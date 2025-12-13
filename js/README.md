@@ -216,8 +216,13 @@ const similarity = stringSimilarity('hello', 'hallo'); // 0.8
 const normalized = normalizeQuestion('What is your NAME?');
 // Output: 'what is your name'
 
-// Extract keywords (filtering stopwords)
+// Extract keywords (no stopwords by default)
 const keywords = extractKeywords('What is the best programming language?');
+// Output: Set { 'what', 'is', 'the', 'best', 'programming', 'language', 'progr' }
+
+// Extract keywords with custom stopwords
+const stopwords = new Set(['what', 'is', 'the']);
+const filteredKeywords = extractKeywords('What is the best programming language?', { stopwords });
 // Output: Set { 'best', 'programming', 'language', 'progr' }
 
 // Find best matching question in a database
@@ -392,11 +397,11 @@ Normalize a question for comparison (lowercase, remove punctuation, standardize 
 
 #### `extractKeywords(question, options)`
 
-Extract meaningful keywords from a question, filtering out stopwords.
+Extract meaningful keywords from a question, optionally filtering out stopwords.
 
 **Parameters:**
 - `question` - Question string
-- `options.stopwords` - Custom stopwords set (default: combined Russian + English)
+- `options.stopwords` - Custom stopwords set to filter out (default: empty Set, no filtering)
 - `options.minWordLength` - Minimum word length (default: 2)
 - `options.stemLength` - Length for word stemming (default: 5, 0 to disable)
 
@@ -424,6 +429,9 @@ Find the best matching question from a database.
 - `options.threshold` - Minimum similarity threshold (default: 0.4)
 - `options.editWeight` - Weight for edit distance similarity (default: 0.4)
 - `options.keywordWeight` - Weight for keyword similarity (default: 0.6)
+- `options.stopwords` - Stopwords to filter from keyword extraction
+- `options.minWordLength` - Minimum word length for keyword extraction
+- `options.stemLength` - Stem length for keyword extraction
 
 **Returns:**
 - `{ question, answer, score }` or null if no match above threshold
@@ -437,14 +445,6 @@ Find all matches above a threshold, sorted by score.
 
 **Returns:**
 - Array of `{ question, answer, score }` sorted by score descending
-
-#### Stopwords
-
-The library exports default stopword sets:
-
-```javascript
-import { DEFAULT_STOPWORDS_RU, DEFAULT_STOPWORDS_EN } from 'link-notation-objects-codec';
-```
 
 ## Development
 

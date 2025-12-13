@@ -12,8 +12,6 @@ import {
   keywordSimilarity,
   findBestMatch,
   findAllMatches,
-  DEFAULT_STOPWORDS_RU,
-  DEFAULT_STOPWORDS_EN,
 } from '../src/index.js';
 
 describe('levenshteinDistance', () => {
@@ -91,24 +89,29 @@ describe('normalizeQuestion', () => {
 });
 
 describe('extractKeywords', () => {
-  test('should extract non-stopword keywords', () => {
+  test('should extract all keywords when no stopwords provided', () => {
     const keywords = extractKeywords('What is the best way to learn programming?');
     assert.ok(keywords.has('best'));
     assert.ok(keywords.has('way'));
     assert.ok(keywords.has('learn'));
     assert.ok(keywords.has('programming'));
+    // With no stopwords, common words are also extracted
+    // (words with length > minWordLength, which defaults to 2)
+    assert.ok(keywords.has('the'));
+    assert.ok(keywords.has('what'));
   });
 
-  test('should filter out English stopwords', () => {
-    const keywords = extractKeywords('the and or is are');
-    // All stopwords, should be mostly empty (except possibly very short words filtered out)
-    assert.ok(keywords.size === 0 || !keywords.has('the'));
+  test('should filter out English stopwords when provided', () => {
+    const stopwords = new Set(['the', 'and', 'or', 'is', 'are']);
+    const keywords = extractKeywords('the and or is are', { stopwords });
+    // All stopwords should be filtered out
+    assert.equal(keywords.size, 0);
   });
 
-  test('should filter out Russian stopwords', () => {
-    const keywords = extractKeywords('как что это в на');
-    assert.ok(!keywords.has('как'));
-    assert.ok(!keywords.has('что'));
+  test('should filter out Russian stopwords when provided', () => {
+    const stopwords = new Set(['как', 'что', 'это', 'в', 'на']);
+    const keywords = extractKeywords('как что это в на', { stopwords });
+    assert.equal(keywords.size, 0);
   });
 
   test('should add stems for longer words', () => {
@@ -237,19 +240,5 @@ describe('findAllMatches', () => {
     const matches = findAllMatches('What is your name?', testDatabase, { threshold: 0.9 });
     assert.ok(matches.length > 0);
     assert.equal(matches[0].answer, 'Claude');
-  });
-});
-
-describe('DEFAULT_STOPWORDS', () => {
-  test('should have Russian stopwords', () => {
-    assert.ok(DEFAULT_STOPWORDS_RU.has('что'));
-    assert.ok(DEFAULT_STOPWORDS_RU.has('как'));
-    assert.ok(DEFAULT_STOPWORDS_RU.has('это'));
-  });
-
-  test('should have English stopwords', () => {
-    assert.ok(DEFAULT_STOPWORDS_EN.has('the'));
-    assert.ok(DEFAULT_STOPWORDS_EN.has('and'));
-    assert.ok(DEFAULT_STOPWORDS_EN.has('is'));
   });
 });

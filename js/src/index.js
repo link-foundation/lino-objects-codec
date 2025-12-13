@@ -35,6 +35,4 @@ export {
   keywordSimilarity,
   findBestMatch,
   findAllMatches,
-  DEFAULT_STOPWORDS_RU,
-  DEFAULT_STOPWORDS_EN,
 } from './fuzzy-match.js';

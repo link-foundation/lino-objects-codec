@@ -64,135 +64,6 @@ export function stringSimilarity(a, b) {
 }
 
 /**
- * Default set of Russian stopwords.
- * These common words are filtered out when extracting keywords.
- */
-export const DEFAULT_STOPWORDS_RU = new Set([
-  'пожалуйста',
-  'свои',
-  'ваши',
-  'от',
-  'до',
-  'в',
-  'на',
-  'с',
-  'по',
-  'о',
-  'об',
-  'и',
-  'а',
-  'но',
-  'или',
-  'то',
-  'как',
-  'что',
-  'это',
-  'вы',
-  'ты',
-  'он',
-  'она',
-  'они',
-  'мы',
-  'я',
-  'к',
-  'для',
-  'при',
-  'чуть',
-  'данный',
-  'момент',
-]);
-
-/**
- * Default set of English stopwords.
- * These common words are filtered out when extracting keywords.
- */
-export const DEFAULT_STOPWORDS_EN = new Set([
-  'the',
-  'a',
-  'an',
-  'and',
-  'or',
-  'but',
-  'in',
-  'on',
-  'at',
-  'to',
-  'for',
-  'of',
-  'with',
-  'by',
-  'from',
-  'as',
-  'is',
-  'was',
-  'are',
-  'were',
-  'been',
-  'be',
-  'have',
-  'has',
-  'had',
-  'do',
-  'does',
-  'did',
-  'will',
-  'would',
-  'could',
-  'should',
-  'may',
-  'might',
-  'must',
-  'can',
-  'this',
-  'that',
-  'these',
-  'those',
-  'it',
-  'its',
-  'you',
-  'your',
-  'we',
-  'our',
-  'they',
-  'their',
-  'he',
-  'his',
-  'she',
-  'her',
-  'i',
-  'my',
-  'me',
-  'what',
-  'which',
-  'who',
-  'whom',
-  'when',
-  'where',
-  'why',
-  'how',
-  'all',
-  'each',
-  'every',
-  'both',
-  'few',
-  'more',
-  'most',
-  'other',
-  'some',
-  'such',
-  'no',
-  'not',
-  'only',
-  'same',
-  'so',
-  'than',
-  'too',
-  'very',
-  'just',
-  'about',
-]);
-
-/**
  * Normalize a question string for comparison.
  * Converts to lowercase, removes punctuation, and standardizes spacing.
  *
@@ -212,13 +83,13 @@ export function normalizeQuestion(question) {
  *
  * @param {string} question - Question string
  * @param {Object} options - Options
- * @param {Set<string>} [options.stopwords] - Custom stopwords set (default: combined RU + EN)
+ * @param {Set<string>} [options.stopwords=new Set()] - Custom stopwords set to filter out
  * @param {number} [options.minWordLength=2] - Minimum word length to include
  * @param {number} [options.stemLength=5] - Length to truncate words for stemming (0 to disable)
  * @returns {Set<string>} Set of key words
  */
 export function extractKeywords(question, options = {}) {
-  const stopwords = options.stopwords || new Set([...DEFAULT_STOPWORDS_RU, ...DEFAULT_STOPWORDS_EN]);
+  const stopwords = options.stopwords ?? new Set();
   const minWordLength = options.minWordLength ?? 2;
   const stemLength = options.stemLength ?? 5;
 
@@ -274,6 +145,9 @@ export function keywordSimilarity(a, b, options = {}) {
  * @param {number} [options.threshold=0.4] - Minimum similarity threshold (0-1)
  * @param {number} [options.editWeight=0.4] - Weight for edit distance similarity
  * @param {number} [options.keywordWeight=0.6] - Weight for keyword similarity
+ * @param {Set<string>} [options.stopwords] - Stopwords to filter from keyword extraction
+ * @param {number} [options.minWordLength] - Minimum word length for keyword extraction
+ * @param {number} [options.stemLength] - Stem length for keyword extraction
  * @returns {{question: string, answer: *, score: number} | null} Best match or null
  */
 export function findBestMatch(question, qaDatabase, options = {}) {
@@ -291,7 +165,7 @@ export function findBestMatch(question, qaDatabase, options = {}) {
 
   for (const [dbQuestion, answer] of qaDatabase.entries()) {
     const editSimilarity = stringSimilarity(normalizeQuestion(question), normalizeQuestion(dbQuestion));
-    const kwSimilarity = keywordSimilarity(question, dbQuestion);
+    const kwSimilarity = keywordSimilarity(question, dbQuestion, options);
 
     const combinedScore = editSimilarity * editWeight + kwSimilarity * keywordWeight;
 
@@ -310,6 +184,12 @@ export function findBestMatch(question, qaDatabase, options = {}) {
  * @param {string} question - Question to match
  * @param {Map<string, *>} qaDatabase - Q&A database
  * @param {Object} [options] - Options (same as findBestMatch)
+ * @param {number} [options.threshold=0.4] - Minimum similarity threshold (0-1)
+ * @param {number} [options.editWeight=0.4] - Weight for edit distance similarity
+ * @param {number} [options.keywordWeight=0.6] - Weight for keyword similarity
+ * @param {Set<string>} [options.stopwords] - Stopwords to filter from keyword extraction
+ * @param {number} [options.minWordLength] - Minimum word length for keyword extraction
+ * @param {number} [options.stemLength] - Stem length for keyword extraction
  * @returns {Array<{question: string, answer: *, score: number}>} Matches sorted by score
  */
 export function findAllMatches(question, qaDatabase, options = {}) {
@@ -329,7 +209,7 @@ export function findAllMatches(question, qaDatabase, options = {}) {
         normalizeQuestion(question),
         normalizeQuestion(dbQuestion)
       );
-      const kwSimilarity = keywordSimilarity(question, dbQuestion);
+      const kwSimilarity = keywordSimilarity(question, dbQuestion, options);
       score = editSimilarity * editWeight + kwSimilarity * keywordWeight;
     }
 
