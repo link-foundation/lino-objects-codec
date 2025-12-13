@@ -1,10 +1,13 @@
 # link-notation-objects-codec (JavaScript)
 
-A comprehensive JavaScript library for working with Links Notation format. This library provides:
+A JavaScript library for working with Links Notation format. This library provides:
 - Universal serialization/deserialization for JavaScript objects with circular reference support
-- JSON to Links Notation conversion utilities (from [follow project](https://github.com/konard/follow))
-- Q&A database functionality with file operations and locking (from [hh-job-application-automation](https://github.com/konard/hh-job-application-automation))
+- JSON to Links Notation conversion utilities
 - Fuzzy matching utilities for string comparison
+
+These tools enable easy implementation of higher-level features like:
+- [LinksNotationManager](https://github.com/konard/follow/blob/main/lino.lib.mjs) - Intermediate application data storage
+- [Q&A Database](https://github.com/konard/hh-job-application-automation/blob/main/src/qa-database.mjs) - Questions and answers database
 
 ## Features
 
@@ -18,8 +21,7 @@ A comprehensive JavaScript library for working with Links Notation format. This 
 - **UTF-8 Support**: Full Unicode string support using base64 encoding
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 - **JSON/Lino Conversion**: Convert between JSON and Links Notation with `jsonToLino()` and `linoToJson()`
-- **File Operations**: Save and load data in Links Notation format
-- **Q&A Database**: Store and retrieve question-answer pairs with concurrent access support
+- **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference()`
 - **Fuzzy Matching**: Find similar strings with Levenshtein distance and keyword similarity
 
 ## Installation
@@ -165,6 +167,72 @@ const decoded4 = decode(encoded4);
 console.log(decoded4.children[0].parent === decoded4); // true
 ```
 
+### JSON/Lino Conversion
+
+Convert between JSON and Links Notation format:
+
+```javascript
+import { jsonToLino, linoToJson, escapeReference } from 'link-notation-objects-codec';
+
+// Convert JSON to Links Notation
+const data = { name: 'Alice', age: 30 };
+const lino = jsonToLino(data);
+console.log(lino);
+// Output: ((name Alice) (age 30))
+
+// Convert Links Notation back to JSON
+const json = linoToJson('((name Alice) (age 30))');
+console.log(json);
+// Output: { name: 'Alice', age: 30 }
+
+// Escape strings for Links Notation
+console.log(escapeReference('hello')); // hello
+console.log(escapeReference('hello world')); // 'hello world'
+console.log(escapeReference("it's")); // "it's"
+console.log(escapeReference('key:value')); // "key:value"
+```
+
+### Fuzzy Matching
+
+Find similar strings using edit distance and keyword similarity:
+
+```javascript
+import {
+  levenshteinDistance,
+  stringSimilarity,
+  findBestMatch,
+  findAllMatches,
+  extractKeywords,
+  normalizeQuestion,
+} from 'link-notation-objects-codec';
+
+// Calculate edit distance
+const distance = levenshteinDistance('hello', 'hallo'); // 1
+
+// Calculate similarity (0-1)
+const similarity = stringSimilarity('hello', 'hallo'); // 0.8
+
+// Normalize questions for comparison
+const normalized = normalizeQuestion('What is your NAME?');
+// Output: 'what is your name'
+
+// Extract keywords (filtering stopwords)
+const keywords = extractKeywords('What is the best programming language?');
+// Output: Set { 'best', 'programming', 'language', 'progr' }
+
+// Find best matching question in a database
+const qaDatabase = new Map([
+  ['What is your name?', 'Claude'],
+  ['How old are you?', 'Unknown'],
+]);
+
+const match = findBestMatch('What is your age?', qaDatabase, { threshold: 0.3 });
+// Returns: { question: 'How old are you?', answer: 'Unknown', score: 0.xx }
+
+// Find all matches above threshold
+const matches = findAllMatches('What is your name?', qaDatabase, { threshold: 0.3 });
+```
+
 ## How It Works
 
 The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target. Each JavaScript object is encoded as a Link with type information:
@@ -219,107 +287,164 @@ const encoded = codec.encode({ data: [1, 2, 3] });
 const decoded = codec.decode(encoded);
 ```
 
-### LinksNotationManager
+### JSON/Lino Conversion
 
-A manager class for JSON/Lino conversion and file operations.
+#### `jsonToLino(json)`
 
-```javascript
-import { LinksNotationManager, lino } from 'link-notation-objects-codec';
+Convert JSON data to Links Notation format.
 
-// Use the singleton instance
-const data = { name: 'Alice', age: 30 };
-const linoStr = lino.jsonToLino(data);
-// Output: ((name Alice) (age 30))
+**Parameters:**
+- `json` - Any JSON-serializable value (object, array, string, number, boolean, null)
 
-const backToJson = lino.linoToJson(linoStr);
-// Output: { name: 'Alice', age: 30 }
-
-// File operations
-lino.saveJsonAsLino('config.lino', data);
-const loaded = lino.loadJsonFromLino('config.lino');
-
-// Create custom instance with different storage directory
-const custom = new LinksNotationManager({ storageDir: '/custom/path' });
-```
-
-**Key Methods:**
-- `jsonToLino(json)` - Convert JSON to Links Notation
-- `linoToJson(lino)` - Convert Links Notation to JSON
-- `saveAsLino(filename, values)` - Save array values to file
-- `loadFromLino(filename)` - Load and parse a file
-- `saveJsonAsLino(filename, data)` - Save JSON data as Links Notation
-- `loadJsonFromLino(filename)` - Load file as JSON
-- `escapeReference(value)` - Escape a string for Links Notation
-
-### Q&A Database
-
-Create a Q&A database with file-based storage and concurrent access support.
+**Returns:**
+- Links Notation string representation
 
 ```javascript
-import { createQADatabase } from 'link-notation-objects-codec';
+jsonToLino({ name: 'Alice', age: 30 });
+// Returns: ((name Alice) (age 30))
 
-const qaDB = createQADatabase('/path/to/qa.lino');
-
-// Add or update entries
-await qaDB.addOrUpdateQA('What is your name?', 'My name is Assistant');
-
-// Get answers
-const answer = await qaDB.getAnswer('What is your name?');
-// Output: 'My name is Assistant'
-
-// Get all entries
-const allQA = await qaDB.getAllQA();
-
-// Delete an entry
-await qaDB.deleteQA('What is your name?');
+jsonToLino([1, 2, 3]);
+// Returns: (1 2 3)
 ```
 
-**Features:**
-- Automatic file locking for concurrent access
-- Multiline answer support
-- Special character handling (colons, parentheses, quotes)
-- Unicode/Cyrillic support
+#### `linoToJson(lino)`
+
+Convert Links Notation to JSON.
+
+**Parameters:**
+- `lino` - Links Notation string
+
+**Returns:**
+- Parsed JSON value
+
+```javascript
+linoToJson('((name Alice) (age 30))');
+// Returns: { name: 'Alice', age: 30 }
+```
+
+#### `escapeReference(value)`
+
+Escape a value for safe use in Links Notation format.
+
+**Parameters:**
+- `value` - The value to escape (string, number, or boolean)
+
+**Returns:**
+- Escaped string suitable for Links Notation
+
+```javascript
+escapeReference('hello'); // 'hello'
+escapeReference('hello world'); // "'hello world'"
+escapeReference("it's"); // "\"it's\""
+```
+
+#### `unescapeReference(str)`
+
+Unescape a Links Notation reference.
+
+**Parameters:**
+- `str` - The escaped reference string
+
+**Returns:**
+- Unescaped string
+
+#### `formatAsLino(values)`
+
+Format an array as Links Notation with proper indentation.
+
+**Parameters:**
+- `values` - Array of values
+
+**Returns:**
+- Formatted Links Notation string
 
 ### Fuzzy Matching Utilities
 
-Find similar strings using edit distance and keyword similarity.
+#### `levenshteinDistance(a, b)`
+
+Calculate edit distance between two strings.
+
+**Parameters:**
+- `a`, `b` - Strings to compare
+
+**Returns:**
+- Number of edits (insertions, deletions, substitutions) needed
+
+#### `stringSimilarity(a, b)`
+
+Calculate normalized similarity score between two strings.
+
+**Parameters:**
+- `a`, `b` - Strings to compare
+
+**Returns:**
+- Score between 0 (completely different) and 1 (identical)
+
+#### `normalizeQuestion(question)`
+
+Normalize a question for comparison (lowercase, remove punctuation, standardize whitespace).
+
+**Parameters:**
+- `question` - Question string
+
+**Returns:**
+- Normalized string
+
+#### `extractKeywords(question, options)`
+
+Extract meaningful keywords from a question, filtering out stopwords.
+
+**Parameters:**
+- `question` - Question string
+- `options.stopwords` - Custom stopwords set (default: combined Russian + English)
+- `options.minWordLength` - Minimum word length (default: 2)
+- `options.stemLength` - Length for word stemming (default: 5, 0 to disable)
+
+**Returns:**
+- Set of keywords
+
+#### `keywordSimilarity(a, b, options)`
+
+Calculate keyword overlap similarity (Jaccard index).
+
+**Parameters:**
+- `a`, `b` - Questions to compare
+- `options` - Same as extractKeywords
+
+**Returns:**
+- Score between 0 and 1
+
+#### `findBestMatch(question, database, options)`
+
+Find the best matching question from a database.
+
+**Parameters:**
+- `question` - Question to match
+- `database` - Map of questions to answers
+- `options.threshold` - Minimum similarity threshold (default: 0.4)
+- `options.editWeight` - Weight for edit distance similarity (default: 0.4)
+- `options.keywordWeight` - Weight for keyword similarity (default: 0.6)
+
+**Returns:**
+- `{ question, answer, score }` or null if no match above threshold
+
+#### `findAllMatches(question, database, options)`
+
+Find all matches above a threshold, sorted by score.
+
+**Parameters:**
+- Same as findBestMatch
+
+**Returns:**
+- Array of `{ question, answer, score }` sorted by score descending
+
+#### Stopwords
+
+The library exports default stopword sets:
 
 ```javascript
-import {
-  levenshteinDistance,
-  stringSimilarity,
-  findBestMatch,
-  findAllMatches,
-  extractKeywords,
-} from 'link-notation-objects-codec';
-
-// Calculate edit distance
-const distance = levenshteinDistance('hello', 'hallo'); // 1
-
-// Calculate similarity (0-1)
-const similarity = stringSimilarity('hello', 'hallo'); // 0.8
-
-// Find best matching question in a database
-const qaDatabase = new Map([
-  ['What is your name?', 'Claude'],
-  ['How old are you?', 'Unknown'],
-]);
-
-const match = findBestMatch('What is your age?', qaDatabase, { threshold: 0.3 });
-// Returns: { question: 'How old are you?', answer: 'Unknown', score: 0.xx }
-
-// Find all matches above threshold
-const matches = findAllMatches('What is your name?', qaDatabase, { threshold: 0.3 });
+import { DEFAULT_STOPWORDS_RU, DEFAULT_STOPWORDS_EN } from 'link-notation-objects-codec';
 ```
-
-**Functions:**
-- `levenshteinDistance(a, b)` - Edit distance between strings
-- `stringSimilarity(a, b)` - Normalized similarity (0-1)
-- `normalizeQuestion(question)` - Normalize text for comparison
-- `extractKeywords(question, options)` - Extract meaningful keywords
-- `keywordSimilarity(a, b, options)` - Keyword overlap similarity
-- `findBestMatch(question, database, options)` - Find best matching entry
-- `findAllMatches(question, database, options)` - Find all matches above threshold
 
 ## Development
 
