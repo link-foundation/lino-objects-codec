@@ -61,7 +61,7 @@ class TestBooleans:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == value
-            assert type(decoded) == type(value)
+            assert isinstance(decoded, bool)
 
 
 class TestIntegers:
@@ -91,7 +91,7 @@ class TestIntegers:
             encoded = encode(value)
             result = decode(encoded)
             assert result == value
-            assert type(result) == int
+            assert isinstance(result, int)
 
     def test_roundtrip_int(self):
         """Test roundtrip encoding/decoding of integers."""
@@ -100,7 +100,7 @@ class TestIntegers:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == value
-            assert type(decoded) == int
+            assert isinstance(decoded, int)
 
 
 class TestFloats:
@@ -117,7 +117,7 @@ class TestFloats:
         encoded = encode(3.14)
         result = decode(encoded)
         assert result == pytest.approx(3.14)
-        assert type(result) == float
+        assert isinstance(result, float)
 
     def test_roundtrip_float(self):
         """Test roundtrip encoding/decoding of floats."""
@@ -126,7 +126,7 @@ class TestFloats:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == pytest.approx(value)
-            assert type(decoded) == float
+            assert isinstance(decoded, float)
 
     def test_float_special_values(self):
         """Test encoding/decoding special float values."""
@@ -164,7 +164,7 @@ class TestStrings:
         encoded = encode("hello world")
         result = decode(encoded)
         assert result == "hello world"
-        assert type(result) == str
+        assert isinstance(result, str)
 
     def test_roundtrip_string(self):
         """Test roundtrip encoding/decoding of strings."""
@@ -182,7 +182,7 @@ class TestStrings:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == value
-            assert type(decoded) == str
+            assert isinstance(decoded, str)
 
     def test_string_with_quotes(self):
         """Test encoding/decoding strings with quotes."""

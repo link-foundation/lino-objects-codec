@@ -15,7 +15,7 @@ class TestCircularReferences:
         decoded = decode(encoded)
 
         # Check that it's a list containing itself
-        assert type(decoded) == list
+        assert isinstance(decoded, list)
         assert len(decoded) == 1
         assert decoded[0] is decoded
 
@@ -28,7 +28,7 @@ class TestCircularReferences:
         decoded = decode(encoded)
 
         # Check that it's a dict containing itself
-        assert type(decoded) == dict
+        assert isinstance(decoded, dict)
         assert "self" in decoded
         assert decoded["self"] is decoded
 
@@ -46,7 +46,7 @@ class TestCircularReferences:
         assert len(decoded) == 3
         assert decoded[0] == 1
         assert decoded[1] == 2
-        assert type(decoded[2]) == list
+        assert isinstance(decoded[2], list)
         assert len(decoded[2]) == 3
         assert decoded[2][0] == 3
         assert decoded[2][1] == 4
