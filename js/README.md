@@ -19,9 +19,9 @@ These tools enable easy implementation of higher-level features like:
 - **Circular References**: Automatically detect and preserve circular references
 - **Object Identity**: Maintain object identity for shared references
 - **UTF-8 Support**: Full Unicode string support using base64 encoding
-- **Simple API**: Easy-to-use `encode()` and `decode()` functions
-- **JSON/Lino Conversion**: Convert between JSON and Links Notation with `jsonToLino()` and `linoToJson()`
-- **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference()`
+- **Simple API**: Easy-to-use `encode({ obj: )` and `decode({ notation:  } })` functions
+- **JSON/Lino Conversion**: Convert between JSON and Links Notation with `jsonToLino({ json: )` and `linoToJson({ lino:  } })`
+- **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference({ value: )`
 - **Fuzzy Matching**: Find similar strings with Levenshtein distance and keyword similarity
 
 ## Installation
@@ -49,12 +49,12 @@ pnpm add link-notation-objects-codec
 import { encode, decode } from 'link-notation-objects-codec';
 
 // Encode basic types
-const encoded = encode({ name: 'Alice', age: 30, active: true });
+const encoded = encode({ obj: { name: 'Alice', age: 30, active: true } } } });
 console.log(encoded);
 // Output: (object obj_0 ((str bmFt...) (int 30)) ((str YWN0...) (bool true)))
 
 // Decode back to JavaScript object
-const decoded = decode(encoded);
+const decoded = decode({ notation: encoded } });
 console.log(decoded);
 // Output: { name: 'Alice', age: 30, active: true }
 
@@ -71,27 +71,27 @@ console.log(JSON.stringify(decoded) === JSON.stringify({ name: 'Alice', age: 30,
 import { encode, decode } from 'link-notation-objects-codec';
 
 // null and undefined
-console.log(decode(encode(null))); // null
-console.log(decode(encode(undefined))); // undefined
+console.log(decode({ notation: encode({ obj: null } }))); // null
+console.log(decode({ notation: encode({ obj: undefined } }))); // undefined
 
 // Booleans
-console.log(decode(encode(true))); // true
-console.log(decode(encode(false))); // false
+console.log(decode({ notation: encode({ obj: true } }))); // true
+console.log(decode({ notation: encode({ obj: false } }))); // false
 
 // Numbers (integers and floats)
-console.log(decode(encode(42))); // 42
-console.log(decode(encode(-123))); // -123
-console.log(decode(encode(3.14))); // 3.14
+console.log(decode({ notation: encode({ obj: 42 } }))); // 42
+console.log(decode({ notation: encode({ obj: -123 } }))); // -123
+console.log(decode({ notation: encode({ obj: 3.14 } }))); // 3.14
 
 // Special number values
-console.log(decode(encode(Infinity))); // Infinity
-console.log(decode(encode(-Infinity))); // -Infinity
-console.log(Number.isNaN(decode(encode(NaN)))); // true
+console.log(decode({ notation: encode({ obj: Infinity } }))); // Infinity
+console.log(decode({ notation: encode({ obj: -Infinity } }))); // -Infinity
+console.log(Number.isNaN(decode({ notation: encode({ obj: NaN } })))); // true
 
 // Strings (with full Unicode support)
-console.log(decode(encode('hello'))); // 'hello'
-console.log(decode(encode('你好世界 🌍'))); // '你好世界 🌍'
-console.log(decode(encode('multi\nline\nstring'))); // 'multi\nline\nstring'
+console.log(decode({ notation: encode({ obj: 'hello' } }))); // 'hello'
+console.log(decode({ notation: encode({ obj: '你好世界 🌍' } }))); // '你好世界 🌍'
+console.log(decode({ notation: encode({ obj: 'multi\nline\nstring' } }))); // 'multi\nline\nstring'
 ```
 
 ### Collections
@@ -101,11 +101,11 @@ import { encode, decode } from 'link-notation-objects-codec';
 
 // Arrays
 const data = [1, 2, 3, 'hello', true, null];
-console.log(JSON.stringify(decode(encode(data))) === JSON.stringify(data)); // true
+console.log(JSON.stringify(decode({ notation: encode({ obj: data } }))) === JSON.stringify(data)); // true
 
 // Nested arrays
 const nested = [[1, 2], [3, 4], [5, [6, 7]]];
-console.log(JSON.stringify(decode(encode(nested))) === JSON.stringify(nested)); // true
+console.log(JSON.stringify(decode({ notation: encode({ obj: nested } }))) === JSON.stringify(nested)); // true
 
 // Objects
 const person = {
@@ -113,7 +113,7 @@ const person = {
   age: 25,
   email: 'bob@example.com',
 };
-console.log(JSON.stringify(decode(encode(person))) === JSON.stringify(person)); // true
+console.log(JSON.stringify(decode({ notation: encode({ obj: person } }))) === JSON.stringify(person)); // true
 
 // Complex nested structures
 const complexData = {
@@ -126,7 +126,7 @@ const complexData = {
     count: 2,
   },
 };
-console.log(JSON.stringify(decode(encode(complexData))) === JSON.stringify(complexData)); // true
+console.log(JSON.stringify(decode({ notation: encode({ obj: complexData } }))) === JSON.stringify(complexData)); // true
 ```
 
 ### Circular References
@@ -139,22 +139,22 @@ import { encode, decode } from 'link-notation-objects-codec';
 // Self-referencing array
 const arr = [1, 2, 3];
 arr.push(arr); // Circular reference
-const encoded = encode(arr);
-const decoded = decode(encoded);
+const encoded = encode({ obj: arr });
+const decoded = decode({ notation: encoded });
 console.log(decoded[3] === decoded); // true - Reference preserved
 
 // Self-referencing object
 const obj = { name: 'root' };
 obj.self = obj; // Circular reference
-const encoded2 = encode(obj);
-const decoded2 = decode(encoded2);
+const encoded2 = encode({ obj: obj });
+const decoded2 = decode({ notation: encoded2 });
 console.log(decoded2.self === decoded2); // true - Reference preserved
 
 // Shared references
 const shared = { shared: 'data' };
 const container = { first: shared, second: shared };
-const encoded3 = encode(container);
-const decoded3 = decode(encoded3);
+const encoded3 = encode({ obj: container });
+const decoded3 = decode({ notation: encoded3 });
 // Both references point to the same object
 console.log(decoded3.first === decoded3.second); // true
 
@@ -162,8 +162,8 @@ console.log(decoded3.first === decoded3.second); // true
 const root = { name: 'root', children: [] };
 const child = { name: 'child', parent: root };
 root.children.push(child);
-const encoded4 = encode(root);
-const decoded4 = decode(encoded4);
+const encoded4 = encode({ obj: root });
+const decoded4 = decode({ notation: encoded4 });
 console.log(decoded4.children[0].parent === decoded4); // true
 ```
 
@@ -176,20 +176,20 @@ import { jsonToLino, linoToJson, escapeReference } from 'link-notation-objects-c
 
 // Convert JSON to Links Notation
 const data = { name: 'Alice', age: 30 };
-const lino = jsonToLino(data);
+const lino = jsonToLino({ json: data });
 console.log(lino);
 // Output: ((name Alice) (age 30))
 
 // Convert Links Notation back to JSON
-const json = linoToJson('((name Alice) (age 30))');
+const json = linoToJson({ lino: '((name Alice }) (age 30))');
 console.log(json);
 // Output: { name: 'Alice', age: 30 }
 
 // Escape strings for Links Notation
-console.log(escapeReference('hello')); // hello
-console.log(escapeReference('hello world')); // 'hello world'
-console.log(escapeReference("it's")); // "it's"
-console.log(escapeReference('key:value')); // "key:value"
+console.log(escapeReference({ value: 'hello' })); // hello
+console.log(escapeReference({ value: 'hello world' })); // 'hello world'
+console.log(escapeReference({ value: "it's" })); // "it's"
+console.log(escapeReference({ value: 'key:value' })); // "key:value"
 ```
 
 ### Fuzzy Matching
@@ -207,22 +207,22 @@ import {
 } from 'link-notation-objects-codec';
 
 // Calculate edit distance
-const distance = levenshteinDistance('hello', 'hallo'); // 1
+const distance = levenshteinDistance({ a: 'hello', b: 'hallo' }); // 1
 
 // Calculate similarity (0-1)
-const similarity = stringSimilarity('hello', 'hallo'); // 0.8
+const similarity = stringSimilarity({ a: 'hello', b: 'hallo' }); // 0.8
 
 // Normalize questions for comparison
-const normalized = normalizeQuestion('What is your NAME?');
+const normalized = normalizeQuestion({ question: 'What is your NAME?' });
 // Output: 'what is your name'
 
 // Extract keywords (no stopwords by default)
-const keywords = extractKeywords('What is the best programming language?');
+const keywords = extractKeywords({ question: 'What is the best programming language?' });
 // Output: Set { 'what', 'is', 'the', 'best', 'programming', 'language', 'progr' }
 
 // Extract keywords with custom stopwords
 const stopwords = new Set(['what', 'is', 'the']);
-const filteredKeywords = extractKeywords('What is the best programming language?', { stopwords });
+const filteredKeywords = extractKeywords({ question: 'What is the best programming language?', stopwords });
 // Output: Set { 'best', 'programming', 'language', 'progr' }
 
 // Find best matching question in a database
@@ -231,11 +231,11 @@ const qaDatabase = new Map([
   ['How old are you?', 'Unknown'],
 ]);
 
-const match = findBestMatch('What is your age?', qaDatabase, { threshold: 0.3 });
+const match = findBestMatch({ question: { question: 'What is your age?', qaDatabase: qaDatabase: qaDatabase, threshold: 0.3 } });
 // Returns: { question: 'How old are you?', answer: 'Unknown', score: 0.xx }
 
 // Find all matches above threshold
-const matches = findAllMatches('What is your name?', qaDatabase, { threshold: 0.3 });
+const matches = findAllMatches({ question: { question: 'What is your name?', qaDatabase: qaDatabase: qaDatabase, threshold: 0.3 } });
 ```
 
 ## How It Works
@@ -257,12 +257,12 @@ This approach allows for:
 
 ### Typed Object Codec
 
-#### `encode(obj)`
+#### `encode({ obj: obj })`
 
 Encode a JavaScript object to Links Notation format with type markers.
 
 **Parameters:**
-- `obj` - The JavaScript object to encode
+- `options.obj` - The JavaScript object to encode
 
 **Returns:**
 - String representation in Links Notation format
@@ -270,36 +270,36 @@ Encode a JavaScript object to Links Notation format with type markers.
 **Throws:**
 - `TypeError` - If the object type is not supported
 
-#### `decode(notation)`
+#### `decode({ notation: notation })`
 
 Decode Links Notation format to a JavaScript object.
 
 **Parameters:**
-- `notation` - String in Links Notation format
+- `options.notation` - String in Links Notation format
 
 **Returns:**
 - Reconstructed JavaScript object
 
 #### `ObjectCodec`
 
-The main codec class that performs encoding and decoding. The module-level `encode()` and `decode()` functions use a shared instance of this class.
+The main codec class that performs encoding and decoding. The module-level `encode({ obj: )` and `decode({ notation:  } })` functions use a shared instance of this class.
 
 ```javascript
 import { ObjectCodec } from 'link-notation-objects-codec';
 
 const codec = new ObjectCodec();
 const encoded = codec.encode({ data: [1, 2, 3] });
-const decoded = codec.decode(encoded);
+const decoded = codec.decode({ notation: encoded });
 ```
 
 ### JSON/Lino Conversion
 
-#### `jsonToLino(json)`
+#### `jsonToLino({ json: json })`
 
 Convert JSON data to Links Notation format.
 
 **Parameters:**
-- `json` - Any JSON-serializable value (object, array, string, number, boolean, null)
+- `options.json` - Any JSON-serializable value (object, array, string, number, boolean, null)
 
 **Returns:**
 - Links Notation string representation
@@ -308,99 +308,99 @@ Convert JSON data to Links Notation format.
 jsonToLino({ name: 'Alice', age: 30 });
 // Returns: ((name Alice) (age 30))
 
-jsonToLino([1, 2, 3]);
+jsonToLino({ json: [1, 2, 3] });
 // Returns: (1 2 3)
 ```
 
-#### `linoToJson(lino)`
+#### `linoToJson({ lino: lino })`
 
 Convert Links Notation to JSON.
 
 **Parameters:**
-- `lino` - Links Notation string
+- `options.lino` - Links Notation string
 
 **Returns:**
 - Parsed JSON value
 
 ```javascript
-linoToJson('((name Alice) (age 30))');
+linoToJson({ lino: '((name Alice }) (age 30))');
 // Returns: { name: 'Alice', age: 30 }
 ```
 
-#### `escapeReference(value)`
+#### `escapeReference({ value: value })`
 
 Escape a value for safe use in Links Notation format.
 
 **Parameters:**
-- `value` - The value to escape (string, number, or boolean)
+- `options.value` - The value to escape (string, number, or boolean)
 
 **Returns:**
 - Escaped string suitable for Links Notation
 
 ```javascript
-escapeReference('hello'); // 'hello'
-escapeReference('hello world'); // "'hello world'"
-escapeReference("it's"); // "\"it's\""
+escapeReference({ value: 'hello' }); // 'hello'
+escapeReference({ value: 'hello world' }); // "'hello world'"
+escapeReference({ value: "it's" }); // "\"it's\""
 ```
 
-#### `unescapeReference(str)`
+#### `unescapeReference(options = {})`
 
 Unescape a Links Notation reference.
 
 **Parameters:**
-- `str` - The escaped reference string
+- `options.str` - The escaped reference string
 
 **Returns:**
 - Unescaped string
 
-#### `formatAsLino(values)`
+#### `formatAsLino(options = {})`
 
 Format an array as Links Notation with proper indentation.
 
 **Parameters:**
-- `values` - Array of values
+- `options.values` - Array of values
 
 **Returns:**
 - Formatted Links Notation string
 
 ### Fuzzy Matching Utilities
 
-#### `levenshteinDistance(a, b)`
+#### `levenshteinDistance(options = {})`
 
 Calculate edit distance between two strings.
 
 **Parameters:**
-- `a`, `b` - Strings to compare
+- `options.a`, `options.b` - Strings to compare
 
 **Returns:**
 - Number of edits (insertions, deletions, substitutions) needed
 
-#### `stringSimilarity(a, b)`
+#### `stringSimilarity(options = {})`
 
 Calculate normalized similarity score between two strings.
 
 **Parameters:**
-- `a`, `b` - Strings to compare
+- `options.a`, `options.b` - Strings to compare
 
 **Returns:**
 - Score between 0 (completely different) and 1 (identical)
 
-#### `normalizeQuestion(question)`
+#### `normalizeQuestion({ question: question })`
 
 Normalize a question for comparison (lowercase, remove punctuation, standardize whitespace).
 
 **Parameters:**
-- `question` - Question string
+- `options.question` - Question string
 
 **Returns:**
 - Normalized string
 
-#### `extractKeywords(question, options)`
+#### `extractKeywords(options = {})`
 
 Extract meaningful keywords from a question, optionally filtering out stopwords.
 
 **Parameters:**
-- `question` - Question string
+- `options.question` - Question string
 - `options.stopwords` - Custom stopwords set to filter out (default: empty Set, no filtering)
 - `options.minWordLength` - Minimum word length (default: 2)
 - `options.stemLength` - Length for word stemming (default: 5, 0 to disable)
@@ -408,24 +408,24 @@ Extract meaningful keywords from a question, optionally filtering out stopwords.
 **Returns:**
 - Set of keywords
 
-#### `keywordSimilarity(a, b, options)`
+#### `keywordSimilarity(options = {})`
 
 Calculate keyword overlap similarity (Jaccard index).
 
 **Parameters:**
-- `a`, `b` - Questions to compare
+- `options.a`, `options.b` - Questions to compare
 - `options` - Same as extractKeywords
 
 **Returns:**
 - Score between 0 and 1
 
-#### `findBestMatch(question, database, options)`
+#### `findBestMatch({ question: question, qaDatabase: database, options })`
 
 Find the best matching question from a database.
 
 **Parameters:**
-- `question` - Question to match
-- `database` - Map of questions to answers
+- `options.question` - Question to match
+- `options.qaDatabase` - Map of questions to answers
 - `options.threshold` - Minimum similarity threshold (default: 0.4)
 - `options.editWeight` - Weight for edit distance similarity (default: 0.4)
 - `options.keywordWeight` - Weight for keyword similarity (default: 0.6)
@@ -436,7 +436,7 @@ Find the best matching question from a database.
 **Returns:**
 - `{ question, answer, score }` or null if no match above threshold
 
-#### `findAllMatches(question, database, options)`
+#### `findAllMatches({ question: question, qaDatabase: database, options })`
 
 Find all matches above a threshold, sorted by score.
 

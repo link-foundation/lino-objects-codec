@@ -14,202 +14,202 @@ import {
 
 // Tests for escapeReference
 test('escapeReference - simple string', () => {
-  assert.equal(escapeReference('hello'), 'hello');
-  assert.equal(escapeReference('world'), 'world');
+  assert.equal(escapeReference({ value: 'hello' }), 'hello');
+  assert.equal(escapeReference({ value: 'world' }), 'world');
 });
 
 test('escapeReference - numbers', () => {
-  assert.equal(escapeReference(42), '42');
-  assert.equal(escapeReference(3.14), '3.14');
-  assert.equal(escapeReference(-17), '-17');
+  assert.equal(escapeReference({ value: 42 }), '42');
+  assert.equal(escapeReference({ value: 3.14 }), '3.14');
+  assert.equal(escapeReference({ value: -17 }), '-17');
 });
 
 test('escapeReference - booleans', () => {
-  assert.equal(escapeReference(true), 'true');
-  assert.equal(escapeReference(false), 'false');
+  assert.equal(escapeReference({ value: true }), 'true');
+  assert.equal(escapeReference({ value: false }), 'false');
 });
 
 test('escapeReference - string with spaces', () => {
-  const result = escapeReference('hello world');
+  const result = escapeReference({ value: 'hello world' });
   assert.ok(result.startsWith("'") || result.startsWith('"'));
   assert.ok(result.includes('hello world'));
 });
 
 test('escapeReference - string with single quotes', () => {
-  const result = escapeReference("it's");
+  const result = escapeReference({ value: "it's" });
   assert.ok(result.startsWith('"'));
   assert.equal(result, '"it\'s"');
 });
 
 test('escapeReference - string with double quotes', () => {
-  const result = escapeReference('he said "hello"');
+  const result = escapeReference({ value: 'he said "hello"' });
   assert.ok(result.startsWith("'"));
   assert.equal(result, "'he said \"hello\"'");
 });
 
 test('escapeReference - string with both quotes', () => {
-  const result = escapeReference(`"it's" he said`);
+  const result = escapeReference({ value: `"it's" he said` });
   // Should use the quote type with fewer escapes needed
   assert.ok(result.startsWith("'") || result.startsWith('"'));
 });
 
 test('escapeReference - string with parentheses', () => {
-  const result = escapeReference('func(arg)');
+  const result = escapeReference({ value: 'func(arg)' });
   assert.ok(result.startsWith("'") || result.startsWith('"'));
 });
 
 test('escapeReference - string with colon', () => {
-  const result = escapeReference('key:value');
+  const result = escapeReference({ value: 'key:value' });
   assert.ok(result.startsWith("'") || result.startsWith('"'));
 });
 
 test('escapeReference - string with newline', () => {
-  const result = escapeReference('line1\nline2');
+  const result = escapeReference({ value: 'line1\nline2' });
   assert.ok(result.startsWith("'") || result.startsWith('"'));
 });
 
 // Tests for unescapeReference
 test('unescapeReference - simple string', () => {
-  assert.equal(unescapeReference('hello'), 'hello');
+  assert.equal(unescapeReference({ str: 'hello' }), 'hello');
 });
 
 test('unescapeReference - doubled double quotes', () => {
-  assert.equal(unescapeReference('he said ""hello""'), 'he said "hello"');
+  assert.equal(unescapeReference({ str: 'he said ""hello""' }), 'he said "hello"');
 });
 
 test('unescapeReference - doubled single quotes', () => {
-  assert.equal(unescapeReference("it''s"), "it's");
+  assert.equal(unescapeReference({ str: "it''s" }), "it's");
 });
 
 test('unescapeReference - null/undefined', () => {
-  assert.equal(unescapeReference(null), null);
-  assert.equal(unescapeReference(undefined), undefined);
+  assert.equal(unescapeReference({ str: null }), null);
+  assert.equal(unescapeReference({ str: undefined }), undefined);
 });
 
 // Tests for jsonToLino
 test('jsonToLino - null', () => {
-  assert.equal(jsonToLino(null), 'null');
+  assert.equal(jsonToLino({ json: null }), 'null');
 });
 
 test('jsonToLino - undefined', () => {
-  assert.equal(jsonToLino(undefined), 'null');
+  assert.equal(jsonToLino({ json: undefined }), 'null');
 });
 
 test('jsonToLino - number', () => {
-  assert.equal(jsonToLino(42), '42');
-  assert.equal(jsonToLino(3.14), '3.14');
-  assert.equal(jsonToLino(-17), '-17');
+  assert.equal(jsonToLino({ json: 42 }), '42');
+  assert.equal(jsonToLino({ json: 3.14 }), '3.14');
+  assert.equal(jsonToLino({ json: -17 }), '-17');
 });
 
 test('jsonToLino - boolean', () => {
-  assert.equal(jsonToLino(true), 'true');
-  assert.equal(jsonToLino(false), 'false');
+  assert.equal(jsonToLino({ json: true }), 'true');
+  assert.equal(jsonToLino({ json: false }), 'false');
 });
 
 test('jsonToLino - simple string', () => {
-  assert.equal(jsonToLino('hello'), 'hello');
+  assert.equal(jsonToLino({ json: 'hello' }), 'hello');
 });
 
 test('jsonToLino - string with spaces', () => {
-  const result = jsonToLino('hello world');
+  const result = jsonToLino({ json: 'hello world' });
   assert.ok(result.startsWith("'") || result.startsWith('"'));
 });
 
 test('jsonToLino - empty array', () => {
-  assert.equal(jsonToLino([]), '()');
+  assert.equal(jsonToLino({ json: [] }), '()');
 });
 
 test('jsonToLino - array of numbers', () => {
-  assert.equal(jsonToLino([1, 2, 3]), '(1 2 3)');
+  assert.equal(jsonToLino({ json: [1, 2, 3] }), '(1 2 3)');
 });
 
 test('jsonToLino - array of strings', () => {
-  assert.equal(jsonToLino(['a', 'b', 'c']), '(a b c)');
+  assert.equal(jsonToLino({ json: ['a', 'b', 'c'] }), '(a b c)');
 });
 
 test('jsonToLino - nested array', () => {
-  assert.equal(jsonToLino([[1, 2], [3, 4]]), '((1 2) (3 4))');
+  assert.equal(jsonToLino({ json: [[1, 2], [3, 4]] }), '((1 2) (3 4))');
 });
 
 test('jsonToLino - empty object', () => {
-  assert.equal(jsonToLino({}), '()');
+  assert.equal(jsonToLino({ json: {} }), '()');
 });
 
 test('jsonToLino - simple object', () => {
-  const result = jsonToLino({ name: 'Alice', age: 30 });
+  const result = jsonToLino({ json: { name: 'Alice', age: 30 } });
   assert.ok(result.includes('(name Alice)'));
   assert.ok(result.includes('(age 30)'));
 });
 
 test('jsonToLino - object with nested object', () => {
-  const result = jsonToLino({ user: { name: 'Bob' } });
+  const result = jsonToLino({ json: { user: { name: 'Bob' } } });
   assert.ok(result.includes('(user ((name Bob)))'));
 });
 
 test('jsonToLino - object with array', () => {
-  const result = jsonToLino({ items: [1, 2, 3] });
+  const result = jsonToLino({ json: { items: [1, 2, 3] } });
   assert.ok(result.includes('(items (1 2 3))'));
 });
 
 // Tests for linoToJson
 test('linoToJson - null input', () => {
-  assert.equal(linoToJson(null), null);
-  assert.equal(linoToJson(''), null);
+  assert.equal(linoToJson({ lino: null }), null);
+  assert.equal(linoToJson({ lino: '' }), null);
 });
 
 test('linoToJson - primitives', () => {
-  assert.equal(linoToJson('42'), 42);
-  assert.equal(linoToJson('true'), true);
-  assert.equal(linoToJson('false'), false);
-  assert.equal(linoToJson('null'), null);
+  assert.equal(linoToJson({ lino: '42' }), 42);
+  assert.equal(linoToJson({ lino: 'true' }), true);
+  assert.equal(linoToJson({ lino: 'false' }), false);
+  assert.equal(linoToJson({ lino: 'null' }), null);
 });
 
 test('linoToJson - simple string', () => {
-  assert.equal(linoToJson('hello'), 'hello');
+  assert.equal(linoToJson({ lino: 'hello' }), 'hello');
 });
 
 test('linoToJson - empty link', () => {
-  assert.deepEqual(linoToJson('()'), []);
+  assert.deepEqual(linoToJson({ lino: '()' }), []);
 });
 
 test('linoToJson - array of numbers', () => {
-  assert.deepEqual(linoToJson('(1 2 3)'), [1, 2, 3]);
+  assert.deepEqual(linoToJson({ lino: '(1 2 3)' }), [1, 2, 3]);
 });
 
 test('linoToJson - simple object', () => {
-  const result = linoToJson('((name Alice) (age 30))');
+  const result = linoToJson({ lino: '((name Alice) (age 30))' });
   assert.deepEqual(result, { name: 'Alice', age: 30 });
 });
 
 test('linoToJson - nested object', () => {
-  const result = linoToJson('((user ((name Bob))))');
+  const result = linoToJson({ lino: '((user ((name Bob))))' });
   assert.deepEqual(result, { user: { name: 'Bob' } });
 });
 
 test('linoToJson - object with array value', () => {
-  const result = linoToJson('((items (1 2 3)))');
+  const result = linoToJson({ lino: '((items (1 2 3)))' });
   assert.deepEqual(result, { items: [1, 2, 3] });
 });
 
 // Roundtrip tests
 test('roundtrip - simple object', () => {
   const original = { name: 'Alice', age: 30 };
-  const lino = jsonToLino(original);
-  const result = linoToJson(lino);
+  const lino = jsonToLino({ json: original });
+  const result = linoToJson({ lino: lino });
   assert.deepEqual(result, original);
 });
 
 test('roundtrip - nested object', () => {
   const original = { user: { name: 'Bob', active: true } };
-  const lino = jsonToLino(original);
-  const result = linoToJson(lino);
+  const lino = jsonToLino({ json: original });
+  const result = linoToJson({ lino: lino });
   assert.deepEqual(result, original);
 });
 
 test('roundtrip - object with array', () => {
   const original = { items: [1, 2, 3] };
-  const lino = jsonToLino(original);
-  const result = linoToJson(lino);
+  const lino = jsonToLino({ json: original });
+  const result = linoToJson({ lino: lino });
   assert.deepEqual(result, original);
 });
 
@@ -221,19 +221,19 @@ test('roundtrip - complex object', () => {
     tags: ['a', 'b', 'c'],
     nested: { x: 1, y: 2 },
   };
-  const lino = jsonToLino(original);
-  const result = linoToJson(lino);
+  const lino = jsonToLino({ json: original });
+  const result = linoToJson({ lino: lino });
   assert.deepEqual(result, original);
 });
 
 // Tests for formatAsLino
 test('formatAsLino - empty array', () => {
-  assert.equal(formatAsLino([]), '()');
-  assert.equal(formatAsLino(null), '()');
+  assert.equal(formatAsLino({ values: [] }), '()');
+  assert.equal(formatAsLino({ values: null }), '()');
 });
 
 test('formatAsLino - array of values', () => {
-  const result = formatAsLino(['a', 'b', 'c']);
+  const result = formatAsLino({ values: ['a', 'b', 'c'] });
   assert.ok(result.includes('  a'));
   assert.ok(result.includes('  b'));
   assert.ok(result.includes('  c'));

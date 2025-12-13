@@ -13,11 +13,13 @@
  * The Levenshtein distance is the minimum number of single-character edits
  * (insertions, deletions, or substitutions) required to change one string into another.
  *
- * @param {string} a - First string
- * @param {string} b - Second string
+ * @param {Object} options - Options
+ * @param {string} options.a - First string
+ * @param {string} options.b - Second string
  * @returns {number} Edit distance between the strings
  */
-export function levenshteinDistance(a, b) {
+export function levenshteinDistance(options = {}) {
+  const { a, b } = options;
   const matrix = [];
 
   // Initialize the matrix
@@ -51,15 +53,17 @@ export function levenshteinDistance(a, b) {
  * Calculate similarity score between two strings (0-1).
  * Uses Levenshtein distance normalized by the maximum string length.
  *
- * @param {string} a - First string
- * @param {string} b - Second string
+ * @param {Object} options - Options
+ * @param {string} options.a - First string
+ * @param {string} options.b - Second string
  * @returns {number} Similarity score (0 = completely different, 1 = identical)
  */
-export function stringSimilarity(a, b) {
+export function stringSimilarity(options = {}) {
+  const { a, b } = options;
   const maxLength = Math.max(a.length, b.length);
   if (maxLength === 0) return 1.0;
 
-  const distance = levenshteinDistance(a, b);
+  const distance = levenshteinDistance({ a, b });
   return 1 - distance / maxLength;
 }
 
@@ -67,10 +71,12 @@ export function stringSimilarity(a, b) {
  * Normalize a question string for comparison.
  * Converts to lowercase, removes punctuation, and standardizes spacing.
  *
- * @param {string} question - Question to normalize
+ * @param {Object} options - Options
+ * @param {string} options.question - Question to normalize
  * @returns {string} Normalized question
  */
-export function normalizeQuestion(question) {
+export function normalizeQuestion(options = {}) {
+  const { question } = options;
   return question
     .toLowerCase()
     .replace(/[.,!?;:]/g, '')
@@ -81,19 +87,20 @@ export function normalizeQuestion(question) {
 /**
  * Extract key words from a question, filtering out stopwords.
  *
- * @param {string} question - Question string
  * @param {Object} options - Options
+ * @param {string} options.question - Question string
  * @param {Set<string>} [options.stopwords=new Set()] - Custom stopwords set to filter out
  * @param {number} [options.minWordLength=2] - Minimum word length to include
  * @param {number} [options.stemLength=5] - Length to truncate words for stemming (0 to disable)
  * @returns {Set<string>} Set of key words
  */
-export function extractKeywords(question, options = {}) {
+export function extractKeywords(options = {}) {
+  const { question } = options;
   const stopwords = options.stopwords ?? new Set();
   const minWordLength = options.minWordLength ?? 2;
   const stemLength = options.stemLength ?? 5;
 
-  const normalized = normalizeQuestion(question);
+  const normalized = normalizeQuestion({ question });
   const words = normalized.split(/\s+/);
 
   const keywords = new Set(
@@ -117,14 +124,18 @@ export function extractKeywords(question, options = {}) {
 /**
  * Calculate keyword overlap similarity (Jaccard index).
  *
- * @param {string} a - First question
- * @param {string} b - Second question
- * @param {Object} [options] - Options passed to extractKeywords
+ * @param {Object} options - Options
+ * @param {string} options.a - First question
+ * @param {string} options.b - Second question
+ * @param {Set<string>} [options.stopwords] - Stopwords to filter from keyword extraction
+ * @param {number} [options.minWordLength] - Minimum word length for keyword extraction
+ * @param {number} [options.stemLength] - Stem length for keyword extraction
  * @returns {number} Similarity score (0-1)
  */
-export function keywordSimilarity(a, b, options = {}) {
-  const keywordsA = extractKeywords(a, options);
-  const keywordsB = extractKeywords(b, options);
+export function keywordSimilarity(options = {}) {
+  const { a, b } = options;
+  const keywordsA = extractKeywords({ question: a, ...options });
+  const keywordsB = extractKeywords({ question: b, ...options });
 
   if (keywordsA.size === 0 && keywordsB.size === 0) return 1.0;
   if (keywordsA.size === 0 || keywordsB.size === 0) return 0.0;
@@ -139,9 +150,9 @@ export function keywordSimilarity(a, b, options = {}) {
  * Find the best matching question from a database using fuzzy matching.
  * Combines edit distance similarity (40% weight) and keyword overlap (60% weight).
  *
- * @param {string} question - Question to match
- * @param {Map<string, *>} qaDatabase - Q&A database (Map of questions to answers)
- * @param {Object} [options] - Options
+ * @param {Object} options - Options
+ * @param {string} options.question - Question to match
+ * @param {Map<string, *>} options.qaDatabase - Q&A database (Map of questions to answers)
  * @param {number} [options.threshold=0.4] - Minimum similarity threshold (0-1)
  * @param {number} [options.editWeight=0.4] - Weight for edit distance similarity
  * @param {number} [options.keywordWeight=0.6] - Weight for keyword similarity
@@ -150,7 +161,8 @@ export function keywordSimilarity(a, b, options = {}) {
  * @param {number} [options.stemLength] - Stem length for keyword extraction
  * @returns {{question: string, answer: *, score: number} | null} Best match or null
  */
-export function findBestMatch(question, qaDatabase, options = {}) {
+export function findBestMatch(options = {}) {
+  const { question, qaDatabase } = options;
   const threshold = options.threshold ?? 0.4;
   const editWeight = options.editWeight ?? 0.4;
   const keywordWeight = options.keywordWeight ?? 0.6;
@@ -164,8 +176,8 @@ export function findBestMatch(question, qaDatabase, options = {}) {
   let bestScore = threshold;
 
   for (const [dbQuestion, answer] of qaDatabase.entries()) {
-    const editSimilarity = stringSimilarity(normalizeQuestion(question), normalizeQuestion(dbQuestion));
-    const kwSimilarity = keywordSimilarity(question, dbQuestion, options);
+    const editSimilarity = stringSimilarity({ a: normalizeQuestion({ question }), b: normalizeQuestion({ question: dbQuestion }) });
+    const kwSimilarity = keywordSimilarity({ a: question, b: dbQuestion, ...options });
 
     const combinedScore = editSimilarity * editWeight + kwSimilarity * keywordWeight;
 
@@ -181,9 +193,9 @@ export function findBestMatch(question, qaDatabase, options = {}) {
 /**
  * Find all matches above a threshold, sorted by score (descending).
  *
- * @param {string} question - Question to match
- * @param {Map<string, *>} qaDatabase - Q&A database
- * @param {Object} [options] - Options (same as findBestMatch)
+ * @param {Object} options - Options
+ * @param {string} options.question - Question to match
+ * @param {Map<string, *>} options.qaDatabase - Q&A database
  * @param {number} [options.threshold=0.4] - Minimum similarity threshold (0-1)
  * @param {number} [options.editWeight=0.4] - Weight for edit distance similarity
  * @param {number} [options.keywordWeight=0.6] - Weight for keyword similarity
@@ -192,7 +204,8 @@ export function findBestMatch(question, qaDatabase, options = {}) {
  * @param {number} [options.stemLength] - Stem length for keyword extraction
  * @returns {Array<{question: string, answer: *, score: number}>} Matches sorted by score
  */
-export function findAllMatches(question, qaDatabase, options = {}) {
+export function findAllMatches(options = {}) {
+  const { question, qaDatabase } = options;
   const threshold = options.threshold ?? 0.4;
   const editWeight = options.editWeight ?? 0.4;
   const keywordWeight = options.keywordWeight ?? 0.6;
@@ -205,11 +218,11 @@ export function findAllMatches(question, qaDatabase, options = {}) {
     if (dbQuestion === question) {
       score = 1.0;
     } else {
-      const editSimilarity = stringSimilarity(
-        normalizeQuestion(question),
-        normalizeQuestion(dbQuestion)
-      );
-      const kwSimilarity = keywordSimilarity(question, dbQuestion, options);
+      const editSimilarity = stringSimilarity({
+        a: normalizeQuestion({ question }),
+        b: normalizeQuestion({ question: dbQuestion })
+      });
+      const kwSimilarity = keywordSimilarity({ a: question, b: dbQuestion, ...options });
       score = editSimilarity * editWeight + kwSimilarity * keywordWeight;
     }
 

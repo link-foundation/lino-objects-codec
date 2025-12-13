@@ -28,10 +28,12 @@ const parser = new LinoParser();
  * - Use double quotes "" if the string contains single quotes
  * - Use double quotes "" if it contains both (escape internal double quotes)
  *
- * @param {*} value - The value to escape
+ * @param {Object} options - Options
+ * @param {*} options.value - The value to escape
  * @returns {string} The escaped reference
  */
-export function escapeReference(value) {
+export function escapeReference(options = {}) {
+  const { value } = options;
   // Numbers and booleans don't need escaping
   if (typeof value === 'number' || typeof value === 'boolean') {
     return String(value);
@@ -82,10 +84,12 @@ export function escapeReference(value) {
  * - Doubled quotes "" become single "
  * - Doubled quotes '' become single '
  *
- * @param {string} str - The escaped reference
+ * @param {Object} options - Options
+ * @param {string} options.str - The escaped reference
  * @returns {string} The unescaped string
  */
-export function unescapeReference(str) {
+export function unescapeReference(options = {}) {
+  const { str } = options;
   if (!str) return str;
 
   // Unescape doubled quotes (Links Notation escape sequences)
@@ -109,10 +113,13 @@ export function unescapeReference(str) {
  * Becomes:
  *   ((name 'John Doe') (age 30) (active true))
  *
- * @param {*} json - The JSON data to convert
+ * @param {Object} options - Options
+ * @param {*} options.json - The JSON data to convert
  * @returns {string} Links Notation representation
  */
-export function jsonToLino(json) {
+export function jsonToLino(options = {}) {
+  const { json } = options;
+
   // Handle null and undefined
   if (json === null || json === undefined) {
     return 'null';
@@ -124,7 +131,7 @@ export function jsonToLino(json) {
   }
 
   if (typeof json === 'string') {
-    return escapeReference(json);
+    return escapeReference({ value: json });
   }
 
   // Handle arrays - convert to link
@@ -132,7 +139,7 @@ export function jsonToLino(json) {
     if (json.length === 0) {
       return '()';
     }
-    const elements = json.map(item => jsonToLino(item));
+    const elements = json.map(item => jsonToLino({ json: item }));
     return `(${elements.join(' ')})`;
   }
 
@@ -148,8 +155,8 @@ export function jsonToLino(json) {
     // Wrap each key-value pair in its own link
     // ((key1 value1) (key2 value2) ...)
     const pairs = entries.map(([key, value]) => {
-      const escapedKey = escapeReference(key);
-      const convertedValue = jsonToLino(value);
+      const escapedKey = escapeReference({ value: key });
+      const convertedValue = jsonToLino({ json: value });
       return `(${escapedKey} ${convertedValue})`;
     });
 
@@ -157,7 +164,7 @@ export function jsonToLino(json) {
   }
 
   // Fallback for unknown types
-  return escapeReference(String(json));
+  return escapeReference({ value: String(json) });
 }
 
 /**
@@ -254,10 +261,12 @@ function convertParsedToJson(element) {
  *   - If all elements are 2-element links with string-like keys, parse as object
  *   - Otherwise, parse as array
  *
- * @param {string} lino - The Links Notation string
+ * @param {Object} options - Options
+ * @param {string} options.lino - The Links Notation string
  * @returns {*} JSON representation
  */
-export function linoToJson(lino) {
+export function linoToJson(options = {}) {
+  const { lino } = options;
   if (!lino || typeof lino !== 'string') {
     return null;
   }
@@ -288,10 +297,12 @@ export function linoToJson(lino) {
 /**
  * Format an array as Links Notation with proper indentation.
  *
- * @param {Array} values - Array of values to format
+ * @param {Object} options - Options
+ * @param {Array} options.values - Array of values to format
  * @returns {string} Formatted Links Notation string
  */
-export function formatAsLino(values) {
+export function formatAsLino(options = {}) {
+  const { values } = options;
   if (!values || values.length === 0) return '()';
 
   const formattedValues = values.map(value => `  ${value}`).join('\n');
