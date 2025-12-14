@@ -2,9 +2,9 @@
 
 import base64
 import math
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
-from links_notation import Link, Parser, format_links
+from links_notation import Link, Parser
 
 
 class ObjectCodec:
@@ -27,6 +27,8 @@ class ObjectCodec:
         self._encode_counter: int = 0
         # For tracking which objects need IDs (referenced multiple times or circularly)
         self._needs_id: Set[int] = set()
+        # For storing all definitions during encoding
+        self._all_definitions: List[Tuple[str, Link]] = []
         # For tracking references during decoding
         self._decode_memo: Dict[str, Any] = {}
         # For storing all links during multi-link decoding
@@ -46,7 +48,12 @@ class ObjectCodec:
         values = [Link(link_id=part) for part in parts]
         return Link(values=values)
 
-    def _find_objects_needing_ids(self, obj: Any, seen: Optional[Dict[int, List[int]]] = None, path: Optional[List[int]] = None) -> None:
+    def _find_objects_needing_ids(
+        self,
+        obj: Any,
+        seen: Optional[Dict[int, List[int]]] = None,
+        path: Optional[List[int]] = None,
+    ) -> None:
         """
         First pass: identify which objects need IDs (referenced multiple times or circularly).
 
@@ -95,6 +102,9 @@ class ObjectCodec:
         """
         Encode a Python object to Links Notation format.
 
+        Uses multi-link format to avoid parser bugs with nested self-references.
+        Each self-referenced object is defined at the top level.
+
         Args:
             obj: The Python object to encode
 
@@ -105,15 +115,29 @@ class ObjectCodec:
         self._encode_memo = {}
         self._encode_counter = 0
         self._needs_id = set()
+        self._all_definitions = []
 
         # First pass: identify which objects need IDs (referenced multiple times or circularly)
         self._find_objects_needing_ids(obj)
 
-        # Encode the object
-        link = self._encode_value(obj, depth=0)
+        # Encode the object (this populates _all_definitions)
+        main_link = self._encode_value(obj, depth=0)
 
-        # Return formatted link
-        return link.format()
+        # If we have additional definitions, output them all as multi-link format
+        if self._all_definitions:
+            # The main link should be first
+            all_links = [main_link]
+            # Add all other definitions
+            for ref_id, link in self._all_definitions:
+                # Only add if not the main link (avoid duplicates)
+                if not (main_link.id and main_link.id == ref_id):
+                    all_links.append(link)
+
+            # Format as multi-link (newline separated)
+            return "\n".join(link.format() for link in all_links)
+
+        # Single link output
+        return main_link.format()
 
     def decode(self, notation: str) -> Any:
         """
@@ -173,11 +197,9 @@ class ObjectCodec:
         # Check if we've seen this object before (for circular references and shared objects)
         # Only track mutable objects (lists, dicts)
         if isinstance(obj, (list, dict)) and obj_id in self._encode_memo:
-            # If depth > 0, return a reference
-            # If depth == 0, we're encoding this as a top-level definition, so continue
-            if depth > 0:
-                ref_id = self._encode_memo[obj_id]
-                return Link(link_id=ref_id)
+            # Return a reference to the previously defined object
+            ref_id = self._encode_memo[obj_id]
+            return Link(link_id=ref_id)
 
         # For mutable objects that need IDs, assign them
         if isinstance(obj, (list, dict)) and obj_id in self._needs_id:
@@ -186,11 +208,10 @@ class ObjectCodec:
                 ref_id = f"obj_{self._encode_counter}"
                 self._encode_counter += 1
                 self._encode_memo[obj_id] = ref_id
-            else:
-                ref_id = self._encode_memo[obj_id]
 
             if obj_id in visited:
                 # We're in a cycle, create a direct reference
+                ref_id = self._encode_memo[obj_id]
                 return Link(link_id=ref_id)
 
             # Add to visited set
@@ -230,11 +251,18 @@ class ObjectCodec:
                 # Encode each item with increased depth
                 item_link = self._encode_value(item, visited, depth + 1)
                 parts.append(item_link)
+
             # If this list has an ID, use self-reference format: (obj_id: list item1 item2 ...)
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
-                # Return the inline definition with self-reference ID
-                return Link(link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts)
+                # Create the definition with self-reference ID
+                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts)
+                # Store for multi-link output if not at top level
+                if depth > 0:
+                    self._all_definitions.append((ref_id, definition))
+                    # Return a reference instead of the full definition
+                    return Link(link_id=ref_id)
+                return definition
             else:
                 # Wrap in a type marker for lists without IDs: (list item1 item2 ...)
                 return Link(values=[Link(link_id=self.TYPE_LIST)] + parts)
@@ -248,11 +276,18 @@ class ObjectCodec:
                 # Create a pair link
                 pair = Link(values=[key_link, value_link])
                 parts.append(pair)
+
             # If this dict has an ID, use self-reference format: (obj_id: dict (key val) ...)
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
-                # Return the inline definition with self-reference ID
-                return Link(link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts)
+                # Create the definition with self-reference ID
+                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts)
+                # Store for multi-link output if not at top level
+                if depth > 0:
+                    self._all_definitions.append((ref_id, definition))
+                    # Return a reference instead of the full definition
+                    return Link(link_id=ref_id)
+                return definition
             else:
                 # Wrap in a type marker for dicts without IDs: (dict (key val) ...)
                 return Link(values=[Link(link_id=self.TYPE_DICT)] + parts)
@@ -291,7 +326,7 @@ class ObjectCodec:
                             return self._decode_link(other_link)
 
                     # Not found in links - create empty list as fallback
-                    result = []
+                    result: List[Any] = []
                     self._decode_memo[link.id] = result
                     return result
 
@@ -363,16 +398,8 @@ class ObjectCodec:
 
         elif type_marker == self.TYPE_LIST:
             # New format with self-reference: (obj_0: list item1 item2 ...)
-            # Old format (for backward compatibility): (list obj_id item1 item2 ...)
             start_idx = 1
             list_id = self_ref_id  # Use self-reference ID from link.id if present
-
-            # Check for old format with obj_id as second element
-            if not list_id and len(link.values) > 1:
-                second = link.values[1]
-                if hasattr(second, 'id') and second.id and second.id.startswith('obj_'):
-                    list_id = second.id
-                    start_idx = 2
 
             result_list: List[Any] = []
             if list_id:
@@ -385,16 +412,8 @@ class ObjectCodec:
 
         elif type_marker == self.TYPE_DICT:
             # New format with self-reference: (obj_0: dict (key val) ...)
-            # Old format (for backward compatibility): (dict obj_id (key val) ...)
             start_idx = 1
             dict_id = self_ref_id  # Use self-reference ID from link.id if present
-
-            # Check for old format with obj_id as second element
-            if not dict_id and len(link.values) > 1:
-                second = link.values[1]
-                if hasattr(second, 'id') and second.id and second.id.startswith('obj_'):
-                    dict_id = second.id
-                    start_idx = 2
 
             result_dict: Dict[Any, Any] = {}
             if dict_id:
