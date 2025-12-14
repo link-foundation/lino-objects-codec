@@ -9,17 +9,14 @@ on:
 jobs:
   test-python:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.13']
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: '3.13'
 
     - name: Install dependencies
       working-directory: ./python
@@ -36,27 +33,22 @@ jobs:
       working-directory: ./python
       run: |
         ruff check src/ tests/
-      continue-on-error: true
 
     - name: Run type checker (mypy)
       working-directory: ./python
       run: |
         mypy src/
-      continue-on-error: true
 
   test-javascript:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['22']
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Set up Node.js ${{ matrix.python-version }}
+    - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '22'
 
     - name: Install dependencies
       working-directory: ./js
