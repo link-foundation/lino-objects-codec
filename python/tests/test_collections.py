@@ -23,14 +23,14 @@ class TestLists:
         encoded = encode([])
         result = decode(encoded)
         assert result == []
-        assert type(result) == list
+        assert isinstance(result, list)
 
     def test_decode_simple_list(self):
         """Test decoding simple list."""
         encoded = encode([1, 2, 3])
         result = decode(encoded)
         assert result == [1, 2, 3]
-        assert type(result) == list
+        assert isinstance(result, list)
 
     def test_roundtrip_list(self):
         """Test roundtrip encoding/decoding of lists."""
@@ -47,7 +47,7 @@ class TestLists:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == value
-            assert type(decoded) == list
+            assert isinstance(decoded, list)
 
     def test_nested_lists(self):
         """Test encoding/decoding nested lists."""
@@ -84,14 +84,14 @@ class TestDicts:
         encoded = encode({})
         result = decode(encoded)
         assert result == {}
-        assert type(result) == dict
+        assert isinstance(result, dict)
 
     def test_decode_simple_dict(self):
         """Test decoding simple dict."""
         encoded = encode({"a": 1, "b": 2})
         result = decode(encoded)
         assert result == {"a": 1, "b": 2}
-        assert type(result) == dict
+        assert isinstance(result, dict)
 
     def test_roundtrip_dict(self):
         """Test roundtrip encoding/decoding of dicts."""
@@ -108,7 +108,7 @@ class TestDicts:
             encoded = encode(value)
             decoded = decode(encoded)
             assert decoded == value
-            assert type(decoded) == dict
+            assert isinstance(decoded, dict)
 
     def test_nested_dicts(self):
         """Test encoding/decoding nested dicts."""

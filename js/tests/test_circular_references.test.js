@@ -11,11 +11,11 @@ test('self-referencing array', () => {
   const arr = [1, 2, 3];
   arr.push(arr); // Circular reference
 
-  const encoded = encode(arr);
+  const encoded = encode({ obj: arr });
   assert.ok(encoded);
   assert.equal(typeof encoded, 'string');
 
-  const decoded = decode(encoded);
+  const decoded = decode({ notation: encoded });
   assert.ok(Array.isArray(decoded));
   assert.equal(decoded.length, 4);
   assert.equal(decoded[0], 1);
@@ -29,8 +29,8 @@ test('array with self in middle', () => {
   arr.push(arr);
   arr.push(3);
 
-  const encoded = encode(arr);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: arr });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.length, 4);
   assert.equal(decoded[0], 1);
@@ -44,8 +44,8 @@ test('nested array with circular reference', () => {
   const outer = [inner, 3];
   inner.push(outer); // Create circular reference: inner -> outer -> inner
 
-  const encoded = encode(outer);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: outer });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.length, 2);
   assert.equal(decoded[1], 3);
@@ -60,11 +60,11 @@ test('self-referencing object', () => {
   const obj = { name: 'root' };
   obj.self = obj; // Circular reference
 
-  const encoded = encode(obj);
+  const encoded = encode({ obj: obj });
   assert.ok(encoded);
   assert.equal(typeof encoded, 'string');
 
-  const decoded = decode(encoded);
+  const decoded = decode({ notation: encoded });
   assert.equal(typeof decoded, 'object');
   assert.equal(decoded.name, 'root');
   assert.equal(decoded.self, decoded); // Circular reference preserved
@@ -76,8 +76,8 @@ test('object with multiple self-references', () => {
   obj.ref2 = obj;
   obj.ref3 = obj;
 
-  const encoded = encode(obj);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: obj });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'root');
   assert.equal(decoded.ref1, decoded);
@@ -91,8 +91,8 @@ test('nested object with circular reference', () => {
   const parent = { name: 'parent', child: child };
   child.parent = parent; // Create circular reference
 
-  const encoded = encode(parent);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: parent });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'parent');
   assert.equal(decoded.child.name, 'child');
@@ -105,8 +105,8 @@ test('complex circular structure (tree with back-references)', () => {
   const child2 = { name: 'child2', parent: root };
   root.children.push(child1, child2);
 
-  const encoded = encode(root);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: root });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'root');
   assert.equal(decoded.children.length, 2);
@@ -125,8 +125,8 @@ test('shared object reference', () => {
     second: shared,
   };
 
-  const encoded = encode(container);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: container });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.first.value, 42);
   assert.equal(decoded.second.value, 42);
@@ -140,8 +140,8 @@ test('shared object reference - modification', () => {
     second: shared,
   };
 
-  const encoded = encode(container);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: container });
+  const decoded = decode({ notation: encoded });
 
   // Modify through one reference
   decoded.first.modified = true;
@@ -161,8 +161,8 @@ test('multiple shared objects', () => {
     d: obj2, // Share obj2
   };
 
-  const encoded = encode(container);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: container });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.a.id, 1);
   assert.equal(decoded.b.id, 2);
@@ -179,8 +179,8 @@ test('shared array reference', () => {
     third: shared,
   };
 
-  const encoded = encode(container);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: container });
+  const decoded = decode({ notation: encoded });
 
   assert.deepEqual(decoded.first, [1, 2, 3]);
   assert.equal(decoded.first, decoded.second);
@@ -203,8 +203,8 @@ test('circular and shared references combined', () => {
   };
   obj.self = obj; // Add circular reference
 
-  const encoded = encode(obj);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: obj });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'root');
   assert.equal(decoded.ref1.shared, 'data');
@@ -218,8 +218,8 @@ test('deeply nested circular structure', () => {
   const c = { name: 'c', ref: b };
   a.ref = c; // Create a -> c -> b -> a cycle
 
-  const encoded = encode(a);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: a });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'a');
   assert.equal(decoded.ref.name, 'c');
@@ -232,8 +232,8 @@ test('array and object circular reference', () => {
   const arr = [1, obj];
   obj.arr = arr; // obj -> arr -> obj
 
-  const encoded = encode(obj);
-  const decoded = decode(encoded);
+  const encoded = encode({ obj: obj });
+  const decoded = decode({ notation: encoded });
 
   assert.equal(decoded.name, 'obj');
   assert.ok(Array.isArray(decoded.arr));

@@ -21,8 +21,8 @@ function main() {
   ];
 
   for (const obj of basicExamples) {
-    const encoded = encode(obj);
-    const decoded = decode(encoded);
+    const encoded = encode({ obj });
+    const decoded = decode({ notation: encoded });
     const encodedPreview = encoded.substring(0, 50);
     console.log(`  ${String(obj).padEnd(30)} -> ${encodedPreview.padEnd(50)} -> ${decoded}`);
     // Handle NaN case (NaN !== NaN)
@@ -38,16 +38,16 @@ function main() {
   const objectExample = { name: 'Alice', age: 30, active: true };
 
   console.log(`  Array: ${JSON.stringify(arrayExample)}`);
-  const encodedArray = encode(arrayExample);
+  const encodedArray = encode({ obj: arrayExample });
   console.log(`  Encoded: ${encodedArray}`);
-  const decodedArray = decode(encodedArray);
+  const decodedArray = decode({ notation: encodedArray });
   console.log(`  Decoded: ${JSON.stringify(decodedArray)}`);
   console.log(`  Match: ${JSON.stringify(decodedArray) === JSON.stringify(arrayExample)}`);
 
   console.log(`\n  Object: ${JSON.stringify(objectExample)}`);
-  const encodedObject = encode(objectExample);
+  const encodedObject = encode({ obj: objectExample });
   console.log(`  Encoded: ${encodedObject}`);
-  const decodedObject = decode(encodedObject);
+  const decodedObject = decode({ notation: encodedObject });
   console.log(`  Decoded: ${JSON.stringify(decodedObject)}`);
   console.log(`  Match: ${JSON.stringify(decodedObject) === JSON.stringify(objectExample)}`);
 
@@ -61,9 +61,9 @@ function main() {
     metadata: { version: 1, count: 2 },
   };
   console.log(`  Original: ${JSON.stringify(nested)}`);
-  const encodedNested = encode(nested);
+  const encodedNested = encode({ obj: nested });
   console.log(`  Encoded length: ${encodedNested.length} characters`);
-  const decodedNested = decode(encodedNested);
+  const decodedNested = decode({ notation: encodedNested });
   console.log(`  Decoded: ${JSON.stringify(decodedNested)}`);
   console.log(`  Match: ${JSON.stringify(decodedNested) === JSON.stringify(nested)}`);
 
@@ -74,9 +74,9 @@ function main() {
   const arr = [1, 2, 3];
   arr.push(arr);
   console.log('  Created self-referencing array');
-  const encodedCircular = encode(arr);
+  const encodedCircular = encode({ obj: arr });
   console.log(`  Encoded: ${encodedCircular}`);
-  const decodedCircular = decode(encodedCircular);
+  const decodedCircular = decode({ notation: encodedCircular });
   console.log(`  Decoded correctly: ${JSON.stringify(decodedCircular.slice(0, 3)) === '[1,2,3]'}`);
   console.log(`  Circular reference preserved: ${decodedCircular[3] === decodedCircular}`);
   if (decodedCircular[3] !== decodedCircular) {
@@ -87,9 +87,9 @@ function main() {
   const obj = { name: 'root' };
   obj.self = obj;
   console.log('\n  Created self-referencing object');
-  const encodedObjectCircular = encode(obj);
+  const encodedObjectCircular = encode({ obj });
   console.log(`  Encoded: ${encodedObjectCircular}`);
-  const decodedObjectCircular = decode(encodedObjectCircular);
+  const decodedObjectCircular = decode({ notation: encodedObjectCircular });
   console.log(`  Decoded correctly: ${decodedObjectCircular.name === 'root'}`);
   console.log(`  Circular reference preserved: ${decodedObjectCircular.self === decodedObjectCircular}`);
   if (decodedObjectCircular.self !== decodedObjectCircular) {
@@ -101,9 +101,9 @@ function main() {
   const shared = { shared: 'data', value: 42 };
   const container = { first: shared, second: shared, third: shared };
   console.log('  Created container with 3 references to same object');
-  const encodedShared = encode(container);
+  const encodedShared = encode({ obj: container });
   console.log(`  Encoded: ${encodedShared}`);
-  const decodedShared = decode(encodedShared);
+  const decodedShared = decode({ notation: encodedShared });
   const allSame = decodedShared.first === decodedShared.second &&
                   decodedShared.second === decodedShared.third;
   console.log(`  All three references point to same object: ${allSame}`);

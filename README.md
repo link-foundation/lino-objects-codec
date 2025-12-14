@@ -25,6 +25,9 @@ Both implementations share the same design philosophy and provide feature parity
 - **Object Identity**: Maintain object identity for shared references
 - **UTF-8 Support**: Full Unicode string support using base64 encoding
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
+- **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
+- **Reference Escaping**: Properly escape strings for Links Notation format (JavaScript)
+- **Fuzzy Matching**: String similarity utilities for finding matches (JavaScript)
 
 ## Quick Start
 

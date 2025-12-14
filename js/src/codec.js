@@ -41,10 +41,12 @@ export class ObjectCodec {
 
   /**
    * Encode a JavaScript object to Links Notation format.
-   * @param {*} obj - The JavaScript object to encode
+   * @param {Object} options - Options
+   * @param {*} options.obj - The JavaScript object to encode
    * @returns {string} String representation in Links Notation format
    */
-  encode(obj) {
+  encode(options = {}) {
+    const { obj } = options;
     // Reset memo for each encode operation
     this._encodeMemo = new Map();
     this._encodeCounter = 0;
@@ -56,10 +58,12 @@ export class ObjectCodec {
 
   /**
    * Decode Links Notation format to a JavaScript object.
-   * @param {string} notation - String in Links Notation format
+   * @param {Object} options - Options
+   * @param {string} options.notation - String in Links Notation format
    * @returns {*} Reconstructed JavaScript object
    */
-  decode(notation) {
+  decode(options = {}) {
+    const { notation } = options;
     // Reset memo for each decode operation
     this._decodeMemo = new Map();
 
@@ -344,18 +348,20 @@ const _defaultCodec = new ObjectCodec();
 
 /**
  * Encode a JavaScript object to Links Notation format.
- * @param {*} obj - The JavaScript object to encode
+ * @param {Object} options - Options
+ * @param {*} options.obj - The JavaScript object to encode
  * @returns {string} String representation in Links Notation format
  */
-export function encode(obj) {
-  return _defaultCodec.encode(obj);
+export function encode(options = {}) {
+  return _defaultCodec.encode(options);
 }
 
 /**
  * Decode Links Notation format to a JavaScript object.
- * @param {string} notation - String in Links Notation format
+ * @param {Object} options - Options
+ * @param {string} options.notation - String in Links Notation format
  * @returns {*} Reconstructed JavaScript object
  */
-export function decode(notation) {
-  return _defaultCodec.decode(notation);
+export function decode(options = {}) {
+  return _defaultCodec.decode(options);
 }
