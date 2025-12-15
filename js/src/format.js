@@ -8,7 +8,7 @@
  * - LinksNotationManager (from https://github.com/konard/follow/blob/main/lino.lib.mjs)
  * - Q&A database (from https://github.com/konard/hh-job-application-automation/blob/main/src/qa-database.mjs)
  *
- * @module link-notation-objects-codec/format
+ * @module lino-objects-codec/format
  */
 
 import { Parser as LinoParser } from 'links-notation';

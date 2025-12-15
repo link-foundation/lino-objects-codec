@@ -1,4 +1,4 @@
-"""Basic usage examples for link-notation-objects-codec."""
+"""Basic usage examples for lino-objects-codec."""
 
 from link_notation_objects_codec import encode, decode
 

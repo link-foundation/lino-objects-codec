@@ -1,5 +1,5 @@
 {
-  "name": "link-notation-objects-codec",
+  "name": "lino-objects-codec",
   "version": "0.1.0",
   "description": "A library to encode/decode objects to/from links notation",
   "type": "module",
@@ -22,7 +22,7 @@
   "license": "Unlicense",
   "repository": {
     "type": "git",
-    "url": "https://github.com/link-foundation/link-notation-objects-codec.git"
+    "url": "https://github.com/link-foundation/lino-objects-codec.git"
   },
   "dependencies": {
     "links-notation": "^0.11.0"

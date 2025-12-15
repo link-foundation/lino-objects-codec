@@ -1,4 +1,4 @@
-# link-notation-objects-codec (JavaScript)
+# lino-objects-codec (JavaScript)
 
 A JavaScript library for working with Links Notation format. This library provides:
 - Universal serialization/deserialization for JavaScript objects with circular reference support
@@ -27,26 +27,26 @@ These tools enable easy implementation of higher-level features like:
 ## Installation
 
 ```bash
-npm install link-notation-objects-codec
+npm install lino-objects-codec
 ```
 
 Or with other package managers:
 
 ```bash
 # Bun
-bun add link-notation-objects-codec
+bun add lino-objects-codec
 
 # Yarn
-yarn add link-notation-objects-codec
+yarn add lino-objects-codec
 
 # pnpm
-pnpm add link-notation-objects-codec
+pnpm add lino-objects-codec
 ```
 
 ## Quick Start
 
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // Encode basic types
 const encoded = encode({ obj: { name: 'Alice', age: 30, active: true } } } });
@@ -68,7 +68,7 @@ console.log(JSON.stringify(decoded) === JSON.stringify({ name: 'Alice', age: 30,
 ### Basic Types
 
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // null and undefined
 console.log(decode({ notation: encode({ obj: null } }))); // null
@@ -97,7 +97,7 @@ console.log(decode({ notation: encode({ obj: 'multi\nline\nstring' } }))); // 'm
 ### Collections
 
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // Arrays
 const data = [1, 2, 3, 'hello', true, null];
@@ -134,7 +134,7 @@ console.log(JSON.stringify(decode({ notation: encode({ obj: complexData } }))) =
 The library automatically handles circular references and shared objects:
 
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // Self-referencing array
 const arr = [1, 2, 3];
@@ -172,7 +172,7 @@ console.log(decoded4.children[0].parent === decoded4); // true
 Convert between JSON and Links Notation format:
 
 ```javascript
-import { jsonToLino, linoToJson, escapeReference } from 'link-notation-objects-codec';
+import { jsonToLino, linoToJson, escapeReference } from 'lino-objects-codec';
 
 // Convert JSON to Links Notation
 const data = { name: 'Alice', age: 30 };
@@ -204,7 +204,7 @@ import {
   findAllMatches,
   extractKeywords,
   normalizeQuestion,
-} from 'link-notation-objects-codec';
+} from 'lino-objects-codec';
 
 // Calculate edit distance
 const distance = levenshteinDistance({ a: 'hello', b: 'hallo' }); // 1
@@ -285,7 +285,7 @@ Decode Links Notation format to a JavaScript object.
 The main codec class that performs encoding and decoding. The module-level `encode({ obj: )` and `decode({ notation:  } })` functions use a shared instance of this class.
 
 ```javascript
-import { ObjectCodec } from 'link-notation-objects-codec';
+import { ObjectCodec } from 'lino-objects-codec';
 
 const codec = new ObjectCodec();
 const encoded = codec.encode({ data: [1, 2, 3] });
@@ -452,8 +452,8 @@ Find all matches above a threshold, sorted by score.
 
 ```bash
 # Clone the repository
-git clone https://github.com/link-foundation/link-notation-objects-codec.git
-cd link-notation-objects-codec/js
+git clone https://github.com/link-foundation/lino-objects-codec.git
+cd lino-objects-codec/js
 
 # Install dependencies
 npm install
@@ -487,9 +487,9 @@ This project is licensed under the Unlicense - see the [LICENSE](../LICENSE) fil
 
 ## Links
 
-- [GitHub Repository](https://github.com/link-foundation/link-notation-objects-codec)
+- [GitHub Repository](https://github.com/link-foundation/lino-objects-codec)
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
-- [npm Package](https://www.npmjs.com/package/link-notation-objects-codec/)
+- [npm Package](https://www.npmjs.com/package/lino-objects-codec/)
 - [Python Implementation](../python/)
 
 ## Acknowledgments

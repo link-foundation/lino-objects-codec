@@ -1,1 +1,1 @@
-"""Tests for link-notation-objects-codec."""
+"""Tests for lino-objects-codec."""
