@@ -1,5 +1,5 @@
 /**
- * Basic usage examples for link-notation-objects-codec.
+ * Basic usage examples for lino-objects-codec.
  */
 
 import { encode, decode } from '../src/index.js';

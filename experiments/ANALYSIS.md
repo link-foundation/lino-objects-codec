@@ -2,11 +2,11 @@
 
 ## Issue Summary
 
-Issue #7 requests that `link-notation-objects-codec` supports all features from two reference implementations:
+Issue #7 requests that `lino-objects-codec` supports all features from two reference implementations:
 1. [lino.lib.mjs](https://github.com/konard/follow/blob/main/lino.lib.mjs) - LinksNotationManager for intermediate application data storage
 2. [qa-database.mjs](https://github.com/konard/hh-job-application-automation/blob/main/src/qa-database.mjs) - Q&A Database
 
-The goal is to make `link-notation-objects-codec` a drop-in replacement.
+The goal is to make `lino-objects-codec` a drop-in replacement.
 
 ## Current State Analysis
 
@@ -75,7 +75,7 @@ The reference implementations include **application-level features** that should
 
 ## Architectural Decision
 
-### The Right Scope for link-notation-objects-codec
+### The Right Scope for lino-objects-codec
 
 A codec library should provide:
 1. ✅ **Encoding/Decoding** - Core transformation between formats
@@ -110,7 +110,7 @@ A codec library should NOT provide:
 ### Example: Building LinksNotationManager-like Features
 
 ```javascript
-import { jsonToLino, linoToJson, formatAsLino } from 'link-notation-objects-codec';
+import { jsonToLino, linoToJson, formatAsLino } from 'lino-objects-codec';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
@@ -143,8 +143,8 @@ class MyLinksNotationManager {
 ### Example: Building Q&A Database
 
 ```javascript
-import { escapeReference, unescapeReference } from 'link-notation-objects-codec/format';
-import { findBestMatch } from 'link-notation-objects-codec/fuzzy-match';
+import { escapeReference, unescapeReference } from 'lino-objects-codec/format';
+import { findBestMatch } from 'lino-objects-codec/fuzzy-match';
 import fs from 'fs/promises';
 
 async function readQADatabase(filePath) {

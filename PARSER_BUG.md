@@ -133,14 +133,14 @@ The JavaScript implementation of `links-notation` correctly parses the nested se
 
 ## Impact
 
-This bug prevents the `link-notation-objects-codec` library from properly encoding/decoding mutually-referential dict structures using the inline self-reference format. It limits the library to either:
+This bug prevents the `lino-objects-codec` library from properly encoding/decoding mutually-referential dict structures using the inline self-reference format. It limits the library to either:
 1. Using the multi-line workaround (separate top-level definitions)
 2. Only supporting list-based circular references (which work because they don't nest definitions in pairs)
 
 ## References
 
-- Issue: https://github.com/link-foundation/link-notation-objects-codec/issues/5
-- Pull Request: https://github.com/link-foundation/link-notation-objects-codec/pull/6
+- Issue: https://github.com/link-foundation/lino-objects-codec/issues/5
+- Pull Request: https://github.com/link-foundation/lino-objects-codec/pull/6
 - Links Notation Specification: https://github.com/link-foundation/links-notation
 
 ## Requested Action

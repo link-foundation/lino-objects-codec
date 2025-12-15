@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "link-notation-objects-codec"
+name = "lino-objects-codec"
 version = "0.1.0"
 description = "A library to encode/decode objects to/from links notation"
 readme = "README.md"
@@ -31,8 +31,8 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/link-foundation/link-notation-objects-codec"
-Repository = "https://github.com/link-foundation/link-notation-objects-codec"
+Homepage = "https://github.com/link-foundation/lino-objects-codec"
+Repository = "https://github.com/link-foundation/lino-objects-codec"
 
 [tool.setuptools.packages.find]
 where = ["src"]

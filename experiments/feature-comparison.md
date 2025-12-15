@@ -1,4 +1,4 @@
-# Feature Comparison: link-notation-objects-codec vs Reference Implementations
+# Feature Comparison: lino-objects-codec vs Reference Implementations
 
 ## Reference Implementations
 
@@ -50,7 +50,7 @@ Location: https://github.com/konard/hh-job-application-automation/blob/main/src/
   - `keywordSimilarityCaseSensitive()` - Case-sensitive keyword similarity
   - `findBestMatch()` - Find best matching entry with fuzzy matching
 
-## Current Implementation (link-notation-objects-codec)
+## Current Implementation (lino-objects-codec)
 
 ### JavaScript (js/src/)
 
@@ -86,7 +86,7 @@ Location: https://github.com/konard/hh-job-application-automation/blob/main/src/
 
 ## Gap Analysis
 
-### Missing Features in link-notation-objects-codec
+### Missing Features in lino-objects-codec
 
 From **lino.lib.mjs**:
 1. ❌ `parse()` - Extract values from Links Notation input
@@ -142,7 +142,7 @@ The reference implementations include **high-level features** that are **applica
 
 ## Recommendation
 
-The current `link-notation-objects-codec` library **already provides ALL the core utilities** needed to build the higher-level applications like `LinksNotationManager` and `qa-database`.
+The current `lino-objects-codec` library **already provides ALL the core utilities** needed to build the higher-level applications like `LinksNotationManager` and `qa-database`.
 
 **The missing features are intentionally NOT included** because they are:
 1. Application-specific (file I/O, Q&A database, locking)
@@ -154,7 +154,7 @@ The current `link-notation-objects-codec` library **already provides ALL the cor
 ### What the issue actually asks for
 
 Looking at issue #7:
-> "So we need to support all features of these, so our `link-notation-objects-codec` can be a drop in replacement for both places."
+> "So we need to support all features of these, so our `lino-objects-codec` can be a drop in replacement for both places."
 
 This means we need to ensure that our core utilities are **compatible** and can be used to build the same high-level features, NOT that we need to include all the application-specific code.
 

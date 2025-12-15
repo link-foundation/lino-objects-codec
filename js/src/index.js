@@ -1,5 +1,5 @@
 /**
- * Link Notation Objects Codec - Universal serializer/deserializer for JavaScript objects.
+ * Lino Objects Codec - Universal serializer/deserializer for JavaScript objects.
  *
  * This library provides:
  * - Typed serialization/deserialization of JavaScript objects to/from Links Notation format
@@ -11,7 +11,7 @@
  * - LinksNotationManager (from https://github.com/konard/follow/blob/main/lino.lib.mjs)
  * - Q&A database (from https://github.com/konard/hh-job-application-automation/blob/main/src/qa-database.mjs)
  *
- * @module link-notation-objects-codec
+ * @module lino-objects-codec
  */
 
 // Typed object codec (preserves types with markers like (int 42), (str base64))

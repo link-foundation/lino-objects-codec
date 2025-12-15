@@ -1,7 +1,7 @@
-# link-notation-objects-codec (Python)
+# lino-objects-codec (Python)
 
-[![Tests](https://github.com/link-foundation/link-notation-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/link-notation-objects-codec/actions/workflows/test.yml)
-[![Python Version](https://img.shields.io/pypi/pyversions/link-notation-objects-codec.svg)](https://pypi.org/project/link-notation-objects-codec/)
+[![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
+[![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
 
 A Python library to encode/decode objects to/from Links Notation format. This library provides universal serialization and deserialization for Python objects, with built-in support for circular references and complex object graphs.
 
@@ -20,7 +20,7 @@ A Python library to encode/decode objects to/from Links Notation format. This li
 ## Installation
 
 ```bash
-pip install link-notation-objects-codec
+pip install lino-objects-codec
 ```
 
 ## Quick Start
@@ -204,8 +204,8 @@ decoded = codec.decode(encoded)
 
 ```bash
 # Clone the repository
-git clone https://github.com/link-foundation/link-notation-objects-codec.git
-cd link-notation-objects-codec/python
+git clone https://github.com/link-foundation/lino-objects-codec.git
+cd lino-objects-codec/python
 
 # Create virtual environment
 python -m venv .venv
@@ -256,9 +256,9 @@ This project is licensed under the Unlicense - see the [LICENSE](../LICENSE) fil
 
 ## Links
 
-- [GitHub Repository](https://github.com/link-foundation/link-notation-objects-codec)
+- [GitHub Repository](https://github.com/link-foundation/lino-objects-codec)
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
-- [PyPI Package](https://pypi.org/project/link-notation-objects-codec/)
+- [PyPI Package](https://pypi.org/project/lino-objects-codec/)
 - [JavaScript Implementation](../js/)
 
 ## Acknowledgments

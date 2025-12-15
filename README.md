@@ -1,7 +1,7 @@
-# link-notation-objects-codec
+# lino-objects-codec
 
-[![Tests](https://github.com/link-foundation/link-notation-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/link-notation-objects-codec/actions/workflows/test.yml)
-[![Python Version](https://img.shields.io/pypi/pyversions/link-notation-objects-codec.svg)](https://pypi.org/project/link-notation-objects-codec/)
+[![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
+[![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
 
 Universal serialization library to encode/decode objects to/from Links Notation format. Available in both **Python** and **JavaScript** with identical functionality and API design.
 
@@ -34,7 +34,7 @@ Both implementations share the same design philosophy and provide feature parity
 ### Python
 
 ```bash
-pip install link-notation-objects-codec
+pip install lino-objects-codec
 ```
 
 ```python
@@ -50,11 +50,11 @@ assert decoded == data
 ### JavaScript
 
 ```bash
-npm install link-notation-objects-codec
+npm install lino-objects-codec
 ```
 
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // Encode and decode
 const data = { name: 'Alice', age: 30, active: true };
@@ -106,7 +106,7 @@ assert decoded[3] is decoded  # Reference preserved
 
 **JavaScript:**
 ```javascript
-import { encode, decode } from 'link-notation-objects-codec';
+import { encode, decode } from 'lino-objects-codec';
 
 // Self-referencing array
 const arr = [1, 2, 3];
@@ -199,10 +199,10 @@ This project is licensed under the Unlicense - see the [LICENSE](LICENSE) file f
 
 ## Links
 
-- [GitHub Repository](https://github.com/link-foundation/link-notation-objects-codec)
+- [GitHub Repository](https://github.com/link-foundation/lino-objects-codec)
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
-- [PyPI Package](https://pypi.org/project/link-notation-objects-codec/) (Python)
-- [npm Package](https://www.npmjs.com/package/link-notation-objects-codec/) (JavaScript)
+- [PyPI Package](https://pypi.org/project/lino-objects-codec/) (Python)
+- [npm Package](https://www.npmjs.com/package/lino-objects-codec/) (JavaScript)
 
 ## Acknowledgments
 
