@@ -3,7 +3,7 @@
 [![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
 [![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
 
-Universal serialization library to encode/decode objects to/from Links Notation format. Available in both **Python** and **JavaScript** with identical functionality and API design.
+Universal serialization library to encode/decode objects to/from Links Notation format. Available in **Python**, **JavaScript**, and **C#** with identical functionality and API design.
 
 ## 🌍 Multi-Language Support
 
@@ -11,8 +11,9 @@ This library provides universal serialization and deserialization with built-in 
 
 - **[Python](python/)** - Full implementation for Python 3.8+
 - **[JavaScript](js/)** - Full implementation for Node.js 18+
+- **[C#](csharp/)** - Full implementation for .NET 8.0+
 
-Both implementations share the same design philosophy and provide feature parity.
+All implementations share the same design philosophy and provide feature parity.
 
 ## Features
 
@@ -20,6 +21,7 @@ Both implementations share the same design philosophy and provide feature parity
 - **Type Support**: Handle all common types in each language:
   - **Python**: `None`, `bool`, `int`, `float`, `str`, `list`, `dict`
   - **JavaScript**: `null`, `undefined`, `boolean`, `number`, `string`, `Array`, `Object`
+  - **C#**: `null`, `bool`, `int`, `long`, `float`, `double`, `string`, `List<object?>`, `Dictionary<string, object?>`
   - Special float/number values: `NaN`, `Infinity`, `-Infinity`
 - **Circular References**: Automatically detect and preserve circular references
 - **Object Identity**: Maintain object identity for shared references
@@ -63,6 +65,27 @@ const decoded = decode(encoded);
 console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 ```
 
+### C#
+
+```bash
+dotnet add package Lino.Objects.Codec
+```
+
+```csharp
+using Lino.Objects.Codec;
+
+// Encode and decode
+var data = new Dictionary<string, object?>
+{
+    { "name", "Alice" },
+    { "age", 30 },
+    { "active", true }
+};
+var encoded = Codec.Encode(data);
+var decoded = Codec.Decode(encoded) as Dictionary<string, object?>;
+Console.WriteLine(decoded?["name"]); // Alice
+```
+
 ## Repository Structure
 
 ```
@@ -77,6 +100,11 @@ console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 │   ├── tests/       # Test suite
 │   ├── examples/    # Usage examples
 │   └── README.md    # JavaScript-specific docs
+├── csharp/          # C# implementation
+│   ├── src/         # Source code
+│   ├── tests/       # Test suite
+│   ├── examples/    # Usage examples
+│   └── README.md    # C#-specific docs
 └── README.md        # This file
 ```
 
@@ -86,10 +114,11 @@ For detailed documentation, API reference, and examples, see:
 
 - **[Python Documentation](python/README.md)**
 - **[JavaScript Documentation](js/README.md)**
+- **[C# Documentation](csharp/README.md)**
 
 ## Usage Examples
 
-Both implementations support the same features with language-appropriate syntax:
+All implementations support the same features with language-appropriate syntax:
 
 ### Circular References
 
@@ -113,6 +142,17 @@ const arr = [1, 2, 3];
 arr.push(arr);
 const decoded = decode(encode(arr));
 console.log(decoded[3] === decoded); // true - Reference preserved
+```
+
+**C#:**
+```csharp
+using Lino.Objects.Codec;
+
+// Self-referencing list
+var lst = new List<object?>();
+lst.Add(lst);
+var decoded = Codec.Decode(Codec.Encode(lst)) as List<object?>;
+Console.WriteLine(ReferenceEquals(decoded, decoded?[0])); // True - Reference preserved
 ```
 
 ### Complex Nested Structures
@@ -139,6 +179,22 @@ const data = {
   metadata: { version: 1, count: 2 }
 };
 console.log(JSON.stringify(decode(encode(data))) === JSON.stringify(data));
+```
+
+**C#:**
+```csharp
+var data = new Dictionary<string, object?>
+{
+    {
+        "users", new List<object?>
+        {
+            new Dictionary<string, object?> { { "id", 1 }, { "name", "Alice" } },
+            new Dictionary<string, object?> { { "id", 2 }, { "name", "Bob" } }
+        }
+    },
+    { "metadata", new Dictionary<string, object?> { { "version", 1 }, { "count", 2 } } }
+};
+var decoded = Codec.Decode(Codec.Encode(data));
 ```
 
 ## How It Works
@@ -181,6 +237,15 @@ npm test
 npm run example
 ```
 
+### C#
+
+```bash
+cd csharp
+dotnet build
+dotnet test
+dotnet run --project examples/BasicUsage.csproj
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -203,6 +268,7 @@ This project is licensed under the Unlicense - see the [LICENSE](LICENSE) file f
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
 - [PyPI Package](https://pypi.org/project/lino-objects-codec/) (Python)
 - [npm Package](https://www.npmjs.com/package/lino-objects-codec/) (JavaScript)
+- [NuGet Package](https://www.nuget.org/packages/Lino.Objects.Codec/) (C#)
 
 ## Acknowledgments
 
