@@ -8,7 +8,7 @@
     ".": "./src/index.js"
   },
   "scripts": {
-    "test": "node --test tests/",
+    "test": "node --test tests/*.test.js",
     "example": "node examples/basic_usage.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
