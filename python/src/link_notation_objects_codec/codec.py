@@ -169,15 +169,22 @@ class ObjectCodec:
 
         # Handle case where format() creates output like (obj_0) which parser wraps
         # The parser returns a wrapper Link with no ID, containing the actual Link as first value
-        if (not link.id and link.values and len(link.values) == 1 and
-            hasattr(link.values[0], 'id') and link.values[0].id and
-            link.values[0].id.startswith('obj_')):
+        if (
+            not link.id
+            and link.values
+            and len(link.values) == 1
+            and hasattr(link.values[0], "id")
+            and link.values[0].id
+            and link.values[0].id.startswith("obj_")
+        ):
             # Extract the actual Link
             link = link.values[0]
 
         return self._decode_link(link)
 
-    def _encode_value(self, obj: Any, visited: Optional[Set[int]] = None, depth: int = 0) -> Link:
+    def _encode_value(
+        self, obj: Any, visited: Optional[Set[int]] = None, depth: int = 0
+    ) -> Link:
         """
         Encode a value into a Link.
 
@@ -242,7 +249,7 @@ class ObjectCodec:
 
         elif isinstance(obj, str):
             # Encode strings as base64 to handle special characters, newlines, etc.
-            b64_encoded = base64.b64encode(obj.encode('utf-8')).decode('ascii')
+            b64_encoded = base64.b64encode(obj.encode("utf-8")).decode("ascii")
             return self._make_link(self.TYPE_STR, b64_encoded)
 
         elif isinstance(obj, list):
@@ -256,7 +263,9 @@ class ObjectCodec:
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
                 # Create the definition with self-reference ID
-                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts)
+                definition = Link(
+                    link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts
+                )
                 # Store for multi-link output if not at top level
                 if depth > 0:
                     self._all_definitions.append((ref_id, definition))
@@ -281,7 +290,9 @@ class ObjectCodec:
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
                 # Create the definition with self-reference ID
-                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts)
+                definition = Link(
+                    link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts
+                )
                 # Store for multi-link output if not at top level
                 if depth > 0:
                     self._all_definitions.append((ref_id, definition))
@@ -318,10 +329,10 @@ class ObjectCodec:
                     return self._decode_memo[link.id]
 
                 # If it starts with obj_, check if we have a forward reference in _all_links
-                if link.id.startswith('obj_') and self._all_links:
+                if link.id.startswith("obj_") and self._all_links:
                     # Look for this ID in the remaining links
                     for other_link in self._all_links:
-                        if hasattr(other_link, 'id') and other_link.id == link.id:
+                        if hasattr(other_link, "id") and other_link.id == link.id:
                             # Found it! Decode it now
                             return self._decode_link(other_link)
 
@@ -336,7 +347,7 @@ class ObjectCodec:
 
         # Check if this link has a self-reference ID (format: obj_0: type ...)
         self_ref_id = None
-        if link.id and link.id.startswith('obj_'):
+        if link.id and link.id.startswith("obj_"):
             self_ref_id = link.id
             # If this is a back-reference (already in memo), return it
             if self_ref_id in self._decode_memo:
@@ -344,7 +355,7 @@ class ObjectCodec:
 
         # Get the type marker from the first value
         first_value = link.values[0]
-        if not hasattr(first_value, 'id') or not first_value.id:
+        if not hasattr(first_value, "id") or not first_value.id:
             # Not a type marker we recognize
             return None
 
@@ -356,21 +367,21 @@ class ObjectCodec:
         elif type_marker == self.TYPE_BOOL:
             if len(link.values) > 1:
                 bool_value = link.values[1]
-                if hasattr(bool_value, 'id'):
+                if hasattr(bool_value, "id"):
                     return bool_value.id == "True"
             return False
 
         elif type_marker == self.TYPE_INT:
             if len(link.values) > 1:
                 int_value = link.values[1]
-                if hasattr(int_value, 'id'):
+                if hasattr(int_value, "id"):
                     return int(int_value.id)
             return 0
 
         elif type_marker == self.TYPE_FLOAT:
             if len(link.values) > 1:
                 float_value = link.values[1]
-                if hasattr(float_value, 'id'):
+                if hasattr(float_value, "id"):
                     value_str = float_value.id
                     if value_str == "NaN":
                         return math.nan
@@ -385,12 +396,12 @@ class ObjectCodec:
         elif type_marker == self.TYPE_STR:
             if len(link.values) > 1:
                 str_value = link.values[1]
-                if hasattr(str_value, 'id'):
+                if hasattr(str_value, "id"):
                     b64_str = str_value.id
                     # Decode from base64
                     try:
                         decoded_bytes = base64.b64decode(b64_str)
-                        return decoded_bytes.decode('utf-8')
+                        return decoded_bytes.decode("utf-8")
                     except Exception:
                         # If decode fails, return the raw value
                         return b64_str
@@ -420,7 +431,7 @@ class ObjectCodec:
                 self._decode_memo[dict_id] = result_dict
 
             for pair_link in link.values[start_idx:]:
-                if hasattr(pair_link, 'values') and len(pair_link.values) >= 2:
+                if hasattr(pair_link, "values") and len(pair_link.values) >= 2:
                     key_link = pair_link.values[0]
                     value_link = pair_link.values[1]
 

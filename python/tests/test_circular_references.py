@@ -47,7 +47,9 @@ class TestCircularReferences:
 
         encoded = encode(list1)
         # Multi-link format is used to avoid parser bug with nested self-references
-        expected = "(obj_0: list (int 1) (int 2) obj_1)\n(obj_1: list (int 3) (int 4) obj_0)"
+        expected = (
+            "(obj_0: list (int 1) (int 2) obj_1)\n(obj_1: list (int 3) (int 4) obj_0)"
+        )
         assert encoded == expected
 
         decoded = decode(encoded)

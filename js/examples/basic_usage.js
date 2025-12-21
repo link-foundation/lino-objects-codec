@@ -24,7 +24,9 @@ function main() {
     const encoded = encode({ obj });
     const decoded = decode({ notation: encoded });
     const encodedPreview = encoded.substring(0, 50);
-    console.log(`  ${String(obj).padEnd(30)} -> ${encodedPreview.padEnd(50)} -> ${decoded}`);
+    console.log(
+      `  ${String(obj).padEnd(30)} -> ${encodedPreview.padEnd(50)} -> ${decoded}`
+    );
     // Handle NaN case (NaN !== NaN)
     const isEqual = (obj !== obj && decoded !== decoded) || decoded === obj;
     if (!isEqual) {
@@ -42,14 +44,18 @@ function main() {
   console.log(`  Encoded: ${encodedArray}`);
   const decodedArray = decode({ notation: encodedArray });
   console.log(`  Decoded: ${JSON.stringify(decodedArray)}`);
-  console.log(`  Match: ${JSON.stringify(decodedArray) === JSON.stringify(arrayExample)}`);
+  console.log(
+    `  Match: ${JSON.stringify(decodedArray) === JSON.stringify(arrayExample)}`
+  );
 
   console.log(`\n  Object: ${JSON.stringify(objectExample)}`);
   const encodedObject = encode({ obj: objectExample });
   console.log(`  Encoded: ${encodedObject}`);
   const decodedObject = decode({ notation: encodedObject });
   console.log(`  Decoded: ${JSON.stringify(decodedObject)}`);
-  console.log(`  Match: ${JSON.stringify(decodedObject) === JSON.stringify(objectExample)}`);
+  console.log(
+    `  Match: ${JSON.stringify(decodedObject) === JSON.stringify(objectExample)}`
+  );
 
   // Example 3: Nested structures
   console.log('\n3. Nested Structures:');
@@ -65,7 +71,9 @@ function main() {
   console.log(`  Encoded length: ${encodedNested.length} characters`);
   const decodedNested = decode({ notation: encodedNested });
   console.log(`  Decoded: ${JSON.stringify(decodedNested)}`);
-  console.log(`  Match: ${JSON.stringify(decodedNested) === JSON.stringify(nested)}`);
+  console.log(
+    `  Match: ${JSON.stringify(decodedNested) === JSON.stringify(nested)}`
+  );
 
   // Example 4: Circular references
   console.log('\n4. Circular References:');
@@ -77,8 +85,12 @@ function main() {
   const encodedCircular = encode({ obj: arr });
   console.log(`  Encoded: ${encodedCircular}`);
   const decodedCircular = decode({ notation: encodedCircular });
-  console.log(`  Decoded correctly: ${JSON.stringify(decodedCircular.slice(0, 3)) === '[1,2,3]'}`);
-  console.log(`  Circular reference preserved: ${decodedCircular[3] === decodedCircular}`);
+  console.log(
+    `  Decoded correctly: ${JSON.stringify(decodedCircular.slice(0, 3)) === '[1,2,3]'}`
+  );
+  console.log(
+    `  Circular reference preserved: ${decodedCircular[3] === decodedCircular}`
+  );
   if (decodedCircular[3] !== decodedCircular) {
     console.error('  ERROR: Circular reference not preserved!');
   }
@@ -91,7 +103,9 @@ function main() {
   console.log(`  Encoded: ${encodedObjectCircular}`);
   const decodedObjectCircular = decode({ notation: encodedObjectCircular });
   console.log(`  Decoded correctly: ${decodedObjectCircular.name === 'root'}`);
-  console.log(`  Circular reference preserved: ${decodedObjectCircular.self === decodedObjectCircular}`);
+  console.log(
+    `  Circular reference preserved: ${decodedObjectCircular.self === decodedObjectCircular}`
+  );
   if (decodedObjectCircular.self !== decodedObjectCircular) {
     console.error('  ERROR: Circular reference not preserved!');
   }
@@ -104,8 +118,9 @@ function main() {
   const encodedShared = encode({ obj: container });
   console.log(`  Encoded: ${encodedShared}`);
   const decodedShared = decode({ notation: encodedShared });
-  const allSame = decodedShared.first === decodedShared.second &&
-                  decodedShared.second === decodedShared.third;
+  const allSame =
+    decodedShared.first === decodedShared.second &&
+    decodedShared.second === decodedShared.third;
   console.log(`  All three references point to same object: ${allSame}`);
   if (!allSame) {
     console.error('  ERROR: Shared references not preserved!');
@@ -113,9 +128,13 @@ function main() {
 
   // Modify through one reference
   decodedShared.first.modified = true;
-  console.log(`  Modified through 'first', visible in 'second': ${decodedShared.second.modified === true}`);
+  console.log(
+    `  Modified through 'first', visible in 'second': ${decodedShared.second.modified === true}`
+  );
   if (decodedShared.second.modified !== true) {
-    console.error('  ERROR: Modification not visible through shared reference!');
+    console.error(
+      '  ERROR: Modification not visible through shared reference!'
+    );
   }
 
   console.log('\n=== All examples completed successfully! ===');
