@@ -72,25 +72,36 @@ describe('normalizeQuestion', () => {
   });
 
   test('should remove punctuation', () => {
-    assert.equal(normalizeQuestion({ question: 'Hello, World!' }), 'hello world');
+    assert.equal(
+      normalizeQuestion({ question: 'Hello, World!' }),
+      'hello world'
+    );
     assert.equal(normalizeQuestion({ question: 'What?!' }), 'what');
     assert.equal(normalizeQuestion({ question: 'a.b.c' }), 'abc');
   });
 
   test('should standardize whitespace', () => {
-    assert.equal(normalizeQuestion({ question: 'hello  world' }), 'hello world');
+    assert.equal(
+      normalizeQuestion({ question: 'hello  world' }),
+      'hello world'
+    );
     assert.equal(normalizeQuestion({ question: '  hello  ' }), 'hello');
     assert.equal(normalizeQuestion({ question: 'a   b   c' }), 'a b c');
   });
 
   test('should handle combined normalization', () => {
-    assert.equal(normalizeQuestion({ question: '  HELLO,  World! What?  ' }), 'hello world what');
+    assert.equal(
+      normalizeQuestion({ question: '  HELLO,  World! What?  ' }),
+      'hello world what'
+    );
   });
 });
 
 describe('extractKeywords', () => {
   test('should extract all keywords when no stopwords provided', () => {
-    const keywords = extractKeywords({ question: 'What is the best way to learn programming?' });
+    const keywords = extractKeywords({
+      question: 'What is the best way to learn programming?',
+    });
     assert.ok(keywords.has('best'));
     assert.ok(keywords.has('way'));
     assert.ok(keywords.has('learn'));
@@ -103,14 +114,20 @@ describe('extractKeywords', () => {
 
   test('should filter out English stopwords when provided', () => {
     const stopwords = new Set(['the', 'and', 'or', 'is', 'are']);
-    const keywords = extractKeywords({ question: 'the and or is are', stopwords });
+    const keywords = extractKeywords({
+      question: 'the and or is are',
+      stopwords,
+    });
     // All stopwords should be filtered out
     assert.equal(keywords.size, 0);
   });
 
   test('should filter out Russian stopwords when provided', () => {
     const stopwords = new Set(['как', 'что', 'это', 'в', 'на']);
-    const keywords = extractKeywords({ question: 'как что это в на', stopwords });
+    const keywords = extractKeywords({
+      question: 'как что это в на',
+      stopwords,
+    });
     assert.equal(keywords.size, 0);
   });
 
@@ -121,7 +138,10 @@ describe('extractKeywords', () => {
   });
 
   test('should respect minWordLength option', () => {
-    const keywords = extractKeywords({ question: 'a ab abc abcd', minWordLength: 3 });
+    const keywords = extractKeywords({
+      question: 'a ab abc abcd',
+      minWordLength: 3,
+    });
     assert.ok(!keywords.has('a'));
     assert.ok(!keywords.has('ab'));
     assert.ok(!keywords.has('abc')); // length 3, not > 3
@@ -129,7 +149,10 @@ describe('extractKeywords', () => {
   });
 
   test('should disable stemming when stemLength is 0', () => {
-    const keywords = extractKeywords({ question: 'programming', stemLength: 0 });
+    const keywords = extractKeywords({
+      question: 'programming',
+      stemLength: 0,
+    });
     assert.ok(keywords.has('programming'));
     assert.ok(!keywords.has('progr'));
   });
@@ -137,26 +160,35 @@ describe('extractKeywords', () => {
 
 describe('keywordSimilarity', () => {
   test('should return 1 for identical questions', () => {
-    const similarity = keywordSimilarity({ a: 'What is programming?', b: 'What is programming?'
-     });
+    const similarity = keywordSimilarity({
+      a: 'What is programming?',
+      b: 'What is programming?',
+    });
     assert.equal(similarity, 1.0);
   });
 
   test('should return positive similarity for similar questions', () => {
-    const similarity = keywordSimilarity({ a: 'What is programming?', b: 'What is computer programming?'
-     });
+    const similarity = keywordSimilarity({
+      a: 'What is programming?',
+      b: 'What is computer programming?',
+    });
     // Both questions share "programming" keyword, so similarity should be positive
     assert.ok(similarity > 0);
   });
 
   test('should return low similarity for different questions', () => {
-    const similarity = keywordSimilarity({ a: 'What is programming?', b: 'How is the weather today?'
-     });
+    const similarity = keywordSimilarity({
+      a: 'What is programming?',
+      b: 'How is the weather today?',
+    });
     assert.ok(similarity < 0.5);
   });
 
   test('should return 0 for completely different questions', () => {
-    const similarity = keywordSimilarity({ a: 'foo bar baz', b: 'xyz abc def' });
+    const similarity = keywordSimilarity({
+      a: 'foo bar baz',
+      b: 'xyz abc def',
+    });
     assert.equal(similarity, 0);
   });
 });
@@ -165,12 +197,18 @@ describe('findBestMatch', () => {
   const testDatabase = new Map([
     ['What is your name?', 'My name is Claude'],
     ['How old are you?', "I don't have an age"],
-    ['What programming languages do you know?', 'I can help with many languages'],
+    [
+      'What programming languages do you know?',
+      'I can help with many languages',
+    ],
     ['Как вас зовут?', 'Меня зовут Клод'],
   ]);
 
   test('should return exact match with score 1.0', () => {
-    const result = findBestMatch({ question: 'What is your name?', qaDatabase: testDatabase });
+    const result = findBestMatch({
+      question: 'What is your name?',
+      qaDatabase: testDatabase,
+    });
     assert.equal(result.question, 'What is your name?');
     assert.equal(result.score, 1.0);
     assert.equal(result.answer, 'My name is Claude');
@@ -178,25 +216,38 @@ describe('findBestMatch', () => {
 
   test('should find similar question with low threshold', () => {
     // Use a lower threshold since the similarity depends on keyword overlap
-    const result = findBestMatch({ question: 'What is your age?', qaDatabase: testDatabase, threshold: 0.2 });
+    const result = findBestMatch({
+      question: 'What is your age?',
+      qaDatabase: testDatabase,
+      threshold: 0.2,
+    });
     assert.ok(result !== null);
     assert.ok(result.score > 0.2);
   });
 
   test('should return null when no match above threshold', () => {
-    const result = findBestMatch({ question: 'Random unrelated question about weather', qaDatabase: testDatabase,
-      threshold: 0.9
+    const result = findBestMatch({
+      question: 'Random unrelated question about weather',
+      qaDatabase: testDatabase,
+      threshold: 0.9,
     });
     assert.equal(result, null);
   });
 
   test('should respect threshold option', () => {
-    const result = findBestMatch({ question: 'name?', qaDatabase: testDatabase, threshold: 0.1 });
+    const result = findBestMatch({
+      question: 'name?',
+      qaDatabase: testDatabase,
+      threshold: 0.1,
+    });
     assert.ok(result !== null);
   });
 
   test('should handle Russian questions', () => {
-    const result = findBestMatch({ question: 'Как вас зовут?', qaDatabase: testDatabase });
+    const result = findBestMatch({
+      question: 'Как вас зовут?',
+      qaDatabase: testDatabase,
+    });
     assert.equal(result.question, 'Как вас зовут?');
     assert.equal(result.score, 1.0);
   });
@@ -211,27 +262,41 @@ describe('findAllMatches', () => {
   ]);
 
   test('should return all matches above threshold', () => {
-    const matches = findAllMatches({ question: 'What is your name?', qaDatabase: testDatabase, threshold: 0.3 });
+    const matches = findAllMatches({
+      question: 'What is your name?',
+      qaDatabase: testDatabase,
+      threshold: 0.3,
+    });
     assert.ok(matches.length >= 1);
     assert.equal(matches[0].score, 1.0); // Exact match should be first
   });
 
   test('should sort matches by score descending', () => {
-    const matches = findAllMatches({ question: 'What is your name?', qaDatabase: testDatabase, threshold: 0.1 });
+    const matches = findAllMatches({
+      question: 'What is your name?',
+      qaDatabase: testDatabase,
+      threshold: 0.1,
+    });
     for (let i = 1; i < matches.length; i++) {
       assert.ok(matches[i - 1].score >= matches[i].score);
     }
   });
 
   test('should return empty array when no matches', () => {
-    const matches = findAllMatches({ question: 'Completely unrelated question', qaDatabase: testDatabase,
-      threshold: 0.9
+    const matches = findAllMatches({
+      question: 'Completely unrelated question',
+      qaDatabase: testDatabase,
+      threshold: 0.9,
     });
     assert.deepEqual(matches, []);
   });
 
   test('should include answer in results', () => {
-    const matches = findAllMatches({ question: 'What is your name?', qaDatabase: testDatabase, threshold: 0.9 });
+    const matches = findAllMatches({
+      question: 'What is your name?',
+      qaDatabase: testDatabase,
+      threshold: 0.9,
+    });
     assert.ok(matches.length > 0);
     assert.equal(matches[0].answer, 'Claude');
   });

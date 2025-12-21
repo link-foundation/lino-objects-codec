@@ -28,6 +28,7 @@ dev = [
     "pytest-cov>=4.0",
     "ruff>=0.1.0",
     "mypy>=1.0",
+    "scriv[toml]>=1.7.0",
 ]
 
 [project.urls]
@@ -58,3 +59,31 @@ warn_return_any = false
 warn_unused_configs = true
 disallow_untyped_defs = false
 ignore_missing_imports = true
+
+# Scriv configuration for changelog management
+# Similar to @changesets/cli but for Python projects
+[tool.scriv]
+# Fragment format (markdown for better GitHub compatibility)
+format = "md"
+# Fragment directory
+fragment_directory = "changelog.d"
+# Changelog file
+output_file = "CHANGELOG.md"
+# Categories for changelog entries
+categories = [
+    "Removed",
+    "Added",
+    "Changed",
+    "Deprecated",
+    "Fixed",
+    "Security",
+]
+# Version header format
+entry_title_template = "## [{{ version }}] - {{ date.strftime('%Y-%m-%d') }}"
+# Insert marker (where new entries go)
+insert_marker = "<!-- scriv-insert-here -->"
+# Main branch name
+main_branches = ["main"]
+# New fragment template
+new_fragment_template = """file:changelog.d/fragment_template.md.j2
+"""

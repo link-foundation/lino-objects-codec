@@ -90,7 +90,9 @@ export function escapeReference(options = {}) {
  */
 export function unescapeReference(options = {}) {
   const { str } = options;
-  if (!str) return str;
+  if (!str) {
+    return str;
+  }
 
   // Unescape doubled quotes (Links Notation escape sequences)
   let unescaped = str.replace(/""/g, '"'); // "" -> "
@@ -139,7 +141,7 @@ export function jsonToLino(options = {}) {
     if (json.length === 0) {
       return '()';
     }
-    const elements = json.map(item => jsonToLino({ json: item }));
+    const elements = json.map((item) => jsonToLino({ json: item }));
     return `(${elements.join(' ')})`;
   }
 
@@ -175,11 +177,17 @@ function parseReference(ref) {
   const str = String(ref);
 
   // Try boolean
-  if (str === 'true') return true;
-  if (str === 'false') return false;
+  if (str === 'true') {
+    return true;
+  }
+  if (str === 'false') {
+    return false;
+  }
 
   // Try null
-  if (str === 'null') return null;
+  if (str === 'null') {
+    return null;
+  }
 
   // Try number
   const num = Number(str);
@@ -212,18 +220,32 @@ function convertParsedToJson(element) {
   }
 
   // If element is a link (has non-empty values)
-  if (element.values && Array.isArray(element.values) && element.values.length > 0) {
+  if (
+    element.values &&
+    Array.isArray(element.values) &&
+    element.values.length > 0
+  ) {
     // Simple rule: If link contains pairs (all children are 2-element links), it's an object
     // Otherwise, it's an array
 
-    const allPairs = element.values.every(child => {
+    const allPairs = element.values.every((child) => {
       // Must be a link with exactly 2 elements
-      if (!child.values || !Array.isArray(child.values) || child.values.length !== 2) {
+      if (
+        !child.values ||
+        !Array.isArray(child.values) ||
+        child.values.length !== 2
+      ) {
         return false;
       }
       // First element (key) must be a primitive
       const keyElement = child.values[0];
-      if (!(keyElement.id !== undefined && keyElement.values && keyElement.values.length === 0)) {
+      if (
+        !(
+          keyElement.id !== undefined &&
+          keyElement.values &&
+          keyElement.values.length === 0
+        )
+      ) {
         return false;
       }
       // Key should be string-like (not a pure number)
@@ -246,7 +268,7 @@ function convertParsedToJson(element) {
     }
 
     // Not pairs, so it's an array
-    return element.values.map(v => convertParsedToJson(v));
+    return element.values.map((v) => convertParsedToJson(v));
   }
 
   return null;
@@ -303,8 +325,10 @@ export function linoToJson(options = {}) {
  */
 export function formatAsLino(options = {}) {
   const { values } = options;
-  if (!values || values.length === 0) return '()';
+  if (!values || values.length === 0) {
+    return '()';
+  }
 
-  const formattedValues = values.map(value => `  ${value}`).join('\n');
+  const formattedValues = values.map((value) => `  ${value}`).join('\n');
   return `(\n${formattedValues}\n)`;
 }

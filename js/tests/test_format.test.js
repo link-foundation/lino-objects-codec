@@ -44,7 +44,7 @@ test('escapeReference - string with single quotes', () => {
 test('escapeReference - string with double quotes', () => {
   const result = escapeReference({ value: 'he said "hello"' });
   assert.ok(result.startsWith("'"));
-  assert.equal(result, "'he said \"hello\"'");
+  assert.equal(result, '\'he said "hello"\'');
 });
 
 test('escapeReference - string with both quotes', () => {
@@ -74,7 +74,10 @@ test('unescapeReference - simple string', () => {
 });
 
 test('unescapeReference - doubled double quotes', () => {
-  assert.equal(unescapeReference({ str: 'he said ""hello""' }), 'he said "hello"');
+  assert.equal(
+    unescapeReference({ str: 'he said ""hello""' }),
+    'he said "hello"'
+  );
 });
 
 test('unescapeReference - doubled single quotes', () => {
@@ -128,7 +131,15 @@ test('jsonToLino - array of strings', () => {
 });
 
 test('jsonToLino - nested array', () => {
-  assert.equal(jsonToLino({ json: [[1, 2], [3, 4]] }), '((1 2) (3 4))');
+  assert.equal(
+    jsonToLino({
+      json: [
+        [1, 2],
+        [3, 4],
+      ],
+    }),
+    '((1 2) (3 4))'
+  );
 });
 
 test('jsonToLino - empty object', () => {
@@ -195,21 +206,21 @@ test('linoToJson - object with array value', () => {
 test('roundtrip - simple object', () => {
   const original = { name: 'Alice', age: 30 };
   const lino = jsonToLino({ json: original });
-  const result = linoToJson({ lino: lino });
+  const result = linoToJson({ lino });
   assert.deepEqual(result, original);
 });
 
 test('roundtrip - nested object', () => {
   const original = { user: { name: 'Bob', active: true } };
   const lino = jsonToLino({ json: original });
-  const result = linoToJson({ lino: lino });
+  const result = linoToJson({ lino });
   assert.deepEqual(result, original);
 });
 
 test('roundtrip - object with array', () => {
   const original = { items: [1, 2, 3] };
   const lino = jsonToLino({ json: original });
-  const result = linoToJson({ lino: lino });
+  const result = linoToJson({ lino });
   assert.deepEqual(result, original);
 });
 
@@ -222,7 +233,7 @@ test('roundtrip - complex object', () => {
     nested: { x: 1, y: 2 },
   };
   const lino = jsonToLino({ json: original });
-  const result = linoToJson({ lino: lino });
+  const result = linoToJson({ lino });
   assert.deepEqual(result, original);
 });
 
