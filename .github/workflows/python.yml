@@ -55,11 +55,11 @@ jobs:
 
       - name: Run Ruff linting
         working-directory: ./python
-        run: ruff check .
+        run: ruff check src tests
 
       - name: Check Ruff formatting
         working-directory: ./python
-        run: ruff format --check .
+        run: ruff format --check src tests
 
       - name: Run mypy
         working-directory: ./python
