@@ -1,11 +1,13 @@
 # lino-objects-codec (JavaScript)
 
 A JavaScript library for working with Links Notation format. This library provides:
+
 - Universal serialization/deserialization for JavaScript objects with circular reference support
 - JSON to Links Notation conversion utilities
 - Fuzzy matching utilities for string comparison
 
 These tools enable easy implementation of higher-level features like:
+
 - [LinksNotationManager](https://github.com/konard/follow/blob/main/lino.lib.mjs) - Intermediate application data storage
 - [Q&A Database](https://github.com/konard/hh-job-application-automation/blob/main/src/qa-database.mjs) - Questions and answers database
 
@@ -248,6 +250,7 @@ The library uses the [links-notation](https://github.com/link-foundation/links-n
 - Circular references use special `ref` links: `(ref obj_0)`
 
 This approach allows for:
+
 - Universal representation of object graphs
 - Preservation of object identity
 - Natural handling of circular references
@@ -262,12 +265,15 @@ This approach allows for:
 Encode a JavaScript object to Links Notation format with type markers.
 
 **Parameters:**
+
 - `options.obj` - The JavaScript object to encode
 
 **Returns:**
+
 - String representation in Links Notation format
 
 **Throws:**
+
 - `TypeError` - If the object type is not supported
 
 #### `decode({ notation: notation })`
@@ -275,9 +281,11 @@ Encode a JavaScript object to Links Notation format with type markers.
 Decode Links Notation format to a JavaScript object.
 
 **Parameters:**
+
 - `options.notation` - String in Links Notation format
 
 **Returns:**
+
 - Reconstructed JavaScript object
 
 #### `ObjectCodec`
@@ -299,9 +307,11 @@ const decoded = codec.decode({ notation: encoded });
 Convert JSON data to Links Notation format.
 
 **Parameters:**
+
 - `options.json` - Any JSON-serializable value (object, array, string, number, boolean, null)
 
 **Returns:**
+
 - Links Notation string representation
 
 ```javascript
@@ -317,9 +327,11 @@ jsonToLino({ json: [1, 2, 3] });
 Convert Links Notation to JSON.
 
 **Parameters:**
+
 - `options.lino` - Links Notation string
 
 **Returns:**
+
 - Parsed JSON value
 
 ```javascript
@@ -332,9 +344,11 @@ linoToJson({ lino: '((name Alice }) (age 30))');
 Escape a value for safe use in Links Notation format.
 
 **Parameters:**
+
 - `options.value` - The value to escape (string, number, or boolean)
 
 **Returns:**
+
 - Escaped string suitable for Links Notation
 
 ```javascript
@@ -348,9 +362,11 @@ escapeReference({ value: "it's" }); // "\"it's\""
 Unescape a Links Notation reference.
 
 **Parameters:**
+
 - `options.str` - The escaped reference string
 
 **Returns:**
+
 - Unescaped string
 
 #### `formatAsLino(options = {})`
@@ -358,9 +374,11 @@ Unescape a Links Notation reference.
 Format an array as Links Notation with proper indentation.
 
 **Parameters:**
+
 - `options.values` - Array of values
 
 **Returns:**
+
 - Formatted Links Notation string
 
 ### Fuzzy Matching Utilities
@@ -370,9 +388,11 @@ Format an array as Links Notation with proper indentation.
 Calculate edit distance between two strings.
 
 **Parameters:**
+
 - `options.a`, `options.b` - Strings to compare
 
 **Returns:**
+
 - Number of edits (insertions, deletions, substitutions) needed
 
 #### `stringSimilarity(options = {})`
@@ -380,9 +400,11 @@ Calculate edit distance between two strings.
 Calculate normalized similarity score between two strings.
 
 **Parameters:**
+
 - `options.a`, `options.b` - Strings to compare
 
 **Returns:**
+
 - Score between 0 (completely different) and 1 (identical)
 
 #### `normalizeQuestion({ question: question })`
@@ -390,9 +412,11 @@ Calculate normalized similarity score between two strings.
 Normalize a question for comparison (lowercase, remove punctuation, standardize whitespace).
 
 **Parameters:**
+
 - `options.question` - Question string
 
 **Returns:**
+
 - Normalized string
 
 #### `extractKeywords(options = {})`
@@ -400,12 +424,14 @@ Normalize a question for comparison (lowercase, remove punctuation, standardize 
 Extract meaningful keywords from a question, optionally filtering out stopwords.
 
 **Parameters:**
+
 - `options.question` - Question string
 - `options.stopwords` - Custom stopwords set to filter out (default: empty Set, no filtering)
 - `options.minWordLength` - Minimum word length (default: 2)
 - `options.stemLength` - Length for word stemming (default: 5, 0 to disable)
 
 **Returns:**
+
 - Set of keywords
 
 #### `keywordSimilarity(options = {})`
@@ -413,10 +439,12 @@ Extract meaningful keywords from a question, optionally filtering out stopwords.
 Calculate keyword overlap similarity (Jaccard index).
 
 **Parameters:**
+
 - `options.a`, `options.b` - Questions to compare
 - `options` - Same as extractKeywords
 
 **Returns:**
+
 - Score between 0 and 1
 
 #### `findBestMatch({ question: question, qaDatabase: database, options })`
@@ -424,6 +452,7 @@ Calculate keyword overlap similarity (Jaccard index).
 Find the best matching question from a database.
 
 **Parameters:**
+
 - `options.question` - Question to match
 - `options.qaDatabase` - Map of questions to answers
 - `options.threshold` - Minimum similarity threshold (default: 0.4)
@@ -434,6 +463,7 @@ Find the best matching question from a database.
 - `options.stemLength` - Stem length for keyword extraction
 
 **Returns:**
+
 - `{ question, answer, score }` or null if no match above threshold
 
 #### `findAllMatches({ question: question, qaDatabase: database, options })`
@@ -441,9 +471,11 @@ Find the best matching question from a database.
 Find all matches above a threshold, sorted by score.
 
 **Parameters:**
+
 - Same as findBestMatch
 
 **Returns:**
+
 - Array of `{ question, answer, score }` sorted by score descending
 
 ## Development

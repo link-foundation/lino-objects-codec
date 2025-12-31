@@ -64,8 +64,15 @@ test('roundtrip array with mixed types', () => {
 
 test('nested arrays', () => {
   const testArrays = [
-    [[1, 2], [3, 4]],
-    [[1, 2], [3, 4], [5, [6, 7]]],
+    [
+      [1, 2],
+      [3, 4],
+    ],
+    [
+      [1, 2],
+      [3, 4],
+      [5, [6, 7]],
+    ],
     [[[1]], [[2]], [[3]]],
   ];
   for (const array of testArrays) {
@@ -104,7 +111,7 @@ test('encode object with basic types', () => {
     score: 95.5,
     empty: null,
   };
-  const result = encode({ obj: obj });
+  const result = encode({ obj });
   assert.ok(result);
   assert.equal(typeof result, 'string');
 });
@@ -115,7 +122,7 @@ test('decode object with basic types', () => {
     age: 30,
     active: true,
   };
-  const encoded = encode({ obj: obj });
+  const encoded = encode({ obj });
   const result = decode({ notation: encoded });
   assert.equal(typeof result, 'object');
   assert.equal(result.name, 'Alice');
@@ -132,7 +139,7 @@ test('roundtrip object with mixed types', () => {
     { x: null, y: undefined, z: false },
   ];
   for (const obj of testObjects) {
-    const encoded = encode({ obj: obj });
+    const encoded = encode({ obj });
     const decoded = decode({ notation: encoded });
     assert.deepEqual(decoded, obj);
   }
@@ -154,7 +161,7 @@ test('nested objects', () => {
     },
   ];
   for (const obj of testObjects) {
-    const encoded = encode({ obj: obj });
+    const encoded = encode({ obj });
     const decoded = decode({ notation: encoded });
     assert.deepEqual(decoded, obj);
   }
