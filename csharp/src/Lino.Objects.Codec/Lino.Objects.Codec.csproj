@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Lino.Objects.Codec</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Link Foundation</Authors>
+    <Description>A library to encode/decode objects to/from links notation</Description>
+    <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/link-foundation/lino-objects-codec</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/link-foundation/lino-objects-codec.git</RepositoryUrl>
+    <PackageTags>links-notation;serialization;codec;object-graph;circular-references</PackageTags>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Link.Foundation.Links.Notation" Version="0.13.0" />
+  </ItemGroup>
+
+</Project>

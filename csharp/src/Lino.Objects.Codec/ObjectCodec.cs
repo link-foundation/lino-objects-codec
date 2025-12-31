@@ -1,0 +1,611 @@
+// Object encoder/decoder for Links Notation format.
+
+using System.Runtime.CompilerServices;
+using System.Text;
+using Link.Foundation.Links.Notation;
+
+namespace Lino.Objects.Codec;
+
+/// <summary>
+/// Codec for encoding/decoding C# objects to/from Links Notation.
+/// </summary>
+public class ObjectCodec
+{
+    /// <summary>Type identifier for null values.</summary>
+    public const string TypeNull = "null";
+    /// <summary>Type identifier for boolean values.</summary>
+    public const string TypeBool = "bool";
+    /// <summary>Type identifier for integer values.</summary>
+    public const string TypeInt = "int";
+    /// <summary>Type identifier for float/double values.</summary>
+    public const string TypeFloat = "float";
+    /// <summary>Type identifier for string values.</summary>
+    public const string TypeStr = "str";
+    /// <summary>Type identifier for list/array values.</summary>
+    public const string TypeList = "list";
+    /// <summary>Type identifier for dictionary/object values.</summary>
+    public const string TypeDict = "dict";
+
+    private readonly Parser _parser = new();
+
+    // For tracking object identity during encoding
+    private Dictionary<object, string> _encodeMemo = new(ReferenceEqualityComparer.Instance);
+    private int _encodeCounter = 0;
+    // For tracking which objects need IDs (referenced multiple times or circularly)
+    private HashSet<object> _needsId = new(ReferenceEqualityComparer.Instance);
+    // For storing all definitions during encoding
+    private List<(string RefId, Link<string> Link)> _allDefinitions = new();
+    // For tracking references during decoding
+    private Dictionary<string, object?> _decodeMemo = new();
+    // For storing all links during multi-link decoding
+    private List<Link<string>> _allLinks = new();
+
+    /// <summary>
+    /// Create a Link from string parts.
+    /// </summary>
+    private static Link<string> MakeLink(params string[] parts)
+    {
+        // Each part becomes a Link with that id
+        var values = parts.Select(part => new Link<string>(part)).ToList();
+        return new Link<string>(null, values);
+    }
+
+    /// <summary>
+    /// First pass: identify which objects need IDs (referenced multiple times or circularly).
+    /// </summary>
+    private void FindObjectsNeedingIds(object? obj, Dictionary<object, bool>? seen = null, List<object>? path = null)
+    {
+        seen ??= new Dictionary<object, bool>(ReferenceEqualityComparer.Instance);
+        path ??= new List<object>();
+
+        // Only track mutable objects (lists and dictionaries)
+        if (obj is null || (obj is not IList<object?> && obj is not IDictionary<string, object?>))
+        {
+            return;
+        }
+
+        // If we've seen this object before, it's referenced multiple times or circularly
+        if (seen.ContainsKey(obj))
+        {
+            _needsId.Add(obj);
+            // Also mark all objects in the cycle as needing IDs
+            int cycleStart = path.IndexOf(obj);
+            if (cycleStart >= 0)
+            {
+                // This is a circular reference - mark all objects in the cycle
+                for (int i = cycleStart; i < path.Count; i++)
+                {
+                    _needsId.Add(path[i]);
+                }
+            }
+            return; // Don't recurse again
+        }
+
+        // Mark as seen
+        seen[obj] = true;
+        // Add to current path
+        var newPath = new List<object>(path) { obj };
+
+        // Recurse into structure
+        if (obj is IList<object?> list)
+        {
+            foreach (var item in list)
+            {
+                if (item is not null)
+                {
+                    FindObjectsNeedingIds(item, seen, newPath);
+                }
+            }
+        }
+        else if (obj is IDictionary<string, object?> dict)
+        {
+            foreach (var kvp in dict)
+            {
+                FindObjectsNeedingIds(kvp.Value, seen, newPath);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Encode a C# object to Links Notation format.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in Links Notation format</returns>
+    public string Encode(object? obj)
+    {
+        // Reset state for each encode operation
+        _encodeMemo = new Dictionary<object, string>(ReferenceEqualityComparer.Instance);
+        _encodeCounter = 0;
+        _needsId = new HashSet<object>(ReferenceEqualityComparer.Instance);
+        _allDefinitions = new List<(string, Link<string>)>();
+
+        // First pass: identify which objects need IDs (referenced multiple times or circularly)
+        FindObjectsNeedingIds(obj);
+
+        // Encode the object (this populates _allDefinitions)
+        var mainLink = EncodeValue(obj, depth: 0);
+
+        // If we have additional definitions, output them all as multi-link format
+        if (_allDefinitions.Count > 0)
+        {
+            // The main link should be first
+            var allLinks = new List<Link<string>> { mainLink };
+            // Add all other definitions
+            foreach (var (refId, link) in _allDefinitions)
+            {
+                // Only add if not the main link (avoid duplicates)
+                if (mainLink.Id is null || mainLink.Id != refId)
+                {
+                    allLinks.Add(link);
+                }
+            }
+
+            // Format as multi-link (newline separated)
+            return string.Join("\n", allLinks.Select(link => new List<Link<string>> { link }.Format()));
+        }
+
+        // Single link output
+        return new List<Link<string>> { mainLink }.Format();
+    }
+
+    /// <summary>
+    /// Decode Links Notation format to a C# object.
+    /// </summary>
+    /// <param name="notation">String in Links Notation format</param>
+    /// <returns>Reconstructed C# object</returns>
+    public object? Decode(string notation)
+    {
+        // Reset state for each decode operation
+        _decodeMemo = new Dictionary<string, object?>();
+        _allLinks = new List<Link<string>>();
+
+        var links = _parser.Parse(notation);
+        if (links is null || links.Count == 0)
+        {
+            return null;
+        }
+
+        // If there are multiple links, store them all for forward reference resolution
+        if (links.Count > 1)
+        {
+            _allLinks = links.ToList();
+            // Decode the first link (this will be the main result)
+            // Forward references will be resolved automatically
+            return DecodeLink(links[0]);
+        }
+
+        var link = links[0];
+
+        // Handle case where format() creates output like (obj_0) which parser wraps
+        // The parser returns a wrapper Link with no ID, containing the actual Link as first value
+        if (link.Id is null && link.Values is not null && link.Values.Count == 1 &&
+            link.Values[0].Id is string firstValueId && firstValueId.StartsWith("obj_"))
+        {
+            // Extract the actual Link
+            link = link.Values[0];
+        }
+
+        return DecodeLink(link);
+    }
+
+    /// <summary>
+    /// Encode a value into a Link.
+    /// </summary>
+    private Link<string> EncodeValue(object? obj, HashSet<object>? visited = null, int depth = 0)
+    {
+        visited ??= new HashSet<object>(ReferenceEqualityComparer.Instance);
+
+        // Check if we've seen this object before (for circular references and shared objects)
+        // Only track mutable objects (lists, dicts)
+        if (obj is not null && (obj is IList<object?> || obj is IDictionary<string, object?>))
+        {
+            if (_encodeMemo.ContainsKey(obj))
+            {
+                // Return a reference to the previously defined object
+                var refId = _encodeMemo[obj];
+                return new Link<string>(refId);
+            }
+
+            // For mutable objects that need IDs, assign them
+            if (_needsId.Contains(obj))
+            {
+                // Assign an ID if not already assigned
+                if (!_encodeMemo.ContainsKey(obj))
+                {
+                    var refId = $"obj_{_encodeCounter}";
+                    _encodeCounter++;
+                    _encodeMemo[obj] = refId;
+                }
+
+                if (visited.Contains(obj))
+                {
+                    // We're in a cycle, create a direct reference
+                    var refId = _encodeMemo[obj];
+                    return new Link<string>(refId);
+                }
+
+                // Add to visited set
+                visited = new HashSet<object>(visited, ReferenceEqualityComparer.Instance) { obj };
+            }
+        }
+
+        // Encode based on type
+        if (obj is null)
+        {
+            return MakeLink(TypeNull);
+        }
+
+        if (obj is bool boolVal)
+        {
+            return MakeLink(TypeBool, boolVal ? "True" : "False");
+        }
+
+        if (obj is int intVal)
+        {
+            return MakeLink(TypeInt, intVal.ToString());
+        }
+
+        if (obj is long longVal)
+        {
+            return MakeLink(TypeInt, longVal.ToString());
+        }
+
+        if (obj is double doubleVal)
+        {
+            // Handle special float values
+            if (double.IsNaN(doubleVal))
+            {
+                return MakeLink(TypeFloat, "NaN");
+            }
+            if (double.IsPositiveInfinity(doubleVal))
+            {
+                return MakeLink(TypeFloat, "Infinity");
+            }
+            if (double.IsNegativeInfinity(doubleVal))
+            {
+                return MakeLink(TypeFloat, "-Infinity");
+            }
+            return MakeLink(TypeFloat, doubleVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        if (obj is float floatVal)
+        {
+            // Handle special float values
+            if (float.IsNaN(floatVal))
+            {
+                return MakeLink(TypeFloat, "NaN");
+            }
+            if (float.IsPositiveInfinity(floatVal))
+            {
+                return MakeLink(TypeFloat, "Infinity");
+            }
+            if (float.IsNegativeInfinity(floatVal))
+            {
+                return MakeLink(TypeFloat, "-Infinity");
+            }
+            return MakeLink(TypeFloat, floatVal.ToString(System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        if (obj is string strVal)
+        {
+            // Encode strings as base64 to handle special characters, newlines, etc.
+            var b64Encoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(strVal));
+            return MakeLink(TypeStr, b64Encoded);
+        }
+
+        if (obj is IList<object?> list)
+        {
+            var parts = new List<Link<string>>();
+            foreach (var item in list)
+            {
+                // Encode each item with increased depth
+                var itemLink = EncodeValue(item, visited, depth + 1);
+                parts.Add(itemLink);
+            }
+
+            // If this list has an ID, use self-reference format: (obj_id: list item1 item2 ...)
+            if (_encodeMemo.TryGetValue(obj, out var listRefId))
+            {
+                var allValues = new List<Link<string>> { new(TypeList) };
+                allValues.AddRange(parts);
+                // Create the definition with self-reference ID
+                var definition = new Link<string>(listRefId, allValues);
+                // Store for multi-link output if not at top level
+                if (depth > 0)
+                {
+                    _allDefinitions.Add((listRefId, definition));
+                    // Return a reference instead of the full definition
+                    return new Link<string>(listRefId);
+                }
+                return definition;
+            }
+            else
+            {
+                // Wrap in a type marker for lists without IDs: (list item1 item2 ...)
+                var allValues = new List<Link<string>> { new(TypeList) };
+                allValues.AddRange(parts);
+                return new Link<string>(null, allValues);
+            }
+        }
+
+        if (obj is IDictionary<string, object?> dict)
+        {
+            var parts = new List<Link<string>>();
+            foreach (var kvp in dict)
+            {
+                // Encode key and value with increased depth
+                var keyLink = EncodeValue(kvp.Key, visited, depth + 1);
+                var valueLink = EncodeValue(kvp.Value, visited, depth + 1);
+                // Create a pair link
+                var pair = new Link<string>(null, new List<Link<string>> { keyLink, valueLink });
+                parts.Add(pair);
+            }
+
+            // If this dict has an ID, use self-reference format: (obj_id: dict (key val) ...)
+            if (_encodeMemo.TryGetValue(obj, out var dictRefId))
+            {
+                var allValues = new List<Link<string>> { new(TypeDict) };
+                allValues.AddRange(parts);
+                // Create the definition with self-reference ID
+                var definition = new Link<string>(dictRefId, allValues);
+                // Store for multi-link output if not at top level
+                if (depth > 0)
+                {
+                    _allDefinitions.Add((dictRefId, definition));
+                    // Return a reference instead of the full definition
+                    return new Link<string>(dictRefId);
+                }
+                return definition;
+            }
+            else
+            {
+                // Wrap in a type marker for dicts without IDs: (dict (key val) ...)
+                var allValues = new List<Link<string>> { new(TypeDict) };
+                allValues.AddRange(parts);
+                return new Link<string>(null, allValues);
+            }
+        }
+
+        throw new NotSupportedException($"Unsupported type: {obj.GetType()}");
+    }
+
+    /// <summary>
+    /// Decode a Link into a C# value.
+    /// </summary>
+    private object? DecodeLink(Link<string> link)
+    {
+        // Check if this is a direct reference to a previously decoded object
+        // Direct references have an id but no values, or the id refers to an existing object
+        if (link.Id is not null && _decodeMemo.ContainsKey(link.Id))
+        {
+            return _decodeMemo[link.Id];
+        }
+
+        if (link.Values is null || link.Values.Count == 0)
+        {
+            // Empty link - this might be a simple id, reference, or empty collection
+            if (link.Id is not null)
+            {
+                // If it's in memo, return the cached object
+                if (_decodeMemo.TryGetValue(link.Id, out var cached))
+                {
+                    return cached;
+                }
+
+                // If it starts with obj_, check if we have a forward reference in _allLinks
+                if (link.Id.StartsWith("obj_") && _allLinks.Count > 0)
+                {
+                    // Look for this ID in the remaining links
+                    foreach (var otherLink in _allLinks)
+                    {
+                        if (otherLink.Id == link.Id)
+                        {
+                            // Found it! Decode it now
+                            return DecodeLink(otherLink);
+                        }
+                    }
+
+                    // Not found in links - create empty list as fallback
+                    var fallbackResult = new List<object?>();
+                    _decodeMemo[link.Id] = fallbackResult;
+                    return fallbackResult;
+                }
+
+                // Otherwise it's just a string ID
+                return link.Id;
+            }
+            return null;
+        }
+
+        // Check if this link has a self-reference ID (format: obj_0: type ...)
+        string? selfRefId = null;
+        if (link.Id is not null && link.Id.StartsWith("obj_"))
+        {
+            selfRefId = link.Id;
+            // If this is a back-reference (already in memo), return it
+            if (_decodeMemo.TryGetValue(selfRefId, out var existing))
+            {
+                return existing;
+            }
+        }
+
+        // Get the type marker from the first value
+        var firstValue = link.Values[0];
+        if (firstValue.Id is null)
+        {
+            // Not a type marker we recognize
+            return null;
+        }
+
+        var typeMarker = firstValue.Id;
+
+        if (typeMarker == TypeNull)
+        {
+            return null;
+        }
+
+        if (typeMarker == TypeBool)
+        {
+            if (link.Values.Count > 1)
+            {
+                var boolValue = link.Values[1];
+                if (boolValue.Id is not null)
+                {
+                    return boolValue.Id == "True";
+                }
+            }
+            return false;
+        }
+
+        if (typeMarker == TypeInt)
+        {
+            if (link.Values.Count > 1)
+            {
+                var intValue = link.Values[1];
+                if (intValue.Id is not null)
+                {
+                    return int.Parse(intValue.Id);
+                }
+            }
+            return 0;
+        }
+
+        if (typeMarker == TypeFloat)
+        {
+            if (link.Values.Count > 1)
+            {
+                var floatValue = link.Values[1];
+                if (floatValue.Id is not null)
+                {
+                    var valueStr = floatValue.Id;
+                    if (valueStr == "NaN")
+                    {
+                        return double.NaN;
+                    }
+                    if (valueStr == "Infinity")
+                    {
+                        return double.PositiveInfinity;
+                    }
+                    if (valueStr == "-Infinity")
+                    {
+                        return double.NegativeInfinity;
+                    }
+                    return double.Parse(valueStr, System.Globalization.CultureInfo.InvariantCulture);
+                }
+            }
+            return 0.0;
+        }
+
+        if (typeMarker == TypeStr)
+        {
+            if (link.Values.Count > 1)
+            {
+                var strValue = link.Values[1];
+                if (strValue.Id is not null)
+                {
+                    var b64Str = strValue.Id;
+                    // Decode from base64
+                    try
+                    {
+                        var decodedBytes = Convert.FromBase64String(b64Str);
+                        return Encoding.UTF8.GetString(decodedBytes);
+                    }
+                    catch
+                    {
+                        // If decode fails, return the raw value
+                        return b64Str;
+                    }
+                }
+            }
+            return "";
+        }
+
+        if (typeMarker == TypeList)
+        {
+            // New format with self-reference: (obj_0: list item1 item2 ...)
+            var startIdx = 1;
+            var listId = selfRefId;  // Use self-reference ID from link.Id if present
+
+            var resultList = new List<object?>();
+            if (listId is not null)
+            {
+                _decodeMemo[listId] = resultList;
+            }
+
+            for (int i = startIdx; i < link.Values.Count; i++)
+            {
+                var itemLink = link.Values[i];
+                var decodedItem = DecodeLink(itemLink);
+                resultList.Add(decodedItem);
+            }
+            return resultList;
+        }
+
+        if (typeMarker == TypeDict)
+        {
+            // New format with self-reference: (obj_0: dict (key val) ...)
+            var startIdx = 1;
+            var dictId = selfRefId;  // Use self-reference ID from link.Id if present
+
+            var resultDict = new Dictionary<string, object?>();
+            if (dictId is not null)
+            {
+                _decodeMemo[dictId] = resultDict;
+            }
+
+            for (int i = startIdx; i < link.Values.Count; i++)
+            {
+                var pairLink = link.Values[i];
+                if (pairLink.Values is not null && pairLink.Values.Count >= 2)
+                {
+                    var keyLink = pairLink.Values[0];
+                    var valueLink = pairLink.Values[1];
+
+                    var decodedKey = DecodeLink(keyLink);
+                    var decodedValue = DecodeLink(valueLink);
+
+                    if (decodedKey is string keyStr)
+                    {
+                        resultDict[keyStr] = decodedValue;
+                    }
+                }
+            }
+            return resultDict;
+        }
+
+        // Unknown type marker
+        throw new InvalidOperationException($"Unknown type marker: {typeMarker}");
+    }
+}
+
+/// <summary>
+/// Comparer that compares objects by reference equality.
+/// </summary>
+internal class ReferenceEqualityComparer : IEqualityComparer<object>
+{
+    public static readonly ReferenceEqualityComparer Instance = new();
+
+    public new bool Equals(object? x, object? y) => ReferenceEquals(x, y);
+
+    public int GetHashCode(object obj) => RuntimeHelpers.GetHashCode(obj);
+}
+
+/// <summary>
+/// Convenience functions for encoding/decoding objects.
+/// </summary>
+public static class Codec
+{
+    /// <summary>
+    /// Encode a C# object to Links Notation format.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in Links Notation format</returns>
+    public static string Encode(object? obj) => new ObjectCodec().Encode(obj);
+
+    /// <summary>
+    /// Decode Links Notation format to a C# object.
+    /// </summary>
+    /// <param name="notation">String in Links Notation format</param>
+    /// <returns>Reconstructed C# object</returns>
+    public static object? Decode(string notation) => new ObjectCodec().Decode(notation);
+}
