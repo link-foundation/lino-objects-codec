@@ -47,7 +47,7 @@ mod type_ids {
 }
 
 /// Error types for codec operations
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CodecError {
     /// Parsing error
     ParseError(String),
