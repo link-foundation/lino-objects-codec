@@ -3,7 +3,7 @@
 [![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
 [![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
 
-Universal serialization library to encode/decode objects to/from Links Notation format. Available in both **Python** and **JavaScript** with identical functionality and API design.
+Universal serialization library to encode/decode objects to/from Links Notation format. Available in **Python**, **JavaScript**, and **Rust** with identical functionality and API design.
 
 ## 🌍 Multi-Language Support
 
@@ -11,8 +11,9 @@ This library provides universal serialization and deserialization with built-in 
 
 - **[Python](python/)** - Full implementation for Python 3.8+
 - **[JavaScript](js/)** - Full implementation for Node.js 18+
+- **[Rust](rust/)** - Full implementation for Rust 1.70+
 
-Both implementations share the same design philosophy and provide feature parity.
+All implementations share the same design philosophy and provide feature parity.
 
 ## Features
 
@@ -20,6 +21,7 @@ Both implementations share the same design philosophy and provide feature parity
 - **Type Support**: Handle all common types in each language:
   - **Python**: `None`, `bool`, `int`, `float`, `str`, `list`, `dict`
   - **JavaScript**: `null`, `undefined`, `boolean`, `number`, `string`, `Array`, `Object`
+  - **Rust**: `LinoValue` enum with `Null`, `Bool`, `Int`, `Float`, `String`, `Array`, `Object`
   - Special float/number values: `NaN`, `Infinity`, `-Infinity`
 - **Circular References**: Automatically detect and preserve circular references
 - **Object Identity**: Maintain object identity for shared references
@@ -63,6 +65,27 @@ const decoded = decode(encoded);
 console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 ```
 
+### Rust
+
+```toml
+[dependencies]
+lino-objects-codec = "0.1"
+```
+
+```rust
+use lino_objects_codec::{encode, decode, LinoValue};
+
+// Encode and decode
+let data = LinoValue::object([
+    ("name", LinoValue::String("Alice".to_string())),
+    ("age", LinoValue::Int(30)),
+    ("active", LinoValue::Bool(true)),
+]);
+let encoded = encode(&data);
+let decoded = decode(&encoded).unwrap();
+assert_eq!(decoded, data);
+```
+
 ## Repository Structure
 
 ```
@@ -77,6 +100,10 @@ console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 │   ├── tests/       # Test suite
 │   ├── examples/    # Usage examples
 │   └── README.md    # JavaScript-specific docs
+├── rust/            # Rust implementation
+│   ├── src/         # Source code
+│   ├── examples/    # Usage examples
+│   └── README.md    # Rust-specific docs
 └── README.md        # This file
 ```
 
@@ -86,10 +113,11 @@ For detailed documentation, API reference, and examples, see:
 
 - **[Python Documentation](python/README.md)**
 - **[JavaScript Documentation](js/README.md)**
+- **[Rust Documentation](rust/README.md)**
 
 ## Usage Examples
 
-Both implementations support the same features with language-appropriate syntax:
+All implementations support the same features with language-appropriate syntax:
 
 ### Circular References
 
@@ -181,6 +209,14 @@ npm test
 npm run example
 ```
 
+### Rust
+
+```bash
+cd rust
+cargo test
+cargo run --example basic_usage
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
@@ -203,6 +239,7 @@ This project is licensed under the Unlicense - see the [LICENSE](LICENSE) file f
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
 - [PyPI Package](https://pypi.org/project/lino-objects-codec/) (Python)
 - [npm Package](https://www.npmjs.com/package/lino-objects-codec/) (JavaScript)
+- [crates.io Package](https://crates.io/crates/lino-objects-codec/) (Rust)
 
 ## Acknowledgments
 

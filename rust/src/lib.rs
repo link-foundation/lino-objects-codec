@@ -1,0 +1,1176 @@
+//! Object encoder/decoder for Links Notation format.
+//!
+//! This library provides encoding and decoding of JSON-like objects to/from
+//! Links Notation format. It supports all common JSON types plus special
+//! float values (NaN, Infinity, -Infinity).
+//!
+//! # Features
+//!
+//! - **Universal Serialization**: Encode objects to Links Notation format
+//! - **Type Support**: Handle all common types: null, boolean, integer, float, string, array, object
+//! - **Special Float Values**: Support for NaN, Infinity, -Infinity (which are not valid JSON)
+//! - **Circular References**: Detect and preserve circular references (via object IDs)
+//! - **Object Identity**: Maintain object identity for shared references
+//! - **UTF-8 Support**: Full Unicode string support using base64 encoding
+//! - **Simple API**: Easy-to-use `encode()` and `decode()` functions
+//!
+//! # Example
+//!
+//! ```rust
+//! use lino_objects_codec::{encode, decode, LinoValue};
+//!
+//! // Encode a simple object
+//! let data = LinoValue::object([
+//!     ("name", LinoValue::String("Alice".to_string())),
+//!     ("age", LinoValue::Int(30)),
+//!     ("active", LinoValue::Bool(true)),
+//! ]);
+//! let encoded = encode(&data);
+//! let decoded = decode(&encoded).unwrap();
+//! assert_eq!(decoded, data);
+//! ```
+
+use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
+use links_notation::{parse_lino_to_links, LiNo};
+use std::collections::{HashMap, HashSet};
+use std::fmt;
+
+/// Type identifiers used in Links Notation format
+mod type_ids {
+    pub const NULL: &str = "null";
+    pub const BOOL: &str = "bool";
+    pub const INT: &str = "int";
+    pub const FLOAT: &str = "float";
+    pub const STR: &str = "str";
+    pub const ARRAY: &str = "array";
+    pub const OBJECT: &str = "object";
+}
+
+/// Error types for codec operations
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum CodecError {
+    /// Parsing error
+    ParseError(String),
+    /// Decoding error
+    DecodeError(String),
+    /// Unknown type marker
+    UnknownType(String),
+}
+
+impl fmt::Display for CodecError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            CodecError::ParseError(msg) => write!(f, "Parse error: {}", msg),
+            CodecError::DecodeError(msg) => write!(f, "Decode error: {}", msg),
+            CodecError::UnknownType(t) => write!(f, "Unknown type marker: {}", t),
+        }
+    }
+}
+
+impl std::error::Error for CodecError {}
+
+/// A value that can be encoded/decoded using the Links Notation codec.
+///
+/// This type supports all the types available in Python/JavaScript versions
+/// including special float values (NaN, Infinity) that are not valid JSON.
+#[derive(Debug, Clone)]
+pub enum LinoValue {
+    /// Null value
+    Null,
+    /// Boolean value
+    Bool(bool),
+    /// Integer value (64-bit signed)
+    Int(i64),
+    /// Floating point value (64-bit)
+    Float(f64),
+    /// String value
+    String(String),
+    /// Array of values
+    Array(Vec<LinoValue>),
+    /// Object/dictionary with string keys
+    Object(Vec<(String, LinoValue)>),
+}
+
+impl PartialEq for LinoValue {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (LinoValue::Null, LinoValue::Null) => true,
+            (LinoValue::Bool(a), LinoValue::Bool(b)) => a == b,
+            (LinoValue::Int(a), LinoValue::Int(b)) => a == b,
+            (LinoValue::Float(a), LinoValue::Float(b)) => {
+                // Handle NaN comparison
+                if a.is_nan() && b.is_nan() {
+                    true
+                } else {
+                    a == b
+                }
+            }
+            (LinoValue::String(a), LinoValue::String(b)) => a == b,
+            (LinoValue::Array(a), LinoValue::Array(b)) => a == b,
+            (LinoValue::Object(a), LinoValue::Object(b)) => {
+                // Objects are equal if they have the same keys and values
+                if a.len() != b.len() {
+                    return false;
+                }
+                // Create hashmaps for comparison (order-independent)
+                let a_map: HashMap<&str, &LinoValue> =
+                    a.iter().map(|(k, v)| (k.as_str(), v)).collect();
+                let b_map: HashMap<&str, &LinoValue> =
+                    b.iter().map(|(k, v)| (k.as_str(), v)).collect();
+                a_map == b_map
+            }
+            _ => false,
+        }
+    }
+}
+
+impl LinoValue {
+    /// Create an object from an iterator of key-value pairs.
+    pub fn object<I, K, V>(iter: I) -> Self
+    where
+        I: IntoIterator<Item = (K, V)>,
+        K: Into<String>,
+        V: Into<LinoValue>,
+    {
+        LinoValue::Object(
+            iter.into_iter()
+                .map(|(k, v)| (k.into(), v.into()))
+                .collect(),
+        )
+    }
+
+    /// Create an array from an iterator of values.
+    pub fn array<I, V>(iter: I) -> Self
+    where
+        I: IntoIterator<Item = V>,
+        V: Into<LinoValue>,
+    {
+        LinoValue::Array(iter.into_iter().map(|v| v.into()).collect())
+    }
+
+    /// Check if this is a null value.
+    pub fn is_null(&self) -> bool {
+        matches!(self, LinoValue::Null)
+    }
+
+    /// Get as a boolean, if this is a bool.
+    pub fn as_bool(&self) -> Option<bool> {
+        match self {
+            LinoValue::Bool(b) => Some(*b),
+            _ => None,
+        }
+    }
+
+    /// Get as an integer, if this is an int.
+    pub fn as_int(&self) -> Option<i64> {
+        match self {
+            LinoValue::Int(i) => Some(*i),
+            _ => None,
+        }
+    }
+
+    /// Get as a float, if this is a float or int.
+    pub fn as_float(&self) -> Option<f64> {
+        match self {
+            LinoValue::Float(f) => Some(*f),
+            LinoValue::Int(i) => Some(*i as f64),
+            _ => None,
+        }
+    }
+
+    /// Get as a string, if this is a string.
+    pub fn as_str(&self) -> Option<&str> {
+        match self {
+            LinoValue::String(s) => Some(s),
+            _ => None,
+        }
+    }
+
+    /// Get as an array, if this is an array.
+    pub fn as_array(&self) -> Option<&Vec<LinoValue>> {
+        match self {
+            LinoValue::Array(a) => Some(a),
+            _ => None,
+        }
+    }
+
+    /// Get as an object, if this is an object.
+    pub fn as_object(&self) -> Option<&Vec<(String, LinoValue)>> {
+        match self {
+            LinoValue::Object(o) => Some(o),
+            _ => None,
+        }
+    }
+
+    /// Get a value from an object by key.
+    pub fn get(&self, key: &str) -> Option<&LinoValue> {
+        match self {
+            LinoValue::Object(o) => o.iter().find(|(k, _)| k == key).map(|(_, v)| v),
+            _ => None,
+        }
+    }
+
+    /// Get a value from an array by index.
+    pub fn get_index(&self, index: usize) -> Option<&LinoValue> {
+        match self {
+            LinoValue::Array(a) => a.get(index),
+            _ => None,
+        }
+    }
+}
+
+// Implement From traits for convenience
+impl From<()> for LinoValue {
+    fn from(_: ()) -> Self {
+        LinoValue::Null
+    }
+}
+
+impl From<bool> for LinoValue {
+    fn from(b: bool) -> Self {
+        LinoValue::Bool(b)
+    }
+}
+
+impl From<i32> for LinoValue {
+    fn from(i: i32) -> Self {
+        LinoValue::Int(i as i64)
+    }
+}
+
+impl From<i64> for LinoValue {
+    fn from(i: i64) -> Self {
+        LinoValue::Int(i)
+    }
+}
+
+impl From<f64> for LinoValue {
+    fn from(f: f64) -> Self {
+        LinoValue::Float(f)
+    }
+}
+
+impl From<&str> for LinoValue {
+    fn from(s: &str) -> Self {
+        LinoValue::String(s.to_string())
+    }
+}
+
+impl From<String> for LinoValue {
+    fn from(s: String) -> Self {
+        LinoValue::String(s)
+    }
+}
+
+impl<T: Into<LinoValue>> From<Vec<T>> for LinoValue {
+    fn from(v: Vec<T>) -> Self {
+        LinoValue::Array(v.into_iter().map(|x| x.into()).collect())
+    }
+}
+
+impl<T: Into<LinoValue>> From<Option<T>> for LinoValue {
+    fn from(opt: Option<T>) -> Self {
+        match opt {
+            Some(v) => v.into(),
+            None => LinoValue::Null,
+        }
+    }
+}
+
+/// Codec for encoding/decoding LinoValue to/from Links Notation.
+///
+/// This codec handles the conversion between `LinoValue` and Links Notation
+/// format strings. It supports circular references and shared object identity
+/// through object ID references.
+pub struct ObjectCodec {
+    /// Counter for generating unique object IDs
+    encode_counter: usize,
+    /// Maps object representations to their assigned IDs (for detecting shared references)
+    encode_memo: HashMap<String, String>,
+    /// Set of object representations that need IDs (referenced multiple times)
+    needs_id: HashSet<String>,
+    /// All link definitions generated during encoding (for multi-link format)
+    all_definitions: Vec<(String, LiNo<String>)>,
+    /// Maps object IDs to decoded values during decoding
+    decode_memo: HashMap<String, LinoValue>,
+    /// All links available for forward reference resolution
+    all_links: Vec<LiNo<String>>,
+}
+
+impl Default for ObjectCodec {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ObjectCodec {
+    /// Create a new ObjectCodec instance.
+    pub fn new() -> Self {
+        ObjectCodec {
+            encode_counter: 0,
+            encode_memo: HashMap::new(),
+            needs_id: HashSet::new(),
+            all_definitions: Vec::new(),
+            decode_memo: HashMap::new(),
+            all_links: Vec::new(),
+        }
+    }
+
+    /// Reset the encoder state for a new encoding operation.
+    fn reset_encode_state(&mut self) {
+        self.encode_counter = 0;
+        self.encode_memo.clear();
+        self.needs_id.clear();
+        self.all_definitions.clear();
+    }
+
+    /// Reset the decoder state for a new decoding operation.
+    fn reset_decode_state(&mut self) {
+        self.decode_memo.clear();
+        self.all_links.clear();
+    }
+
+    /// Create a Link from string parts.
+    fn make_link(&self, parts: &[&str]) -> LiNo<String> {
+        let values: Vec<LiNo<String>> = parts.iter().map(|p| LiNo::Ref(p.to_string())).collect();
+        LiNo::Link { id: None, values }
+    }
+
+    /// Create a reference Link with just an ID.
+    fn make_ref(&self, id: &str) -> LiNo<String> {
+        LiNo::Ref(id.to_string())
+    }
+
+    /// Generate a unique object key for detecting shared references.
+    fn object_key(&self, value: &LinoValue) -> String {
+        // Use pointer-based identity
+        format!("{:p}", value)
+    }
+
+    /// First pass: identify which objects need IDs (referenced multiple times or circularly).
+    fn find_objects_needing_ids(&mut self, value: &LinoValue, seen: &mut HashMap<String, bool>) {
+        // Only track arrays and objects (compound types)
+        match value {
+            LinoValue::Array(arr) => {
+                let key = self.object_key(value);
+
+                if seen.contains_key(&key) {
+                    // Already seen - needs an ID
+                    self.needs_id.insert(key);
+                    return;
+                }
+
+                seen.insert(key, true);
+
+                for item in arr {
+                    self.find_objects_needing_ids(item, seen);
+                }
+            }
+            LinoValue::Object(obj) => {
+                let key = self.object_key(value);
+
+                if seen.contains_key(&key) {
+                    // Already seen - needs an ID
+                    self.needs_id.insert(key);
+                    return;
+                }
+
+                seen.insert(key, true);
+
+                for (_, v) in obj {
+                    self.find_objects_needing_ids(v, seen);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    /// Encode a LinoValue to Links Notation format.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to encode
+    ///
+    /// # Returns
+    ///
+    /// A string in Links Notation format
+    pub fn encode(&mut self, value: &LinoValue) -> String {
+        self.reset_encode_state();
+
+        // First pass: identify which objects need IDs
+        let mut seen = HashMap::new();
+        self.find_objects_needing_ids(value, &mut seen);
+
+        // Encode the value
+        let mut visited = HashSet::new();
+        let main_link = self.encode_value(value, &mut visited, 0);
+
+        // If we have additional definitions, output them all as multi-link format
+        if !self.all_definitions.is_empty() {
+            let mut all_links = vec![main_link];
+
+            // Add all other definitions (avoid duplicates)
+            for (ref_id, link) in &self.all_definitions {
+                let main_id = match &all_links[0] {
+                    LiNo::Link { id: Some(id), .. } => Some(id.clone()),
+                    _ => None,
+                };
+                if main_id.as_ref() != Some(ref_id) {
+                    all_links.push(link.clone());
+                }
+            }
+
+            // Format as multi-link (newline separated)
+            all_links
+                .iter()
+                .map(Self::format_link)
+                .collect::<Vec<_>>()
+                .join("\n")
+        } else {
+            Self::format_link(&main_link)
+        }
+    }
+
+    /// Format a single link to its string representation.
+    fn format_link(link: &LiNo<String>) -> String {
+        match link {
+            LiNo::Ref(s) => s.clone(),
+            LiNo::Link { id, values } => {
+                let inner: Vec<String> = values.iter().map(Self::format_link).collect();
+
+                if let Some(link_id) = id {
+                    if inner.is_empty() {
+                        format!("({}:)", link_id)
+                    } else {
+                        format!("({}: {})", link_id, inner.join(" "))
+                    }
+                } else if inner.is_empty() {
+                    "()".to_string()
+                } else {
+                    format!("({})", inner.join(" "))
+                }
+            }
+        }
+    }
+
+    /// Encode a value into a Link.
+    fn encode_value(
+        &mut self,
+        value: &LinoValue,
+        visited: &mut HashSet<String>,
+        depth: usize,
+    ) -> LiNo<String> {
+        match value {
+            LinoValue::Null => self.make_link(&[type_ids::NULL]),
+
+            LinoValue::Bool(b) => {
+                if *b {
+                    self.make_link(&[type_ids::BOOL, "true"])
+                } else {
+                    self.make_link(&[type_ids::BOOL, "false"])
+                }
+            }
+
+            LinoValue::Int(i) => self.make_link(&[type_ids::INT, &i.to_string()]),
+
+            LinoValue::Float(f) => {
+                if f.is_nan() {
+                    self.make_link(&[type_ids::FLOAT, "NaN"])
+                } else if f.is_infinite() {
+                    if f.is_sign_positive() {
+                        self.make_link(&[type_ids::FLOAT, "Infinity"])
+                    } else {
+                        self.make_link(&[type_ids::FLOAT, "-Infinity"])
+                    }
+                } else {
+                    self.make_link(&[type_ids::FLOAT, &f.to_string()])
+                }
+            }
+
+            LinoValue::String(s) => {
+                let b64_encoded = BASE64.encode(s.as_bytes());
+                self.make_link(&[type_ids::STR, &b64_encoded])
+            }
+
+            LinoValue::Array(arr) => {
+                let obj_key = self.object_key(value);
+
+                // Check if we've already encoded this object
+                if let Some(ref_id) = self.encode_memo.get(&obj_key).cloned() {
+                    return self.make_ref(&ref_id);
+                }
+
+                // Check if this object needs an ID
+                let needs_id = self.needs_id.contains(&obj_key);
+
+                if needs_id {
+                    // Check for cycle
+                    if visited.contains(&obj_key) {
+                        // We're in a cycle - must have assigned ID already
+                        if let Some(ref_id) = self.encode_memo.get(&obj_key) {
+                            return self.make_ref(ref_id);
+                        }
+                    }
+
+                    // Assign an ID
+                    let ref_id = format!("obj_{}", self.encode_counter);
+                    self.encode_counter += 1;
+                    self.encode_memo.insert(obj_key.clone(), ref_id.clone());
+                    visited.insert(obj_key.clone());
+
+                    // Encode items
+                    let mut parts: Vec<LiNo<String>> = vec![LiNo::Ref(type_ids::ARRAY.to_string())];
+                    for item in arr {
+                        let item_link = self.encode_value(item, visited, depth + 1);
+                        parts.push(item_link);
+                    }
+
+                    let definition = LiNo::Link {
+                        id: Some(ref_id.clone()),
+                        values: parts,
+                    };
+
+                    // Store for multi-link output if not at top level
+                    if depth > 0 {
+                        self.all_definitions.push((ref_id.clone(), definition));
+                        return self.make_ref(&ref_id);
+                    }
+
+                    definition
+                } else {
+                    // No ID needed - simple array
+                    let mut parts: Vec<LiNo<String>> = vec![LiNo::Ref(type_ids::ARRAY.to_string())];
+                    for item in arr {
+                        let item_link = self.encode_value(item, visited, depth + 1);
+                        parts.push(item_link);
+                    }
+                    LiNo::Link {
+                        id: None,
+                        values: parts,
+                    }
+                }
+            }
+
+            LinoValue::Object(obj) => {
+                let obj_key = self.object_key(value);
+
+                // Check if we've already encoded this object
+                if let Some(ref_id) = self.encode_memo.get(&obj_key).cloned() {
+                    return self.make_ref(&ref_id);
+                }
+
+                // Check if this object needs an ID
+                let needs_id = self.needs_id.contains(&obj_key);
+
+                if needs_id {
+                    // Check for cycle
+                    if visited.contains(&obj_key) {
+                        // We're in a cycle - must have assigned ID already
+                        if let Some(ref_id) = self.encode_memo.get(&obj_key) {
+                            return self.make_ref(ref_id);
+                        }
+                    }
+
+                    // Assign an ID
+                    let ref_id = format!("obj_{}", self.encode_counter);
+                    self.encode_counter += 1;
+                    self.encode_memo.insert(obj_key.clone(), ref_id.clone());
+                    visited.insert(obj_key.clone());
+
+                    // Encode key-value pairs
+                    let mut parts: Vec<LiNo<String>> =
+                        vec![LiNo::Ref(type_ids::OBJECT.to_string())];
+                    for (k, v) in obj {
+                        let key_link =
+                            self.encode_value(&LinoValue::String(k.clone()), visited, depth + 1);
+                        let value_link = self.encode_value(v, visited, depth + 1);
+                        let pair = LiNo::Link {
+                            id: None,
+                            values: vec![key_link, value_link],
+                        };
+                        parts.push(pair);
+                    }
+
+                    let definition = LiNo::Link {
+                        id: Some(ref_id.clone()),
+                        values: parts,
+                    };
+
+                    // Store for multi-link output if not at top level
+                    if depth > 0 {
+                        self.all_definitions.push((ref_id.clone(), definition));
+                        return self.make_ref(&ref_id);
+                    }
+
+                    definition
+                } else {
+                    // No ID needed - simple object
+                    let mut parts: Vec<LiNo<String>> =
+                        vec![LiNo::Ref(type_ids::OBJECT.to_string())];
+                    for (k, v) in obj {
+                        let key_link =
+                            self.encode_value(&LinoValue::String(k.clone()), visited, depth + 1);
+                        let value_link = self.encode_value(v, visited, depth + 1);
+                        let pair = LiNo::Link {
+                            id: None,
+                            values: vec![key_link, value_link],
+                        };
+                        parts.push(pair);
+                    }
+                    LiNo::Link {
+                        id: None,
+                        values: parts,
+                    }
+                }
+            }
+        }
+    }
+
+    /// Decode Links Notation format to a LinoValue.
+    ///
+    /// # Arguments
+    ///
+    /// * `notation` - String in Links Notation format
+    ///
+    /// # Returns
+    ///
+    /// The reconstructed value, or an error
+    pub fn decode(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
+        self.reset_decode_state();
+
+        let links = parse_lino_to_links(notation)
+            .map_err(|e| CodecError::ParseError(format!("{:?}", e)))?;
+
+        if links.is_empty() {
+            return Ok(LinoValue::Null);
+        }
+
+        // Store all links for forward reference resolution
+        if links.len() > 1 {
+            self.all_links = links.clone();
+        }
+
+        // Decode the first link
+        self.decode_link(&links[0])
+    }
+
+    /// Decode a Link into a LinoValue.
+    fn decode_link(&mut self, link: &LiNo<String>) -> Result<LinoValue, CodecError> {
+        match link {
+            LiNo::Ref(id) => {
+                // Check if this is a reference to a previously decoded object
+                if let Some(value) = self.decode_memo.get(id) {
+                    return Ok(value.clone());
+                }
+
+                // Check if it's a forward reference
+                if id.starts_with("obj_") && !self.all_links.is_empty() {
+                    // Look for this ID in remaining links
+                    for other_link in self.all_links.clone() {
+                        if let LiNo::Link {
+                            id: Some(link_id), ..
+                        } = &other_link
+                        {
+                            if link_id == id {
+                                return self.decode_link(&other_link);
+                            }
+                        }
+                    }
+                    // Not found - return empty array as fallback
+                    let result = LinoValue::Array(vec![]);
+                    self.decode_memo.insert(id.clone(), result.clone());
+                    return Ok(result);
+                }
+
+                // Handle single-element type markers (parser returns Ref for single values like "(null)")
+                match id.as_str() {
+                    type_ids::NULL => return Ok(LinoValue::Null),
+                    type_ids::ARRAY => return Ok(LinoValue::Array(vec![])),
+                    type_ids::OBJECT => return Ok(LinoValue::Object(vec![])),
+                    type_ids::STR => return Ok(LinoValue::String(String::new())),
+                    _ => {}
+                }
+
+                // Just a plain string reference
+                Ok(LinoValue::String(id.clone()))
+            }
+
+            LiNo::Link { id, values } => {
+                // Check for self-reference ID (already in memo)
+                let self_ref_id = id.as_ref().filter(|i| i.starts_with("obj_"));
+                if let Some(ref_id) = self_ref_id {
+                    if let Some(value) = self.decode_memo.get(ref_id) {
+                        return Ok(value.clone());
+                    }
+                }
+
+                if values.is_empty() {
+                    return Ok(LinoValue::Null);
+                }
+
+                // Get the type marker from the first value
+                let type_marker = match &values[0] {
+                    LiNo::Ref(t) => t.as_str(),
+                    LiNo::Link { .. } => return Ok(LinoValue::Null),
+                };
+
+                match type_marker {
+                    type_ids::NULL => Ok(LinoValue::Null),
+
+                    type_ids::BOOL => {
+                        if values.len() > 1 {
+                            if let LiNo::Ref(val) = &values[1] {
+                                return Ok(LinoValue::Bool(val == "true"));
+                            }
+                        }
+                        Ok(LinoValue::Bool(false))
+                    }
+
+                    type_ids::INT => {
+                        if values.len() > 1 {
+                            if let LiNo::Ref(val) = &values[1] {
+                                if let Ok(i) = val.parse::<i64>() {
+                                    return Ok(LinoValue::Int(i));
+                                }
+                            }
+                        }
+                        Ok(LinoValue::Int(0))
+                    }
+
+                    type_ids::FLOAT => {
+                        if values.len() > 1 {
+                            if let LiNo::Ref(val) = &values[1] {
+                                return match val.as_str() {
+                                    "NaN" => Ok(LinoValue::Float(f64::NAN)),
+                                    "Infinity" => Ok(LinoValue::Float(f64::INFINITY)),
+                                    "-Infinity" => Ok(LinoValue::Float(f64::NEG_INFINITY)),
+                                    s => {
+                                        if let Ok(f) = s.parse::<f64>() {
+                                            Ok(LinoValue::Float(f))
+                                        } else {
+                                            Ok(LinoValue::Float(0.0))
+                                        }
+                                    }
+                                };
+                            }
+                        }
+                        Ok(LinoValue::Float(0.0))
+                    }
+
+                    type_ids::STR => {
+                        if values.len() > 1 {
+                            if let LiNo::Ref(b64_str) = &values[1] {
+                                if let Ok(bytes) = BASE64.decode(b64_str) {
+                                    if let Ok(s) = String::from_utf8(bytes) {
+                                        return Ok(LinoValue::String(s));
+                                    }
+                                }
+                                // If decode fails, return raw value
+                                return Ok(LinoValue::String(b64_str.clone()));
+                            }
+                        }
+                        Ok(LinoValue::String(String::new()))
+                    }
+
+                    type_ids::ARRAY => {
+                        // Create result array and register in memo early for circular refs
+                        let result_array = LinoValue::Array(vec![]);
+                        if let Some(ref_id) = self_ref_id {
+                            self.decode_memo.insert(ref_id.clone(), result_array);
+                        }
+
+                        // Decode items (skip type marker at index 0)
+                        let mut items = Vec::new();
+                        for item_link in values.iter().skip(1) {
+                            let decoded = self.decode_link(item_link)?;
+                            items.push(decoded);
+                        }
+
+                        let result = LinoValue::Array(items);
+
+                        // Update memo if needed
+                        if let Some(ref_id) = self_ref_id {
+                            self.decode_memo.insert(ref_id.clone(), result.clone());
+                        }
+
+                        Ok(result)
+                    }
+
+                    type_ids::OBJECT => {
+                        // Create result object and register in memo early for circular refs
+                        let result_object = LinoValue::Object(vec![]);
+                        if let Some(ref_id) = self_ref_id {
+                            self.decode_memo.insert(ref_id.clone(), result_object);
+                        }
+
+                        // Decode key-value pairs (skip type marker at index 0)
+                        let mut obj = Vec::new();
+                        for pair_link in values.iter().skip(1) {
+                            if let LiNo::Link { values: pair, .. } = pair_link {
+                                if pair.len() >= 2 {
+                                    let key = self.decode_link(&pair[0])?;
+                                    let value = self.decode_link(&pair[1])?;
+
+                                    // Key should be a string
+                                    if let LinoValue::String(k) = key {
+                                        obj.push((k, value));
+                                    }
+                                }
+                            }
+                        }
+
+                        let result = LinoValue::Object(obj);
+
+                        // Update memo if needed
+                        if let Some(ref_id) = self_ref_id {
+                            self.decode_memo.insert(ref_id.clone(), result.clone());
+                        }
+
+                        Ok(result)
+                    }
+
+                    unknown => Err(CodecError::UnknownType(unknown.to_string())),
+                }
+            }
+        }
+    }
+}
+
+// Global codec instance for convenience functions
+thread_local! {
+    static DEFAULT_CODEC: std::cell::RefCell<ObjectCodec> = std::cell::RefCell::new(ObjectCodec::new());
+}
+
+/// Encode a value to Links Notation format.
+///
+/// This is a convenience function that uses a thread-local codec instance.
+///
+/// # Arguments
+///
+/// * `value` - The value to encode
+///
+/// # Returns
+///
+/// A string in Links Notation format
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{encode, LinoValue};
+///
+/// let data = LinoValue::object([
+///     ("name", LinoValue::String("Alice".to_string())),
+///     ("age", LinoValue::Int(30)),
+/// ]);
+/// let encoded = encode(&data);
+/// // String "Alice" is base64-encoded as "QWxpY2U="
+/// assert!(encoded.contains("QWxpY2U="));
+/// ```
+pub fn encode(value: &LinoValue) -> String {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode(value))
+}
+
+/// Decode Links Notation format to a value.
+///
+/// This is a convenience function that uses a thread-local codec instance.
+///
+/// # Arguments
+///
+/// * `notation` - String in Links Notation format
+///
+/// # Returns
+///
+/// The reconstructed value, or an error
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{encode, decode, LinoValue};
+///
+/// let original = LinoValue::Int(42);
+/// let encoded = encode(&original);
+/// let decoded = decode(&encoded).unwrap();
+/// assert_eq!(decoded, original);
+/// ```
+pub fn decode(notation: &str) -> Result<LinoValue, CodecError> {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().decode(notation))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_roundtrip_null() {
+        let original = LinoValue::Null;
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_roundtrip_bool() {
+        for value in [true, false] {
+            let original = LinoValue::Bool(value);
+            let encoded = encode(&original);
+            let decoded = decode(&encoded).unwrap();
+            assert_eq!(decoded, original);
+        }
+    }
+
+    #[test]
+    fn test_roundtrip_int() {
+        let test_values: Vec<i64> = vec![0, 1, -1, 42, -42, 123456789, -123456789];
+        for value in test_values {
+            let original = LinoValue::Int(value);
+            let encoded = encode(&original);
+            let decoded = decode(&encoded).unwrap();
+            assert_eq!(decoded.as_int(), Some(value));
+        }
+    }
+
+    #[test]
+    fn test_roundtrip_float() {
+        let test_values: Vec<f64> = vec![0.0, 1.0, -1.0, 3.14, -3.14, 0.123456789, -999.999];
+        for value in test_values {
+            let original = LinoValue::Float(value);
+            let encoded = encode(&original);
+            let decoded = decode(&encoded).unwrap();
+            let decoded_f = decoded.as_float().unwrap();
+            assert!((decoded_f - value).abs() < 0.0001);
+        }
+    }
+
+    #[test]
+    fn test_float_special_values() {
+        // Test infinity
+        let inf = LinoValue::Float(f64::INFINITY);
+        let encoded = encode(&inf);
+        let decoded = decode(&encoded).unwrap();
+        let decoded_f = decoded.as_float().unwrap();
+        assert!(decoded_f.is_infinite());
+        assert!(decoded_f.is_sign_positive());
+
+        // Test negative infinity
+        let neg_inf = LinoValue::Float(f64::NEG_INFINITY);
+        let encoded = encode(&neg_inf);
+        let decoded = decode(&encoded).unwrap();
+        let decoded_f = decoded.as_float().unwrap();
+        assert!(decoded_f.is_infinite());
+        assert!(decoded_f.is_sign_negative());
+
+        // Test NaN
+        let nan = LinoValue::Float(f64::NAN);
+        let encoded = encode(&nan);
+        let decoded = decode(&encoded).unwrap();
+        let decoded_f = decoded.as_float().unwrap();
+        assert!(decoded_f.is_nan());
+    }
+
+    #[test]
+    fn test_roundtrip_string() {
+        let test_values = [
+            "",
+            "hello",
+            "hello world",
+            "Hello, World!",
+            "multi\nline\nstring",
+            "tab\tseparated",
+            "special chars: @#$%^&*()",
+        ];
+        for value in test_values {
+            let original = LinoValue::String(value.to_string());
+            let encoded = encode(&original);
+            let decoded = decode(&encoded).unwrap();
+            assert_eq!(decoded.as_str(), Some(value));
+        }
+    }
+
+    #[test]
+    fn test_string_with_quotes() {
+        let test_values = [
+            "string with 'single quotes'",
+            "string with \"double quotes\"",
+            "string with \"both\" 'quotes'",
+        ];
+        for value in test_values {
+            let original = LinoValue::String(value.to_string());
+            let encoded = encode(&original);
+            let decoded = decode(&encoded).unwrap();
+            assert_eq!(decoded.as_str(), Some(value));
+        }
+    }
+
+    #[test]
+    fn test_unicode_string() {
+        let value = "unicode: 你好世界 🌍";
+        let original = LinoValue::String(value.to_string());
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded.as_str(), Some(value));
+    }
+
+    #[test]
+    fn test_roundtrip_empty_array() {
+        let original = LinoValue::Array(vec![]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_roundtrip_simple_array() {
+        let original = LinoValue::Array(vec![
+            LinoValue::Int(1),
+            LinoValue::Int(2),
+            LinoValue::Int(3),
+        ]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_roundtrip_mixed_array() {
+        let original = LinoValue::Array(vec![
+            LinoValue::Int(1),
+            LinoValue::String("hello".to_string()),
+            LinoValue::Bool(true),
+            LinoValue::Null,
+        ]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_nested_arrays() {
+        let original = LinoValue::Array(vec![LinoValue::Array(vec![])]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+
+        let original2 = LinoValue::Array(vec![
+            LinoValue::Array(vec![LinoValue::Int(1), LinoValue::Int(2)]),
+            LinoValue::Array(vec![LinoValue::Int(3), LinoValue::Int(4)]),
+        ]);
+        let encoded2 = encode(&original2);
+        let decoded2 = decode(&encoded2).unwrap();
+        assert_eq!(decoded2, original2);
+    }
+
+    #[test]
+    fn test_roundtrip_empty_object() {
+        let original = LinoValue::Object(vec![]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_roundtrip_simple_object() {
+        let original = LinoValue::object([("a", LinoValue::Int(1)), ("b", LinoValue::Int(2))]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_nested_objects() {
+        let original = LinoValue::object([(
+            "user",
+            LinoValue::object([
+                ("name", LinoValue::String("Alice".to_string())),
+                (
+                    "address",
+                    LinoValue::object([
+                        ("city", LinoValue::String("NYC".to_string())),
+                        ("zip", LinoValue::String("10001".to_string())),
+                    ]),
+                ),
+            ]),
+        )]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_complex_structure() {
+        let original = LinoValue::object([
+            ("id", LinoValue::Int(123)),
+            ("name", LinoValue::String("Test Object".to_string())),
+            ("active", LinoValue::Bool(true)),
+            (
+                "tags",
+                LinoValue::array([
+                    LinoValue::String("tag1".to_string()),
+                    LinoValue::String("tag2".to_string()),
+                    LinoValue::String("tag3".to_string()),
+                ]),
+            ),
+            (
+                "metadata",
+                LinoValue::object([
+                    ("created", LinoValue::String("2025-01-01".to_string())),
+                    ("modified", LinoValue::Null),
+                    ("count", LinoValue::Int(42)),
+                ]),
+            ),
+            (
+                "items",
+                LinoValue::array([
+                    LinoValue::object([
+                        ("id", LinoValue::Int(1)),
+                        ("value", LinoValue::String("first".to_string())),
+                    ]),
+                    LinoValue::object([
+                        ("id", LinoValue::Int(2)),
+                        ("value", LinoValue::String("second".to_string())),
+                    ]),
+                ]),
+            ),
+        ]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_list_of_dicts() {
+        let original = LinoValue::array([
+            LinoValue::object([
+                ("name", LinoValue::String("Alice".to_string())),
+                ("age", LinoValue::Int(30)),
+            ]),
+            LinoValue::object([
+                ("name", LinoValue::String("Bob".to_string())),
+                ("age", LinoValue::Int(25)),
+            ]),
+        ]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+
+    #[test]
+    fn test_dict_of_lists() {
+        let original = LinoValue::object([
+            (
+                "numbers",
+                LinoValue::array([LinoValue::Int(1), LinoValue::Int(2), LinoValue::Int(3)]),
+            ),
+            (
+                "strings",
+                LinoValue::array([
+                    LinoValue::String("a".to_string()),
+                    LinoValue::String("b".to_string()),
+                    LinoValue::String("c".to_string()),
+                ]),
+            ),
+        ]);
+        let encoded = encode(&original);
+        let decoded = decode(&encoded).unwrap();
+        assert_eq!(decoded, original);
+    }
+}
