@@ -1,0 +1,324 @@
+name: C# CI/CD
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'csharp/**'
+      - '.github/workflows/csharp.yml'
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'csharp/**'
+      - '.github/workflows/csharp.yml'
+  workflow_dispatch:
+    inputs:
+      bump_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      description:
+        description: 'Release description (optional)'
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+
+jobs:
+  # Linting and formatting
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        working-directory: ./csharp
+        run: dotnet restore
+
+      - name: Check formatting
+        working-directory: ./csharp
+        run: dotnet format --verify-no-changes --verbosity diagnostic
+
+      - name: Build with warnings as errors
+        working-directory: ./csharp
+        run: dotnet build --configuration Release --no-restore /warnaserror
+
+  # Test matrix: .NET on multiple OS
+  test:
+    name: Test (.NET on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        working-directory: ./csharp
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ./csharp
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Run tests
+        working-directory: ./csharp
+        run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Run example
+        working-directory: ./csharp/examples
+        run: dotnet run
+
+      - name: Upload coverage (Ubuntu only)
+        if: matrix.os == 'ubuntu-latest'
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: false
+
+  # Build NuGet package
+  build:
+    name: Build Package
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        working-directory: ./csharp
+        run: dotnet restore
+
+      - name: Build
+        working-directory: ./csharp
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        working-directory: ./csharp
+        run: dotnet pack --configuration Release --no-build --output ./artifacts
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-package
+          path: csharp/artifacts/*.nupkg
+
+  # Check for changeset in PRs
+  changeset-check:
+    name: Changeset Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check for changeset
+        working-directory: ./csharp
+        run: |
+          # Skip changeset check for automated release PRs
+          if [[ "${{ github.head_ref }}" == "changeset-release/"* ]] || [[ "${{ github.head_ref }}" == "changeset-manual-release-"* ]]; then
+            echo "Skipping changeset check for automated release PR"
+            exit 0
+          fi
+
+          # Get list of changeset files (excluding README.md and config.json)
+          CHANGESET_COUNT=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
+
+          # Get changed files in PR
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
+
+          # Check if any source files changed (excluding docs and config)
+          SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "^csharp/(src/|tests/|examples/)" | wc -l)
+
+          if [ "$SOURCE_CHANGED" -gt 0 ] && [ "$CHANGESET_COUNT" -eq 0 ]; then
+            echo "::warning::No changeset found. Please add a changeset in csharp/.changeset/"
+            echo ""
+            echo "To create a changeset:"
+            echo "  cd csharp/.changeset"
+            echo "  Create a file: YYYYMMDD_HHMMSS_description.md"
+            echo ""
+            echo "See csharp/.changeset/README.md for more information."
+            # Note: This is a warning, not a failure, to allow flexibility
+            exit 0
+          fi
+
+          echo "✓ Changeset check passed"
+
+  # Automatic release on push to main (if version changed)
+  auto-release:
+    name: Auto Release
+    needs: [lint, test, build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check if version changed
+        id: version_check
+        working-directory: ./csharp
+        run: |
+          # Get current version from csproj
+          CURRENT_VERSION=$(grep -Po '(?<=<Version>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
+          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+
+          # Check if tag exists
+          if git rev-parse "csharp-v$CURRENT_VERSION" >/dev/null 2>&1; then
+            echo "Tag csharp-v$CURRENT_VERSION already exists, skipping release"
+            echo "should_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "New version detected: $CURRENT_VERSION"
+            echo "should_release=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download artifacts
+        if: steps.version_check.outputs.should_release == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+          path: csharp/artifacts/
+
+      - name: Publish to NuGet
+        if: steps.version_check.outputs.should_release == 'true'
+        working-directory: ./csharp
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ -z "$NUGET_API_KEY" ]; then
+            echo "::warning::NUGET_API_KEY not set, skipping publish to NuGet"
+          else
+            dotnet nuget push artifacts/*.nupkg \
+              --api-key "$NUGET_API_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          fi
+
+      - name: Create GitHub Release
+        if: steps.version_check.outputs.should_release == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./csharp
+        run: |
+          node scripts/create-github-release.mjs \
+            --version "${{ steps.version_check.outputs.current_version }}" \
+            --repository "${{ github.repository }}" \
+            --tag-prefix "csharp-v"
+
+  # Manual release via workflow_dispatch
+  manual-release:
+    name: Manual Release
+    needs: [lint, test, build]
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Version and commit
+        id: version
+        working-directory: ./csharp
+        run: |
+          node scripts/version-and-commit.mjs \
+            --bump-type "${{ github.event.inputs.bump_type }}" \
+            --description "${{ github.event.inputs.description }}"
+
+      - name: Build release
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        working-directory: ./csharp
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet pack --configuration Release --output ./artifacts
+
+      - name: Publish to NuGet
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        working-directory: ./csharp
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          if [ -z "$NUGET_API_KEY" ]; then
+            echo "::warning::NUGET_API_KEY not set, skipping publish to NuGet"
+          else
+            dotnet nuget push artifacts/*.nupkg \
+              --api-key "$NUGET_API_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          fi
+
+      - name: Create GitHub Release
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: ./csharp
+        run: |
+          node scripts/create-github-release.mjs \
+            --version "${{ steps.version.outputs.new_version }}" \
+            --repository "${{ github.repository }}" \
+            --tag-prefix "csharp-v"
