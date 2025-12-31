@@ -36,7 +36,7 @@ export class ObjectCodec {
    */
   _makeLink(...parts) {
     // Each part becomes a Link with that id
-    const values = parts.map(part => new Link(part));
+    const values = parts.map((part) => new Link(part));
     return new Link(undefined, values);
   }
 
@@ -125,8 +125,13 @@ export class ObjectCodec {
 
     // Handle case where format() creates output like (obj_0) which parser wraps
     // The parser returns a wrapper Link with no ID, containing the actual Link as first value
-    if (!link.id && link.values && link.values.length === 1 &&
-        link.values[0].id && link.values[0].id.startsWith('obj_')) {
+    if (
+      !link.id &&
+      link.values &&
+      link.values.length === 1 &&
+      link.values[0].id &&
+      link.values[0].id.startsWith('obj_')
+    ) {
       // Extract the actual Link
       link = link.values[0];
     }
@@ -143,7 +148,7 @@ export class ObjectCodec {
   _encodeValue(obj, visited = new Set()) {
     // Check if we've seen this object before (for circular references and shared objects)
     // Only track objects and arrays (mutable types)
-    if (obj !== null && (typeof obj === 'object')) {
+    if (obj !== null && typeof obj === 'object') {
       if (this._encodeMemo.has(obj)) {
         // Return a direct reference using the object's ID
         const refId = this._encodeMemo.get(obj);
@@ -226,7 +231,10 @@ export class ObjectCodec {
         return new Link(refId, [new Link(ObjectCodec.TYPE_ARRAY), ...parts]);
       } else {
         // Wrap in a type marker for arrays without IDs: (array item1 item2 ...)
-        return new Link(undefined, [new Link(ObjectCodec.TYPE_ARRAY), ...parts]);
+        return new Link(undefined, [
+          new Link(ObjectCodec.TYPE_ARRAY),
+          ...parts,
+        ]);
       }
     }
 
@@ -247,7 +255,10 @@ export class ObjectCodec {
         return new Link(refId, [new Link(ObjectCodec.TYPE_OBJECT), ...parts]);
       } else {
         // Wrap in a type marker for objects without IDs: (object (key val) ...)
-        return new Link(undefined, [new Link(ObjectCodec.TYPE_OBJECT), ...parts]);
+        return new Link(undefined, [
+          new Link(ObjectCodec.TYPE_OBJECT),
+          ...parts,
+        ]);
       }
     }
 
@@ -366,7 +377,7 @@ export class ObjectCodec {
           // Decode from base64
           try {
             return Buffer.from(b64Str, 'base64').toString('utf-8');
-          } catch (e) {
+          } catch {
             // If decode fails, return the raw value
             return b64Str;
           }
@@ -379,7 +390,7 @@ export class ObjectCodec {
       // New format with self-reference: (obj_0: array item1 item2 ...)
       // Old format (for backward compatibility): (array obj_id item1 item2 ...)
       let startIdx = 1;
-      let arrayId = selfRefId;  // Use self-reference ID from link.id if present
+      let arrayId = selfRefId; // Use self-reference ID from link.id if present
 
       // Check for old format with obj_id as second element
       if (!arrayId && link.values.length > 1) {
@@ -407,7 +418,7 @@ export class ObjectCodec {
       // New format with self-reference: (obj_0: object (key val) ...)
       // Old format (for backward compatibility): (object obj_id (key val) ...)
       let startIdx = 1;
-      let objectId = selfRefId;  // Use self-reference ID from link.id if present
+      let objectId = selfRefId; // Use self-reference ID from link.id if present
 
       // Check for old format with obj_id as second element
       if (!objectId && link.values.length > 1) {

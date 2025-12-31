@@ -131,6 +131,7 @@ class TestFloats:
     def test_float_special_values(self):
         """Test encoding/decoding special float values."""
         import math
+
         # Test infinity
         inf_encoded = encode(math.inf)
         assert decode(inf_encoded) == math.inf

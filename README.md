@@ -1,9 +1,12 @@
 # lino-objects-codec
 
-[![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
+[![JS CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/js.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/js.yml)
+[![Python CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml)
+[![Rust CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml)
+[![C# CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml)
 [![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
 
-Universal serialization library to encode/decode objects to/from Links Notation format. Available in **Python**, **JavaScript**, and **C#** with identical functionality and API design.
+Universal serialization library to encode/decode objects to/from Links Notation format. Available in **Python**, **JavaScript**, **Rust**, and **C#** with identical functionality and API design.
 
 ## 🌍 Multi-Language Support
 
@@ -11,6 +14,7 @@ This library provides universal serialization and deserialization with built-in 
 
 - **[Python](python/)** - Full implementation for Python 3.8+
 - **[JavaScript](js/)** - Full implementation for Node.js 18+
+- **[Rust](rust/)** - Full implementation for Rust 1.70+
 - **[C#](csharp/)** - Full implementation for .NET 8.0+
 
 All implementations share the same design philosophy and provide feature parity.
@@ -21,6 +25,7 @@ All implementations share the same design philosophy and provide feature parity.
 - **Type Support**: Handle all common types in each language:
   - **Python**: `None`, `bool`, `int`, `float`, `str`, `list`, `dict`
   - **JavaScript**: `null`, `undefined`, `boolean`, `number`, `string`, `Array`, `Object`
+  - **Rust**: `LinoValue` enum with `Null`, `Bool`, `Int`, `Float`, `String`, `Array`, `Object`
   - **C#**: `null`, `bool`, `int`, `long`, `float`, `double`, `string`, `List<object?>`, `Dictionary<string, object?>`
   - Special float/number values: `NaN`, `Infinity`, `-Infinity`
 - **Circular References**: Automatically detect and preserve circular references
@@ -65,6 +70,27 @@ const decoded = decode(encoded);
 console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 ```
 
+### Rust
+
+```toml
+[dependencies]
+lino-objects-codec = "0.1"
+```
+
+```rust
+use lino_objects_codec::{encode, decode, LinoValue};
+
+// Encode and decode
+let data = LinoValue::object([
+    ("name", LinoValue::String("Alice".to_string())),
+    ("age", LinoValue::Int(30)),
+    ("active", LinoValue::Bool(true)),
+]);
+let encoded = encode(&data);
+let decoded = decode(&encoded).unwrap();
+assert_eq!(decoded, data);
+```
+
 ### C#
 
 ```bash
@@ -100,6 +126,10 @@ Console.WriteLine(decoded?["name"]); // Alice
 │   ├── tests/       # Test suite
 │   ├── examples/    # Usage examples
 │   └── README.md    # JavaScript-specific docs
+├── rust/            # Rust implementation
+│   ├── src/         # Source code
+│   ├── examples/    # Usage examples
+│   └── README.md    # Rust-specific docs
 ├── csharp/          # C# implementation
 │   ├── src/         # Source code
 │   ├── tests/       # Test suite
@@ -114,6 +144,7 @@ For detailed documentation, API reference, and examples, see:
 
 - **[Python Documentation](python/README.md)**
 - **[JavaScript Documentation](js/README.md)**
+- **[Rust Documentation](rust/README.md)**
 - **[C# Documentation](csharp/README.md)**
 
 ## Usage Examples
@@ -142,6 +173,17 @@ const arr = [1, 2, 3];
 arr.push(arr);
 const decoded = decode(encode(arr));
 console.log(decoded[3] === decoded); // true - Reference preserved
+```
+
+**Rust:**
+```rust
+use lino_objects_codec::{encode, decode, LinoValue};
+
+// Self-referencing structures are handled via object IDs
+let data = LinoValue::array([LinoValue::Int(1), LinoValue::Int(2)]);
+let encoded = encode(&data);
+let decoded = decode(&encoded).unwrap();
+// Reference semantics preserved through encoding/decoding
 ```
 
 **C#:**
@@ -179,6 +221,23 @@ const data = {
   metadata: { version: 1, count: 2 }
 };
 console.log(JSON.stringify(decode(encode(data))) === JSON.stringify(data));
+```
+
+**Rust:**
+```rust
+use lino_objects_codec::{encode, decode, LinoValue};
+
+let data = LinoValue::object([
+    ("users", LinoValue::array([
+        LinoValue::object([("id", LinoValue::Int(1)), ("name", LinoValue::String("Alice".to_string()))]),
+        LinoValue::object([("id", LinoValue::Int(2)), ("name", LinoValue::String("Bob".to_string()))]),
+    ])),
+    ("metadata", LinoValue::object([
+        ("version", LinoValue::Int(1)),
+        ("count", LinoValue::Int(2)),
+    ])),
+]);
+assert_eq!(decode(&encode(&data)).unwrap(), data);
 ```
 
 **C#:**
@@ -237,6 +296,14 @@ npm test
 npm run example
 ```
 
+### Rust
+
+```bash
+cd rust
+cargo test
+cargo run --example basic_usage
+```
+
 ### C#
 
 ```bash
@@ -268,6 +335,7 @@ This project is licensed under the Unlicense - see the [LICENSE](LICENSE) file f
 - [Links Notation Specification](https://github.com/link-foundation/links-notation)
 - [PyPI Package](https://pypi.org/project/lino-objects-codec/) (Python)
 - [npm Package](https://www.npmjs.com/package/lino-objects-codec/) (JavaScript)
+- [crates.io Package](https://crates.io/crates/lino-objects-codec/) (Rust)
 - [NuGet Package](https://www.nuget.org/packages/Lino.Objects.Codec/) (C#)
 
 ## Acknowledgments

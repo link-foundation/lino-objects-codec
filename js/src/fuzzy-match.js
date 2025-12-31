@@ -61,7 +61,9 @@ export function levenshteinDistance(options = {}) {
 export function stringSimilarity(options = {}) {
   const { a, b } = options;
   const maxLength = Math.max(a.length, b.length);
-  if (maxLength === 0) return 1.0;
+  if (maxLength === 0) {
+    return 1.0;
+  }
 
   const distance = levenshteinDistance({ a, b });
   return 1 - distance / maxLength;
@@ -104,7 +106,7 @@ export function extractKeywords(options = {}) {
   const words = normalized.split(/\s+/);
 
   const keywords = new Set(
-    words.filter(word => word.length > minWordLength && !stopwords.has(word))
+    words.filter((word) => word.length > minWordLength && !stopwords.has(word))
   );
 
   // Add stems for longer words to improve matching
@@ -137,10 +139,14 @@ export function keywordSimilarity(options = {}) {
   const keywordsA = extractKeywords({ question: a, ...options });
   const keywordsB = extractKeywords({ question: b, ...options });
 
-  if (keywordsA.size === 0 && keywordsB.size === 0) return 1.0;
-  if (keywordsA.size === 0 || keywordsB.size === 0) return 0.0;
+  if (keywordsA.size === 0 && keywordsB.size === 0) {
+    return 1.0;
+  }
+  if (keywordsA.size === 0 || keywordsB.size === 0) {
+    return 0.0;
+  }
 
-  const intersection = new Set([...keywordsA].filter(x => keywordsB.has(x)));
+  const intersection = new Set([...keywordsA].filter((x) => keywordsB.has(x)));
   const union = new Set([...keywordsA, ...keywordsB]);
 
   return intersection.size / union.size;
@@ -176,10 +182,18 @@ export function findBestMatch(options = {}) {
   let bestScore = threshold;
 
   for (const [dbQuestion, answer] of qaDatabase.entries()) {
-    const editSimilarity = stringSimilarity({ a: normalizeQuestion({ question }), b: normalizeQuestion({ question: dbQuestion }) });
-    const kwSimilarity = keywordSimilarity({ a: question, b: dbQuestion, ...options });
+    const editSimilarity = stringSimilarity({
+      a: normalizeQuestion({ question }),
+      b: normalizeQuestion({ question: dbQuestion }),
+    });
+    const kwSimilarity = keywordSimilarity({
+      a: question,
+      b: dbQuestion,
+      ...options,
+    });
 
-    const combinedScore = editSimilarity * editWeight + kwSimilarity * keywordWeight;
+    const combinedScore =
+      editSimilarity * editWeight + kwSimilarity * keywordWeight;
 
     if (combinedScore > bestScore) {
       bestScore = combinedScore;
@@ -220,9 +234,13 @@ export function findAllMatches(options = {}) {
     } else {
       const editSimilarity = stringSimilarity({
         a: normalizeQuestion({ question }),
-        b: normalizeQuestion({ question: dbQuestion })
+        b: normalizeQuestion({ question: dbQuestion }),
       });
-      const kwSimilarity = keywordSimilarity({ a: question, b: dbQuestion, ...options });
+      const kwSimilarity = keywordSimilarity({
+        a: question,
+        b: dbQuestion,
+        ...options,
+      });
       score = editSimilarity * editWeight + kwSimilarity * keywordWeight;
     }
 

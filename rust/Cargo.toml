@@ -1,0 +1,75 @@
+[package]
+name = "lino-objects-codec"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "A library to encode/decode objects to/from links notation"
+license = "Unlicense"
+repository = "https://github.com/link-foundation/lino-objects-codec"
+documentation = "https://docs.rs/lino-objects-codec"
+readme = "README.md"
+keywords = ["links-notation", "serialization", "codec", "object-graph", "circular-references"]
+categories = ["encoding", "parser-implementations"]
+
+[dependencies]
+links-notation = "0.13.0"
+base64 = "0.22"
+
+[dev-dependencies]
+
+# Clippy lints configuration
+[lints.clippy]
+# Set priority for lint groups so specific allows take precedence
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+# Allow some lints that are too strict for this codebase
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"
+# Allow use_self since it conflicts with LinoValue pattern matching readability
+use_self = "allow"
+# Allow unreadable literals in tests
+unreadable_literal = "allow"
+# Allow const fn suggestions for accessor methods
+missing_const_for_fn = "allow"
+# Allow potential precision loss when converting i64 to f64
+cast_precision_loss = "allow"
+# Allow cast_lossless since explicit as casts are clear
+cast_lossless = "allow"
+# Allow must_use suggestions for simple accessor methods
+must_use_candidate = "allow"
+# Allow redundant closures for type inference clarity
+redundant_closure_for_method_calls = "allow"
+# Allow ignored unit patterns
+ignored_unit_patterns = "allow"
+# Allow uninlined format args for clarity
+uninlined_format_args = "allow"
+# Allow derive PartialEq without Eq for float handling
+derive_partial_eq_without_eq = "allow"
+# Allow doc markdown issues for type names
+doc_markdown = "allow"
+# Allow option if let else patterns
+option_if_let_else = "allow"
+# Allow unused self in methods
+unused_self = "allow"
+# Allow if not else patterns
+if_not_else = "allow"
+# Allow too many lines in functions
+too_many_lines = "allow"
+# Allow redundant clone for clarity
+redundant_clone = "allow"
+# Allow assigning clones
+assigning_clones = "allow"
+# Allow inefficient to_string calls
+inefficient_to_string = "allow"
+# Allow approximate constants in tests
+approx_constant = "allow"
+# Allow similar names for variables
+similar_names = "allow"
+
+# Release profile optimizations
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
