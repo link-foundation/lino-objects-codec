@@ -896,6 +896,284 @@ pub fn decode(notation: &str) -> Result<LinoValue, CodecError> {
     DEFAULT_CODEC.with(|codec| codec.borrow_mut().decode(notation))
 }
 
+/// Formatting utilities for indented Links Notation format.
+pub mod format {
+    use std::collections::HashMap;
+
+    /// Error types for format operations
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    pub enum FormatError {
+        /// Missing required field
+        MissingField(String),
+        /// Invalid input
+        InvalidInput(String),
+    }
+
+    impl std::fmt::Display for FormatError {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                FormatError::MissingField(field) => write!(f, "Missing required field: {}", field),
+                FormatError::InvalidInput(msg) => write!(f, "Invalid input: {}", msg),
+            }
+        }
+    }
+
+    impl std::error::Error for FormatError {}
+
+    /// Escape a reference for Links Notation.
+    ///
+    /// References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to escape
+    ///
+    /// # Returns
+    ///
+    /// The escaped reference string
+    pub fn escape_reference(value: &str) -> String {
+        // Check if escaping is needed
+        let needs_escaping = value.chars().any(|c| {
+            c.is_whitespace() || c == '(' || c == ')' || c == '\'' || c == '"' || c == ':'
+        }) || value.contains('\n');
+
+        if !needs_escaping {
+            return value.to_string();
+        }
+
+        let has_single = value.contains('\'');
+        let has_double = value.contains('"');
+
+        // If contains single quotes but not double quotes, use double quotes
+        if has_single && !has_double {
+            return format!("\"{}\"", value);
+        }
+
+        // If contains double quotes but not single quotes, use single quotes
+        if has_double && !has_single {
+            return format!("'{}'", value);
+        }
+
+        // If contains both quotes, count which one appears more
+        if has_single && has_double {
+            let single_count = value.chars().filter(|&c| c == '\'').count();
+            let double_count = value.chars().filter(|&c| c == '"').count();
+
+            if double_count < single_count {
+                // Use double quotes, escape internal double quotes by doubling
+                let escaped = value.replace('"', "\"\"");
+                return format!("\"{}\"", escaped);
+            } else {
+                // Use single quotes, escape internal single quotes by doubling
+                let escaped = value.replace('\'', "''");
+                return format!("'{}'", escaped);
+            }
+        }
+
+        // Just spaces or other special characters, use single quotes by default
+        format!("'{}'", value)
+    }
+
+    /// Unescape a reference from Links Notation format.
+    ///
+    /// Reverses the escaping done by escape_reference.
+    ///
+    /// # Arguments
+    ///
+    /// * `s` - The escaped reference string
+    ///
+    /// # Returns
+    ///
+    /// The unescaped string
+    pub fn unescape_reference(s: &str) -> String {
+        s.replace("\"\"", "\"").replace("''", "'")
+    }
+
+    /// Format a value for display in indented Links Notation.
+    /// Values are always wrapped in double quotes.
+    fn format_indented_value(value: &str) -> String {
+        // Escape internal double quotes by doubling them
+        let escaped = value.replace('"', "\"\"");
+        format!("\"{}\"", escaped)
+    }
+
+    /// Format an object in indented Links Notation format.
+    ///
+    /// This format is designed for human readability, displaying objects as:
+    ///
+    /// ```text
+    /// <identifier>
+    ///   <key> "<value>"
+    ///   <key> "<value>"
+    ///   ...
+    /// ```
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The object identifier (displayed on first line)
+    /// * `obj` - The object as key-value pairs to format
+    /// * `indent` - The indentation string (default: 2 spaces)
+    ///
+    /// # Returns
+    ///
+    /// Formatted indented Links Notation string, or an error
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use lino_objects_codec::format::format_indented;
+    /// use std::collections::HashMap;
+    ///
+    /// let mut obj = HashMap::new();
+    /// obj.insert("status".to_string(), "executed".to_string());
+    /// obj.insert("exitCode".to_string(), "0".to_string());
+    ///
+    /// let result = format_indented("my-uuid", &obj, "  ").unwrap();
+    /// assert!(result.starts_with("my-uuid\n"));
+    /// ```
+    pub fn format_indented(
+        id: &str,
+        obj: &HashMap<String, String>,
+        indent: &str,
+    ) -> Result<String, FormatError> {
+        if id.is_empty() {
+            return Err(FormatError::MissingField("id".to_string()));
+        }
+
+        let mut lines = vec![id.to_string()];
+
+        for (key, value) in obj {
+            let escaped_key = escape_reference(key);
+            let formatted_value = format_indented_value(value);
+            lines.push(format!("{}{} {}", indent, escaped_key, formatted_value));
+        }
+
+        Ok(lines.join("\n"))
+    }
+
+    /// Format an object in indented Links Notation format, maintaining key order.
+    ///
+    /// This is similar to `format_indented` but takes a slice of tuples to preserve
+    /// the order of keys.
+    ///
+    /// # Arguments
+    ///
+    /// * `id` - The object identifier (displayed on first line)
+    /// * `pairs` - The key-value pairs in order
+    /// * `indent` - The indentation string (default: 2 spaces)
+    ///
+    /// # Returns
+    ///
+    /// Formatted indented Links Notation string, or an error
+    pub fn format_indented_ordered(
+        id: &str,
+        pairs: &[(&str, &str)],
+        indent: &str,
+    ) -> Result<String, FormatError> {
+        if id.is_empty() {
+            return Err(FormatError::MissingField("id".to_string()));
+        }
+
+        let mut lines = vec![id.to_string()];
+
+        for (key, value) in pairs {
+            let escaped_key = escape_reference(key);
+            let formatted_value = format_indented_value(value);
+            lines.push(format!("{}{} {}", indent, escaped_key, formatted_value));
+        }
+
+        Ok(lines.join("\n"))
+    }
+
+    /// Parse an indented Links Notation string back to an object.
+    ///
+    /// This is the inverse of format_indented. It parses strings like:
+    ///
+    /// ```text
+    /// <identifier>
+    ///   <key> "<value>"
+    ///   <key> "<value>"
+    ///   ...
+    /// ```
+    ///
+    /// # Arguments
+    ///
+    /// * `text` - The indented Links Notation string to parse
+    ///
+    /// # Returns
+    ///
+    /// A tuple of (id, HashMap of key-value pairs), or an error
+    ///
+    /// # Example
+    ///
+    /// ```rust
+    /// use lino_objects_codec::format::parse_indented;
+    ///
+    /// let text = "my-uuid\n  status \"executed\"\n  exitCode \"0\"";
+    /// let (id, obj) = parse_indented(text).unwrap();
+    /// assert_eq!(id, "my-uuid");
+    /// assert_eq!(obj.get("status"), Some(&"executed".to_string()));
+    /// ```
+    pub fn parse_indented(text: &str) -> Result<(String, HashMap<String, String>), FormatError> {
+        if text.is_empty() {
+            return Err(FormatError::InvalidInput(
+                "text is required for parse_indented".to_string(),
+            ));
+        }
+
+        let lines: Vec<&str> = text.lines().collect();
+        if lines.is_empty() {
+            return Err(FormatError::InvalidInput(
+                "text must have at least one line (the identifier)".to_string(),
+            ));
+        }
+
+        let id = lines[0].trim().to_string();
+        let mut obj = HashMap::new();
+
+        for line in lines.iter().skip(1) {
+            // Skip empty lines
+            let trimmed = line.trim();
+            if trimmed.is_empty() {
+                continue;
+            }
+
+            // Find the first space that separates key from value
+            let space_index = match trimmed.find(' ') {
+                Some(i) => i,
+                None => continue, // No value, skip this line
+            };
+
+            let key = &trimmed[..space_index];
+            let value = &trimmed[space_index + 1..];
+
+            // Unescape key (remove quotes if present)
+            let unescaped_key = if (key.starts_with('\'') && key.ends_with('\''))
+                || (key.starts_with('"') && key.ends_with('"'))
+            {
+                unescape_reference(&key[1..key.len() - 1])
+            } else {
+                key.to_string()
+            };
+
+            // Parse value (remove surrounding quotes and unescape doubled quotes)
+            let parsed_value = if value.starts_with('"') && value.ends_with('"') {
+                let inner = &value[1..value.len() - 1];
+                inner.replace("\"\"", "\"")
+            } else if value.starts_with('\'') && value.ends_with('\'') {
+                let inner = &value[1..value.len() - 1];
+                inner.replace("''", "'")
+            } else {
+                value.to_string()
+            };
+
+            obj.insert(unescaped_key, parsed_value);
+        }
+
+        Ok((id, obj))
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1172,5 +1450,135 @@ mod tests {
         let encoded = encode(&original);
         let decoded = decode(&encoded).unwrap();
         assert_eq!(decoded, original);
+    }
+}
+
+#[cfg(test)]
+mod format_tests {
+    use super::format::*;
+    use std::collections::HashMap;
+
+    #[test]
+    fn test_escape_reference_simple_string() {
+        assert_eq!(escape_reference("hello"), "hello");
+        assert_eq!(escape_reference("world"), "world");
+    }
+
+    #[test]
+    fn test_escape_reference_string_with_spaces() {
+        let result = escape_reference("hello world");
+        assert!(result.starts_with('\'') || result.starts_with('"'));
+        assert!(result.contains("hello world"));
+    }
+
+    #[test]
+    fn test_escape_reference_string_with_single_quotes() {
+        let result = escape_reference("it's");
+        assert_eq!(result, "\"it's\"");
+    }
+
+    #[test]
+    fn test_escape_reference_string_with_double_quotes() {
+        let result = escape_reference("he said \"hello\"");
+        assert_eq!(result, "'he said \"hello\"'");
+    }
+
+    #[test]
+    fn test_unescape_reference_doubled_quotes() {
+        assert_eq!(unescape_reference("he said \"\"hello\"\""), "he said \"hello\"");
+        assert_eq!(unescape_reference("it''s"), "it's");
+    }
+
+    #[test]
+    fn test_format_indented_ordered_basic() {
+        let pairs = [
+            ("uuid", "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"),
+            ("status", "executed"),
+            ("command", "echo test"),
+            ("exitCode", "0"),
+        ];
+        let result = format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
+        let lines: Vec<&str> = result.lines().collect();
+        assert_eq!(lines[0], "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
+        assert_eq!(lines[1], "  uuid \"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\"");
+        assert_eq!(lines[2], "  status \"executed\"");
+        assert_eq!(lines[3], "  command \"echo test\"");
+        assert_eq!(lines[4], "  exitCode \"0\"");
+    }
+
+    #[test]
+    fn test_format_indented_value_with_quotes() {
+        let pairs = [("message", "He said \"hello\"")];
+        let result = format_indented_ordered("test-id", &pairs, "  ").unwrap();
+        let lines: Vec<&str> = result.lines().collect();
+        assert_eq!(lines[1], "  message \"He said \"\"hello\"\"\"");
+    }
+
+    #[test]
+    fn test_format_indented_requires_id() {
+        let mut obj = HashMap::new();
+        obj.insert("key".to_string(), "value".to_string());
+        let result = format_indented("", &obj, "  ");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_parse_indented_basic() {
+        let text = "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\n  uuid \"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\"\n  status \"executed\"\n  exitCode \"0\"";
+        let (id, obj) = parse_indented(text).unwrap();
+        assert_eq!(id, "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
+        assert_eq!(obj.get("uuid"), Some(&"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019".to_string()));
+        assert_eq!(obj.get("status"), Some(&"executed".to_string()));
+        assert_eq!(obj.get("exitCode"), Some(&"0".to_string()));
+    }
+
+    #[test]
+    fn test_parse_indented_with_escaped_quotes() {
+        let text = "test-id\n  message \"He said \"\"hello\"\"\"";
+        let (id, obj) = parse_indented(text).unwrap();
+        assert_eq!(id, "test-id");
+        assert_eq!(obj.get("message"), Some(&"He said \"hello\"".to_string()));
+    }
+
+    #[test]
+    fn test_parse_indented_empty_lines_skipped() {
+        let text = "test-id\n\n  key \"value\"\n\n  another \"value2\"";
+        let (id, obj) = parse_indented(text).unwrap();
+        assert_eq!(id, "test-id");
+        assert_eq!(obj.get("key"), Some(&"value".to_string()));
+        assert_eq!(obj.get("another"), Some(&"value2".to_string()));
+    }
+
+    #[test]
+    fn test_parse_indented_requires_text() {
+        let result = parse_indented("");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_roundtrip_format_indented() {
+        let pairs = [
+            ("uuid", "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"),
+            ("status", "executed"),
+            ("command", "echo test"),
+            ("exitCode", "0"),
+        ];
+        let formatted = format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
+        let (parsed_id, parsed_obj) = parse_indented(&formatted).unwrap();
+
+        assert_eq!(parsed_id, "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
+        for (key, value) in pairs {
+            assert_eq!(parsed_obj.get(key), Some(&value.to_string()));
+        }
+    }
+
+    #[test]
+    fn test_roundtrip_with_quotes() {
+        let pairs = [("message", "He said \"hello\"")];
+        let formatted = format_indented_ordered("test-id", &pairs, "  ").unwrap();
+        let (parsed_id, parsed_obj) = parse_indented(&formatted).unwrap();
+
+        assert_eq!(parsed_id, "test-id");
+        assert_eq!(parsed_obj.get("message"), Some(&"He said \"hello\"".to_string()));
     }
 }
