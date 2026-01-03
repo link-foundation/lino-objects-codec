@@ -332,3 +332,149 @@ export function formatAsLino(options = {}) {
   const formattedValues = values.map((value) => `  ${value}`).join('\n');
   return `(\n${formattedValues}\n)`;
 }
+
+/**
+ * Format a value for display in indented Links Notation.
+ * Values are always wrapped in double quotes.
+ *
+ * @private
+ * @param {*} value - The value to format
+ * @returns {string} Formatted value with double quotes
+ */
+function formatIndentedValue(value) {
+  if (value === null || value === undefined) {
+    return '"null"';
+  }
+
+  const str = String(value);
+
+  // Escape internal double quotes by doubling them
+  const escaped = str.replace(/"/g, '""');
+
+  return `"${escaped}"`;
+}
+
+/**
+ * Format an object in indented Links Notation format.
+ *
+ * This format is designed for human readability, displaying objects as:
+ * ```
+ * <identifier>
+ *   <key> "<value>"
+ *   <key> "<value>"
+ *   ...
+ * ```
+ *
+ * Example:
+ *   formatIndented({
+ *     id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+ *     obj: { uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', status: 'executed', command: 'echo test', exitCode: '0' }
+ *   })
+ *
+ * Returns:
+ *   6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
+ *     uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
+ *     status "executed"
+ *     command "echo test"
+ *     exitCode "0"
+ *
+ * @param {Object} options - Options
+ * @param {string} options.id - The object identifier (displayed on first line)
+ * @param {Object} options.obj - The object with key-value pairs to format
+ * @param {string} [options.indent='  '] - The indentation string (default: 2 spaces)
+ * @returns {string} Formatted indented Links Notation string
+ */
+export function formatIndented(options = {}) {
+  const { id, obj, indent = '  ' } = options;
+
+  if (!id) {
+    throw new Error('id is required for formatIndented');
+  }
+
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+    throw new Error('obj must be a plain object for formatIndented');
+  }
+
+  const lines = [id];
+
+  for (const [key, value] of Object.entries(obj)) {
+    const escapedKey = escapeReference({ value: key });
+    const formattedValue = formatIndentedValue(value);
+    lines.push(`${indent}${escapedKey} ${formattedValue}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Parse an indented Links Notation string back to an object.
+ *
+ * This is the inverse of formatIndented. It parses strings like:
+ * ```
+ * <identifier>
+ *   <key> "<value>"
+ *   <key> "<value>"
+ *   ...
+ * ```
+ *
+ * @param {Object} options - Options
+ * @param {string} options.text - The indented Links Notation string to parse
+ * @returns {{ id: string, obj: Object }} Object with id and parsed key-value pairs
+ */
+export function parseIndented(options = {}) {
+  const { text } = options;
+
+  if (!text || typeof text !== 'string') {
+    throw new Error('text is required for parseIndented');
+  }
+
+  const lines = text.split('\n');
+  if (lines.length === 0) {
+    throw new Error('text must have at least one line (the identifier)');
+  }
+
+  const id = lines[0].trim();
+  const obj = {};
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Skip empty lines
+    if (!line.trim()) {
+      continue;
+    }
+
+    // Remove leading whitespace
+    const trimmed = line.trimStart();
+
+    // Find the first space that separates key from value
+    const spaceIndex = trimmed.indexOf(' ');
+    if (spaceIndex === -1) {
+      continue; // No value, skip this line
+    }
+
+    const key = trimmed.substring(0, spaceIndex);
+    let value = trimmed.substring(spaceIndex + 1);
+
+    // Unescape key (remove quotes if present)
+    const unescapedKey = unescapeReference({ str: key.replace(/^['"]|['"]$/g, '') });
+
+    // Parse value (remove surrounding quotes and unescape doubled quotes)
+    if (value.startsWith('"') && value.endsWith('"')) {
+      value = value.slice(1, -1);
+      value = value.replace(/""/g, '"');
+    } else if (value.startsWith("'") && value.endsWith("'")) {
+      value = value.slice(1, -1);
+      value = value.replace(/''/g, "'");
+    }
+
+    // Handle null value
+    if (value === 'null') {
+      obj[unescapedKey] = null;
+    } else {
+      obj[unescapedKey] = value;
+    }
+  }
+
+  return { id, obj };
+}

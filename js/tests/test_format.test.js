@@ -10,6 +10,8 @@ import {
   jsonToLino,
   linoToJson,
   formatAsLino,
+  formatIndented,
+  parseIndented,
 } from '../src/index.js';
 
 // Tests for escapeReference
@@ -250,4 +252,152 @@ test('formatAsLino - array of values', () => {
   assert.ok(result.includes('  c'));
   assert.ok(result.startsWith('('));
   assert.ok(result.endsWith(')'));
+});
+
+// Tests for formatIndented
+test('formatIndented - basic object', () => {
+  const result = formatIndented({
+    id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+    obj: {
+      uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+      status: 'executed',
+      command: 'echo test',
+      exitCode: '0',
+    },
+  });
+  const lines = result.split('\n');
+  assert.equal(lines[0], '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019');
+  assert.equal(lines[1], '  uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"');
+  assert.equal(lines[2], '  status "executed"');
+  assert.equal(lines[3], '  command "echo test"');
+  assert.equal(lines[4], '  exitCode "0"');
+});
+
+test('formatIndented - custom indentation', () => {
+  const result = formatIndented({
+    id: 'test-id',
+    obj: { key: 'value' },
+    indent: '    ', // 4 spaces
+  });
+  const lines = result.split('\n');
+  assert.equal(lines[0], 'test-id');
+  assert.equal(lines[1], '    key "value"');
+});
+
+test('formatIndented - value with double quotes', () => {
+  const result = formatIndented({
+    id: 'test-id',
+    obj: { message: 'He said "hello"' },
+  });
+  const lines = result.split('\n');
+  assert.equal(lines[0], 'test-id');
+  assert.equal(lines[1], '  message "He said ""hello"""');
+});
+
+test('formatIndented - key with space', () => {
+  const result = formatIndented({
+    id: 'test-id',
+    obj: { 'key with space': 'value' },
+  });
+  const lines = result.split('\n');
+  assert.equal(lines[0], 'test-id');
+  assert.ok(lines[1].includes("'key with space'") || lines[1].includes('"key with space"'));
+});
+
+test('formatIndented - null value', () => {
+  const result = formatIndented({
+    id: 'test-id',
+    obj: { key: null },
+  });
+  const lines = result.split('\n');
+  assert.equal(lines[0], 'test-id');
+  assert.equal(lines[1], '  key "null"');
+});
+
+test('formatIndented - requires id', () => {
+  assert.throws(() => formatIndented({ obj: { key: 'value' } }), {
+    message: 'id is required for formatIndented',
+  });
+});
+
+test('formatIndented - requires plain object', () => {
+  assert.throws(() => formatIndented({ id: 'test', obj: [1, 2, 3] }), {
+    message: 'obj must be a plain object for formatIndented',
+  });
+});
+
+// Tests for parseIndented
+test('parseIndented - basic object', () => {
+  const text = `6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
+  uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
+  status "executed"
+  command "echo test"
+  exitCode "0"`;
+
+  const result = parseIndented({ text });
+  assert.equal(result.id, '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019');
+  assert.equal(result.obj.uuid, '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019');
+  assert.equal(result.obj.status, 'executed');
+  assert.equal(result.obj.command, 'echo test');
+  assert.equal(result.obj.exitCode, '0');
+});
+
+test('parseIndented - value with escaped quotes', () => {
+  const text = `test-id
+  message "He said ""hello"""`;
+
+  const result = parseIndented({ text });
+  assert.equal(result.id, 'test-id');
+  assert.equal(result.obj.message, 'He said "hello"');
+});
+
+test('parseIndented - empty lines are skipped', () => {
+  const text = `test-id
+
+  key "value"
+
+  another "value2"`;
+
+  const result = parseIndented({ text });
+  assert.equal(result.id, 'test-id');
+  assert.equal(result.obj.key, 'value');
+  assert.equal(result.obj.another, 'value2');
+});
+
+test('parseIndented - requires text', () => {
+  assert.throws(() => parseIndented({}), {
+    message: 'text is required for parseIndented',
+  });
+});
+
+// Roundtrip tests for formatIndented/parseIndented
+test('formatIndented/parseIndented roundtrip - basic', () => {
+  const original = {
+    id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+    obj: {
+      uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+      status: 'executed',
+      command: 'echo test',
+      exitCode: '0',
+    },
+  };
+
+  const formatted = formatIndented(original);
+  const parsed = parseIndented({ text: formatted });
+
+  assert.equal(parsed.id, original.id);
+  assert.deepEqual(parsed.obj, original.obj);
+});
+
+test('formatIndented/parseIndented roundtrip - with quotes', () => {
+  const original = {
+    id: 'test-id',
+    obj: { message: 'He said "hello"' },
+  };
+
+  const formatted = formatIndented(original);
+  const parsed = parseIndented({ text: formatted });
+
+  assert.equal(parsed.id, original.id);
+  assert.deepEqual(parsed.obj, original.obj);
 });
