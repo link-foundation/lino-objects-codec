@@ -22,7 +22,9 @@ if links:
         print(f"  values: {val.values}")
         if val.values:
             for j, subval in enumerate(val.values):
-                print(f"    Subvalue {j}: id={subval.id}, has_values={bool(subval.values)}")
+                print(
+                    f"    Subvalue {j}: id={subval.id}, has_values={bool(subval.values)}"
+                )
                 if subval.values:
                     for k, subsubval in enumerate(subval.values):
                         print(f"      Subsubvalue {k}: id={subsubval.id}")

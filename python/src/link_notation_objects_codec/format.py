@@ -27,7 +27,7 @@ def escape_reference(value: Any) -> str:
     s = str(value)
 
     # Check if escaping is needed
-    needs_escaping = bool(re.search(r'[\s()\'":]', s)) or '\n' in s
+    needs_escaping = bool(re.search(r'[\s()\'":]', s)) or "\n" in s
 
     if not needs_escaping:
         return s
@@ -47,10 +47,10 @@ def escape_reference(value: Any) -> str:
 
         if double_count < single_count:
             # Use double quotes, escape internal double quotes by doubling
-            return f'"{s.replace(chr(34), chr(34)+chr(34))}"'
+            return f'"{s.replace(chr(34), chr(34) + chr(34))}"'
         else:
             # Use single quotes, escape internal single quotes by doubling
-            return f"'{s.replace(chr(39), chr(39)+chr(39))}'"
+            return f"'{s.replace(chr(39), chr(39) + chr(39))}'"
 
     # Just spaces or other special characters, use single quotes by default
     return f"'{s}'"
@@ -195,7 +195,7 @@ def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
             continue  # No value, skip this line
 
         key = trimmed[:space_index]
-        value = trimmed[space_index + 1:]
+        value = trimmed[space_index + 1 :]
 
         # Unescape key (remove quotes if present)
         if (key.startswith("'") and key.endswith("'")) or (

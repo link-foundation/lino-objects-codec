@@ -64,7 +64,7 @@ def main():
     # Self-referencing list
     lst = [1, 2, 3]
     lst.append(lst)
-    print(f"  Created self-referencing list")
+    print("  Created self-referencing list")
     encoded_circular = encode(lst)
     print(f"  Encoded: {encoded_circular}")
     decoded_circular = decode(encoded_circular)
@@ -75,7 +75,7 @@ def main():
     # Self-referencing dict
     d = {"name": "root"}
     d["self"] = d
-    print(f"\n  Created self-referencing dict")
+    print("\n  Created self-referencing dict")
     encoded_dict_circular = encode(d)
     print(f"  Encoded: {encoded_dict_circular}")
     decoded_dict_circular = decode(encoded_dict_circular)
@@ -89,7 +89,7 @@ def main():
     print("\n5. Shared Object References:")
     shared = {"shared": "data", "value": 42}
     container = {"first": shared, "second": shared, "third": shared}
-    print(f"  Created container with 3 references to same object")
+    print("  Created container with 3 references to same object")
     encoded_shared = encode(container)
     print(f"  Encoded: {encoded_shared}")
     decoded_shared = decode(encoded_shared)

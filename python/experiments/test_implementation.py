@@ -12,7 +12,7 @@ print(f"Encoded: {encoded}")
 
 try:
     decoded = decode(encoded)
-    print(f"Decoded successfully")
+    print("Decoded successfully")
     print(f"Has 'self' key: {'self' in decoded}")
     print(f"Has 'other' key: {'other' in decoded}")
     print(f"Self-reference works: {decoded['self'] is decoded}")
@@ -20,6 +20,7 @@ try:
 except Exception as e:
     print(f"ERROR: {e}")
     import traceback
+
     traceback.print_exc()
 
 print()
@@ -32,12 +33,13 @@ print(f"Encoded: {encoded2}")
 
 try:
     decoded2 = decode(encoded2)
-    print(f"Decoded successfully")
+    print("Decoded successfully")
     print(f"List length: {len(decoded2)}")
     print(f"Self-reference works: {decoded2[0] is decoded2}")
 except Exception as e:
     print(f"ERROR: {e}")
     import traceback
+
     traceback.print_exc()
 
 print()
@@ -52,11 +54,12 @@ print(f"Encoded: {encoded3}")
 
 try:
     decoded3 = decode(encoded3)
-    print(f"Decoded successfully")
+    print("Decoded successfully")
     print(f"List1 length: {len(decoded3)}")
     print(f"List1[2] length: {len(decoded3[2])}")
     print(f"Mutual reference works: {decoded3[2][2] is decoded3}")
 except Exception as e:
     print(f"ERROR: {e}")
     import traceback
+
     traceback.print_exc()

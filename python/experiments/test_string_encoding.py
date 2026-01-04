@@ -31,6 +31,7 @@ for s in test_strings:
     except Exception as e:
         print(f"Error: {e}")
         import traceback
+
         traceback.print_exc()
 
 # Test how to properly escape strings in links notation

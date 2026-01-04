@@ -3,7 +3,8 @@
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from link_notation_objects_codec import encode, decode
 
@@ -16,7 +17,7 @@ obj["self"] = obj
 
 encoded = encode(obj)
 print(f"Encoded: {encoded}")
-print(f"Expected format: (obj_0: dict ((str c2VsZg==) obj_0))")
+print("Expected format: (obj_0: dict ((str c2VsZg==) obj_0))")
 
 # Decode it back
 decoded = decode(encoded)
@@ -33,7 +34,7 @@ lst.append(lst)
 
 encoded2 = encode(lst)
 print(f"Encoded: {encoded2}")
-print(f"Expected format: (obj_0: list (int 1) (int 2) (int 3) obj_0)")
+print("Expected format: (obj_0: list (int 1) (int 2) (int 3) obj_0)")
 
 decoded2 = decode(encoded2)
 print(f"Decoded successfully: {decoded2 is not None}")
@@ -65,7 +66,7 @@ print("=" * 60)
 simple = {"a": 1, "b": 2}
 encoded4 = encode(simple)
 print(f"Encoded: {encoded4}")
-print(f"Expected format: (dict ((str ...) (int 1)) ((str ...) (int 2)))")
+print("Expected format: (dict ((str ...) (int 1)) ((str ...) (int 2)))")
 
 decoded4 = decode(encoded4)
 print(f"Decoded: {decoded4}")

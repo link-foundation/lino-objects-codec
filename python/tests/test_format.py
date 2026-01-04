@@ -34,7 +34,7 @@ class TestEscapeReference:
     def test_string_with_single_quotes(self):
         result = escape_reference("it's")
         assert result.startswith('"')
-        assert result == "\"it's\""
+        assert result == '"it\'s"'
 
     def test_string_with_double_quotes(self):
         result = escape_reference('he said "hello"')
@@ -42,7 +42,7 @@ class TestEscapeReference:
         assert result == "'he said \"hello\"'"
 
     def test_string_with_both_quotes(self):
-        result = escape_reference("\"it's\" he said")
+        result = escape_reference('"it\'s" he said')
         assert result.startswith("'") or result.startswith('"')
 
 
