@@ -22,7 +22,7 @@ try:
     print(f"Encoded: {encoded}")
     decoded = decode(encoded)
     print(f"Decoded: {decoded}")
-    print(f"Match: {decoded == True}")
+    print(f"Match: {decoded is True}")
 except Exception as e:
     print(f"Error: {e}")
     import traceback

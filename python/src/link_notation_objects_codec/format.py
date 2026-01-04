@@ -202,7 +202,11 @@ def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
             key.startswith('"') and key.endswith('"')
         ):
             key = key[1:-1]
-        unescaped_key = unescape_reference(key)
+        unescaped_key_result = unescape_reference(key)
+        # unescape_reference only returns None if input is None, but key is always str here
+        unescaped_key: str = (
+            unescaped_key_result if unescaped_key_result is not None else key
+        )
 
         # Parse value (remove surrounding quotes and unescape doubled quotes)
         if value.startswith('"') and value.endswith('"'):

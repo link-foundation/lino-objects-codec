@@ -963,11 +963,10 @@ pub mod format {
                 // Use double quotes, escape internal double quotes by doubling
                 let escaped = value.replace('"', "\"\"");
                 return format!("\"{}\"", escaped);
-            } else {
-                // Use single quotes, escape internal single quotes by doubling
-                let escaped = value.replace('\'', "''");
-                return format!("'{}'", escaped);
             }
+            // Use single quotes, escape internal single quotes by doubling
+            let escaped = value.replace('\'', "''");
+            return format!("'{}'", escaped);
         }
 
         // Just spaces or other special characters, use single quotes by default
@@ -1031,9 +1030,9 @@ pub mod format {
     /// let result = format_indented("my-uuid", &obj, "  ").unwrap();
     /// assert!(result.starts_with("my-uuid\n"));
     /// ```
-    pub fn format_indented(
+    pub fn format_indented<S: ::std::hash::BuildHasher>(
         id: &str,
-        obj: &HashMap<String, String>,
+        obj: &HashMap<String, String, S>,
         indent: &str,
     ) -> Result<String, FormatError> {
         if id.is_empty() {
@@ -1139,9 +1138,8 @@ pub mod format {
             }
 
             // Find the first space that separates key from value
-            let space_index = match trimmed.find(' ') {
-                Some(i) => i,
-                None => continue, // No value, skip this line
+            let Some(space_index) = trimmed.find(' ') else {
+                continue; // No value, skip this line
             };
 
             let key = &trimmed[..space_index];
