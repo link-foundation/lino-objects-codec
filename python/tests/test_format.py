@@ -89,10 +89,11 @@ class TestFormatIndented:
         assert lines[1] == '    key "value"'
 
     def test_value_with_double_quotes(self):
+        # Values containing double quotes are wrapped in single quotes (links-notation style)
         result = format_indented("test-id", {"message": 'He said "hello"'})
         lines = result.split("\n")
         assert lines[0] == "test-id"
-        assert lines[1] == '  message "He said ""hello"""'
+        assert lines[1] == "  message 'He said \"hello\"'"
 
     def test_key_with_space(self):
         result = format_indented("test-id", {"key with space": "value"})
@@ -132,9 +133,10 @@ class TestParseIndented:
         assert obj["command"] == "echo test"
         assert obj["exitCode"] == "0"
 
-    def test_value_with_escaped_quotes(self):
+    def test_value_with_quotes(self):
+        # Links-notation style: use single quotes to wrap value containing double quotes
         text = """test-id
-  message "He said ""hello\"\"\""""
+  message 'He said "hello"'"""
 
         id, obj = parse_indented(text)
         assert id == "test-id"

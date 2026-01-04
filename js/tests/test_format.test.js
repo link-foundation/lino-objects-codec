@@ -285,13 +285,14 @@ test('formatIndented - custom indentation', () => {
 });
 
 test('formatIndented - value with double quotes', () => {
+  // Values containing double quotes are wrapped in single quotes (links-notation style)
   const result = formatIndented({
     id: 'test-id',
     obj: { message: 'He said "hello"' },
   });
   const lines = result.split('\n');
   assert.equal(lines[0], 'test-id');
-  assert.equal(lines[1], '  message "He said ""hello"""');
+  assert.equal(lines[1], `  message 'He said "hello"'`);
 });
 
 test('formatIndented - key with space', () => {
@@ -345,9 +346,10 @@ test('parseIndented - basic object', () => {
   assert.equal(result.obj.exitCode, '0');
 });
 
-test('parseIndented - value with escaped quotes', () => {
+test('parseIndented - value with quotes', () => {
+  // Links-notation style: use single quotes to wrap value containing double quotes
   const text = `test-id
-  message "He said ""hello"""`;
+  message 'He said "hello"'`;
 
   const result = parseIndented({ text });
   assert.equal(result.id, 'test-id');

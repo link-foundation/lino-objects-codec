@@ -335,11 +335,13 @@ export function formatAsLino(options = {}) {
 
 /**
  * Format a value for display in indented Links Notation.
- * Values are always wrapped in double quotes.
+ * Uses quoting strategy compatible with the links-notation parser:
+ * - If value contains double quotes, wrap in single quotes
+ * - Otherwise, wrap in double quotes
  *
  * @private
  * @param {*} value - The value to format
- * @returns {string} Formatted value with double quotes
+ * @returns {string} Formatted value with appropriate quotes
  */
 function formatIndentedValue(value) {
   if (value === null || value === undefined) {
@@ -348,10 +350,24 @@ function formatIndentedValue(value) {
 
   const str = String(value);
 
-  // Escape internal double quotes by doubling them
-  const escaped = str.replace(/"/g, '""');
+  // If contains double quotes but no single quotes, use single quotes
+  if (str.includes('"') && !str.includes("'")) {
+    return `'${str}'`;
+  }
 
-  return `"${escaped}"`;
+  // If contains single quotes but no double quotes, use double quotes
+  if (str.includes("'") && !str.includes('"')) {
+    return `"${str}"`;
+  }
+
+  // If contains both, use single quotes and escape internal single quotes
+  if (str.includes("'") && str.includes('"')) {
+    const escaped = str.replace(/'/g, "''");
+    return `'${escaped}'`;
+  }
+
+  // Default: use double quotes
+  return `"${str}"`;
 }
 
 /**
@@ -409,12 +425,21 @@ export function formatIndented(options = {}) {
 /**
  * Parse an indented Links Notation string back to an object.
  *
- * This is the inverse of formatIndented. It parses strings like:
+ * This function uses the links-notation parser for proper parsing,
+ * supporting the standard Links Notation indented syntax.
+ *
+ * Parses strings like:
  * ```
  * <identifier>
  *   <key> "<value>"
  *   <key> "<value>"
  *   ...
+ * ```
+ *
+ * The format with colon after identifier is also supported (standard lino):
+ * ```
+ * <identifier>:
+ *   <key> "<value>"
  * ```
  *
  * @param {Object} options - Options
@@ -433,48 +458,54 @@ export function parseIndented(options = {}) {
     throw new Error('text must have at least one line (the identifier)');
   }
 
-  const id = lines[0].trim();
+  // Filter out empty lines to preserve indentation structure for the parser
+  // Empty lines would break the indentation context in links-notation
+  const nonEmptyLines = lines.filter((line) => line.trim());
+
+  if (nonEmptyLines.length === 0) {
+    throw new Error(
+      'text must have at least one non-empty line (the identifier)'
+    );
+  }
+
+  // Convert to standard lino format by adding colon after first line if not present
+  // This allows the links-notation parser to properly parse the indented structure
+  const firstLine = nonEmptyLines[0].trim();
+  let linoText;
+  if (!firstLine.endsWith(':')) {
+    linoText = `${firstLine}:\n${nonEmptyLines.slice(1).join('\n')}`;
+  } else {
+    linoText = nonEmptyLines.join('\n');
+  }
+
+  // Use links-notation parser
+  const parsed = parser.parse(linoText);
+
+  if (!parsed || parsed.length === 0) {
+    throw new Error('Failed to parse indented Links Notation');
+  }
+
+  // Extract id and key-value pairs from parsed result
+  const mainLink = parsed[0];
+  const id = mainLink.id || '';
   const obj = {};
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
+  // Process the values array - each entry is a doublet (key value)
+  for (const child of mainLink.values || []) {
+    if (child.values && child.values.length === 2) {
+      const keyRef = child.values[0];
+      const valueRef = child.values[1];
 
-    // Skip empty lines
-    if (!line.trim()) {
-      continue;
-    }
+      // Get key string
+      const key = keyRef.id || '';
 
-    // Remove leading whitespace
-    const trimmed = line.trimStart();
-
-    // Find the first space that separates key from value
-    const spaceIndex = trimmed.indexOf(' ');
-    if (spaceIndex === -1) {
-      continue; // No value, skip this line
-    }
-
-    const key = trimmed.substring(0, spaceIndex);
-    let value = trimmed.substring(spaceIndex + 1);
-
-    // Unescape key (remove quotes if present)
-    const unescapedKey = unescapeReference({
-      str: key.replace(/^['"]|['"]$/g, ''),
-    });
-
-    // Parse value (remove surrounding quotes and unescape doubled quotes)
-    if (value.startsWith('"') && value.endsWith('"')) {
-      value = value.slice(1, -1);
-      value = value.replace(/""/g, '"');
-    } else if (value.startsWith("'") && value.endsWith("'")) {
-      value = value.slice(1, -1);
-      value = value.replace(/''/g, "'");
-    }
-
-    // Handle null value
-    if (value === 'null') {
-      obj[unescapedKey] = null;
-    } else {
-      obj[unescapedKey] = value;
+      // Get value string, handling null
+      const valueStr = valueRef.id;
+      if (valueStr === 'null') {
+        obj[key] = null;
+      } else {
+        obj[key] = valueStr;
+      }
     }
   }
 

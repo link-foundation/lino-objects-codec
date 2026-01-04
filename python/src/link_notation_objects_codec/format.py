@@ -2,10 +2,16 @@
 Formatting utilities for Links Notation.
 
 These utilities provide functions for formatting and parsing indented Links Notation format.
+Uses the links-notation library for parsing to ensure compatibility with the standard format.
 """
 
 import re
 from typing import Any, Dict, Optional, Tuple
+
+from links_notation import Parser
+
+# Shared parser instance
+_parser = Parser()
 
 
 def escape_reference(value: Any) -> str:
@@ -81,23 +87,36 @@ def unescape_reference(s: Optional[str]) -> Optional[str]:
 def _format_indented_value(value: Any) -> str:
     """
     Format a value for display in indented Links Notation.
-    Values are always wrapped in double quotes.
+    Uses quoting strategy compatible with the links-notation parser:
+    - If value contains double quotes, wrap in single quotes
+    - Otherwise, wrap in double quotes
 
     Args:
         value: The value to format
 
     Returns:
-        Formatted value with double quotes
+        Formatted value with appropriate quotes
     """
     if value is None:
         return '"null"'
 
     s = str(value)
 
-    # Escape internal double quotes by doubling them
-    escaped = s.replace('"', '""')
+    # If contains double quotes but no single quotes, use single quotes
+    if '"' in s and "'" not in s:
+        return f"'{s}'"
 
-    return f'"{escaped}"'
+    # If contains single quotes but no double quotes, use double quotes
+    if "'" in s and '"' not in s:
+        return f'"{s}"'
+
+    # If contains both, use single quotes and escape internal single quotes
+    if "'" in s and '"' in s:
+        escaped = s.replace("'", "''")
+        return f"'{escaped}'"
+
+    # Default: use double quotes
+    return f'"{s}"'
 
 
 def format_indented(
@@ -153,12 +172,20 @@ def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
     """
     Parse an indented Links Notation string back to an object.
 
-    This is the inverse of format_indented. It parses strings like:
+    This function uses the links-notation parser for proper parsing,
+    supporting the standard Links Notation indented syntax.
+
+    Parses strings like:
 
         <identifier>
           <key> "<value>"
           <key> "<value>"
           ...
+
+    The format with colon after identifier is also supported (standard lino):
+
+        <identifier>:
+          <key> "<value>"
 
     Args:
         text: The indented Links Notation string to parse
@@ -176,50 +203,46 @@ def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
     if len(lines) == 0:
         raise ValueError("text must have at least one line (the identifier)")
 
-    id = lines[0].strip()
+    # Filter out empty lines to preserve indentation structure for the parser
+    # Empty lines would break the indentation context in links-notation
+    non_empty_lines = [line for line in lines if line.strip()]
+
+    if len(non_empty_lines) == 0:
+        raise ValueError("text must have at least one non-empty line (the identifier)")
+
+    # Convert to standard lino format by adding colon after first line if not present
+    # This allows the links-notation parser to properly parse the indented structure
+    first_line = non_empty_lines[0].strip()
+    if not first_line.endswith(":"):
+        lino_text = first_line + ":\n" + "\n".join(non_empty_lines[1:])
+    else:
+        lino_text = "\n".join(non_empty_lines)
+
+    # Use links-notation parser
+    parsed = _parser.parse(lino_text)
+
+    if not parsed or len(parsed) == 0:
+        raise ValueError("Failed to parse indented Links Notation")
+
+    # Extract id and key-value pairs from parsed result
+    main_link = parsed[0]
+    result_id = main_link.id or ""
     obj: Dict[str, Any] = {}
 
-    for i in range(1, len(lines)):
-        line = lines[i]
+    # Process the values array - each entry is a doublet (key value)
+    for child in main_link.values or []:
+        if hasattr(child, "values") and child.values and len(child.values) == 2:
+            key_ref = child.values[0]
+            value_ref = child.values[1]
 
-        # Skip empty lines
-        if not line.strip():
-            continue
+            # Get key string
+            key = key_ref.id or ""
 
-        # Remove leading whitespace
-        trimmed = line.lstrip()
+            # Get value string, handling null
+            value_str = value_ref.id
+            if value_str == "null":
+                obj[key] = None
+            else:
+                obj[key] = value_str
 
-        # Find the first space that separates key from value
-        space_index = trimmed.find(" ")
-        if space_index == -1:
-            continue  # No value, skip this line
-
-        key = trimmed[:space_index]
-        value = trimmed[space_index + 1 :]
-
-        # Unescape key (remove quotes if present)
-        if (key.startswith("'") and key.endswith("'")) or (
-            key.startswith('"') and key.endswith('"')
-        ):
-            key = key[1:-1]
-        unescaped_key_result = unescape_reference(key)
-        # unescape_reference only returns None if input is None, but key is always str here
-        unescaped_key: str = (
-            unescaped_key_result if unescaped_key_result is not None else key
-        )
-
-        # Parse value (remove surrounding quotes and unescape doubled quotes)
-        if value.startswith('"') and value.endswith('"'):
-            value = value[1:-1]
-            value = value.replace('""', '"')
-        elif value.startswith("'") and value.endswith("'"):
-            value = value[1:-1]
-            value = value.replace("''", "'")
-
-        # Handle null value
-        if value == "null":
-            obj[unescaped_key] = None
-        else:
-            obj[unescaped_key] = value
-
-    return id, obj
+    return result_id, obj

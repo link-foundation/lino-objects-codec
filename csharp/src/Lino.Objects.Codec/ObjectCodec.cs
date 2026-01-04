@@ -685,9 +685,14 @@ public static class Format
         return str.Replace("\"\"", "\"").Replace("''", "'");
     }
 
+    // Shared parser instance for ParseIndented
+    private static readonly Parser SharedParser = new();
+
     /// <summary>
     /// Format a value for display in indented Links Notation.
-    /// Values are always wrapped in double quotes.
+    /// Uses quoting strategy compatible with the links-notation parser:
+    /// - If value contains double quotes, wrap in single quotes
+    /// - Otherwise, wrap in double quotes
     /// </summary>
     private static string FormatIndentedValue(string? value)
     {
@@ -696,9 +701,30 @@ public static class Format
             return "\"null\"";
         }
 
-        // Escape internal double quotes by doubling them
-        var escaped = value.Replace("\"", "\"\"");
-        return $"\"{escaped}\"";
+        bool hasSingle = value.Contains('\'');
+        bool hasDouble = value.Contains('"');
+
+        // If contains double quotes but no single quotes, use single quotes
+        if (hasDouble && !hasSingle)
+        {
+            return $"'{value}'";
+        }
+
+        // If contains single quotes but no double quotes, use double quotes
+        if (hasSingle && !hasDouble)
+        {
+            return $"\"{value}\"";
+        }
+
+        // If contains both, use single quotes and escape internal single quotes
+        if (hasSingle && hasDouble)
+        {
+            var escaped = value.Replace("'", "''");
+            return $"'{escaped}'";
+        }
+
+        // Default: use double quotes
+        return $"\"{value}\"";
     }
 
     /// <summary>
@@ -782,12 +808,21 @@ public static class Format
     /// <summary>
     /// Parse an indented Links Notation string back to an object.
     ///
-    /// This is the inverse of FormatIndented. It parses strings like:
+    /// This function uses the links-notation parser for proper parsing,
+    /// supporting the standard Links Notation indented syntax.
+    ///
+    /// Parses strings like:
     /// <code>
     /// &lt;identifier&gt;
     ///   &lt;key&gt; "&lt;value&gt;"
     ///   &lt;key&gt; "&lt;value&gt;"
     ///   ...
+    /// </code>
+    ///
+    /// The format with colon after identifier is also supported (standard lino):
+    /// <code>
+    /// &lt;identifier&gt;:
+    ///   &lt;key&gt; "&lt;value&gt;"
     /// </code>
     /// </summary>
     /// <param name="text">The indented Links Notation string to parse</param>
@@ -814,69 +849,68 @@ public static class Format
             throw new ArgumentException("text must have at least one line (the identifier)", nameof(text));
         }
 
-        var id = lines[0].Trim();
+        // Filter out empty lines to preserve indentation structure for the parser
+        // Empty lines would break the indentation context in links-notation
+        var nonEmptyLines = lines.Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+
+        if (nonEmptyLines.Length == 0)
+        {
+            throw new ArgumentException("text must have at least one non-empty line (the identifier)", nameof(text));
+        }
+
+        // Convert to standard lino format by adding colon after first line if not present
+        // This allows the links-notation parser to properly parse the indented structure
+        var firstLine = nonEmptyLines[0].Trim();
+        string linoText;
+        if (firstLine.EndsWith(':'))
+        {
+            linoText = string.Join("\n", nonEmptyLines);
+        }
+        else
+        {
+            linoText = $"{firstLine}:\n{string.Join("\n", nonEmptyLines.Skip(1))}";
+        }
+
+        // Use links-notation parser
+        var parsed = SharedParser.Parse(linoText);
+
+        if (parsed is null || parsed.Count == 0)
+        {
+            throw new ArgumentException("Failed to parse indented Links Notation", nameof(text));
+        }
+
+        // Extract id and key-value pairs from parsed result
+        var mainLink = parsed[0];
+        var resultId = mainLink.Id ?? "";
         var obj = new Dictionary<string, string?>();
 
-        for (int i = 1; i < lines.Length; i++)
+        // Process the values list - each entry is a doublet (key value)
+        if (mainLink.Values is not null)
         {
-            var line = lines[i];
+            foreach (var child in mainLink.Values)
+            {
+                if (child.Values is not null && child.Values.Count == 2)
+                {
+                    var keyRef = child.Values[0];
+                    var valueRef = child.Values[1];
 
-            // Skip empty lines
-            var trimmed = line.TrimStart();
-            if (string.IsNullOrWhiteSpace(trimmed))
-            {
-                continue;
-            }
+                    // Get key string
+                    var key = keyRef.Id ?? "";
 
-            // Find the first space that separates key from value
-            var spaceIndex = trimmed.IndexOf(' ');
-            if (spaceIndex == -1)
-            {
-                continue; // No value, skip this line
-            }
-
-            var key = trimmed.Substring(0, spaceIndex);
-            var value = trimmed.Substring(spaceIndex + 1);
-
-            // Unescape key (remove quotes if present)
-            string unescapedKey;
-            if ((key.StartsWith("'") && key.EndsWith("'")) || (key.StartsWith("\"") && key.EndsWith("\"")))
-            {
-                unescapedKey = UnescapeReference(key.Substring(1, key.Length - 2));
-            }
-            else
-            {
-                unescapedKey = key;
-            }
-
-            // Parse value (remove surrounding quotes and unescape doubled quotes)
-            string? parsedValue;
-            if (value.StartsWith("\"") && value.EndsWith("\""))
-            {
-                var inner = value.Substring(1, value.Length - 2);
-                parsedValue = inner.Replace("\"\"", "\"");
-            }
-            else if (value.StartsWith("'") && value.EndsWith("'"))
-            {
-                var inner = value.Substring(1, value.Length - 2);
-                parsedValue = inner.Replace("''", "'");
-            }
-            else
-            {
-                parsedValue = value;
-            }
-
-            // Handle null value
-            if (parsedValue == "null")
-            {
-                obj[unescapedKey] = null;
-            }
-            else
-            {
-                obj[unescapedKey] = parsedValue;
+                    // Get value string, handling null
+                    var valueStr = valueRef.Id;
+                    if (valueStr == "null")
+                    {
+                        obj[key] = null;
+                    }
+                    else
+                    {
+                        obj[key] = valueStr;
+                    }
+                }
             }
         }
 
-        return (id, obj);
+        return (resultId, obj);
     }
 }

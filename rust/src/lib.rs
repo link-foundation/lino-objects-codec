@@ -898,6 +898,7 @@ pub fn decode(notation: &str) -> Result<LinoValue, CodecError> {
 
 /// Formatting utilities for indented Links Notation format.
 pub mod format {
+    use super::{parse_lino_to_links, LiNo};
     use std::collections::HashMap;
 
     /// Error types for format operations
@@ -989,11 +990,31 @@ pub mod format {
     }
 
     /// Format a value for display in indented Links Notation.
-    /// Values are always wrapped in double quotes.
+    /// Uses quoting strategy compatible with the links-notation parser:
+    /// - If value contains double quotes, wrap in single quotes
+    /// - Otherwise, wrap in double quotes
     fn format_indented_value(value: &str) -> String {
-        // Escape internal double quotes by doubling them
-        let escaped = value.replace('"', "\"\"");
-        format!("\"{}\"", escaped)
+        let has_single = value.contains('\'');
+        let has_double = value.contains('"');
+
+        // If contains double quotes but no single quotes, use single quotes
+        if has_double && !has_single {
+            return format!("'{}'", value);
+        }
+
+        // If contains single quotes but no double quotes, use double quotes
+        if has_single && !has_double {
+            return format!("\"{}\"", value);
+        }
+
+        // If contains both, use single quotes and escape internal single quotes
+        if has_single && has_double {
+            let escaped = value.replace('\'', "''");
+            return format!("'{}'", escaped);
+        }
+
+        // Default: use double quotes
+        format!("\"{}\"", value)
     }
 
     /// Format an object in indented Links Notation format.
@@ -1086,13 +1107,23 @@ pub mod format {
 
     /// Parse an indented Links Notation string back to an object.
     ///
-    /// This is the inverse of format_indented. It parses strings like:
+    /// This function uses the links-notation parser for proper parsing,
+    /// supporting the standard Links Notation indented syntax.
+    ///
+    /// Parses strings like:
     ///
     /// ```text
     /// <identifier>
     ///   <key> "<value>"
     ///   <key> "<value>"
     ///   ...
+    /// ```
+    ///
+    /// The format with colon after identifier is also supported (standard lino):
+    ///
+    /// ```text
+    /// <identifier>:
+    ///   <key> "<value>"
     /// ```
     ///
     /// # Arguments
@@ -1127,48 +1158,77 @@ pub mod format {
             ));
         }
 
-        let id = lines[0].trim().to_string();
-        let mut obj = HashMap::new();
+        // Filter out empty lines to preserve indentation structure for the parser
+        // Empty lines would break the indentation context in links-notation
+        let non_empty_lines: Vec<&str> = lines
+            .iter()
+            .filter(|l| !l.trim().is_empty())
+            .copied()
+            .collect();
 
-        for line in lines.iter().skip(1) {
-            // Skip empty lines
-            let trimmed = line.trim();
-            if trimmed.is_empty() {
-                continue;
-            }
-
-            // Find the first space that separates key from value
-            let Some(space_index) = trimmed.find(' ') else {
-                continue; // No value, skip this line
-            };
-
-            let key = &trimmed[..space_index];
-            let value = &trimmed[space_index + 1..];
-
-            // Unescape key (remove quotes if present)
-            let unescaped_key = if (key.starts_with('\'') && key.ends_with('\''))
-                || (key.starts_with('"') && key.ends_with('"'))
-            {
-                unescape_reference(&key[1..key.len() - 1])
-            } else {
-                key.to_string()
-            };
-
-            // Parse value (remove surrounding quotes and unescape doubled quotes)
-            let parsed_value = if value.starts_with('"') && value.ends_with('"') {
-                let inner = &value[1..value.len() - 1];
-                inner.replace("\"\"", "\"")
-            } else if value.starts_with('\'') && value.ends_with('\'') {
-                let inner = &value[1..value.len() - 1];
-                inner.replace("''", "'")
-            } else {
-                value.to_string()
-            };
-
-            obj.insert(unescaped_key, parsed_value);
+        if non_empty_lines.is_empty() {
+            return Err(FormatError::InvalidInput(
+                "text must have at least one non-empty line (the identifier)".to_string(),
+            ));
         }
 
-        Ok((id, obj))
+        // Convert to standard lino format by adding colon after first line if not present
+        // This allows the links-notation parser to properly parse the indented structure
+        let first_line = non_empty_lines[0].trim();
+        let lino_text = if first_line.ends_with(':') {
+            non_empty_lines.join("\n")
+        } else {
+            format!("{}:\n{}", first_line, non_empty_lines[1..].join("\n"))
+        };
+
+        // Use links-notation parser
+        let parsed = parse_lino_to_links(&lino_text)
+            .map_err(|e| FormatError::InvalidInput(format!("Parse error: {:?}", e)))?;
+
+        if parsed.is_empty() {
+            return Err(FormatError::InvalidInput(
+                "Failed to parse indented Links Notation".to_string(),
+            ));
+        }
+
+        // Extract id and key-value pairs from parsed result
+        let main_link = &parsed[0];
+        let (result_id, values) = match main_link {
+            LiNo::Link { id, values } => (id.clone().unwrap_or_default(), values),
+            LiNo::Ref(id) => (id.clone(), &vec![]),
+        };
+
+        let mut obj = HashMap::new();
+
+        // Process the values array - each entry is a doublet (key value)
+        for child in values {
+            if let LiNo::Link {
+                values: child_values,
+                ..
+            } = child
+            {
+                if child_values.len() == 2 {
+                    let key_ref = &child_values[0];
+                    let value_ref = &child_values[1];
+
+                    // Get key string
+                    let key = match key_ref {
+                        LiNo::Ref(k) => k.clone(),
+                        LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
+                    };
+
+                    // Get value string
+                    let value = match value_ref {
+                        LiNo::Ref(v) => v.clone(),
+                        LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
+                    };
+
+                    obj.insert(key, value);
+                }
+            }
+        }
+
+        Ok((result_id, obj))
     }
 }
 
@@ -1510,10 +1570,11 @@ mod format_tests {
 
     #[test]
     fn test_format_indented_value_with_quotes() {
+        // Values containing double quotes are wrapped in single quotes (links-notation style)
         let pairs = [("message", "He said \"hello\"")];
         let result = format_indented_ordered("test-id", &pairs, "  ").unwrap();
         let lines: Vec<&str> = result.lines().collect();
-        assert_eq!(lines[1], "  message \"He said \"\"hello\"\"\"");
+        assert_eq!(lines[1], "  message 'He said \"hello\"'");
     }
 
     #[test]
@@ -1538,8 +1599,9 @@ mod format_tests {
     }
 
     #[test]
-    fn test_parse_indented_with_escaped_quotes() {
-        let text = "test-id\n  message \"He said \"\"hello\"\"\"";
+    fn test_parse_indented_with_quotes() {
+        // Links-notation style: use single quotes to wrap value containing double quotes
+        let text = "test-id\n  message 'He said \"hello\"'";
         let (id, obj) = parse_indented(text).unwrap();
         assert_eq!(id, "test-id");
         assert_eq!(obj.get("message"), Some(&"He said \"hello\"".to_string()));

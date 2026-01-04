@@ -75,10 +75,11 @@ public class FormatTests
     [Fact]
     public void FormatIndentedOrdered_ValueWithQuotes()
     {
+        // Values containing double quotes are wrapped in single quotes (links-notation style)
         var pairs = new (string Key, string? Value)[] { ("message", "He said \"hello\"") };
         var result = Format.FormatIndentedOrdered("test-id", pairs);
         var lines = result.Split('\n');
-        Assert.Equal("  message \"He said \"\"hello\"\"\"", lines[1]);
+        Assert.Equal("  message 'He said \"hello\"'", lines[1]);
     }
 
     [Fact]
@@ -100,9 +101,10 @@ public class FormatTests
     }
 
     [Fact]
-    public void ParseIndented_WithEscapedQuotes()
+    public void ParseIndented_WithQuotes()
     {
-        var text = "test-id\n  message \"He said \"\"hello\"\"\"";
+        // Links-notation style: use single quotes to wrap value containing double quotes
+        var text = "test-id\n  message 'He said \"hello\"'";
         var (id, obj) = Format.ParseIndented(text);
         Assert.Equal("test-id", id);
         Assert.Equal("He said \"hello\"", obj["message"]);
