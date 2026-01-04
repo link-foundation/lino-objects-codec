@@ -1485,7 +1485,10 @@ mod format_tests {
 
     #[test]
     fn test_unescape_reference_doubled_quotes() {
-        assert_eq!(unescape_reference("he said \"\"hello\"\""), "he said \"hello\"");
+        assert_eq!(
+            unescape_reference("he said \"\"hello\"\""),
+            "he said \"hello\""
+        );
         assert_eq!(unescape_reference("it''s"), "it's");
     }
 
@@ -1497,7 +1500,8 @@ mod format_tests {
             ("command", "echo test"),
             ("exitCode", "0"),
         ];
-        let result = format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
+        let result =
+            format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
         let lines: Vec<&str> = result.lines().collect();
         assert_eq!(lines[0], "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
         assert_eq!(lines[1], "  uuid \"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\"");
@@ -1527,7 +1531,10 @@ mod format_tests {
         let text = "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\n  uuid \"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\"\n  status \"executed\"\n  exitCode \"0\"";
         let (id, obj) = parse_indented(text).unwrap();
         assert_eq!(id, "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
-        assert_eq!(obj.get("uuid"), Some(&"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019".to_string()));
+        assert_eq!(
+            obj.get("uuid"),
+            Some(&"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019".to_string())
+        );
         assert_eq!(obj.get("status"), Some(&"executed".to_string()));
         assert_eq!(obj.get("exitCode"), Some(&"0".to_string()));
     }
@@ -1563,7 +1570,8 @@ mod format_tests {
             ("command", "echo test"),
             ("exitCode", "0"),
         ];
-        let formatted = format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
+        let formatted =
+            format_indented_ordered("6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", &pairs, "  ").unwrap();
         let (parsed_id, parsed_obj) = parse_indented(&formatted).unwrap();
 
         assert_eq!(parsed_id, "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019");
@@ -1579,6 +1587,9 @@ mod format_tests {
         let (parsed_id, parsed_obj) = parse_indented(&formatted).unwrap();
 
         assert_eq!(parsed_id, "test-id");
-        assert_eq!(parsed_obj.get("message"), Some(&"He said \"hello\"".to_string()));
+        assert_eq!(
+            parsed_obj.get("message"),
+            Some(&"He said \"hello\"".to_string())
+        );
     }
 }
