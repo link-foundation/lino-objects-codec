@@ -46,7 +46,7 @@ public class FormatTests
     [Fact]
     public void FormatIndentedOrdered_Basic()
     {
-        (string Key, string? Value)[] pairs = new[]
+        var pairs = new (string Key, string? Value)[]
         {
             ("uuid", "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"),
             ("status", "executed"),
@@ -65,7 +65,7 @@ public class FormatTests
     [Fact]
     public void FormatIndentedOrdered_CustomIndentation()
     {
-        (string Key, string? Value)[] pairs = new[] { ("key", "value") };
+        var pairs = new (string Key, string? Value)[] { ("key", "value") };
         var result = Format.FormatIndentedOrdered("test-id", pairs, "    ");
         var lines = result.Split('\n');
         Assert.Equal("test-id", lines[0]);
@@ -75,7 +75,7 @@ public class FormatTests
     [Fact]
     public void FormatIndentedOrdered_ValueWithQuotes()
     {
-        (string Key, string? Value)[] pairs = new[] { ("message", "He said \"hello\"") };
+        var pairs = new (string Key, string? Value)[] { ("message", "He said \"hello\"") };
         var result = Format.FormatIndentedOrdered("test-id", pairs);
         var lines = result.Split('\n');
         Assert.Equal("  message \"He said \"\"hello\"\"\"", lines[1]);
@@ -127,7 +127,7 @@ public class FormatTests
     [Fact]
     public void RoundtripFormatIndented_Basic()
     {
-        (string Key, string? Value)[] pairs = new[]
+        var pairs = new (string Key, string? Value)[]
         {
             ("uuid", "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"),
             ("status", "executed"),
@@ -147,7 +147,7 @@ public class FormatTests
     [Fact]
     public void RoundtripFormatIndented_WithQuotes()
     {
-        (string Key, string? Value)[] pairs = new[] { ("message", "He said \"hello\"") };
+        var pairs = new (string Key, string? Value)[] { ("message", "He said \"hello\"") };
         var formatted = Format.FormatIndentedOrdered("test-id", pairs);
         var (parsedId, parsedObj) = Format.ParseIndented(formatted);
 
