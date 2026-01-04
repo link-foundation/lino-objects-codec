@@ -35,6 +35,7 @@ All implementations share the same design philosophy and provide feature parity.
 - **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
 - **Reference Escaping**: Properly escape strings for Links Notation format (JavaScript)
 - **Fuzzy Matching**: String similarity utilities for finding matches (JavaScript)
+- **Indented Format**: Human-readable indented Links Notation format for display and debugging
 
 ## Quick Start
 
@@ -254,6 +255,69 @@ var data = new Dictionary<string, object?>
     { "metadata", new Dictionary<string, object?> { { "version", 1 }, { "count", 2 } } }
 };
 var decoded = Codec.Decode(Codec.Encode(data));
+```
+
+### Indented Links Notation Format
+
+The indented format provides a human-readable representation for displaying objects:
+
+**JavaScript:**
+```javascript
+import { formatIndented, parseIndented } from 'lino-objects-codec';
+
+// Format an object with an identifier
+const formatted = formatIndented({
+  id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+  obj: { uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', status: 'executed', command: 'echo test', exitCode: '0' }
+});
+console.log(formatted);
+// Output:
+// 6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
+//   uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
+//   status "executed"
+//   command "echo test"
+//   exitCode "0"
+
+// Parse it back
+const { id, obj } = parseIndented({ text: formatted });
+```
+
+**Python:**
+```python
+from link_notation_objects_codec import format_indented, parse_indented
+
+# Format an object with an identifier
+formatted = format_indented(
+    '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+    {'uuid': '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', 'status': 'executed'}
+)
+
+# Parse it back
+id, obj = parse_indented(formatted)
+```
+
+**Rust:**
+```rust
+use lino_objects_codec::format::{format_indented_ordered, parse_indented};
+
+// Format an object with an identifier
+let pairs = [("status", "executed"), ("exitCode", "0")];
+let formatted = format_indented_ordered("my-uuid", &pairs, "  ").unwrap();
+
+// Parse it back
+let (id, obj) = parse_indented(&formatted).unwrap();
+```
+
+**C#:**
+```csharp
+using Lino.Objects.Codec;
+
+// Format an object with an identifier
+var obj = new Dictionary<string, string?> { { "status", "executed" }, { "exitCode", "0" } };
+var formatted = Format.FormatIndented("my-uuid", obj);
+
+// Parse it back
+var (id, parsedObj) = Format.ParseIndented(formatted);
 ```
 
 ## How It Works
