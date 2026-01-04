@@ -457,7 +457,9 @@ export function parseIndented(options = {}) {
     let value = trimmed.substring(spaceIndex + 1);
 
     // Unescape key (remove quotes if present)
-    const unescapedKey = unescapeReference({ str: key.replace(/^['"]|['"]$/g, '') });
+    const unescapedKey = unescapeReference({
+      str: key.replace(/^['"]|['"]$/g, ''),
+    });
 
     // Parse value (remove surrounding quotes and unescape doubled quotes)
     if (value.startsWith('"') && value.endsWith('"')) {

@@ -301,7 +301,10 @@ test('formatIndented - key with space', () => {
   });
   const lines = result.split('\n');
   assert.equal(lines[0], 'test-id');
-  assert.ok(lines[1].includes("'key with space'") || lines[1].includes('"key with space"'));
+  assert.ok(
+    lines[1].includes("'key with space'") ||
+      lines[1].includes('"key with space"')
+  );
 });
 
 test('formatIndented - null value', () => {
