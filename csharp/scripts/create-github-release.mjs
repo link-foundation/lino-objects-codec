@@ -28,6 +28,7 @@ const { makeConfig } = await use('lino-arguments');
 const config = makeConfig({
   yargs: ({ yargs, getenv }) =>
     yargs
+      .version(false) // Disable yargs built-in --version to use our custom version option
       .option('version', {
         type: 'string',
         default: getenv('VERSION', ''),

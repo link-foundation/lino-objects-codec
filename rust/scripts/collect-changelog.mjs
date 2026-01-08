@@ -24,7 +24,9 @@ const { makeConfig } = await use('lino-arguments');
 // Parse CLI arguments using lino-arguments
 const config = makeConfig({
   yargs: ({ yargs, getenv }) =>
-    yargs.option('version', {
+    yargs
+      .version(false) // Disable yargs built-in --version to use our custom version option
+      .option('version', {
       type: 'string',
       default: getenv('VERSION', ''),
       describe: 'Version to use in the changelog entry',
