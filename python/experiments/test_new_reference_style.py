@@ -13,7 +13,7 @@ The key insight:
 - The container should have link_id set to establish the self-reference
 """
 
-from links_notation import Link, Parser, format_links
+from links_notation import Link, Parser
 
 # Test 1: Simple self-reference using new style
 print("=== Test 1: Simple self-reference ===")
@@ -24,11 +24,13 @@ print("=== Test 1: Simple self-reference ===")
 obj_link = Link(
     link_id="obj_0",
     values=[
-        Link(values=[
-            Link(link_id="self"),
-            Link(link_id="obj_0")  # Direct reference, not (ref obj_0)
-        ])
-    ]
+        Link(
+            values=[
+                Link(link_id="self"),
+                Link(link_id="obj_0"),  # Direct reference, not (ref obj_0)
+            ]
+        )
+    ],
 )
 encoded = obj_link.format()
 print(f"Encoded: {encoded}")
@@ -47,16 +49,16 @@ inner_obj = Link(
     link_id="obj_1",
     values=[
         Link(values=[Link(link_id="1"), Link(link_id="1")]),
-        Link(values=[Link(link_id="2"), Link(link_id="2")])
-    ]
+        Link(values=[Link(link_id="2"), Link(link_id="2")]),
+    ],
 )
 
 outer_obj = Link(
     link_id="obj_0",
     values=[
         Link(values=[Link(link_id="self"), Link(link_id="obj_0")]),
-        Link(values=[Link(link_id="other"), inner_obj])
-    ]
+        Link(values=[Link(link_id="other"), inner_obj]),
+    ],
 )
 
 encoded2 = outer_obj.format()
@@ -76,7 +78,7 @@ list_link = Link(
     link_id="obj_0",
     values=[
         Link(link_id="obj_0")  # Direct self-reference
-    ]
+    ],
 )
 
 encoded3 = list_link.format()

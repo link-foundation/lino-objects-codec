@@ -2,7 +2,8 @@
 """Test the failing cases to understand the issue."""
 
 import sys
-sys.path.insert(0, 'src')
+
+sys.path.insert(0, "src")
 
 from link_notation_objects_codec import encode, decode
 
@@ -19,7 +20,7 @@ decoded = decode(encoded)
 print(f"  Decoded: {decoded}")
 print(f"  Has 'name': {'name' in decoded}")
 print(f"  Has 'other': {'other' in decoded}")
-if 'other' in decoded:
+if "other" in decoded:
     print(f"  decoded['other']: {decoded['other']}")
 print()
 

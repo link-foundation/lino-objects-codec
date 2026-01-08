@@ -332,3 +332,182 @@ export function formatAsLino(options = {}) {
   const formattedValues = values.map((value) => `  ${value}`).join('\n');
   return `(\n${formattedValues}\n)`;
 }
+
+/**
+ * Format a value for display in indented Links Notation.
+ * Uses quoting strategy compatible with the links-notation parser:
+ * - If value contains double quotes, wrap in single quotes
+ * - Otherwise, wrap in double quotes
+ *
+ * @private
+ * @param {*} value - The value to format
+ * @returns {string} Formatted value with appropriate quotes
+ */
+function formatIndentedValue(value) {
+  if (value === null || value === undefined) {
+    return '"null"';
+  }
+
+  const str = String(value);
+
+  // If contains double quotes but no single quotes, use single quotes
+  if (str.includes('"') && !str.includes("'")) {
+    return `'${str}'`;
+  }
+
+  // If contains single quotes but no double quotes, use double quotes
+  if (str.includes("'") && !str.includes('"')) {
+    return `"${str}"`;
+  }
+
+  // If contains both, use single quotes and escape internal single quotes
+  if (str.includes("'") && str.includes('"')) {
+    const escaped = str.replace(/'/g, "''");
+    return `'${escaped}'`;
+  }
+
+  // Default: use double quotes
+  return `"${str}"`;
+}
+
+/**
+ * Format an object in indented Links Notation format.
+ *
+ * This format is designed for human readability, displaying objects as:
+ * ```
+ * <identifier>
+ *   <key> "<value>"
+ *   <key> "<value>"
+ *   ...
+ * ```
+ *
+ * Example:
+ *   formatIndented({
+ *     id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
+ *     obj: { uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', status: 'executed', command: 'echo test', exitCode: '0' }
+ *   })
+ *
+ * Returns:
+ *   6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
+ *     uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
+ *     status "executed"
+ *     command "echo test"
+ *     exitCode "0"
+ *
+ * @param {Object} options - Options
+ * @param {string} options.id - The object identifier (displayed on first line)
+ * @param {Object} options.obj - The object with key-value pairs to format
+ * @param {string} [options.indent='  '] - The indentation string (default: 2 spaces)
+ * @returns {string} Formatted indented Links Notation string
+ */
+export function formatIndented(options = {}) {
+  const { id, obj, indent = '  ' } = options;
+
+  if (!id) {
+    throw new Error('id is required for formatIndented');
+  }
+
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
+    throw new Error('obj must be a plain object for formatIndented');
+  }
+
+  const lines = [id];
+
+  for (const [key, value] of Object.entries(obj)) {
+    const escapedKey = escapeReference({ value: key });
+    const formattedValue = formatIndentedValue(value);
+    lines.push(`${indent}${escapedKey} ${formattedValue}`);
+  }
+
+  return lines.join('\n');
+}
+
+/**
+ * Parse an indented Links Notation string back to an object.
+ *
+ * This function uses the links-notation parser for proper parsing,
+ * supporting the standard Links Notation indented syntax.
+ *
+ * Parses strings like:
+ * ```
+ * <identifier>
+ *   <key> "<value>"
+ *   <key> "<value>"
+ *   ...
+ * ```
+ *
+ * The format with colon after identifier is also supported (standard lino):
+ * ```
+ * <identifier>:
+ *   <key> "<value>"
+ * ```
+ *
+ * @param {Object} options - Options
+ * @param {string} options.text - The indented Links Notation string to parse
+ * @returns {{ id: string, obj: Object }} Object with id and parsed key-value pairs
+ */
+export function parseIndented(options = {}) {
+  const { text } = options;
+
+  if (!text || typeof text !== 'string') {
+    throw new Error('text is required for parseIndented');
+  }
+
+  const lines = text.split('\n');
+  if (lines.length === 0) {
+    throw new Error('text must have at least one line (the identifier)');
+  }
+
+  // Filter out empty lines to preserve indentation structure for the parser
+  // Empty lines would break the indentation context in links-notation
+  const nonEmptyLines = lines.filter((line) => line.trim());
+
+  if (nonEmptyLines.length === 0) {
+    throw new Error(
+      'text must have at least one non-empty line (the identifier)'
+    );
+  }
+
+  // Convert to standard lino format by adding colon after first line if not present
+  // This allows the links-notation parser to properly parse the indented structure
+  const firstLine = nonEmptyLines[0].trim();
+  let linoText;
+  if (!firstLine.endsWith(':')) {
+    linoText = `${firstLine}:\n${nonEmptyLines.slice(1).join('\n')}`;
+  } else {
+    linoText = nonEmptyLines.join('\n');
+  }
+
+  // Use links-notation parser
+  const parsed = parser.parse(linoText);
+
+  if (!parsed || parsed.length === 0) {
+    throw new Error('Failed to parse indented Links Notation');
+  }
+
+  // Extract id and key-value pairs from parsed result
+  const mainLink = parsed[0];
+  const id = mainLink.id || '';
+  const obj = {};
+
+  // Process the values array - each entry is a doublet (key value)
+  for (const child of mainLink.values || []) {
+    if (child.values && child.values.length === 2) {
+      const keyRef = child.values[0];
+      const valueRef = child.values[1];
+
+      // Get key string
+      const key = keyRef.id || '';
+
+      // Get value string, handling null
+      const valueStr = valueRef.id;
+      if (valueStr === 'null') {
+        obj[key] = null;
+      } else {
+        obj[key] = valueStr;
+      }
+    }
+  }
+
+  return { id, obj };
+}

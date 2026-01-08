@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Lino.Objects.Codec</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.2.0</Version>
     <Authors>Link Foundation</Authors>
     <Description>A library to encode/decode objects to/from links notation</Description>
     <PackageLicenseExpression>Unlicense</PackageLicenseExpression>

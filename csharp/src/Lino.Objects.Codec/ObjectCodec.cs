@@ -609,3 +609,308 @@ public static class Codec
     /// <returns>Reconstructed C# object</returns>
     public static object? Decode(string notation) => new ObjectCodec().Decode(notation);
 }
+
+/// <summary>
+/// Formatting utilities for indented Links Notation format.
+/// </summary>
+public static class Format
+{
+    /// <summary>
+    /// Escape a reference for Links Notation.
+    /// References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.
+    /// </summary>
+    /// <param name="value">The value to escape</param>
+    /// <returns>The escaped reference string</returns>
+    public static string EscapeReference(string value)
+    {
+        // Check if escaping is needed
+        bool needsEscaping = value.Any(c => char.IsWhiteSpace(c) || c == '(' || c == ')' || c == '\'' || c == '"' || c == ':')
+            || value.Contains('\n');
+
+        if (!needsEscaping)
+        {
+            return value;
+        }
+
+        bool hasSingle = value.Contains('\'');
+        bool hasDouble = value.Contains('"');
+
+        // If contains single quotes but not double quotes, use double quotes
+        if (hasSingle && !hasDouble)
+        {
+            return $"\"{value}\"";
+        }
+
+        // If contains double quotes but not single quotes, use single quotes
+        if (hasDouble && !hasSingle)
+        {
+            return $"'{value}'";
+        }
+
+        // If contains both quotes, count which one appears more
+        if (hasSingle && hasDouble)
+        {
+            int singleCount = value.Count(c => c == '\'');
+            int doubleCount = value.Count(c => c == '"');
+
+            if (doubleCount < singleCount)
+            {
+                // Use double quotes, escape internal double quotes by doubling
+                var escaped = value.Replace("\"", "\"\"");
+                return $"\"{escaped}\"";
+            }
+            else
+            {
+                // Use single quotes, escape internal single quotes by doubling
+                var escaped = value.Replace("'", "''");
+                return $"'{escaped}'";
+            }
+        }
+
+        // Just spaces or other special characters, use single quotes by default
+        return $"'{value}'";
+    }
+
+    /// <summary>
+    /// Unescape a reference from Links Notation format.
+    /// Reverses the escaping done by EscapeReference.
+    /// </summary>
+    /// <param name="str">The escaped reference string</param>
+    /// <returns>The unescaped string</returns>
+    public static string UnescapeReference(string str)
+    {
+        if (str is null) return str!;
+
+        // Unescape doubled quotes
+        return str.Replace("\"\"", "\"").Replace("''", "'");
+    }
+
+    // Shared parser instance for ParseIndented
+    private static readonly Parser SharedParser = new();
+
+    /// <summary>
+    /// Format a value for display in indented Links Notation.
+    /// Uses quoting strategy compatible with the links-notation parser:
+    /// - If value contains double quotes, wrap in single quotes
+    /// - Otherwise, wrap in double quotes
+    /// </summary>
+    private static string FormatIndentedValue(string? value)
+    {
+        if (value is null)
+        {
+            return "\"null\"";
+        }
+
+        bool hasSingle = value.Contains('\'');
+        bool hasDouble = value.Contains('"');
+
+        // If contains double quotes but no single quotes, use single quotes
+        if (hasDouble && !hasSingle)
+        {
+            return $"'{value}'";
+        }
+
+        // If contains single quotes but no double quotes, use double quotes
+        if (hasSingle && !hasDouble)
+        {
+            return $"\"{value}\"";
+        }
+
+        // If contains both, use single quotes and escape internal single quotes
+        if (hasSingle && hasDouble)
+        {
+            var escaped = value.Replace("'", "''");
+            return $"'{escaped}'";
+        }
+
+        // Default: use double quotes
+        return $"\"{value}\"";
+    }
+
+    /// <summary>
+    /// Format an object in indented Links Notation format.
+    ///
+    /// This format is designed for human readability, displaying objects as:
+    /// <code>
+    /// &lt;identifier&gt;
+    ///   &lt;key&gt; "&lt;value&gt;"
+    ///   &lt;key&gt; "&lt;value&gt;"
+    ///   ...
+    /// </code>
+    /// </summary>
+    /// <param name="id">The object identifier (displayed on first line)</param>
+    /// <param name="obj">The dictionary with key-value pairs to format</param>
+    /// <param name="indent">The indentation string (default: 2 spaces)</param>
+    /// <returns>Formatted indented Links Notation string</returns>
+    /// <exception cref="ArgumentException">If id is null or empty</exception>
+    /// <example>
+    /// <code>
+    /// var obj = new Dictionary&lt;string, string&gt;
+    /// {
+    ///     { "status", "executed" },
+    ///     { "exitCode", "0" }
+    /// };
+    /// var result = Format.FormatIndented("my-uuid", obj);
+    /// </code>
+    /// </example>
+    public static string FormatIndented(string id, IDictionary<string, string?> obj, string indent = "  ")
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            throw new ArgumentException("id is required for FormatIndented", nameof(id));
+        }
+
+        if (obj is null)
+        {
+            throw new ArgumentNullException(nameof(obj), "obj must be a dictionary for FormatIndented");
+        }
+
+        var lines = new List<string> { id };
+
+        foreach (var kvp in obj)
+        {
+            var escapedKey = EscapeReference(kvp.Key);
+            var formattedValue = FormatIndentedValue(kvp.Value);
+            lines.Add($"{indent}{escapedKey} {formattedValue}");
+        }
+
+        return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    /// Format an object in indented Links Notation format, maintaining key order.
+    /// This is similar to FormatIndented but takes an array of tuples to preserve
+    /// the order of keys.
+    /// </summary>
+    /// <param name="id">The object identifier (displayed on first line)</param>
+    /// <param name="pairs">The key-value pairs in order</param>
+    /// <param name="indent">The indentation string (default: 2 spaces)</param>
+    /// <returns>Formatted indented Links Notation string</returns>
+    public static string FormatIndentedOrdered(string id, (string Key, string? Value)[] pairs, string indent = "  ")
+    {
+        if (string.IsNullOrEmpty(id))
+        {
+            throw new ArgumentException("id is required for FormatIndentedOrdered", nameof(id));
+        }
+
+        var lines = new List<string> { id };
+
+        foreach (var (key, value) in pairs)
+        {
+            var escapedKey = EscapeReference(key);
+            var formattedValue = FormatIndentedValue(value);
+            lines.Add($"{indent}{escapedKey} {formattedValue}");
+        }
+
+        return string.Join("\n", lines);
+    }
+
+    /// <summary>
+    /// Parse an indented Links Notation string back to an object.
+    ///
+    /// This function uses the links-notation parser for proper parsing,
+    /// supporting the standard Links Notation indented syntax.
+    ///
+    /// Parses strings like:
+    /// <code>
+    /// &lt;identifier&gt;
+    ///   &lt;key&gt; "&lt;value&gt;"
+    ///   &lt;key&gt; "&lt;value&gt;"
+    ///   ...
+    /// </code>
+    ///
+    /// The format with colon after identifier is also supported (standard lino):
+    /// <code>
+    /// &lt;identifier&gt;:
+    ///   &lt;key&gt; "&lt;value&gt;"
+    /// </code>
+    /// </summary>
+    /// <param name="text">The indented Links Notation string to parse</param>
+    /// <returns>A tuple of (id, dictionary of key-value pairs)</returns>
+    /// <exception cref="ArgumentException">If text is null or empty</exception>
+    /// <example>
+    /// <code>
+    /// var text = "my-uuid\n  status \"executed\"\n  exitCode \"0\"";
+    /// var (id, obj) = Format.ParseIndented(text);
+    /// // id = "my-uuid"
+    /// // obj["status"] = "executed"
+    /// </code>
+    /// </example>
+    public static (string Id, Dictionary<string, string?> Obj) ParseIndented(string text)
+    {
+        if (string.IsNullOrEmpty(text))
+        {
+            throw new ArgumentException("text is required for ParseIndented", nameof(text));
+        }
+
+        var lines = text.Split('\n');
+        if (lines.Length == 0)
+        {
+            throw new ArgumentException("text must have at least one line (the identifier)", nameof(text));
+        }
+
+        // Filter out empty lines to preserve indentation structure for the parser
+        // Empty lines would break the indentation context in links-notation
+        var nonEmptyLines = lines.Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+
+        if (nonEmptyLines.Length == 0)
+        {
+            throw new ArgumentException("text must have at least one non-empty line (the identifier)", nameof(text));
+        }
+
+        // Convert to standard lino format by adding colon after first line if not present
+        // This allows the links-notation parser to properly parse the indented structure
+        var firstLine = nonEmptyLines[0].Trim();
+        string linoText;
+        if (firstLine.EndsWith(':'))
+        {
+            linoText = string.Join("\n", nonEmptyLines);
+        }
+        else
+        {
+            linoText = $"{firstLine}:\n{string.Join("\n", nonEmptyLines.Skip(1))}";
+        }
+
+        // Use links-notation parser
+        var parsed = SharedParser.Parse(linoText);
+
+        if (parsed is null || parsed.Count == 0)
+        {
+            throw new ArgumentException("Failed to parse indented Links Notation", nameof(text));
+        }
+
+        // Extract id and key-value pairs from parsed result
+        var mainLink = parsed[0];
+        var resultId = mainLink.Id ?? "";
+        var obj = new Dictionary<string, string?>();
+
+        // Process the values list - each entry is a doublet (key value)
+        if (mainLink.Values is not null)
+        {
+            foreach (var child in mainLink.Values)
+            {
+                if (child.Values is not null && child.Values.Count == 2)
+                {
+                    var keyRef = child.Values[0];
+                    var valueRef = child.Values[1];
+
+                    // Get key string
+                    var key = keyRef.Id ?? "";
+
+                    // Get value string, handling null
+                    var valueStr = valueRef.Id;
+                    if (valueStr == "null")
+                    {
+                        obj[key] = null;
+                    }
+                    else
+                    {
+                        obj[key] = valueStr;
+                    }
+                }
+            }
+        }
+
+        return (resultId, obj);
+    }
+}

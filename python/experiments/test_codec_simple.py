@@ -13,6 +13,7 @@ try:
 except Exception as e:
     print(f"Error: {e}")
     import traceback
+
     traceback.print_exc()
 
 print("\n=== Testing bool ===")
@@ -21,10 +22,11 @@ try:
     print(f"Encoded: {encoded}")
     decoded = decode(encoded)
     print(f"Decoded: {decoded}")
-    print(f"Match: {decoded == True}")
+    print(f"Match: {decoded is True}")
 except Exception as e:
     print(f"Error: {e}")
     import traceback
+
     traceback.print_exc()
 
 print("\n=== Testing int ===")
@@ -37,6 +39,7 @@ try:
 except Exception as e:
     print(f"Error: {e}")
     import traceback
+
     traceback.print_exc()
 
 print("\n=== Testing str ===")
@@ -49,6 +52,7 @@ try:
 except Exception as e:
     print(f"Error: {e}")
     import traceback
+
     traceback.print_exc()
 
 print("\n=== Testing list ===")
@@ -61,4 +65,5 @@ try:
 except Exception as e:
     print(f"Error: {e}")
     import traceback
+
     traceback.print_exc()

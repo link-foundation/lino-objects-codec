@@ -24,6 +24,8 @@ export {
   jsonToLino,
   linoToJson,
   formatAsLino,
+  formatIndented,
+  parseIndented,
 } from './format.js';
 
 // Fuzzy matching utilities

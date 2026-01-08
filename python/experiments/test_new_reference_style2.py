@@ -23,8 +23,8 @@ obj_link = Link(
         # (self obj_0)
         Link(values=[Link(link_id="self"), Link(link_id="obj_0")]),
         # (num 42)
-        Link(values=[Link(link_id="num"), Link(link_id="42")])
-    ]
+        Link(values=[Link(link_id="num"), Link(link_id="42")]),
+    ],
 )
 
 encoded = obj_link.format()

@@ -21,4 +21,6 @@ if isinstance(decoded, list) and len(decoded) > 0:
     print(f"First item type: {type(decoded[0])}")
     print(f"First item: {decoded[0]}")
     if len(decoded) > 1:
-        print(f"All same object: {decoded[0] is decoded[1] is decoded[2] if len(decoded) > 2 else 'N/A'}")
+        print(
+            f"All same object: {decoded[0] is decoded[1] is decoded[2] if len(decoded) > 2 else 'N/A'}"
+        )

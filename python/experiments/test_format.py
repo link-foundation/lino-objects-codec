@@ -2,7 +2,8 @@
 """Quick test to verify the encoder produces the correct format."""
 
 import sys
-sys.path.insert(0, 'src')
+
+sys.path.insert(0, "src")
 
 from link_notation_objects_codec import encode, decode
 
@@ -12,7 +13,7 @@ lst = []
 lst.append(lst)
 encoded = encode(lst)
 print(f"  Encoded: {encoded}")
-print(f"  Expected: (obj_0: list obj_0)")
+print("  Expected: (obj_0: list obj_0)")
 print(f"  Match: {encoded == '(obj_0: list obj_0)'}")
 print()
 
@@ -22,7 +23,7 @@ d = {}
 d["self"] = d
 encoded = encode(d)
 print(f"  Encoded: {encoded}")
-print(f"  Expected: (obj_0: dict ((str c2VsZg==) obj_0))")
+print("  Expected: (obj_0: dict ((str c2VsZg==) obj_0))")
 print(f"  Match: {encoded == '(obj_0: dict ((str c2VsZg==) obj_0))'}")
 print()
 
@@ -34,8 +35,10 @@ list1.append(list2)
 list2.append(list1)
 encoded = encode(list1)
 print(f"  Encoded: {encoded}")
-print(f"  Expected: (obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))")
-print(f"  Match: {encoded == '(obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))'}")
+print("  Expected: (obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))")
+print(
+    f"  Match: {encoded == '(obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))'}"
+)
 print()
 
 # Test 4: Round-trip

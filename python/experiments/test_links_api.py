@@ -25,9 +25,9 @@ if result2:
     print(f"  Link values: {result2[0].values}")
     if result2[0].values:
         print(f"  First value type: {type(result2[0].values[0])}")
-        if hasattr(result2[0].values[0], 'id'):
+        if hasattr(result2[0].values[0], "id"):
             print(f"  First value id: {result2[0].values[0].id}")
-        if hasattr(result2[0].values[0], 'values'):
+        if hasattr(result2[0].values[0], "values"):
             print(f"  First value values: {result2[0].values[0].values}")
     print(f"  Formatted: {format_links(result2)}")
 
@@ -68,8 +68,8 @@ if result4:
     print(f"  Number of values: {len(result4[0].values)}")
     for i, val in enumerate(result4[0].values):
         print(f"  Value {i}: {val} (type: {type(val).__name__})")
-        if hasattr(val, 'id'):
+        if hasattr(val, "id"):
             print(f"    id: {val.id}")
-        if hasattr(val, 'values'):
+        if hasattr(val, "values"):
             print(f"    values: {val.values}")
     print(f"  Formatted: {format_links(result4)}")

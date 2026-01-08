@@ -2,7 +2,8 @@
 """Test the updated encoder implementation."""
 
 import sys
-sys.path.insert(0, 'src')
+
+sys.path.insert(0, "src")
 
 from link_notation_objects_codec import encode, decode
 
@@ -30,7 +31,7 @@ print(f"  Lines: {len(encoded.split(chr(10)))}")
 decoded = decode(encoded)
 print(f"  Decoded has 'name': {'name' in decoded}")
 print(f"  Decoded has 'other': {'other' in decoded}")
-if 'other' in decoded and 'other' in decoded['other']:
+if "other" in decoded and "other" in decoded["other"]:
     print(f"  Circular ref works: {decoded['other']['other'] is decoded}")
 print()
 
@@ -61,7 +62,7 @@ print(f"  Encoded:\n{encoded}")
 print(f"  Lines: {len(encoded.split(chr(10)))}")
 decoded = decode(encoded)
 print(f"  Decoded has 'children': {'children' in decoded}")
-if 'children' in decoded and len(decoded['children']) > 0:
+if "children" in decoded and len(decoded["children"]) > 0:
     print(f"  Children count: {len(decoded['children'])}")
-    if 'parent' in decoded['children'][0]:
+    if "parent" in decoded["children"][0]:
         print(f"  Circular ref works: {decoded['children'][0]['parent'] is decoded}")
