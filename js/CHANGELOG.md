@@ -1,5 +1,12 @@
 # lino-objects-codec
 
+## 0.3.2
+
+### Patch Changes
+
+- 240826f: Add registry-version, CI, and license badges to the JavaScript README so the
+  package's published state on npm is visible at a glance. No code changes.
+
 ## 0.3.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "lino-objects-codec",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A library to encode/decode objects to/from links notation",
   "type": "module",
   "main": "./src/index.js",
