@@ -208,14 +208,20 @@ jobs:
         run: |
           # Get current version from pyproject.toml
           CURRENT_VERSION=$(grep -Po '(?<=^version = ")[^"]*' pyproject.toml)
+          PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
 
-          # Check if tag exists
-          if git rev-parse "python-v$CURRENT_VERSION" >/dev/null 2>&1; then
-            echo "Tag python-v$CURRENT_VERSION already exists, skipping release"
+          # Decide based on the registry, not on the local git tag. PyPI returns 200 for an
+          # existing version's JSON metadata and 404 otherwise. See
+          # docs/case-studies/issue-25/README.md for why the tag is not a reliable proxy.
+          STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PACKAGE_NAME}/${CURRENT_VERSION}/json")
+          echo "PyPI HTTP status for ${PACKAGE_NAME}@${CURRENT_VERSION}: ${STATUS}"
+          if [ "$STATUS" = "200" ]; then
+            echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} already on PyPI, skipping publish"
             echo "should_release=false" >> $GITHUB_OUTPUT
           else
-            echo "New version detected: $CURRENT_VERSION"
+            echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} is NOT on PyPI, will publish"
             echo "should_release=true" >> $GITHUB_OUTPUT
           fi
 
@@ -228,9 +234,14 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.version_check.outputs.should_release == 'true'
+        # Uses PyPI's OIDC Trusted Publisher flow (id-token: write below). If you see "Trusted
+        # Publisher … not configured" in the logs, configure it for this repo + workflow on PyPI.
+        # See docs/case-studies/issue-25/README.md for the broader context.
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          verbose: true
+          skip-existing: true
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -306,9 +317,12 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        # See note above: relies on PyPI Trusted Publisher; see docs/case-studies/issue-25/README.md.
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          verbose: true
+          skip-existing: true
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
