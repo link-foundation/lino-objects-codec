@@ -50,7 +50,11 @@ try {
   } catch {
     console.log('No changelog.d directory found');
     console.log('bump_type=patch');
+    console.log('fragment_count=0');
+    console.log('has_fragments=false');
     setOutput('bump_type', 'patch');
+    setOutput('fragment_count', '0');
+    setOutput('has_fragments', 'false');
     process.exit(0);
   }
 
@@ -61,7 +65,11 @@ try {
   if (fragments.length === 0) {
     console.log('No changelog fragments found');
     console.log('bump_type=patch');
+    console.log('fragment_count=0');
+    console.log('has_fragments=false');
     setOutput('bump_type', 'patch');
+    setOutput('fragment_count', '0');
+    setOutput('has_fragments', 'false');
     process.exit(0);
   }
 
@@ -80,7 +88,11 @@ try {
   console.log(`Found ${fragments.length} fragment(s)`);
   console.log(`Highest bump type: ${highest}`);
   console.log(`bump_type=${highest}`);
+  console.log(`fragment_count=${fragments.length}`);
+  console.log('has_fragments=true');
   setOutput('bump_type', highest);
+  setOutput('fragment_count', String(fragments.length));
+  setOutput('has_fragments', 'true');
 } catch (error) {
   console.error('Error:', error.message);
   process.exit(1);
