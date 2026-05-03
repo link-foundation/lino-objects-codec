@@ -1,0 +1,14 @@
+Status checks:
+
+npm lino-objects-codec@0.3.1: HTTP 200
+npm lino-objects-codec@0.3.2: HTTP 404
+npm lino-objects-codec@0.3.3: HTTP 404
+
+rust crates.io:
+  lino-objects-codec/0.2.0: HTTP 200
+
+PyPI:
+  lino-objects-codec/0.2.0: HTTP 404
+
+NuGet:
+  Lino.Objects.Codec/0.2.0: HTTP 404
