@@ -7,7 +7,9 @@
  * - Add shields.io NPM version badge
  * - Format nicely with proper markdown
  *
- * IMPORTANT: Update the PACKAGE_NAME constant below to match your package.json
+ * The package name is read dynamically from ./package.json so it cannot
+ * drift from the actual published package (see docs/case-studies/issue-29
+ * for the false-positive case that motivated this).
  *
  * PR Detection Logic:
  * 1. Extract commit hash from changelog entry (if present)
@@ -23,8 +25,11 @@
  * Note: Uses --release-version instead of --version to avoid conflict with yargs' built-in --version flag.
  */
 
-// TODO: Update this to match your package name in package.json
-const PACKAGE_NAME = 'my-package';
+import { readFileSync } from 'fs';
+
+// Read the package name from package.json so the badge always points at the
+// real npm registry entry. Hardcoding this caused issue #29's false-positive.
+const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
 // Load use-m dynamically
 const { use } = eval(

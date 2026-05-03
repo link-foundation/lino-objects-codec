@@ -240,14 +240,40 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           if [ -z "$NUGET_API_KEY" ]; then
-            echo "::error::NUGET_API_KEY is not set; cannot publish to NuGet."
-            echo "Configure NUGET_API_KEY as a repository secret. See docs/case-studies/issue-25/README.md."
+            echo "::error title=NUGET_API_KEY missing::Cannot publish to NuGet without an API key."
+            echo ""
+            echo "How to fix:"
+            echo "  1. Generate a key at https://www.nuget.org/account/apikeys"
+            echo "     (scope: 'Push new packages and package versions', glob pattern: package id)."
+            echo "  2. Add it to this repo at:"
+            echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "     Name: NUGET_API_KEY"
+            echo "  3. Re-run this workflow."
+            echo ""
+            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
-          dotnet nuget push artifacts/*.nupkg \
-            --api-key "$NUGET_API_KEY" \
-            --source https://api.nuget.org/v3/index.json \
-            --skip-duplicate
+          if ! OUT=$(dotnet nuget push artifacts/*.nupkg \
+              --api-key "$NUGET_API_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate 2>&1); then
+            echo "$OUT"
+            if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|api ?key'; then
+              echo "::error title=NuGet credentials rejected::NuGet rejected NUGET_API_KEY."
+              echo ""
+              echo "How to fix:"
+              echo "  1. The key may have expired or been revoked. Rotate it at"
+              echo "     https://www.nuget.org/account/apikeys"
+              echo "  2. Update the secret at:"
+              echo "     Settings -> Secrets and variables -> Actions -> NUGET_API_KEY"
+              echo "  3. Verify the key's package glob includes this package id."
+              echo ""
+              echo "See docs/case-studies/issue-29/README.md."
+            fi
+            exit 1
+          fi
+          echo "$OUT"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -313,14 +339,40 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           if [ -z "$NUGET_API_KEY" ]; then
-            echo "::error::NUGET_API_KEY is not set; cannot publish to NuGet."
-            echo "Configure NUGET_API_KEY as a repository secret. See docs/case-studies/issue-25/README.md."
+            echo "::error title=NUGET_API_KEY missing::Cannot publish to NuGet without an API key."
+            echo ""
+            echo "How to fix:"
+            echo "  1. Generate a key at https://www.nuget.org/account/apikeys"
+            echo "     (scope: 'Push new packages and package versions', glob pattern: package id)."
+            echo "  2. Add it to this repo at:"
+            echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "     Name: NUGET_API_KEY"
+            echo "  3. Re-run this workflow."
+            echo ""
+            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
-          dotnet nuget push artifacts/*.nupkg \
-            --api-key "$NUGET_API_KEY" \
-            --source https://api.nuget.org/v3/index.json \
-            --skip-duplicate
+          if ! OUT=$(dotnet nuget push artifacts/*.nupkg \
+              --api-key "$NUGET_API_KEY" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate 2>&1); then
+            echo "$OUT"
+            if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|api ?key'; then
+              echo "::error title=NuGet credentials rejected::NuGet rejected NUGET_API_KEY."
+              echo ""
+              echo "How to fix:"
+              echo "  1. The key may have expired or been revoked. Rotate it at"
+              echo "     https://www.nuget.org/account/apikeys"
+              echo "  2. Update the secret at:"
+              echo "     Settings -> Secrets and variables -> Actions -> NUGET_API_KEY"
+              echo "  3. Verify the key's package glob includes this package id."
+              echo ""
+              echo "See docs/case-studies/issue-29/README.md."
+            fi
+            exit 1
+          fi
+          echo "$OUT"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

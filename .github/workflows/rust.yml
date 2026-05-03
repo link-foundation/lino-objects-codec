@@ -336,8 +336,18 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
         run: |
           if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
-            echo "::error::Neither CARGO_REGISTRY_TOKEN nor CARGO_TOKEN is set; cannot publish to crates.io."
-            echo "Configure one of these as a repository secret. See docs/case-studies/issue-25/README.md."
+            echo "::error title=CARGO_REGISTRY_TOKEN missing::Cannot publish to crates.io without an API token."
+            echo ""
+            echo "How to fix:"
+            echo "  1. Generate a token at https://crates.io/me (Account Settings -> API Tokens)."
+            echo "     Scope: 'publish-update' for this crate."
+            echo "  2. Add it to this repo at:"
+            echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "     Name: CARGO_REGISTRY_TOKEN  (CARGO_TOKEN is also accepted as a fallback)"
+            echo "  3. Re-run this workflow."
+            echo ""
+            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
           # `cargo publish` exits non-zero on retry if the version already exists; we tolerate that
@@ -348,6 +358,18 @@ jobs:
             if echo "$OUT" | grep -qE 'already (uploaded|exists)'; then
               echo "::warning::Version was published by another run between probe and publish; treating as success."
               exit 0
+            fi
+            if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|invalid token|token (expired|rejected)'; then
+              echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN."
+              echo ""
+              echo "How to fix:"
+              echo "  1. The token may have expired or been revoked. Rotate it at"
+              echo "     https://crates.io/me  (Account Settings -> API Tokens)"
+              echo "  2. Update the secret at:"
+              echo "     Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN"
+              echo "  3. Verify the token's scope includes 'publish-update' for this crate."
+              echo ""
+              echo "See docs/case-studies/issue-29/README.md."
             fi
             exit 1
           fi
@@ -419,8 +441,18 @@ jobs:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
         run: |
           if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
-            echo "::error::Neither CARGO_REGISTRY_TOKEN nor CARGO_TOKEN is set; cannot publish to crates.io."
-            echo "Configure one of these as a repository secret. See docs/case-studies/issue-25/README.md."
+            echo "::error title=CARGO_REGISTRY_TOKEN missing::Cannot publish to crates.io without an API token."
+            echo ""
+            echo "How to fix:"
+            echo "  1. Generate a token at https://crates.io/me (Account Settings -> API Tokens)."
+            echo "     Scope: 'publish-update' for this crate."
+            echo "  2. Add it to this repo at:"
+            echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
+            echo "     Name: CARGO_REGISTRY_TOKEN  (CARGO_TOKEN is also accepted as a fallback)"
+            echo "  3. Re-run this workflow."
+            echo ""
+            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
           if ! OUT=$(cargo publish 2>&1); then
@@ -428,6 +460,18 @@ jobs:
             if echo "$OUT" | grep -qE 'already (uploaded|exists)'; then
               echo "::warning::Version is already on crates.io; treating manual re-run as success."
               exit 0
+            fi
+            if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|invalid token|token (expired|rejected)'; then
+              echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN."
+              echo ""
+              echo "How to fix:"
+              echo "  1. The token may have expired or been revoked. Rotate it at"
+              echo "     https://crates.io/me  (Account Settings -> API Tokens)"
+              echo "  2. Update the secret at:"
+              echo "     Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN"
+              echo "  3. Verify the token's scope includes 'publish-update' for this crate."
+              echo ""
+              echo "See docs/case-studies/issue-29/README.md."
             fi
             exit 1
           fi

@@ -254,14 +254,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./js
-        run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}"
+        run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --tag-prefix "js-v"
 
       - name: Format GitHub release notes
         if: steps.publish.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./js
-        run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --commit-sha "${{ github.sha }}"
+        run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --commit-sha "${{ github.sha }}" --tag-prefix "js-v"
 
   # Manual Instant Release - triggered via workflow_dispatch with instant mode
   instant-release:
@@ -316,14 +316,14 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./js
-        run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}"
+        run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --tag-prefix "js-v"
 
       - name: Format GitHub release notes
         if: steps.publish.outputs.published == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./js
-        run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --commit-sha "${{ github.sha }}"
+        run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository "${{ github.repository }}" --commit-sha "${{ github.sha }}" --tag-prefix "js-v"
 
   # Manual Changeset PR - creates a pull request with the changeset for review
   changeset-pr:

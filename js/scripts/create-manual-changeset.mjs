@@ -4,7 +4,8 @@
  * Create a changeset file for manual releases
  * Usage: node scripts/create-manual-changeset.mjs --bump-type <major|minor|patch> [--description <description>]
  *
- * IMPORTANT: Update the PACKAGE_NAME constant below to match your package.json
+ * The package name is read dynamically from ./package.json (see
+ * docs/case-studies/issue-29 for why hardcoding it broke things).
  *
  * Uses link-foundation libraries:
  * - use-m: Dynamic package loading without package.json dependencies
@@ -12,11 +13,10 @@
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
 
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 import { randomBytes } from 'crypto';
 
-// TODO: Update this to match your package name in package.json
-const PACKAGE_NAME = 'my-package';
+const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
 // Load use-m dynamically
 const { use } = eval(
