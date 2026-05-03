@@ -16,9 +16,7 @@
 import { writeFileSync, readFileSync } from 'fs';
 import { randomBytes } from 'crypto';
 
-const PACKAGE_NAME = JSON.parse(
-  readFileSync('./package.json', 'utf8')
-).name;
+const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
 // Load use-m dynamically
 const { use } = eval(

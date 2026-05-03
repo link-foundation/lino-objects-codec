@@ -29,9 +29,7 @@ import { readFileSync } from 'fs';
 
 // Read the package name from package.json so the badge always points at the
 // real npm registry entry. Hardcoding this caused issue #29's false-positive.
-const PACKAGE_NAME = JSON.parse(
-  readFileSync('./package.json', 'utf8')
-).name;
+const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
 // Load use-m dynamically
 const { use } = eval(

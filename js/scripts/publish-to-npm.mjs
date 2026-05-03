@@ -119,9 +119,7 @@ function printCredentialRunbook() {
   console.error(
     '     Configure it at: https://www.npmjs.com/package/<package-name>/access'
   );
-  console.error(
-    '     Docs: https://docs.npmjs.com/trusted-publishers'
-  );
+  console.error('     Docs: https://docs.npmjs.com/trusted-publishers');
   console.error('');
   console.error(
     '  2. Verify the workflow has `permissions: id-token: write` (see .github/workflows/js.yml).'
@@ -279,9 +277,10 @@ async function main() {
     console.log(
       `Checking if version ${currentVersion} is already published...`
     );
-    const checkResult = await $`npm view "${packageName}@${currentVersion}" version`.run(
-      { capture: true }
-    );
+    const checkResult =
+      await $`npm view "${packageName}@${currentVersion}" version`.run({
+        capture: true,
+      });
 
     // command-stream returns { code: 0 } on success, { code: 1 } on failure (e.g., E404)
     // Exit code 0 means version exists, non-zero means version not found
@@ -325,9 +324,7 @@ async function main() {
     console.error(
       `::error title=npm publish failed::${MAX_RETRIES} attempts exhausted; ${packageName}@${currentVersion} was not published.`
     );
-    console.error(
-      'See docs/case-studies/issue-29/README.md for the runbook.'
-    );
+    console.error('See docs/case-studies/issue-29/README.md for the runbook.');
     process.exit(1);
   } catch (error) {
     console.error('Error:', error.message);
