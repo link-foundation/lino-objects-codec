@@ -1,5 +1,11 @@
 # lino-objects-codec
 
+## 0.3.5
+
+### Patch Changes
+
+- c78eb96: Harden npm trusted-publishing setup so CI fails when npm cannot be upgraded to an OIDC-capable version, and surface access/trusted-publisher guidance for npm publish 404 failures.
+
 ## 0.3.4
 
 ### Patch Changes
