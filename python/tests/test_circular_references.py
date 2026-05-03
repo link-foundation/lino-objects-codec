@@ -1,5 +1,7 @@
 """Tests for encoding/decoding objects with circular references."""
 
+import pytest
+
 from link_notation_objects_codec import decode, encode
 
 
@@ -150,3 +152,21 @@ class TestCircularReferences:
         assert decoded["child"]["child"]["child"]["level"] == 4
         # Check circular reference back to root
         assert decoded["child"]["child"]["child"]["root"] is decoded
+
+    def test_encoded_format_uses_builtin_references_not_ref_marker(self):
+        """Cycles must encode as bare `obj_N` links, not `(ref obj_N)`. See issue #27."""
+        d = {}
+        d["self"] = d
+        encoded = encode(d)
+
+        # Self-reference must be a bare obj_0 link, not a (ref ...) wrapper.
+        assert "obj_0" in encoded, encoded
+        assert "(ref " not in encoded, encoded
+        # The owner must be defined inline using the (obj_id: type ...) form.
+        assert "(obj_0: dict" in encoded, encoded
+
+    def test_decoder_rejects_legacy_ref_marker(self):
+        """Legacy (ref X) form must be rejected as an unknown type marker."""
+        legacy = "(dict obj_0 ((str c2VsZg==) (ref obj_0)))"
+        with pytest.raises(ValueError, match=r"Unknown type marker:\s*ref"):
+            decode(legacy)

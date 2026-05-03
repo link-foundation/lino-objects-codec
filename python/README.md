@@ -152,8 +152,15 @@ The library uses the [links-notation](https://github.com/link-foundation/links-n
 
 - Basic types are encoded with type markers: `(int 42)`, `(str "hello")`, `(bool True)`
 - Strings are base64-encoded to handle special characters and newlines
-- Collections include object IDs for reference tracking: `(list obj_0 item1 item2 ...)`
-- Circular references use special `ref` links: `(ref obj_0)`
+- Shared / cyclic collections are defined inline with a self-reference id using
+  the built-in links-notation `(self-ref: first-ref second-ref ...)` form, e.g.
+  `(obj_0: list (int 1) (int 2) ...)` or `(obj_0: dict (key val) ...)`
+- Circular references use built-in links-notation references — the bare object
+  id link `obj_0` — instead of a dedicated keyword. For example, a self-
+  referencing dict `{"self": obj}` encodes as
+  `(obj_0: dict ((str c2VsZg==) obj_0))` (no `(ref obj_0)` marker). See
+  [issue #27](https://github.com/link-foundation/lino-objects-codec/issues/27)
+  for the rationale.
 
 This approach allows for:
 - Universal representation of object graphs

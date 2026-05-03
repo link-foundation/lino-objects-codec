@@ -240,3 +240,42 @@ test('array and object circular reference', () => {
   assert.equal(decoded.arr[0], 1);
   assert.equal(decoded.arr[1], decoded); // Circular reference
 });
+
+// Tests for the encoded format itself: circular references must use built-in
+// links-notation references (a bare `obj_N` link) rather than the legacy
+// `(ref obj_N)` marker. See issue #27.
+test('encoded format uses built-in references, not (ref X) marker', () => {
+  const obj = {};
+  obj.self = obj;
+  const encoded = encode({ obj });
+
+  // Self-reference should appear as a bare `obj_0` link, not wrapped in (ref ...)
+  assert.match(
+    encoded,
+    /obj_0/,
+    `expected encoded output to contain bare obj_0 reference, got: ${encoded}`
+  );
+  assert.doesNotMatch(
+    encoded,
+    /\(ref\b/,
+    `expected encoded output to NOT contain (ref ...) marker, got: ${encoded}`
+  );
+
+  // The self-referenced object must be defined inline using the
+  // `(obj_id: type ...)` form, not `(type obj_id ...)`.
+  assert.match(
+    encoded,
+    /\(obj_0:\s*object\b/,
+    `expected (obj_0: object ...) self-reference definition, got: ${encoded}`
+  );
+});
+
+test('decoder rejects legacy (ref X) marker as unknown type', () => {
+  // The legacy form must no longer be supported as a type marker. Decoding
+  // should fail loudly so it cannot silently masquerade as a real type.
+  const legacy = '(object obj_0 ((str c2VsZg==) (ref obj_0)))';
+  assert.throws(
+    () => decode({ notation: legacy }),
+    /Unknown type marker:\s*ref/
+  );
+});
