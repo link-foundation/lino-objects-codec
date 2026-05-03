@@ -207,14 +207,22 @@ jobs:
         run: |
           # Get current version from csproj
           CURRENT_VERSION=$(grep -Po '(?<=<Version>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
+          PACKAGE_ID=$(grep -Po '(?<=<PackageId>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
+          PACKAGE_ID_LC=$(echo "$PACKAGE_ID" | tr '[:upper:]' '[:lower:]')
           echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "package_id=$PACKAGE_ID" >> $GITHUB_OUTPUT
 
-          # Check if tag exists
-          if git rev-parse "csharp-v$CURRENT_VERSION" >/dev/null 2>&1; then
-            echo "Tag csharp-v$CURRENT_VERSION already exists, skipping release"
+          # Decide based on the registry, not on the local git tag. NuGet's flat-container index
+          # returns 200 for an existing package id and 404 otherwise; the version-specific .nuspec
+          # endpoint pinpoints whether a particular version is published. See
+          # docs/case-studies/issue-25/README.md for why we no longer trust the tag.
+          STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://api.nuget.org/v3-flatcontainer/${PACKAGE_ID_LC}/${CURRENT_VERSION}/${PACKAGE_ID_LC}.nuspec")
+          echo "NuGet HTTP status for ${PACKAGE_ID}@${CURRENT_VERSION}: ${STATUS}"
+          if [ "$STATUS" = "200" ]; then
+            echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} already on NuGet, skipping publish"
             echo "should_release=false" >> $GITHUB_OUTPUT
           else
-            echo "New version detected: $CURRENT_VERSION"
+            echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} is NOT on NuGet, will publish"
             echo "should_release=true" >> $GITHUB_OUTPUT
           fi
 
@@ -232,13 +240,14 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           if [ -z "$NUGET_API_KEY" ]; then
-            echo "::warning::NUGET_API_KEY not set, skipping publish to NuGet"
-          else
-            dotnet nuget push artifacts/*.nupkg \
-              --api-key "$NUGET_API_KEY" \
-              --source https://api.nuget.org/v3/index.json \
-              --skip-duplicate
+            echo "::error::NUGET_API_KEY is not set; cannot publish to NuGet."
+            echo "Configure NUGET_API_KEY as a repository secret. See docs/case-studies/issue-25/README.md."
+            exit 1
           fi
+          dotnet nuget push artifacts/*.nupkg \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -304,13 +313,14 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           if [ -z "$NUGET_API_KEY" ]; then
-            echo "::warning::NUGET_API_KEY not set, skipping publish to NuGet"
-          else
-            dotnet nuget push artifacts/*.nupkg \
-              --api-key "$NUGET_API_KEY" \
-              --source https://api.nuget.org/v3/index.json \
-              --skip-duplicate
+            echo "::error::NUGET_API_KEY is not set; cannot publish to NuGet."
+            echo "Configure NUGET_API_KEY as a repository secret. See docs/case-studies/issue-25/README.md."
+            exit 1
           fi
+          dotnet nuget push artifacts/*.nupkg \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

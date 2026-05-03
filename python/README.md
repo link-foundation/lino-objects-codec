@@ -1,7 +1,9 @@
 # lino-objects-codec (Python)
 
-[![Tests](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/test.yml)
+[![Python CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml)
+[![PyPI](https://img.shields.io/pypi/v/lino-objects-codec?label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/lino-objects-codec/)
 [![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
 
 A Python library to encode/decode objects to/from Links Notation format. This library provides universal serialization and deserialization for Python objects, with built-in support for circular references and complex object graphs.
 

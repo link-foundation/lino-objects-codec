@@ -3,10 +3,10 @@
 Create a GitHub release from CHANGELOG.md content.
 
 Usage:
-    python scripts/create_github_release.py --version VERSION --repository REPO
+    python scripts/create_github_release.py --version VERSION --repository REPO [--tag-prefix PREFIX]
 
 Example:
-    python scripts/create_github_release.py --version 1.2.3 --repository owner/repo
+    python scripts/create_github_release.py --version 1.2.3 --repository owner/repo --tag-prefix python-v
 
 Environment variables:
     GH_TOKEN or GITHUB_TOKEN: GitHub token for authentication
@@ -72,10 +72,15 @@ def extract_changelog_entry(changelog_path: Path, version: str) -> str:
 
 
 def create_release(
-    version: str, repository: str, release_notes: str, prerelease: bool = False
+    version: str,
+    repository: str,
+    release_notes: str,
+    prerelease: bool = False,
+    tag_prefix: str = "v",
 ) -> None:
     """Create a GitHub release using gh CLI."""
-    tag = f"v{version}"
+    tag = f"{tag_prefix}{version}"
+    title = f"Python {version}" if tag_prefix == "python-v" else tag
 
     print(f"\nCreating GitHub release for {tag}...")
     print(f"Repository: {repository}")
@@ -90,7 +95,7 @@ def create_release(
         "--repo",
         repository,
         "--title",
-        tag,
+        title,
         "--notes",
         release_notes,
     ]
@@ -124,6 +129,11 @@ def main() -> int:
         action="store_true",
         help="Mark as prerelease",
     )
+    parser.add_argument(
+        "--tag-prefix",
+        default="v",
+        help='Tag prefix for the release (e.g. "python-v"); default "v"',
+    )
 
     args = parser.parse_args()
 
@@ -154,7 +164,13 @@ def main() -> int:
         release_notes = extract_changelog_entry(changelog_path, args.version)
 
         # Create release
-        create_release(args.version, args.repository, release_notes, args.prerelease)
+        create_release(
+            args.version,
+            args.repository,
+            release_notes,
+            args.prerelease,
+            args.tag_prefix,
+        )
 
         return 0
 

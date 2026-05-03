@@ -1,5 +1,10 @@
 # lino-objects-codec (C#)
 
+[![C# CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml)
+[![NuGet](https://img.shields.io/nuget/v/Lino.Objects.Codec?label=NuGet&logo=nuget)](https://www.nuget.org/packages/Lino.Objects.Codec)
+[![NuGet downloads](https://img.shields.io/nuget/dt/Lino.Objects.Codec?label=downloads)](https://www.nuget.org/packages/Lino.Objects.Codec)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
+
 A C# library for working with Links Notation format. This library provides universal serialization/deserialization for C# objects with circular reference support.
 
 ## Features
