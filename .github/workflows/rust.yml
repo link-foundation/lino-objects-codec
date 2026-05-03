@@ -175,6 +175,10 @@ jobs:
         working-directory: ./rust
         run: node scripts/check-file-size.mjs
 
+      - name: Run CI script tests
+        working-directory: ./rust
+        run: node --test scripts/*.test.mjs
+
   # === TEST ===
   # Test runs independently of changelog check
   test:
@@ -284,33 +288,16 @@ jobs:
         working-directory: ./rust
         run: node scripts/get-bump-type.mjs
 
-      - name: Check if version already released
-        id: version_check
+      - name: Check if release is needed
+        id: release_check
         working-directory: ./rust
-        run: |
-          # Get current version from Cargo.toml
-          CURRENT_VERSION=$(grep -Po '(?<=^version = ")[^"]*' Cargo.toml)
-          PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' Cargo.toml | head -1)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-
-          # Decide based on the registry, not on the local git tag.
-          # A 200 from crates.io means the package@version is already published; otherwise we should
-          # publish. This makes the pipeline self-healing if a previous publish was silently skipped
-          # (see docs/case-studies/issue-25/README.md).
-          STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://crates.io/api/v1/crates/${PACKAGE_NAME}/${CURRENT_VERSION}")
-          echo "crates.io HTTP status for ${PACKAGE_NAME}@${CURRENT_VERSION}: ${STATUS}"
-          if [ "$STATUS" = "200" ]; then
-            echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} already on crates.io, skipping publish"
-            echo "should_release=false" >> $GITHUB_OUTPUT
-          else
-            echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} is NOT on crates.io, will publish"
-            echo "should_release=true" >> $GITHUB_OUTPUT
-          fi
+        env:
+          HAS_FRAGMENTS: ${{ steps.bump_type.outputs.has_fragments }}
+        run: node scripts/check-release-needed.mjs
 
       - name: Collect changelog and bump version
         id: version
-        if: steps.version_check.outputs.should_release == 'true' && steps.bump_type.outputs.has_fragments == 'true'
+        if: steps.release_check.outputs.should_release == 'true' && steps.release_check.outputs.skip_bump != 'true'
         working-directory: ./rust
         run: |
           node scripts/version-and-commit.mjs \
@@ -318,19 +305,19 @@ jobs:
 
       - name: Get current version
         id: current_version
-        if: steps.version_check.outputs.should_release == 'true'
+        if: steps.release_check.outputs.should_release == 'true'
         working-directory: ./rust
         run: |
           VERSION=$(grep -Po '(?<=^version = ")[^"]*' Cargo.toml)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build release
-        if: steps.version_check.outputs.should_release == 'true'
+        if: steps.release_check.outputs.should_release == 'true'
         working-directory: ./rust
         run: cargo build --release
 
       - name: Publish to crates.io
-        if: steps.version_check.outputs.should_release == 'true'
+        if: steps.release_check.outputs.should_release == 'true'
         working-directory: ./rust
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
@@ -351,7 +338,7 @@ jobs:
             exit 1
           fi
           # `cargo publish` exits non-zero on retry if the version already exists; we tolerate that
-          # because the registry probe in version_check already proved the version is missing, so a
+          # because the registry probe in release_check already proved the version is missing, so a
           # late "already exists" error means a parallel run won the race -- treat as success.
           if ! OUT=$(cargo publish 2>&1); then
             echo "$OUT"
@@ -376,7 +363,7 @@ jobs:
           echo "$OUT"
 
       - name: Create GitHub Release
-        if: steps.version_check.outputs.should_release == 'true'
+        if: steps.release_check.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ./rust

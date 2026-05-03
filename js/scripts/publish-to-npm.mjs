@@ -102,11 +102,27 @@ function findFailurePattern(output, patterns) {
 }
 
 /**
- * Print a credential-recovery runbook to GitHub Actions logs.
+ * Detect failures that should print credential and trusted-publisher guidance.
+ * @param {string} output
+ * @returns {boolean}
  */
-function printCredentialRunbook() {
+function isLikelyAccessFailure(output) {
+  return (
+    Boolean(findFailurePattern(output, CREDENTIAL_FAILURE_PATTERNS)) ||
+    /E404 Not Found - PUT https:\/\/registry\.npmjs\.org\//i.test(output) ||
+    /npm error 404 Not Found - PUT https:\/\/registry\.npmjs\.org\//i.test(
+      output
+    )
+  );
+}
+
+/**
+ * Print a credential-recovery runbook to GitHub Actions logs.
+ * @param {string} packageName
+ */
+function printCredentialRunbook(packageName) {
   console.error(
-    '::error title=npm credentials problem::npm publish failed with an authentication error.'
+    '::error title=npm credentials or trusted publisher problem::npm publish failed with an authentication or package-access error.'
   );
   console.error('');
   console.error('How to fix:');
@@ -117,7 +133,7 @@ function printCredentialRunbook() {
     '     but the package on npm must list this GitHub repository as a trusted publisher.'
   );
   console.error(
-    '     Configure it at: https://www.npmjs.com/package/<package-name>/access'
+    `     Configure it at: https://www.npmjs.com/package/${packageName}/access`
   );
   console.error('     Docs: https://docs.npmjs.com/trusted-publishers');
   console.error('');
@@ -183,9 +199,10 @@ async function runChangesetPublish() {
  * succeeded. Returns null on success or an Error describing the failure.
  * @param {object|null} publishResult
  * @param {Error|null} commandError
+ * @param {string} packageName
  * @returns {Error|null}
  */
-function analyzePublishResult(publishResult, commandError) {
+function analyzePublishResult(publishResult, commandError, packageName) {
   const combinedOutput = publishResult
     ? `${publishResult.stdout || ''}\n${publishResult.stderr || ''}`
     : '';
@@ -201,8 +218,8 @@ function analyzePublishResult(publishResult, commandError) {
 
   const failurePattern = findFailurePattern(combinedOutput, FAILURE_PATTERNS);
   if (failurePattern) {
-    if (findFailurePattern(combinedOutput, CREDENTIAL_FAILURE_PATTERNS)) {
-      printCredentialRunbook();
+    if (isLikelyAccessFailure(combinedOutput)) {
+      printCredentialRunbook(packageName);
     }
     return new Error(
       `Publish failed: detected "${failurePattern}" in changeset output`
@@ -225,7 +242,7 @@ function analyzePublishResult(publishResult, commandError) {
  */
 async function attemptPublish(packageName, currentVersion) {
   const { result, error } = await runChangesetPublish();
-  const analysisError = analyzePublishResult(result, error);
+  const analysisError = analyzePublishResult(result, error, packageName);
   if (analysisError) {
     return { success: false, error: analysisError };
   }

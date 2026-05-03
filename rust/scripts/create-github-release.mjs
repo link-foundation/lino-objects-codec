@@ -15,6 +15,8 @@
 
 import { readFileSync } from 'fs';
 
+import { isAlreadyExistingReleaseError } from './crates-release-helpers.mjs';
+
 // Load use-m dynamically
 const { use } = eval(
   await (await fetch('https://unpkg.com/use-m/use.js')).text()
@@ -31,8 +33,13 @@ const config = makeConfig({
       .version(false) // Disable yargs built-in --version to use our custom version option
       .option('version', {
         type: 'string',
-        default: getenv('VERSION', ''),
+        default: getenv('VERSION', getenv('RELEASE_VERSION', '')),
         describe: 'Version number (e.g., 1.0.0)',
+      })
+      .option('release-version', {
+        type: 'string',
+        default: getenv('RELEASE_VERSION', ''),
+        describe: 'Version number (alias for --version)',
       })
       .option('repository', {
         type: 'string',
@@ -46,7 +53,8 @@ const config = makeConfig({
       }),
 });
 
-const { version, repository, tagPrefix } = config;
+const { releaseVersion, repository, tagPrefix } = config;
+const version = config.version || releaseVersion;
 
 if (!version || !repository) {
   console.error('Error: Missing required arguments');
@@ -75,7 +83,10 @@ try {
   if (match) {
     // Remove the version header itself and trim
     releaseNotes = match[0]
-      .replace(new RegExp(`## \\[?${version.replace(/\./g, '\\.')}\\]?[^\\n]*`), '')
+      .replace(
+        new RegExp(`## \\[?${version.replace(/\./g, '\\.')}\\]?[^\\n]*`),
+        ''
+      )
       .trim();
   }
 
@@ -91,9 +102,28 @@ try {
     body: releaseNotes,
   });
 
-  await $`gh api repos/${repository}/releases -X POST --input -`.run({
-    stdin: payload,
-  });
+  const result =
+    await $`gh api repos/${repository}/releases -X POST --input -`.run({
+      stdin: payload,
+      capture: true,
+    });
+
+  if (result.stdout) {
+    console.log(result.stdout);
+  }
+
+  if (result.stderr) {
+    console.error(result.stderr);
+  }
+
+  if (result.code && result.code !== 0) {
+    const output = `${result.stdout || ''}\n${result.stderr || ''}`;
+    if (isAlreadyExistingReleaseError(output)) {
+      console.log(`GitHub release already exists: ${tag}`);
+      process.exit(0);
+    }
+    throw new Error(`gh api exited with code ${result.code}`);
+  }
 
   console.log(`\u2705 Created GitHub release: ${tag}`);
 } catch (error) {

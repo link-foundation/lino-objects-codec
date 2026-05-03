@@ -244,30 +244,6 @@ jobs:
           verbose: true
           skip-existing: true
 
-      - name: Diagnose PyPI publish failure
-        if: failure() && steps.pypi_publish.outcome == 'failure'
-        run: |
-          echo "::error title=PyPI publish failed::pypa/gh-action-pypi-publish exited with an error."
-          echo ""
-          echo "Most common causes & fixes:"
-          echo "  1. 'Trusted publisher … not configured' / 'invalid-publisher':"
-          echo "     PyPI does not yet trust this repository+workflow. Configure it at:"
-          echo "       https://pypi.org/manage/project/${{ steps.version_check.outputs.package_name }}/settings/publishing/"
-          echo "     Match: owner=${{ github.repository_owner }}, repo=$(basename ${{ github.repository }}),"
-          echo "            workflow=python.yml, environment=(blank unless you set one)."
-          echo ""
-          echo "  2. Token-based auth in use but PYPI_API_TOKEN missing/expired:"
-          echo "     Generate at https://pypi.org/manage/account/token/ and store as a repo secret."
-          echo ""
-          echo "  3. id-token: write missing on the job (this workflow already has it)."
-          echo ""
-          echo "  4. Version already published: skip-existing is true so PyPI conflicts are tolerated;"
-          echo "     a hard failure here means something else is wrong."
-          echo ""
-          echo "Docs: https://docs.pypi.org/trusted-publishers/"
-          echo "      docs/case-studies/issue-29/README.md"
-          exit 1
-
       - name: Verify package on PyPI
         if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
         run: |
@@ -377,30 +353,6 @@ jobs:
           packages-dir: python/dist/
           verbose: true
           skip-existing: true
-
-      - name: Diagnose PyPI publish failure
-        if: failure() && steps.pypi_publish.outcome == 'failure'
-        run: |
-          echo "::error title=PyPI publish failed::pypa/gh-action-pypi-publish exited with an error."
-          echo ""
-          echo "Most common causes & fixes:"
-          echo "  1. 'Trusted publisher … not configured' / 'invalid-publisher':"
-          echo "     PyPI does not yet trust this repository+workflow. Configure it at:"
-          echo "       https://pypi.org/manage/project/${{ steps.pkg.outputs.package_name }}/settings/publishing/"
-          echo "     Match: owner=${{ github.repository_owner }}, repo=$(basename ${{ github.repository }}),"
-          echo "            workflow=python.yml, environment=(blank unless you set one)."
-          echo ""
-          echo "  2. Token-based auth in use but PYPI_API_TOKEN missing/expired:"
-          echo "     Generate at https://pypi.org/manage/account/token/ and store as a repo secret."
-          echo ""
-          echo "  3. id-token: write missing on the job (this workflow already has it)."
-          echo ""
-          echo "  4. Version already published: skip-existing is true so PyPI conflicts are tolerated;"
-          echo "     a hard failure here means something else is wrong."
-          echo ""
-          echo "Docs: https://docs.pypi.org/trusted-publishers/"
-          echo "      docs/case-studies/issue-29/README.md"
-          exit 1
 
       - name: Verify package on PyPI
         if: (steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true') && steps.pypi_publish.outcome == 'success'
