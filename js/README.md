@@ -1,5 +1,10 @@
 # lino-objects-codec (JavaScript)
 
+[![JS CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/js.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/js.yml)
+[![npm](https://img.shields.io/npm/v/lino-objects-codec?label=npm&logo=npm)](https://www.npmjs.com/package/lino-objects-codec)
+[![npm downloads](https://img.shields.io/npm/dm/lino-objects-codec.svg)](https://www.npmjs.com/package/lino-objects-codec)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
+
 A JavaScript library for working with Links Notation format. This library provides:
 
 - Universal serialization/deserialization for JavaScript objects with circular reference support

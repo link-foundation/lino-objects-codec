@@ -1,5 +1,10 @@
 # lino-objects-codec (Rust)
 
+[![Rust CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml)
+[![crates.io](https://img.shields.io/crates/v/lino-objects-codec?label=crates.io&logo=rust)](https://crates.io/crates/lino-objects-codec)
+[![docs.rs](https://img.shields.io/docsrs/lino-objects-codec?label=docs.rs)](https://docs.rs/lino-objects-codec)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
+
 Rust implementation of the Links Notation Objects Codec - a universal serialization library to encode/decode objects to/from Links Notation format.
 
 ## Installation

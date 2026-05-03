@@ -4,7 +4,18 @@
 [![Python CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/python.yml)
 [![Rust CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/rust.yml)
 [![C# CI](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml/badge.svg)](https://github.com/link-foundation/lino-objects-codec/actions/workflows/csharp.yml)
+
+### Package versions
+
+[![npm](https://img.shields.io/npm/v/lino-objects-codec?label=npm&logo=npm)](https://www.npmjs.com/package/lino-objects-codec)
+[![PyPI](https://img.shields.io/pypi/v/lino-objects-codec?label=PyPI&logo=pypi&logoColor=white)](https://pypi.org/project/lino-objects-codec/)
+[![crates.io](https://img.shields.io/crates/v/lino-objects-codec?label=crates.io&logo=rust)](https://crates.io/crates/lino-objects-codec)
+[![NuGet](https://img.shields.io/nuget/v/Lino.Objects.Codec?label=NuGet&logo=nuget)](https://www.nuget.org/packages/Lino.Objects.Codec)
 [![Python Version](https://img.shields.io/pypi/pyversions/lino-objects-codec.svg)](https://pypi.org/project/lino-objects-codec/)
+
+> A "no badge / not found" state on any of the registry badges above means the corresponding
+> package has not been published yet for that version. The badges read live from the package
+> registries, so they always reflect the latest published state.
 
 Universal serialization library to encode/decode objects to/from Links Notation format. Available in **Python**, **JavaScript**, **Rust**, and **C#** with identical functionality and API design.
 
