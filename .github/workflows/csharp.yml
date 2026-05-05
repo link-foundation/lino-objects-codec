@@ -234,6 +234,7 @@ jobs:
           path: csharp/artifacts/
 
       - name: Publish to NuGet
+        id: nuget_publish
         if: steps.version_check.outputs.should_release == 'true'
         working-directory: ./csharp
         env:
@@ -275,6 +276,35 @@ jobs:
           fi
           echo "$OUT"
 
+      - name: Verify package on NuGet
+        # Mirrors the PyPI verification step (see python.yml). The NuGet CDN can
+        # take a minute or so to mirror a successful push; without an explicit
+        # registry probe the workflow can succeed even if the package never
+        # surfaces. See docs/case-studies/issue-33/README.md.
+        if: steps.version_check.outputs.should_release == 'true' && steps.nuget_publish.outcome == 'success'
+        run: |
+          PKG="${{ steps.version_check.outputs.package_id }}"
+          VER="${{ steps.version_check.outputs.current_version }}"
+          if [ -z "$PKG" ]; then
+            echo "::warning title=NuGet verification skipped::package_id not exported by version_check; skipping verify."
+            exit 0
+          fi
+          PKG_LOWER=$(echo "$PKG" | tr '[:upper:]' '[:lower:]')
+          for i in 1 2 3 4 5 6; do
+            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' \
+              "https://api.nuget.org/v3-flatcontainer/${PKG_LOWER}/${VER}/${PKG_LOWER}.nuspec")
+            echo "Attempt $i: NuGet HTTP status for ${PKG}@${VER}: ${STATUS}"
+            if [ "$STATUS" = "200" ]; then
+              echo "✅ Verified ${PKG}@${VER} is on NuGet"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error title=NuGet verification failed::${PKG}@${VER} is not on NuGet after publish."
+          echo "The publish step reported success but the registry does not see the version."
+          echo "See docs/case-studies/issue-33/README.md for the runbook."
+          exit 1
+
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
         env:
@@ -284,7 +314,8 @@ jobs:
           node scripts/create-github-release.mjs \
             --version "${{ steps.version_check.outputs.current_version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "csharp-v"
+            --tag-prefix "csharp_v" \
+            --language "C#"
 
   # Manual release via workflow_dispatch
   manual-release:
@@ -383,4 +414,5 @@ jobs:
           node scripts/create-github-release.mjs \
             --version "${{ steps.version.outputs.new_version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "csharp-v"
+            --tag-prefix "csharp_v" \
+            --language "C#"
