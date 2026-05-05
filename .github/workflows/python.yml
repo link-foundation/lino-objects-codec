@@ -273,7 +273,8 @@ jobs:
           python scripts/create_github_release.py \
             --version "${{ steps.version_check.outputs.current_version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "python-v"
+            --tag-prefix "python_v" \
+            --language "Python"
 
   # Manual release via workflow_dispatch - only after CI passes
   manual-release:
@@ -382,4 +383,5 @@ jobs:
           python scripts/create_github_release.py \
             --version "${{ steps.version.outputs.new_version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "python-v"
+            --tag-prefix "python_v" \
+            --language "Python"

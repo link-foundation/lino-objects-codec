@@ -51,6 +51,14 @@ const { shouldPull } = config;
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 10000; // 10 seconds
 
+// Verification retries: npm registry CDN can take a few seconds to propagate
+// after a successful publish. Retrying verification (not re-publish) avoids
+// false-positive failures and avoids unnecessary "already published" warnings
+// from changesets/cli that surface as ##[error] annotations in CI.
+// See: docs/case-studies/issue-33/README.md (run 25288053638).
+const VERIFY_MAX_ATTEMPTS = 5;
+const VERIFY_INITIAL_DELAY = 3000; // 3 seconds; doubles each attempt up to ~48s total
+
 // Patterns that indicate publish failure in changeset output.
 // `@changesets/cli` exits 0 even when individual packages fail; these are the
 // stable markers it prints in that case, plus the standard npm error code lines.
@@ -234,8 +242,43 @@ function analyzePublishResult(publishResult, commandError, packageName) {
 }
 
 /**
+ * Verify with retries that the version is visible on the npm registry.
+ * The publish call may have already succeeded, so retry only the read-side
+ * `npm view`. Otherwise the outer publish retry would re-invoke
+ * `npm run changeset:publish` and produce the misleading
+ * "##[error] ... 0.3.5 is not on npm after publish" annotation seen in
+ * run 25288053638 even though the publish itself was fine.
+ * @param {string} packageName
+ * @param {string} currentVersion
+ * @returns {Promise<boolean>}
+ */
+async function verifyPublishedWithRetry(packageName, currentVersion) {
+  let delay = VERIFY_INITIAL_DELAY;
+  for (let attempt = 1; attempt <= VERIFY_MAX_ATTEMPTS; attempt++) {
+    console.log(
+      `Verifying ${packageName}@${currentVersion} on npm (attempt ${attempt}/${VERIFY_MAX_ATTEMPTS})...`
+    );
+    await sleep(delay);
+    const isPublished = await verifyPublished(packageName, currentVersion);
+    if (isPublished) {
+      console.log(
+        `✅ Verified ${packageName}@${currentVersion} is live on npm.`
+      );
+      return true;
+    }
+    if (attempt < VERIFY_MAX_ATTEMPTS) {
+      console.log(
+        `Not yet visible on npm CDN; waiting ${delay / 1000}s before next check...`
+      );
+      delay *= 2;
+    }
+  }
+  return false;
+}
+
+/**
  * Single publish attempt: run changeset, scan output, then re-query the
- * registry to make absolutely sure the version is there.
+ * registry (with retries) to make absolutely sure the version is there.
  * @param {string} packageName
  * @param {string} currentVersion
  * @returns {Promise<{success: boolean, error: Error|null}>}
@@ -247,10 +290,10 @@ async function attemptPublish(packageName, currentVersion) {
     return { success: false, error: analysisError };
   }
 
-  // Allow npm registry caches a moment to propagate
-  console.log('Verifying package was published to npm...');
-  await sleep(2000);
-  const isPublished = await verifyPublished(packageName, currentVersion);
+  const isPublished = await verifyPublishedWithRetry(
+    packageName,
+    currentVersion
+  );
   if (isPublished) {
     return { success: true, error: null };
   }
@@ -316,6 +359,11 @@ async function main() {
 
     // Publish to npm using OIDC trusted publishing with retry logic
     // Multi-layer failure detection based on link-assistant/agent PR #116 (see file header).
+    // Before each retry, re-check the registry: if the previous attempt actually
+    // succeeded but verification timed out, we must NOT call
+    // `npm run changeset:publish` again — that produces a misleading
+    // "already published" warning and surfaces ##[error] annotations
+    // (see docs/case-studies/issue-33/README.md, run 25288053638).
     for (let i = 1; i <= MAX_RETRIES; i++) {
       console.log(`Publish attempt ${i} of ${MAX_RETRIES}...`);
       const { success, error } = await attemptPublish(
@@ -335,6 +383,17 @@ async function main() {
           `Publish failed: ${error.message}, waiting ${RETRY_DELAY / 1000}s before retry...`
         );
         await sleep(RETRY_DELAY);
+
+        // Final guard before re-publishing: if the previous attempt succeeded
+        // and CDN propagation just lagged, avoid duplicate publish.
+        if (await verifyPublished(packageName, currentVersion)) {
+          setOutput('published', 'true');
+          setOutput('published_version', currentVersion);
+          console.log(
+            `✅ Verified ${packageName}@${currentVersion} appeared on npm during retry delay; skipping re-publish.`
+          );
+          return;
+        }
       }
     }
 

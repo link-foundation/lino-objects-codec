@@ -371,7 +371,8 @@ jobs:
           node scripts/create-github-release.mjs \
             --version "${{ steps.current_version.outputs.version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "rust-v"
+            --tag-prefix "rust_v" \
+            --language "Rust"
 
   # === MANUAL INSTANT RELEASE ===
   # Manual release via workflow_dispatch - only after CI passes
@@ -473,7 +474,8 @@ jobs:
           node scripts/create-github-release.mjs \
             --version "${{ steps.version.outputs.new_version }}" \
             --repository "${{ github.repository }}" \
-            --tag-prefix "rust-v"
+            --tag-prefix "rust_v" \
+            --language "Rust"
 
   # === MANUAL CHANGELOG PR ===
   changelog-pr:

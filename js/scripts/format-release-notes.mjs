@@ -26,6 +26,10 @@
  */
 
 import { readFileSync } from 'fs';
+import {
+  buildNpmVersionBadge,
+  normalizeReleaseVersionForBadge,
+} from './release-format-helpers.mjs';
 
 // Read the package name from package.json so the badge always points at the
 // real npm registry entry. Hardcoding this caused issue #29's false-positive.
@@ -194,8 +198,11 @@ try {
   }
 
   // Build formatted release notes
-  const versionWithoutV = version.replace(/^v/, '');
-  const npmBadge = `[![npm version](https://img.shields.io/badge/npm-${versionWithoutV}-blue.svg)](https://www.npmjs.com/package/${PACKAGE_NAME}/v/${versionWithoutV})`;
+  // Strip any language prefix (e.g. "js-v0.3.5" or "js_v0.3.5") so the badge
+  // shows bare semver and links to the correct npm package URL.
+  // See docs/case-studies/issue-33/README.md for the broken-badge bug.
+  const versionWithoutV = normalizeReleaseVersionForBadge(version);
+  const npmBadge = buildNpmVersionBadge(PACKAGE_NAME, version);
 
   let formattedBody = `${cleanDescription}`;
 
