@@ -1,5 +1,11 @@
 # lino-objects-codec
 
+## 0.4.0
+
+### Minor Changes
+
+- a9ad369: Add recursive readable indented object formatting and parsing for untyped repository data.
+
 ## 0.3.6
 
 ### Patch Changes
