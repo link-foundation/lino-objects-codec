@@ -266,11 +266,11 @@ test('formatIndented - basic object', () => {
     },
   });
   const lines = result.split('\n');
-  assert.equal(lines[0], '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019');
-  assert.equal(lines[1], '  uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"');
-  assert.equal(lines[2], '  status "executed"');
-  assert.equal(lines[3], '  command "echo test"');
-  assert.equal(lines[4], '  exitCode "0"');
+  assert.equal(lines[0], '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019:');
+  assert.equal(lines[1], "  uuid '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019'");
+  assert.equal(lines[2], '  status executed');
+  assert.equal(lines[3], "  command 'echo test'");
+  assert.equal(lines[4], "  exitCode '0'");
 });
 
 test('formatIndented - custom indentation', () => {
@@ -280,8 +280,8 @@ test('formatIndented - custom indentation', () => {
     indent: '    ', // 4 spaces
   });
   const lines = result.split('\n');
-  assert.equal(lines[0], 'test-id');
-  assert.equal(lines[1], '    key "value"');
+  assert.equal(lines[0], 'test-id:');
+  assert.equal(lines[1], '    key value');
 });
 
 test('formatIndented - value with double quotes', () => {
@@ -291,7 +291,7 @@ test('formatIndented - value with double quotes', () => {
     obj: { message: 'He said "hello"' },
   });
   const lines = result.split('\n');
-  assert.equal(lines[0], 'test-id');
+  assert.equal(lines[0], 'test-id:');
   assert.equal(lines[1], `  message 'He said "hello"'`);
 });
 
@@ -301,7 +301,7 @@ test('formatIndented - key with space', () => {
     obj: { 'key with space': 'value' },
   });
   const lines = result.split('\n');
-  assert.equal(lines[0], 'test-id');
+  assert.equal(lines[0], 'test-id:');
   assert.ok(
     lines[1].includes("'key with space'") ||
       lines[1].includes('"key with space"')
@@ -314,8 +314,8 @@ test('formatIndented - null value', () => {
     obj: { key: null },
   });
   const lines = result.split('\n');
-  assert.equal(lines[0], 'test-id');
-  assert.equal(lines[1], '  key "null"');
+  assert.equal(lines[0], 'test-id:');
+  assert.equal(lines[1], '  key null');
 });
 
 test('formatIndented - requires id', () => {
@@ -328,6 +328,36 @@ test('formatIndented - requires plain object', () => {
   assert.throws(() => formatIndented({ id: 'test', obj: [1, 2, 3] }), {
     message: 'obj must be a plain object for formatIndented',
   });
+});
+
+test('formatIndented - recursively formats nested objects and arrays', () => {
+  const result = formatIndented({
+    id: 'obj_root',
+    obj: {
+      title: 'Indian Law',
+      defaultLanguage: 'en',
+      maxLines: 1500,
+      nested: { ok: true },
+      items: ['a', 1],
+    },
+  });
+
+  assert.equal(
+    result,
+    `obj_root:
+  title 'Indian Law'
+  defaultLanguage en
+  maxLines 1500
+  nested obj_root_nested
+  items obj_root_items
+
+obj_root_nested:
+  ok true
+
+obj_root_items:
+  a
+  1`
+  );
 });
 
 // Tests for parseIndented
@@ -369,6 +399,33 @@ test('parseIndented - empty lines are skipped', () => {
   assert.equal(result.obj.another, 'value2');
 });
 
+test('parseIndented - resolves recursive object and array definitions', () => {
+  const text = `obj_root:
+  title 'Indian Law'
+  defaultLanguage en
+  maxLines 1500
+  nested obj_root_nested
+  items obj_root_items
+
+obj_root_nested:
+  ok true
+
+obj_root_items:
+  a
+  1`;
+
+  const result = parseIndented({ text });
+
+  assert.equal(result.id, 'obj_root');
+  assert.deepEqual(result.obj, {
+    title: 'Indian Law',
+    defaultLanguage: 'en',
+    maxLines: 1500,
+    nested: { ok: true },
+    items: ['a', 1],
+  });
+});
+
 test('parseIndented - requires text', () => {
   assert.throws(() => parseIndented({}), {
     message: 'text is required for parseIndented',
@@ -398,6 +455,26 @@ test('formatIndented/parseIndented roundtrip - with quotes', () => {
   const original = {
     id: 'test-id',
     obj: { message: 'He said "hello"' },
+  };
+
+  const formatted = formatIndented(original);
+  const parsed = parseIndented({ text: formatted });
+
+  assert.equal(parsed.id, original.id);
+  assert.deepEqual(parsed.obj, original.obj);
+});
+
+test('formatIndented/parseIndented roundtrip - ambiguous strings and empty containers', () => {
+  const original = {
+    id: 'obj_root',
+    obj: {
+      idString: 'obj_root',
+      numberString: '1500',
+      booleanString: 'true',
+      nullString: 'null',
+      emptyArray: [],
+      emptyObject: {},
+    },
   };
 
   const formatted = formatIndented(original);

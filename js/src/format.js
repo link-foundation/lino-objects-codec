@@ -334,40 +334,164 @@ export function formatAsLino(options = {}) {
 }
 
 /**
- * Format a value for display in indented Links Notation.
- * Uses quoting strategy compatible with the links-notation parser:
- * - If value contains double quotes, wrap in single quotes
- * - Otherwise, wrap in double quotes
+ * Quote a reference even when Links Notation would allow it to remain bare.
  *
  * @private
- * @param {*} value - The value to format
- * @returns {string} Formatted value with appropriate quotes
+ * @param {string} value - The reference value to quote
+ * @returns {string} Quoted reference
  */
-function formatIndentedValue(value) {
-  if (value === null || value === undefined) {
-    return '"null"';
-  }
-
+function quoteReference(value) {
   const str = String(value);
 
-  // If contains double quotes but no single quotes, use single quotes
-  if (str.includes('"') && !str.includes("'")) {
-    return `'${str}'`;
-  }
-
-  // If contains single quotes but no double quotes, use double quotes
   if (str.includes("'") && !str.includes('"')) {
     return `"${str}"`;
   }
 
-  // If contains both, use single quotes and escape internal single quotes
-  if (str.includes("'") && str.includes('"')) {
-    const escaped = str.replace(/'/g, "''");
-    return `'${escaped}'`;
+  if (str.includes('"') && !str.includes("'")) {
+    return `'${str}'`;
   }
 
-  // Default: use double quotes
-  return `"${str}"`;
+  if (str.includes("'") && str.includes('"')) {
+    return `'${str.replace(/'/g, "''")}'`;
+  }
+
+  return `'${str}'`;
+}
+
+/**
+ * Check whether a bare string would be parsed as a dynamic primitive.
+ *
+ * @private
+ * @param {string} value - The string value to check
+ * @returns {boolean} True when the string should be quoted to remain a string
+ */
+function isAmbiguousStringReference(value) {
+  if (value === '') {
+    return true;
+  }
+
+  if (value === 'true' || value === 'false' || value === 'null') {
+    return true;
+  }
+
+  const num = Number(value);
+  return !isNaN(num) && value.trim() !== '';
+}
+
+/**
+ * Format a scalar value for display in indented Links Notation.
+ *
+ * @private
+ * @param {*} value - The value to format
+ * @param {Set<string>} [reservedReferences] - References that should remain unambiguous strings
+ * @returns {string} Formatted scalar value
+ */
+function formatIndentedScalarValue(value, reservedReferences = new Set()) {
+  if (value === null || value === undefined) {
+    return 'null';
+  }
+
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+
+  if (typeof value === 'string') {
+    if (reservedReferences.has(value) || isAmbiguousStringReference(value)) {
+      return quoteReference(value);
+    }
+    reservedReferences.add(value);
+    return escapeReference({ value });
+  }
+
+  return escapeReference({ value: String(value) });
+}
+
+/**
+ * Sanitize an object key/path segment into a stable Links Notation id segment.
+ *
+ * @private
+ * @param {*} value - Value to turn into an id segment
+ * @returns {string} Sanitized id segment
+ */
+function sanitizeIdentifierPart(value) {
+  const sanitized = String(value)
+    .replace(/[^A-Za-z0-9_-]+/g, '_')
+    .replace(/^_+|_+$/g, '');
+
+  return sanitized || 'item';
+}
+
+/**
+ * Create a unique child definition id for a nested object or array.
+ *
+ * @private
+ * @param {string} parentId - Parent definition id
+ * @param {string|number} key - Child key or array index
+ * @param {Set<string>} usedIds - Already used definition ids
+ * @returns {string} Unique child definition id
+ */
+function createChildId(parentId, key, usedIds) {
+  const baseId = `${sanitizeIdentifierPart(parentId)}_${sanitizeIdentifierPart(key)}`;
+  let candidate = baseId;
+  let counter = 2;
+
+  while (usedIds.has(candidate)) {
+    candidate = `${baseId}_${counter}`;
+    counter += 1;
+  }
+
+  usedIds.add(candidate);
+  return candidate;
+}
+
+/**
+ * Check whether a value should be emitted as a separate indented definition.
+ *
+ * @private
+ * @param {*} value - The value to check
+ * @returns {boolean} True for non-null objects and non-empty arrays
+ */
+function shouldUseIndentedDefinition(value) {
+  if (value === null || typeof value !== 'object') {
+    return false;
+  }
+
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+
+  return true;
+}
+
+/**
+ * Format a child value, creating a queued definition for nested objects/arrays.
+ *
+ * @private
+ * @param {*} value - Child value
+ * @param {string} parentId - Parent definition id
+ * @param {string|number} key - Child key or array index
+ * @param {Array<{ id: string, value: * }>} childDefinitions - Queued children
+ * @param {Set<string>} usedIds - Already used definition ids
+ * @returns {string} Formatted scalar value or child definition reference
+ */
+function formatIndentedChildValue(
+  value,
+  parentId,
+  key,
+  childDefinitions,
+  usedIds
+) {
+  if (Array.isArray(value) && value.length === 0) {
+    return '()';
+  }
+
+  if (shouldUseIndentedDefinition(value)) {
+    const childId = createChildId(parentId, key, usedIds);
+    childDefinitions.push({ id: childId, value });
+    return escapeReference({ value: childId });
+  }
+
+  return formatIndentedScalarValue(value, usedIds);
 }
 
 /**
@@ -375,9 +499,12 @@ function formatIndentedValue(value) {
  *
  * This format is designed for human readability, displaying objects as:
  * ```
- * <identifier>
- *   <key> "<value>"
- *   <key> "<value>"
+ * <identifier>:
+ *   <key> <value>
+ *   <key> <nested-definition-id>
+ *
+ * <nested-definition-id>:
+ *   <nested-key> <nested-value>
  *   ...
  * ```
  *
@@ -388,11 +515,11 @@ function formatIndentedValue(value) {
  *   })
  *
  * Returns:
- *   6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
- *     uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
- *     status "executed"
- *     command "echo test"
- *     exitCode "0"
+ *   6dcf4c1b-ff3f-482c-95ab-711ea7d1b019:
+ *     uuid '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019'
+ *     status executed
+ *     command 'echo test'
+ *     exitCode '0'
  *
  * @param {Object} options - Options
  * @param {string} options.id - The object identifier (displayed on first line)
@@ -411,36 +538,314 @@ export function formatIndented(options = {}) {
     throw new Error('obj must be a plain object for formatIndented');
   }
 
-  const lines = [id];
+  const rootId = String(id);
+  const usedIds = new Set([rootId]);
+  const sections = [];
 
-  for (const [key, value] of Object.entries(obj)) {
-    const escapedKey = escapeReference({ value: key });
-    const formattedValue = formatIndentedValue(value);
-    lines.push(`${indent}${escapedKey} ${formattedValue}`);
+  function formatDefinition(definitionId, value, ancestors = new Set()) {
+    if (value !== null && typeof value === 'object') {
+      if (ancestors.has(value)) {
+        throw new Error(
+          'formatIndented does not support circular references; use encode/decode for typed object graphs'
+        );
+      }
+      ancestors = new Set([...ancestors, value]);
+    }
+
+    const childDefinitions = [];
+    const lines = [`${escapeReference({ value: definitionId })}:`];
+
+    if (Array.isArray(value)) {
+      for (let index = 0; index < value.length; index += 1) {
+        const formattedValue = formatIndentedChildValue(
+          value[index],
+          definitionId,
+          index,
+          childDefinitions,
+          usedIds
+        );
+        lines.push(`${indent}${formattedValue}`);
+      }
+    } else {
+      for (const [key, childValue] of Object.entries(value)) {
+        const escapedKey = escapeReference({ value: key });
+        const formattedValue = formatIndentedChildValue(
+          childValue,
+          definitionId,
+          key,
+          childDefinitions,
+          usedIds
+        );
+        lines.push(`${indent}${escapedKey} ${formattedValue}`);
+      }
+    }
+
+    sections.push(lines.join('\n'));
+
+    for (const childDefinition of childDefinitions) {
+      formatDefinition(childDefinition.id, childDefinition.value, ancestors);
+    }
   }
 
-  return lines.join('\n');
+  formatDefinition(rootId, obj);
+  return sections.join('\n\n');
+}
+
+/**
+ * Find a definition header colon outside quoted text.
+ *
+ * @private
+ * @param {string} line - Header line
+ * @returns {number} Colon index, or -1 when there is no header colon
+ */
+function findHeaderColon(line) {
+  let quote = null;
+
+  for (let index = 0; index < line.length; index += 1) {
+    const char = line[index];
+
+    if (quote) {
+      if (char === quote) {
+        if (line[index + 1] === quote) {
+          index += 1;
+        } else {
+          quote = null;
+        }
+      }
+      continue;
+    }
+
+    if (char === "'" || char === '"' || char === '`') {
+      quote = char;
+      continue;
+    }
+
+    if (char === ':') {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+/**
+ * Check whether a character starts/ends a quoted reference.
+ *
+ * @private
+ * @param {string} char - Character to check
+ * @returns {boolean} True for supported quote characters
+ */
+function isIndentedQuote(char) {
+  return char === "'" || char === '"' || char === '`';
+}
+
+/**
+ * Skip whitespace starting at index.
+ *
+ * @private
+ * @param {string} line - Line to scan
+ * @param {number} index - Starting index
+ * @returns {number} First non-whitespace index
+ */
+function skipIndentedWhitespace(line, index) {
+  while (index < line.length && /\s/.test(line[index])) {
+    index += 1;
+  }
+
+  return index;
+}
+
+/**
+ * Read a quoted indented reference.
+ *
+ * @private
+ * @param {string} line - Line to scan
+ * @param {number} index - Index of the opening quote
+ * @returns {{ token: { value: string, quoted: boolean }, nextIndex: number }} Parsed token and next index
+ */
+function readQuotedIndentedReference(line, index) {
+  const quote = line[index];
+  let value = '';
+  index += 1;
+
+  while (index < line.length) {
+    const char = line[index];
+
+    if (char !== quote) {
+      value += char;
+      index += 1;
+      continue;
+    }
+
+    if (line[index + 1] === quote) {
+      value += quote;
+      index += 2;
+      continue;
+    }
+
+    index += 1;
+    if (index < line.length && !/\s/.test(line[index])) {
+      throw new Error(`Invalid quoted reference: ${line}`);
+    }
+
+    return {
+      token: { value, quoted: true },
+      nextIndex: index,
+    };
+  }
+
+  throw new Error(`Unterminated quoted reference: ${line}`);
+}
+
+/**
+ * Read a bare indented reference.
+ *
+ * @private
+ * @param {string} line - Line to scan
+ * @param {number} index - Starting index
+ * @returns {{ token: { value: string, quoted: boolean }, nextIndex: number }} Parsed token and next index
+ */
+function readBareIndentedReference(line, index) {
+  const start = index;
+
+  while (index < line.length && !/\s/.test(line[index])) {
+    index += 1;
+  }
+
+  return {
+    token: { value: line.slice(start, index), quoted: false },
+    nextIndex: index,
+  };
+}
+
+/**
+ * Tokenize one indented Links Notation line into references while preserving
+ * whether each reference was quoted.
+ *
+ * @private
+ * @param {string} line - Line content without leading indentation
+ * @returns {Array<{ value: string, quoted: boolean }>} Parsed references
+ */
+function tokenizeIndentedReferences(line) {
+  const tokens = [];
+  let index = 0;
+
+  while (index < line.length) {
+    index = skipIndentedWhitespace(line, index);
+
+    if (index >= line.length) {
+      break;
+    }
+
+    const result = isIndentedQuote(line[index])
+      ? readQuotedIndentedReference(line, index)
+      : readBareIndentedReference(line, index);
+    tokens.push(result.token);
+    index = result.nextIndex;
+  }
+
+  return tokens;
+}
+
+/**
+ * Parse a definition header line.
+ *
+ * @private
+ * @param {string} line - Header line without leading/trailing whitespace
+ * @returns {string} Definition id
+ */
+function parseIndentedDefinitionId(line) {
+  const colonIndex = findHeaderColon(line);
+  const idText = colonIndex === -1 ? line : line.slice(0, colonIndex).trimEnd();
+
+  if (colonIndex !== -1 && line.slice(colonIndex + 1).trim() !== '') {
+    throw new Error(`Invalid definition header: ${line}`);
+  }
+
+  const tokens = tokenizeIndentedReferences(idText);
+
+  if (tokens.length !== 1) {
+    throw new Error(`Invalid definition header: ${line}`);
+  }
+
+  return tokens[0].value;
+}
+
+/**
+ * Split indented Links Notation text into top-level definitions.
+ *
+ * @private
+ * @param {string} text - Indented Links Notation text
+ * @returns {Array<{ id: string, childLines: string[] }>} Parsed definitions
+ */
+function splitIndentedDefinitions(text) {
+  const definitions = [];
+  let currentDefinition = null;
+
+  for (const rawLine of text.split(/\r?\n/)) {
+    if (!rawLine.trim()) {
+      continue;
+    }
+
+    if (/^\s/.test(rawLine)) {
+      if (!currentDefinition) {
+        throw new Error('Indented value found before a definition header');
+      }
+
+      currentDefinition.childLines.push(rawLine.trim());
+      continue;
+    }
+
+    currentDefinition = {
+      id: parseIndentedDefinitionId(rawLine.trim()),
+      childLines: [],
+    };
+    definitions.push(currentDefinition);
+  }
+
+  return definitions;
+}
+
+/**
+ * Parse a token into a dynamic scalar.
+ *
+ * @private
+ * @param {{ value: string, quoted: boolean }} token - Token to parse
+ * @returns {*} Parsed scalar value
+ */
+function parseIndentedScalarToken(token) {
+  if (token.quoted) {
+    return token.value;
+  }
+
+  if (token.value === '()') {
+    return [];
+  }
+
+  return parseReference(token.value);
 }
 
 /**
  * Parse an indented Links Notation string back to an object.
  *
- * This function uses the links-notation parser for proper parsing,
- * supporting the standard Links Notation indented syntax.
+ * This parser handles the recursive definition format emitted by
+ * formatIndented. Quoted references stay strings, while unquoted references are
+ * parsed dynamically as numbers, booleans, null, definition references, or
+ * strings.
  *
  * Parses strings like:
  * ```
- * <identifier>
- *   <key> "<value>"
- *   <key> "<value>"
+ * <identifier>:
+ *   <key> <value>
+ *   <key> <nested-definition-id>
+ *
+ * <nested-definition-id>:
+ *   <nested-key> <nested-value>
  *   ...
  * ```
  *
- * The format with colon after identifier is also supported (standard lino):
- * ```
- * <identifier>:
- *   <key> "<value>"
- * ```
+ * The legacy flat format without a colon after the root identifier is also
+ * accepted.
  *
  * @param {Object} options - Options
  * @param {string} options.text - The indented Links Notation string to parse
@@ -453,61 +858,85 @@ export function parseIndented(options = {}) {
     throw new Error('text is required for parseIndented');
   }
 
-  const lines = text.split('\n');
-  if (lines.length === 0) {
-    throw new Error('text must have at least one line (the identifier)');
-  }
+  const definitions = splitIndentedDefinitions(text);
 
-  // Filter out empty lines to preserve indentation structure for the parser
-  // Empty lines would break the indentation context in links-notation
-  const nonEmptyLines = lines.filter((line) => line.trim());
-
-  if (nonEmptyLines.length === 0) {
+  if (definitions.length === 0) {
     throw new Error(
       'text must have at least one non-empty line (the identifier)'
     );
   }
 
-  // Convert to standard lino format by adding colon after first line if not present
-  // This allows the links-notation parser to properly parse the indented structure
-  const firstLine = nonEmptyLines[0].trim();
-  let linoText;
-  if (!firstLine.endsWith(':')) {
-    linoText = `${firstLine}:\n${nonEmptyLines.slice(1).join('\n')}`;
-  } else {
-    linoText = nonEmptyLines.join('\n');
+  const definitionMap = new Map();
+  for (const definition of definitions) {
+    if (definitionMap.has(definition.id)) {
+      throw new Error(`Duplicate indented definition id: ${definition.id}`);
+    }
+    definitionMap.set(definition.id, definition);
   }
 
-  // Use links-notation parser
-  const parsed = parser.parse(linoText);
+  const parsedDefinitions = new Map();
+  for (const definition of definitions) {
+    const childTokens = definition.childLines.map((line) =>
+      tokenizeIndentedReferences(line)
+    );
 
-  if (!parsed || parsed.length === 0) {
-    throw new Error('Failed to parse indented Links Notation');
-  }
-
-  // Extract id and key-value pairs from parsed result
-  const mainLink = parsed[0];
-  const id = mainLink.id || '';
-  const obj = {};
-
-  // Process the values array - each entry is a doublet (key value)
-  for (const child of mainLink.values || []) {
-    if (child.values && child.values.length === 2) {
-      const keyRef = child.values[0];
-      const valueRef = child.values[1];
-
-      // Get key string
-      const key = keyRef.id || '';
-
-      // Get value string, handling null
-      const valueStr = valueRef.id;
-      if (valueStr === 'null') {
-        obj[key] = null;
-      } else {
-        obj[key] = valueStr;
+    for (const tokens of childTokens) {
+      if (tokens.length !== 1 && tokens.length !== 2) {
+        throw new Error(`Invalid indented value line in ${definition.id}`);
       }
     }
+
+    const isArray =
+      childTokens.length > 0 &&
+      childTokens.every((tokens) => tokens.length === 1);
+    const isObject = childTokens.every((tokens) => tokens.length === 2);
+
+    if (!isArray && !isObject) {
+      throw new Error(
+        `Cannot mix array items and object pairs in ${definition.id}`
+      );
+    }
+
+    parsedDefinitions.set(definition.id, {
+      isArray,
+      childTokens,
+    });
   }
 
-  return { id, obj };
+  const decodedDefinitions = new Map();
+
+  function decodeToken(token) {
+    if (!token.quoted && definitionMap.has(token.value)) {
+      return decodeDefinition(token.value);
+    }
+
+    return parseIndentedScalarToken(token);
+  }
+
+  function decodeDefinition(definitionId) {
+    if (decodedDefinitions.has(definitionId)) {
+      return decodedDefinitions.get(definitionId);
+    }
+
+    const parsedDefinition = parsedDefinitions.get(definitionId);
+    const result = parsedDefinition.isArray ? [] : {};
+    decodedDefinitions.set(definitionId, result);
+
+    if (parsedDefinition.isArray) {
+      for (const tokens of parsedDefinition.childTokens) {
+        result.push(decodeToken(tokens[0]));
+      }
+      return result;
+    }
+
+    for (const tokens of parsedDefinition.childTokens) {
+      const key = tokens[0].value;
+      result[key] = decodeToken(tokens[1]);
+    }
+
+    return result;
+  }
+
+  const rootId = definitions[0].id;
+  return { id: rootId, obj: decodeDefinition(rootId) };
 }

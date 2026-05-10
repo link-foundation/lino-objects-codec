@@ -2,8 +2,9 @@
  * Lino Objects Codec - Universal serializer/deserializer for JavaScript objects.
  *
  * This library provides:
- * - Typed serialization/deserialization of JavaScript objects to/from Links Notation format
- * - Support for circular references and complex object graphs
+ * - Readable recursive indented Links Notation for JSON-style repository data
+ * - Typed serialization/deserialization for exact JavaScript object graphs
+ * - Typed support for circular references and shared object identity
  * - JSON to Links Notation conversion utilities
  * - Fuzzy matching utilities for string comparison
  *
@@ -17,7 +18,7 @@
 // Typed object codec (preserves types with markers like (int 42), (str base64))
 export { ObjectCodec, encode, decode } from './codec.js';
 
-// Formatting utilities for JSON/Lino conversion
+// Formatting utilities for readable indented data and compact JSON/Lino conversion
 export {
   escapeReference,
   unescapeReference,
