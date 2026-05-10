@@ -73,13 +73,13 @@ npm install lino-objects-codec
 ```
 
 ```javascript
-import { encode, decode } from 'lino-objects-codec';
+import { formatIndented, parseIndented } from "lino-objects-codec";
 
-// Encode and decode
-const data = { name: 'Alice', age: 30, active: true };
-const encoded = encode(data);
-const decoded = decode(encoded);
-console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
+// Readable indented Links Notation for repository data
+const data = { name: "Alice", age: 30, active: true };
+const text = formatIndented({ id: "obj_root", obj: data });
+const { obj } = parseIndented({ text });
+console.log(JSON.stringify(obj) === JSON.stringify(data)); // true
 ```
 
 ### Rust
@@ -166,6 +166,7 @@ All implementations support the same features with language-appropriate syntax:
 ### Circular References
 
 **Python:**
+
 ```python
 from link_notation_objects_codec import encode, decode
 
@@ -177,8 +178,9 @@ assert decoded[3] is decoded  # Reference preserved
 ```
 
 **JavaScript:**
+
 ```javascript
-import { encode, decode } from 'lino-objects-codec';
+import { encode, decode } from "lino-objects-codec";
 
 // Self-referencing array
 const arr = [1, 2, 3];
@@ -188,6 +190,7 @@ console.log(decoded[3] === decoded); // true - Reference preserved
 ```
 
 **Rust:**
+
 ```rust
 use lino_objects_codec::{encode, decode, LinoValue};
 
@@ -199,6 +202,7 @@ let decoded = decode(&encoded).unwrap();
 ```
 
 **C#:**
+
 ```csharp
 using Lino.Objects.Codec;
 
@@ -212,6 +216,7 @@ Console.WriteLine(ReferenceEquals(decoded, decoded?[0])); // True - Reference pr
 ### Complex Nested Structures
 
 **Python:**
+
 ```python
 data = {
     "users": [
@@ -224,18 +229,20 @@ assert decode(encode(data)) == data
 ```
 
 **JavaScript:**
+
 ```javascript
 const data = {
   users: [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' }
+    { id: 1, name: "Alice" },
+    { id: 2, name: "Bob" },
   ],
-  metadata: { version: 1, count: 2 }
+  metadata: { version: 1, count: 2 },
 };
 console.log(JSON.stringify(decode(encode(data))) === JSON.stringify(data));
 ```
 
 **Rust:**
+
 ```rust
 use lino_objects_codec::{encode, decode, LinoValue};
 
@@ -253,6 +260,7 @@ assert_eq!(decode(&encode(&data)).unwrap(), data);
 ```
 
 **C#:**
+
 ```csharp
 var data = new Dictionary<string, object?>
 {
@@ -273,27 +281,34 @@ var decoded = Codec.Decode(Codec.Encode(data));
 The indented format provides a human-readable representation for displaying objects:
 
 **JavaScript:**
+
 ```javascript
-import { formatIndented, parseIndented } from 'lino-objects-codec';
+import { formatIndented, parseIndented } from "lino-objects-codec";
 
 // Format an object with an identifier
 const formatted = formatIndented({
-  id: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
-  obj: { uuid: '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', status: 'executed', command: 'echo test', exitCode: '0' }
+  id: "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019",
+  obj: {
+    uuid: "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019",
+    status: "executed",
+    command: "echo test",
+    exitCode: "0",
+  },
 });
 console.log(formatted);
 // Output:
-// 6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
-//   uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
-//   status "executed"
-//   command "echo test"
-//   exitCode "0"
+// 6dcf4c1b-ff3f-482c-95ab-711ea7d1b019:
+//   uuid '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019'
+//   status executed
+//   command 'echo test'
+//   exitCode '0'
 
 // Parse it back
 const { id, obj } = parseIndented({ text: formatted });
 ```
 
 **Python:**
+
 ```python
 from link_notation_objects_codec import format_indented, parse_indented
 
@@ -308,6 +323,7 @@ id, obj = parse_indented(formatted)
 ```
 
 **Rust:**
+
 ```rust
 use lino_objects_codec::format::{format_indented_ordered, parse_indented};
 
@@ -320,6 +336,7 @@ let (id, obj) = parse_indented(&formatted).unwrap();
 ```
 
 **C#:**
+
 ```csharp
 using Lino.Objects.Codec;
 
@@ -345,6 +362,7 @@ The library uses the [links-notation](https://github.com/link-foundation/links-n
 - Circular references use direct object ID references: `obj_0` (without the `ref` keyword)
 
 This approach allows for:
+
 - Universal representation of object graphs
 - Preservation of object identity
 - Natural handling of circular references using built-in links notation syntax

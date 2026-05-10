@@ -2,13 +2,30 @@
  * Basic usage examples for lino-objects-codec.
  */
 
-import { encode, decode } from '../src/index.js';
+import { encode, decode, formatIndented, parseIndented } from '../src/index.js';
 
-function main() {
-  console.log('=== Link Notation Objects Codec Examples ===\n');
+function runReadableIndentedExample() {
+  console.log('1. Readable Indented Data:');
+  const repositoryData = {
+    title: 'Indian Law',
+    defaultLanguage: 'en',
+    maxLines: 1500,
+    nested: { ok: true },
+    items: ['a', 1],
+  };
+  const readableLino = formatIndented({
+    id: 'obj_root',
+    obj: repositoryData,
+  });
+  console.log(readableLino);
+  const parsedReadable = parseIndented({ text: readableLino });
+  console.log(
+    `  Parsed match: ${JSON.stringify(parsedReadable.obj) === JSON.stringify(repositoryData)}`
+  );
+}
 
-  // Example 1: Basic types
-  console.log('1. Basic Types:');
+function runTypedBasicValuesExample() {
+  console.log('\n2. Typed Basic Values:');
   const basicExamples = [
     null,
     undefined,
@@ -33,9 +50,10 @@ function main() {
       console.error(`  ERROR: Mismatch for ${obj}`);
     }
   }
+}
 
-  // Example 2: Collections
-  console.log('\n2. Collections:');
+function runTypedCollectionsExample() {
+  console.log('\n3. Typed Collections:');
   const arrayExample = [1, 2, 3, 'hello', true];
   const objectExample = { name: 'Alice', age: 30, active: true };
 
@@ -56,9 +74,10 @@ function main() {
   console.log(
     `  Match: ${JSON.stringify(decodedObject) === JSON.stringify(objectExample)}`
   );
+}
 
-  // Example 3: Nested structures
-  console.log('\n3. Nested Structures:');
+function runTypedNestedStructuresExample() {
+  console.log('\n4. Typed Nested Structures:');
   const nested = {
     users: [
       { id: 1, name: 'Alice', admin: true },
@@ -74,9 +93,10 @@ function main() {
   console.log(
     `  Match: ${JSON.stringify(decodedNested) === JSON.stringify(nested)}`
   );
+}
 
-  // Example 4: Circular references
-  console.log('\n4. Circular References:');
+function runCircularReferencesExample() {
+  console.log('\n5. Circular References:');
 
   // Self-referencing array
   const arr = [1, 2, 3];
@@ -109,9 +129,10 @@ function main() {
   if (decodedObjectCircular.self !== decodedObjectCircular) {
     console.error('  ERROR: Circular reference not preserved!');
   }
+}
 
-  // Example 5: Shared references
-  console.log('\n5. Shared Object References:');
+function runSharedReferencesExample() {
+  console.log('\n6. Shared Object References:');
   const shared = { shared: 'data', value: 42 };
   const container = { first: shared, second: shared, third: shared };
   console.log('  Created container with 3 references to same object');
@@ -136,6 +157,17 @@ function main() {
       '  ERROR: Modification not visible through shared reference!'
     );
   }
+}
+
+function main() {
+  console.log('=== Link Notation Objects Codec Examples ===\n');
+
+  runReadableIndentedExample();
+  runTypedBasicValuesExample();
+  runTypedCollectionsExample();
+  runTypedNestedStructuresExample();
+  runCircularReferencesExample();
+  runSharedReferencesExample();
 
   console.log('\n=== All examples completed successfully! ===');
 }

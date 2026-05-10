@@ -5,10 +5,11 @@
 [![npm downloads](https://img.shields.io/npm/dm/lino-objects-codec.svg)](https://www.npmjs.com/package/lino-objects-codec)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
 
-A JavaScript library for working with Links Notation format. This library provides:
+A JavaScript library for working with Links Notation format. The default documented path is readable recursive indented Links Notation for repository data, with a typed codec available when exact JavaScript type preservation or object identity is required. This library provides:
 
-- Universal serialization/deserialization for JavaScript objects with circular reference support
-- JSON to Links Notation conversion utilities
+- Readable recursive indented Links Notation for JSON-style objects
+- Typed serialization/deserialization for JavaScript object graphs with circular reference support
+- Compact JSON to Links Notation conversion utilities
 - Fuzzy matching utilities for string comparison
 
 These tools enable easy implementation of higher-level features like:
@@ -18,17 +19,18 @@ These tools enable easy implementation of higher-level features like:
 
 ## Features
 
-- **Universal Serialization**: Encode JavaScript objects to Links Notation format
-- **Type Support**: Handle all common JavaScript types:
+- **Readable Indented Format**: Write nested objects and arrays as reviewable recursive Links Notation definitions with `formatIndented({ id, obj })`
+- **Dynamic Parsing**: Parse readable indented data back with `parseIndented({ text })`; quoted references stay strings and unquoted numbers, booleans, and `null` become dynamic values
+- **Typed Object Codec**: Encode JavaScript object graphs to Links Notation with type markers when exact type preservation is required
+- **Typed Support**: Handle all common JavaScript types:
   - Basic types: `null`, `undefined`, `boolean`, `number`, `string`
   - Collections: `Array`, `Object`
   - Special number values: `NaN`, `Infinity`, `-Infinity`
-- **Circular References**: Automatically detect and preserve circular references
-- **Object Identity**: Maintain object identity for shared references
-- **UTF-8 Support**: Full Unicode string support using base64 encoding
-- **Simple API**: Easy-to-use `encode({ obj: )` and `decode({ notation:  } })` functions
-- **JSON/Lino Conversion**: Convert between JSON and Links Notation with `jsonToLino({ json: )` and `linoToJson({ lino:  } })`
-- **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference({ value: )`
+- **Circular References**: Automatically detect and preserve circular references in the typed codec
+- **Object Identity**: Maintain object identity for shared references in the typed codec
+- **UTF-8 Support**: Full Unicode string support in the typed codec using base64 encoding
+- **Compact JSON/Lino Conversion**: Convert between JSON and compact Links Notation with `jsonToLino({ json })` and `linoToJson({ lino })`
+- **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference({ value })`
 - **Fuzzy Matching**: Find similar strings with Levenshtein distance and keyword similarity
 
 ## Installation
@@ -53,26 +55,78 @@ pnpm add lino-objects-codec
 ## Quick Start
 
 ```javascript
+import { formatIndented, parseIndented } from 'lino-objects-codec';
+
+const data = {
+  title: 'Indian Law',
+  defaultLanguage: 'en',
+  maxLines: 1500,
+  nested: { ok: true },
+  items: ['a', 1],
+};
+
+const lino = formatIndented({ id: 'obj_root', obj: data });
+console.log(lino);
+// Output:
+// obj_root:
+//   title 'Indian Law'
+//   defaultLanguage en
+//   maxLines 1500
+//   nested obj_root_nested
+//   items obj_root_items
+//
+// obj_root_nested:
+//   ok true
+//
+// obj_root_items:
+//   a
+//   1
+
+const parsed = parseIndented({ text: lino });
+console.log(parsed.obj.items[1] === 1);
+// Output: true
+```
+
+Use the typed codec when you need exact JavaScript type preservation, circular references, or shared object identity:
+
+```javascript
 import { encode, decode } from 'lino-objects-codec';
 
-// Encode basic types
-const encoded = encode({ obj: { name: 'Alice', age: 30, active: true } } } });
-console.log(encoded);
-// Output: (object obj_0 ((str bmFt...) (int 30)) ((str YWN0...) (bool true)))
+const obj = { name: 'root' };
+obj.self = obj;
 
-// Decode back to JavaScript object
-const decoded = decode({ notation: encoded } });
-console.log(decoded);
-// Output: { name: 'Alice', age: 30, active: true }
+const encoded = encode({ obj });
+const decoded = decode({ notation: encoded });
 
-// Roundtrip preserves data
-console.log(JSON.stringify(decoded) === JSON.stringify({ name: 'Alice', age: 30, active: true }));
+console.log(decoded.self === decoded);
 // Output: true
 ```
 
 ## Usage Examples
 
-### Basic Types
+### Readable Indented Data
+
+```javascript
+import { formatIndented, parseIndented } from 'lino-objects-codec';
+
+const data = {
+  catalog: {
+    title: 'Indian Law',
+    languages: ['en', 'hi'],
+  },
+  maxLines: 1500,
+};
+
+const text = formatIndented({ id: 'obj_root', obj: data });
+const { obj } = parseIndented({ text });
+
+console.log(obj.catalog.languages[0]);
+// Output: en
+```
+
+Readable indented data is intentionally untyped and acyclic. Use quoted references for strings that look like numbers, booleans, `null`, or generated definition ids. Use the typed codec below when you need circular references, shared object identity, `undefined`, `NaN`, or exact string/number distinctions in all cases.
+
+### Typed Basic Types
 
 ```javascript
 import { encode, decode } from 'lino-objects-codec';
@@ -101,7 +155,7 @@ console.log(decode({ notation: encode({ obj: '你好世界 🌍' } }))); // '你
 console.log(decode({ notation: encode({ obj: 'multi\nline\nstring' } }))); // 'multi\nline\nstring'
 ```
 
-### Collections
+### Typed Collections
 
 ```javascript
 import { encode, decode } from 'lino-objects-codec';
@@ -188,7 +242,7 @@ console.log(lino);
 // Output: ((name Alice) (age 30))
 
 // Convert Links Notation back to JSON
-const json = linoToJson({ lino: '((name Alice }) (age 30))');
+const json = linoToJson({ lino: '((name Alice) (age 30))' });
 console.log(json);
 // Output: { name: 'Alice', age: 30 }
 
@@ -247,7 +301,17 @@ const matches = findAllMatches({ question: { question: 'What is your name?', qaD
 
 ## How It Works
 
-The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target. Each JavaScript object is encoded as a Link with type information:
+The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target.
+
+Readable indented mode emits a root definition and a definition for each nested object or non-empty array:
+
+- Object definitions contain key/value doublets: `title 'Indian Law'`
+- Array definitions contain one value per line
+- Nested values reference generated definition ids such as `obj_root_items`
+- Empty arrays are written as `()`
+- Quoted references parse as strings; unquoted references parse dynamically as numbers, booleans, `null`, definition references, or strings
+
+The typed codec uses explicit type information:
 
 - Basic types are encoded with type markers: `(int 42)`, `(str "hello")`, `(bool true)`
 - Strings are base64-encoded to handle special characters and newlines
@@ -266,9 +330,48 @@ This approach allows for:
 - Universal representation of object graphs
 - Preservation of object identity
 - Natural handling of circular references
-- Human-readable (somewhat) output
+- Exact typed round-trips when readability is less important than preserving JavaScript semantics
 
 ## API Reference
+
+### Readable Indented Data
+
+#### `formatIndented({ id: id, obj: obj, indent: indent })`
+
+Format a plain object as readable recursive indented Links Notation.
+
+**Parameters:**
+
+- `options.id` - Root definition id
+- `options.obj` - Plain object to format
+- `options.indent` - Optional indentation string, defaulting to two spaces
+
+**Returns:**
+
+- Formatted indented Links Notation string
+
+**Throws:**
+
+- `Error` - If `id` is missing, `obj` is not a plain object, or a circular reference is found
+
+```javascript
+formatIndented({
+  id: 'obj_root',
+  obj: { title: 'Indian Law', nested: { ok: true }, items: ['a', 1] },
+});
+```
+
+#### `parseIndented({ text: text })`
+
+Parse readable recursive indented Links Notation back to `{ id, obj }`.
+
+**Parameters:**
+
+- `options.text` - Indented Links Notation text
+
+**Returns:**
+
+- `{ id, obj }`, where `id` is the root definition id and `obj` is the parsed dynamic object
 
 ### Typed Object Codec
 
@@ -308,7 +411,7 @@ The main codec class that performs encoding and decoding. The module-level `enco
 import { ObjectCodec } from 'lino-objects-codec';
 
 const codec = new ObjectCodec();
-const encoded = codec.encode({ data: [1, 2, 3] });
+const encoded = codec.encode({ obj: [1, 2, 3] });
 const decoded = codec.decode({ notation: encoded });
 ```
 
@@ -327,7 +430,7 @@ Convert JSON data to Links Notation format.
 - Links Notation string representation
 
 ```javascript
-jsonToLino({ name: 'Alice', age: 30 });
+jsonToLino({ json: { name: 'Alice', age: 30 } });
 // Returns: ((name Alice) (age 30))
 
 jsonToLino({ json: [1, 2, 3] });
@@ -347,7 +450,7 @@ Convert Links Notation to JSON.
 - Parsed JSON value
 
 ```javascript
-linoToJson({ lino: '((name Alice }) (age 30))');
+linoToJson({ lino: '((name Alice) (age 30))' });
 // Returns: { name: 'Alice', age: 30 }
 ```
 
