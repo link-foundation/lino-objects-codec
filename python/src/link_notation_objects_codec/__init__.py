@@ -8,6 +8,9 @@ Links Notation format, with support for circular references and complex object g
 reads both that and the compact (base64) format written by earlier versions.
 """
 
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _installed_version
+
 from .codec import (
     ObjectCodec,
     decode,
@@ -31,7 +34,12 @@ from .readable import (
     ReadableFormatError,
 )
 
-__version__ = "0.3.0"
+try:
+    #: Read from the installed distribution, so this never drifts from
+    #: ``pyproject.toml`` -- the release pipeline bumps the version in one place.
+    __version__ = _installed_version("lino-objects-codec")
+except PackageNotFoundError:  # pragma: no cover - only when run from a source tree
+    __version__ = "0.0.0+unknown"
 __all__ = [
     "ObjectCodec",
     "encode",
