@@ -328,8 +328,14 @@ readback), `dotnet nuget verify` (verifies signatures, not registry presence).
 | Defect | Template(s) affected | Action |
 | --- | --- | --- |
 | Node 20 actions | verified current in the templates — **not** an upstream defect | none |
-| No crates.io post-publish verification | Rust template has the same blind spot as §3.4 | report upstream |
-| Publish verification budget hard-coded inline instead of using the shared script | Python template's PyPI readback is shorter than its own install smoke test | report upstream |
+| No crates.io post-publish verification | **withdrawn.** `tpl-rust/scripts/wait-for-crate.rs` exists and `release.yml:632` calls it; the blind spot in §3.4 is this repository's, not the template's | none |
+| Publish verification budget | **withdrawn.** `tpl-python/scripts/smoke_test_published_package.py` retries 6 x 20 s and fails the release job if the version never appears; that is a defensible budget for PyPI | none |
+| Change detection ignores the multi-language layout ([js#141](https://github.com/link-foundation/js-ai-driven-development-pipeline-template/issues/141), [rust#139](https://github.com/link-foundation/rust-ai-driven-development-pipeline-template/issues/139)) | JavaScript and Rust templates: `detect-code-changes` matches exclusion prefixes such as `examples/` against repository-root paths, so in the `js/` / `rust/` layout that `js-paths.mjs` and `rust-paths.rs` explicitly support, nothing is ever excluded. The C# template already solves this with `prefixCsharpRoot()` and the Python template with `removeprefix("python/")` | report upstream |
+
+The first two rows were written from the run evidence before the templates were
+read in full; reading them disproved both claims, and filing them would have been
+noise. They are kept here rather than deleted because a withdrawn hypothesis is
+part of the record.
 
 ---
 
