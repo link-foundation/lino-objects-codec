@@ -362,6 +362,21 @@ jobs:
           fi
           echo "$OUT"
 
+      - name: Verify crate on crates.io
+        # Issue #41: Rust was the only language that published without ever
+        # reading the result back, so a rejected or half-completed upload would
+        # still have produced a green run, a git tag and a GitHub release for a
+        # version nobody can depend on. JavaScript, Python and C# all verify;
+        # now Rust does too.
+        if: steps.release_check.outputs.should_release == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          VER=$(sed -n 's|^version = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          node scripts/wait-for-registry.mjs \
+            --registry crates --name "$CRATE" --version "$VER"
+
       - name: Create GitHub Release
         if: steps.release_check.outputs.should_release == 'true'
         env:
@@ -464,6 +479,15 @@ jobs:
             exit 1
           fi
           echo "$OUT"
+
+      - name: Verify crate on crates.io
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          node scripts/wait-for-registry.mjs --registry crates \
+            --name "$CRATE" --version "${{ steps.version.outputs.new_version }}"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

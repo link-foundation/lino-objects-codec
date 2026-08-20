@@ -1,0 +1,44 @@
+name: Shared CI Scripts
+
+# The repository-level `scripts/` directory holds helpers that every language's
+# pipeline depends on: the cross-language parity gate and the post-publish
+# registry readback. Until issue #41 the only thing that ran their tests was the
+# parity workflow, which is pull-request-only and named a single test file, so a
+# broken helper could reach `main` untested and only surface during a release.
+#
+# This workflow runs every `scripts/*.test.mjs`, on pull requests and on pushes
+# to `main`. It has no `paths:` filter on purpose — a change anywhere can break
+# a shared helper, and a filtered workflow is a check that silently does not run.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# Least privilege: this workflow only ever reads the repository.
+permissions:
+  contents: read
+
+# A read-only check, so superseded runs are safe to cancel.
+concurrency:
+  group: check-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Test Shared Scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run shared script tests
+        run: node --test scripts/*.test.mjs
