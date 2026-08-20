@@ -277,11 +277,18 @@ jobs:
           echo "$OUT"
 
       - name: Verify package on NuGet
-        # Mirrors the PyPI verification step (see python.yml). The NuGet CDN can
-        # take a minute or so to mirror a successful push; without an explicit
-        # registry probe the workflow can succeed even if the package never
-        # surfaces. See docs/case-studies/issue-33/README.md.
+        # Issue #41: this step used to poll the flat-container API six times at
+        # ten-second intervals. NuGet documents package validation and indexing
+        # as taking up to fifteen minutes, so a sixty-second budget reported a
+        # successful publish as a failure — run 32345106283 went red while
+        # 0.2.0 was already on its way to the CDN. The readback now waits for
+        # the window NuGet actually documents. See
+        # dev/log/issues/41/pulls/42/ANALYSIS.md and
+        # docs/case-studies/issue-33/README.md.
         if: steps.version_check.outputs.should_release == 'true' && steps.nuget_publish.outcome == 'success'
+        env:
+          # Switch to '1' when a readback needs diagnosing; quiet by default.
+          REGISTRY_WAIT_VERBOSE: '0'
         run: |
           PKG="${{ steps.version_check.outputs.package_id }}"
           VER="${{ steps.version_check.outputs.current_version }}"
@@ -289,21 +296,8 @@ jobs:
             echo "::warning title=NuGet verification skipped::package_id not exported by version_check; skipping verify."
             exit 0
           fi
-          PKG_LOWER=$(echo "$PKG" | tr '[:upper:]' '[:lower:]')
-          for i in 1 2 3 4 5 6; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' \
-              "https://api.nuget.org/v3-flatcontainer/${PKG_LOWER}/${VER}/${PKG_LOWER}.nuspec")
-            echo "Attempt $i: NuGet HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on NuGet"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "::error title=NuGet verification failed::${PKG}@${VER} is not on NuGet after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-33/README.md for the runbook."
-          exit 1
+          node scripts/wait-for-registry.mjs \
+            --registry nuget --name "$PKG" --version "$VER"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -404,6 +398,25 @@ jobs:
             exit 1
           fi
           echo "$OUT"
+
+      - name: Verify package on NuGet
+        # Issue #41: the manual release path published without ever reading the
+        # package back, so a rejected or partial push would still have left a
+        # green run and a version number that does not exist on NuGet. Both
+        # release paths now verify the same way.
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          PKG=$(sed -n 's|.*<PackageId>\(.*\)</PackageId>.*|\1|p' \
+            csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj | head -1)
+          VER="${{ steps.version.outputs.new_version }}"
+          if [ -z "$PKG" ] || [ -z "$VER" ]; then
+            echo "::error title=NuGet verification skipped::Could not resolve package id or version."
+            exit 1
+          fi
+          node scripts/wait-for-registry.mjs \
+            --registry nuget --name "$PKG" --version "$VER"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
