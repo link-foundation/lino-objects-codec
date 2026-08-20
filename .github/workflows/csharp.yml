@@ -246,38 +246,11 @@ jobs:
       - name: Check for changeset
         working-directory: ./csharp
         env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
           # Passed through the environment: a branch name is attacker-controlled
           # and must never be interpolated straight into a shell script.
           HEAD_REF: ${{ github.head_ref }}
-        run: |
-          # Skip changeset check for automated release PRs
-          if [[ "$HEAD_REF" == "changeset-release/"* ]] || [[ "$HEAD_REF" == "changeset-manual-release-"* ]]; then
-            echo "Skipping changeset check for automated release PR"
-            exit 0
-          fi
-
-          # Get list of changeset files (excluding README.md and config.json)
-          CHANGESET_COUNT=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
-
-          # Get changed files in PR
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-
-          # Check if any source files changed (excluding docs and config)
-          SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "^csharp/(src/|tests/|examples/)" | wc -l)
-
-          if [ "$SOURCE_CHANGED" -gt 0 ] && [ "$CHANGESET_COUNT" -eq 0 ]; then
-            echo "::warning::No changeset found. Please add a changeset in csharp/.changeset/"
-            echo ""
-            echo "To create a changeset:"
-            echo "  cd csharp/.changeset"
-            echo "  Create a file: YYYYMMDD_HHMMSS_description.md"
-            echo ""
-            echo "See csharp/.changeset/README.md for more information."
-            # Note: This is a warning, not a failure, to allow flexibility
-            exit 0
-          fi
-
-          echo "✓ Changeset check passed"
+        run: node scripts/check-changeset.mjs
 
   # Automatic release on push to main (if version changed)
   auto-release:

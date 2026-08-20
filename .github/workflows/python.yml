@@ -223,37 +223,14 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Install scriv
-        run: pip install "scriv[toml]"
-
       - name: Check for changelog fragments
         working-directory: ./python
-        run: |
-          # Get list of fragment files (excluding README and template)
-          FRAGMENTS=$(find changelog.d -name "*.md" ! -name "README.md" ! -name "*.j2" 2>/dev/null | wc -l)
-
-          # Get changed files in PR
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-
-          # Check if any source files changed (excluding docs and config)
-          SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "^python/(src/|tests/|scripts/)" | wc -l)
-
-          if [ "$SOURCE_CHANGED" -gt 0 ] && [ "$FRAGMENTS" -eq 0 ]; then
-            echo "::warning::No changelog fragment found. Please run 'scriv create' and document your changes."
-            echo ""
-            echo "To create a changelog fragment:"
-            echo "  cd python"
-            echo "  pip install 'scriv[toml]'"
-            echo "  scriv create"
-            echo ""
-            echo "This is similar to adding a changeset in JavaScript projects."
-            echo "See python/changelog.d/README.md for more information."
-            # Note: This is a warning, not a failure, to allow flexibility
-            # Change 'exit 0' to 'exit 1' to make it required
-            exit 0
-          fi
-
-          echo "✓ Changelog check passed"
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          # Passed through the environment: a branch name is attacker-controlled
+          # and must never be interpolated straight into a shell script.
+          HEAD_REF: ${{ github.head_ref }}
+        run: python scripts/validate_changeset.py
 
   # RELEASE JOBS - Only run after all CI checks pass
 
