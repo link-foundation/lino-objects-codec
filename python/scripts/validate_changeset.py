@@ -104,9 +104,7 @@ def main() -> int:
         print("  scriv create")
         print()
         print("  # Or using the helper script:")
-        print(
-            "  python scripts/create_manual_changeset.py patch --description 'Your changes'"
-        )
+        print("  python scripts/create_manual_changeset.py patch --description 'Your changes'")
         print()
         print("See changelog.d/README.md for more information.")
         print()
@@ -117,9 +115,7 @@ def main() -> int:
 
     if fragment_count > 1:
         print()
-        print(
-            f"WARNING: Found {fragment_count} fragments. Usually PRs should have only one."
-        )
+        print(f"WARNING: Found {fragment_count} fragments. Usually PRs should have only one.")
         print("Fragments found:")
         for f in fragments:
             print(f"  - {f.name}")

@@ -33,9 +33,7 @@ def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProce
         print(result.stderr, file=sys.stderr)
 
     if check and result.returncode != 0:
-        print(
-            f"Error: Command failed with exit code {result.returncode}", file=sys.stderr
-        )
+        print(f"Error: Command failed with exit code {result.returncode}", file=sys.stderr)
         sys.exit(result.returncode)
 
     return result
