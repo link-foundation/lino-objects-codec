@@ -26,9 +26,10 @@ These tools enable easy implementation of higher-level features like:
   - Basic types: `null`, `undefined`, `boolean`, `number`, `string`
   - Collections: `Array`, `Object`
   - Special number values: `NaN`, `Infinity`, `-Infinity`
-- **Circular References**: Automatically detect and preserve circular references in the typed codec
-- **Object Identity**: Maintain object identity for shared references in the typed codec
-- **UTF-8 Support**: Full Unicode string support in the typed codec using base64 encoding
+- **Readable by Default**: `encode({ obj })` writes plain, indented text that can be read and reviewed
+- **Object Identity**: Shared references and circular references are preserved by the compact format (`encodeCompact`) via object ids
+- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Compact JSON/Lino Conversion**: Convert between JSON and compact Links Notation with `jsonToLino({ json })` and `linoToJson({ lino })`
 - **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference({ value })`
 - **Fuzzy Matching**: Find similar strings with Levenshtein distance and keyword similarity
@@ -87,20 +88,36 @@ console.log(parsed.obj.items[1] === 1);
 // Output: true
 ```
 
-Use the typed codec when you need exact JavaScript type preservation, circular references, or shared object identity:
+`encode({ obj })` writes the readable format. Use `encodeCompact({ obj })` when you
+need exact JavaScript type preservation, circular references, or shared object
+identity -- the compact format names shared nodes with `obj_N` ids, which the
+readable tree has nowhere to put:
 
 ```javascript
-import { encode, decode } from 'lino-objects-codec';
+import { encodeCompact, decode } from 'lino-objects-codec';
 
 const obj = { name: 'root' };
 obj.self = obj;
 
-const encoded = encode({ obj });
+const encoded = encodeCompact({ obj });
 const decoded = decode({ notation: encoded });
 
 console.log(decoded.self === decoded);
 // Output: true
 ```
+
+## Output Formats
+
+| Function                        | Output                                          |
+| ------------------------------- | ----------------------------------------------- |
+| `encode({ obj })`               | Readable, indented Links Notation (the default) |
+| `encode({ obj, indent: '\t' })` | Same, with a custom indentation string          |
+| `encodeCompact({ obj })`        | The previous single-line, base64 form           |
+| `encodeObfuscated({ obj })`     | Alias of `encodeCompact`                        |
+
+`decode({ notation })` accepts every one of them, so files written by older
+versions keep working and are rewritten in the readable form the next time they
+are saved.
 
 ## Usage Examples
 
@@ -192,40 +209,32 @@ console.log(JSON.stringify(decode({ notation: encode({ obj: complexData } }))) =
 
 ### Circular References
 
-The library automatically handles circular references and shared objects:
+Object identity -- shared nodes and cycles -- is a property of the **compact**
+format, which names shared nodes with `obj_N` ids. The readable format is a plain
+tree with nowhere to put those ids, so `encode` throws `CircularReferenceError`
+on a cycle. Use `encodeCompact` when you need identity preserved:
 
 ```javascript
-import { encode, decode } from 'lino-objects-codec';
+import { encode, encodeCompact, decode } from 'lino-objects-codec';
 
-// Self-referencing array
+// Self-referencing array -- preserved by the compact format
 const arr = [1, 2, 3];
 arr.push(arr); // Circular reference
-const encoded = encode({ obj: arr });
-const decoded = decode({ notation: encoded });
+const decoded = decode({ notation: encodeCompact({ obj: arr }) });
 console.log(decoded[3] === decoded); // true - Reference preserved
 
-// Self-referencing object
-const obj = { name: 'root' };
-obj.self = obj; // Circular reference
-const encoded2 = encode({ obj: obj });
-const decoded2 = decode({ notation: encoded2 });
-console.log(decoded2.self === decoded2); // true - Reference preserved
-
-// Shared references
+// Shared references -- the same object is restored once
 const shared = { shared: 'data' };
 const container = { first: shared, second: shared };
-const encoded3 = encode({ obj: container });
-const decoded3 = decode({ notation: encoded3 });
-// Both references point to the same object
+const decoded3 = decode({ notation: encodeCompact({ obj: container }) });
 console.log(decoded3.first === decoded3.second); // true
 
-// Complex circular structure (tree with back-references)
-const root = { name: 'root', children: [] };
-const child = { name: 'child', parent: root };
-root.children.push(child);
-const encoded4 = encode({ obj: root });
-const decoded4 = decode({ notation: encoded4 });
-console.log(decoded4.children[0].parent === decoded4); // true
+// The readable format rejects a cycle rather than losing the identity
+try {
+  encode({ obj: arr });
+} catch (error) {
+  console.log(error.name); // CircularReferenceError
+}
 ```
 
 ### JSON/Lino Conversion
@@ -311,26 +320,55 @@ Readable indented mode emits a root definition and a definition for each nested 
 - Empty arrays are written as `()`
 - Quoted references parse as strings; unquoted references parse dynamically as numbers, booleans, `null`, definition references, or strings
 
-The typed codec uses explicit type information:
+### Readable format (the default)
 
-- Basic types are encoded with type markers: `(int 42)`, `(str "hello")`, `(bool true)`
+`encode({ obj })` writes one `( )` construct for both objects and arrays, at
+every level including the root. Lines of the form `key value` make an object,
+bare-value lines make an array:
+
+- Strings are double-quoted and written as text: `name "Alice"`
+- Numbers, `true`, `false` and `null` are bare, so types survive a round trip
+- `NaN`, `Infinity` and `-Infinity` are written as such
+- An empty array is `()`; an empty object is `(` + newline + `)`
+- A value that cannot be written as text (one containing control characters) is
+  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
+  everything around it stays readable
+
+### Compact format (`encodeCompact`)
+
+The previous single-line form, kept for compatibility and for the object graphs
+the readable tree cannot express (shared and circular references):
+
+- Basic types carry a type marker: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
 - Strings are base64-encoded to handle special characters and newlines
-- Shared / cyclic collections are defined inline with a self-reference id using
-  the built-in links-notation `(self-ref: first-ref second-ref ...)` form, e.g.
-  `(obj_0: array (int 1) (int 2) ...)` or `(obj_0: object (key val) ...)`
-- Circular references use built-in links-notation references — the bare object
-  id link `obj_0` — instead of a dedicated keyword. For example, a self-
-  referencing object `{ self: obj }` encodes as
-  `(obj_0: object ((str c2VsZg==) obj_0))` (no `(ref obj_0)` marker). See
+- Shared / cyclic collections are defined inline with a self-reference id, e.g.
+  `(obj_0: array (int 1) (int 2) ...)`; a self-referencing object `{ self: obj }`
+  encodes as `(obj_0: object ((str c2VsZg==) obj_0))`. See
   [issue #27](https://github.com/link-foundation/lino-objects-codec/issues/27)
   for the rationale.
 
-This approach allows for:
+`decode` detects which of the two forms it is given, so previously written files
+keep decoding.
 
-- Universal representation of object graphs
-- Preservation of object identity
-- Natural handling of circular references
-- Exact typed round-trips when readability is less important than preserving JavaScript semantics
+## Debugging
+
+Tracing is off by default. Turn it on to see what the codec does, either from
+the environment or from code:
+
+```bash
+LINO_CODEC_DEBUG=1 node your_script.js   # 1, true, yes or on
+```
+
+```javascript
+import { setDebugEnabled } from 'lino-objects-codec';
+
+setDebugEnabled(true); // force on
+setDebugEnabled(null); // follow LINO_CODEC_DEBUG again
+```
+
+Trace lines are written to standard error, prefixed with `[lino-codec]`. The
+same switch and the same `LINO_CODEC_DEBUG` variable exist in the Python, Rust
+and C# implementations.
 
 ## API Reference
 

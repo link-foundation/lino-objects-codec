@@ -39,10 +39,10 @@ All implementations share the same design philosophy and provide feature parity.
   - **Rust**: `LinoValue` enum with `Null`, `Bool`, `Int`, `Float`, `String`, `Array`, `Object`
   - **C#**: `null`, `bool`, `int`, `long`, `float`, `double`, `string`, `List<object?>`, `Dictionary<string, object?>`
   - Special float/number values: `NaN`, `Infinity`, `-Infinity`
-- **Circular References**: Automatically detect and preserve circular references
-- **Object Identity**: Maintain object identity for shared references
-- **UTF-8 Support**: Full Unicode string support using base64 encoding
-- **Readable by Default (Rust)**: `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()`
+- **Readable by Default**: In every language `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()` (alias `encode_obfuscated()`)
+- **Object Identity**: Shared references and circular references are preserved by the compact format via object ids; the readable format is a plain tree and raises a circular-reference error instead
+- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 - **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
 - **Reference Escaping**: Properly escape strings for Links Notation format (JavaScript)
@@ -74,13 +74,13 @@ npm install lino-objects-codec
 ```
 
 ```javascript
-import { formatIndented, parseIndented } from "lino-objects-codec";
+import { encode, decode } from "lino-objects-codec";
 
-// Readable indented Links Notation for repository data
+// `encode` produces readable, indented Links Notation by default
 const data = { name: "Alice", age: 30, active: true };
-const text = formatIndented({ id: "obj_root", obj: data });
-const { obj } = parseIndented({ text });
-console.log(JSON.stringify(obj) === JSON.stringify(data)); // true
+const encoded = encode({ obj: data });
+const decoded = decode({ notation: encoded });
+console.log(JSON.stringify(decoded) === JSON.stringify(data)); // true
 ```
 
 ### Rust
@@ -116,7 +116,7 @@ assert_eq!(decoded, data);
 ```
 
 The single-line base64 form is still available as `encode_compact()` (alias
-`encode_obfuscated()`), and `decode()` accepts both forms.
+`encode_obfuscated()`) in every language, and `decode()` accepts both forms.
 
 ### C#
 
@@ -180,39 +180,44 @@ All implementations support the same features with language-appropriate syntax:
 
 ### Circular References
 
+Object identity -- shared nodes and cycles -- is a property of the **compact**
+format, which names shared nodes with `obj_N` ids. The readable format is a plain
+tree with nowhere to put those ids, so `encode()` raises a circular-reference
+error on a cycle; use `encode_compact()` (the compact form) when you need
+identity preserved.
+
 **Python:**
 
 ```python
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import decode, encode_compact
 
-# Self-referencing list
+# Self-referencing list -- preserved by the compact format
 lst = [1, 2, 3]
 lst.append(lst)
-decoded = decode(encode(lst))
+decoded = decode(encode_compact(lst))
 assert decoded[3] is decoded  # Reference preserved
 ```
 
 **JavaScript:**
 
 ```javascript
-import { encode, decode } from "lino-objects-codec";
+import { encodeCompact, decode } from "lino-objects-codec";
 
-// Self-referencing array
+// Self-referencing array -- preserved by the compact format
 const arr = [1, 2, 3];
 arr.push(arr);
-const decoded = decode(encode(arr));
+const decoded = decode({ notation: encodeCompact({ obj: arr }) });
 console.log(decoded[3] === decoded); // true - Reference preserved
 ```
 
 **Rust:**
 
 ```rust
-use lino_objects_codec::{encode, decode, LinoValue};
+use lino_objects_codec::{encode_compact, decode, LinoValue};
 
-// Self-referencing structures are handled via object IDs
+// Self-referencing structures are handled via object ids in the compact form
 let data = LinoValue::array([LinoValue::Int(1), LinoValue::Int(2)]);
-let encoded = encode(&data);
-let decoded = decode(&encoded).unwrap();
+let decoded = decode(&encode_compact(&data)).unwrap();
 // Reference semantics preserved through encoding/decoding
 ```
 
@@ -221,10 +226,10 @@ let decoded = decode(&encoded).unwrap();
 ```csharp
 using Lino.Objects.Codec;
 
-// Self-referencing list
+// Self-referencing list -- preserved by the compact format
 var lst = new List<object?>();
 lst.Add(lst);
-var decoded = Codec.Decode(Codec.Encode(lst)) as List<object?>;
+var decoded = Codec.Decode(Codec.EncodeCompact(lst)) as List<object?>;
 Console.WriteLine(ReferenceEquals(decoded, decoded?[0])); // True - Reference preserved
 ```
 
@@ -367,25 +372,51 @@ var (id, parsedObj) = Format.ParseIndented(formatted);
 
 The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target. Each object is encoded as a Link with type information:
 
-- Basic types are encoded with type markers: `(int 42)`, `(str aGVsbG8=)`, `(bool True)`
+### Readable format (the default)
+
+In every language `encode()` writes one `( )` construct for both objects and
+arrays, at every level including the root. Lines of the form `key value` make an
+object, bare-value lines make an array:
+
+```lino
+(
+  name "Alice"
+  age 30
+  active true
+)
+```
+
+- Strings are double-quoted and written as text; numbers, `true`, `false` and
+  `null` are bare, so types survive a round trip
+- `NaN`, `Infinity` and `-Infinity` are written as such
+- An empty array is `()`; an empty object is `(` + newline + `)`
+- Only a value that cannot be written as text (one containing control characters)
+  is base64-encoded, and it is marked individually as `(base64 "bGluZTEKbGluZTI=")`
+- The four languages produce byte-identical output, checked by the shared
+  fixtures in [`fixtures/readable-format/cases.json`](fixtures/readable-format/cases.json)
+
+### Compact format (`encode_compact`)
+
+The previous single-line form, kept for compatibility and for the object graphs
+the readable tree cannot express (shared and circular references):
+
+- Basic types are encoded with type markers: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
 - Strings are base64-encoded to handle special characters and newlines
-- **Rust exception**: `encode()` defaults to the readable indented form described in
-  [rust/README.md](rust/README.md), where strings are quoted rather than encoded and
-  only values containing control characters are marked as `(base64 "...")`; the form
-  above is what `encode_compact()` produces
-- Collections with self-references use built-in links notation self-reference syntax:
-  - **Format**: `(obj_id: type content...)`
-  - **Python example**: `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
-  - **JavaScript example**: `(obj_0: array (int 1) (int 2) obj_0)` for self-referencing array
-- Simple collections without shared references use format: `(list item1 item2 ...)` or `(dict (key val) ...)`
-- Circular references use direct object ID references: `obj_0` (without the `ref` keyword)
+- Collections with self-references use `(obj_id: type content...)`, e.g.
+  `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
+- Circular references use direct object id references: `obj_0` (without a `ref` keyword)
 
-This approach allows for:
+`decode()` detects which of the two forms it is given, so previously written
+files keep decoding, and every language reads the compact documents the others
+write.
 
-- Universal representation of object graphs
-- Preservation of object identity
-- Natural handling of circular references using built-in links notation syntax
-- Cross-language compatibility
+## Debugging
+
+Tracing is off by default and can be turned on in any language by setting the
+`LINO_CODEC_DEBUG` environment variable to a truthy value (`1`, `true`, `yes` or
+`on`), or from code (`set_debug_enabled` / `setDebugEnabled` /
+`CodecDebug.SetEnabled`). Trace lines go to standard error, prefixed with
+`[lino-codec]`.
 
 ## Development
 
