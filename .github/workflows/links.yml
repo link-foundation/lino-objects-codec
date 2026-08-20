@@ -43,6 +43,8 @@ jobs:
           # `docs/case-studies` and `dev/log` are research records that quote
           # issues, runs and files belonging to other repositories; their links
           # are evidence, not navigation, and must not gate this repository.
+          # `js/node_modules` only exists in local runs, but excluding it keeps
+          # the same command reproducible outside CI.
           args: >-
             --verbose
             --no-progress
@@ -52,6 +54,7 @@ jobs:
             --timeout 30
             --exclude-path docs/case-studies
             --exclude-path dev/log
+            --exclude-path js/node_modules
             './**/*.md'
           fail: true
           jobSummary: true
