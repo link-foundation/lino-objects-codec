@@ -149,3 +149,40 @@ jobs:
         run: |
           python -m pip install -e ".[dev]"
           pip-audit --skip-editable --progress-spinner off
+
+  # === SECRETS DETECTION (best practice #11) ===
+  # Nothing scanned this repository for committed credentials before issue #41.
+  secrets-scan:
+    name: Scan for Committed Secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-secrets-scan
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: a secret that was committed and later removed is
+          # still in the repository and still has to be rotated.
+          fetch-depth: 0
+
+      # The pinned CLI is used instead of gitleaks-action because the action
+      # requires a paid licence key for organisation-owned repositories, while
+      # the binary itself is MIT-licensed and free.
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.28.0
+        run: |
+          curl -sSfL \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar xz gitleaks
+          ./gitleaks version
+
+      # Scans the working tree and the full git history. Findings are redacted
+      # so a real secret is never echoed into the public log (best practice #11:
+      # "Never log environment variables or token values").
+      - name: Scan working tree
+        run: ./gitleaks dir . --no-banner --redact --config .gitleaks.toml
+
+      - name: Scan git history
+        run: ./gitleaks git . --no-banner --redact --config .gitleaks.toml
