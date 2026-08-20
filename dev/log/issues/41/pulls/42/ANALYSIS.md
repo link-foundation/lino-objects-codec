@@ -367,3 +367,102 @@ than a guess:
 - Rust readback — `CRATES_WAIT_VERBOSE=1`.
 
 All three default to off, so normal runs stay quiet.
+
+---
+
+## 9. Execution record
+
+What was actually done, in the order it was committed. Every entry was verified
+locally before it was committed; the verification command is named where it is not
+obvious.
+
+| Commit | Plan step | Change |
+| --- | --- | --- |
+| `cde9620` | 1 | Evidence archive: workflow files, run logs, template copies. |
+| `d913208` | — | This analysis. |
+| `ef20bf6`, `e46dd0b` | 2 | `wait-for-registry.mjs` + tests; called from both C# release paths. |
+| `a797ada`, `097056a` | 3 | Python release helpers linted; PyPI readback widened, failure explained. |
+| `6b1e962` | 4 | crates.io publish verification + shared-script tests. |
+| `fa867ad` | 5, 6 | Every action to its current Node 24 major; Codecov inputs fixed. |
+| `b86f595` | 7 | `PackageReadmeFile` for NuGet; PEP 639 licence metadata for Python. |
+| `bf90ac2` | 8 | `npm audit fix` — 7 advisories (2 moderate, 5 high) cleared. |
+| `4ff3717` | — | JavaScript codec split to clear the 3 standing ESLint warnings. |
+| `9149a3f` | 9 | Top-level `permissions`, `timeout-minutes` everywhere, reader/writer concurrency split, `!cancelled()`. |
+| `1d8dc18` | 9 | actionlint over all workflows. |
+| `d3738cf`, `d28060b` | 10 | `security.yml` and `links.yml`, then the link gate made honest (see §9.2). |
+| `cee793c` | 9 | Fresh-merge simulation (`scripts/simulate-fresh-merge.sh`) in all 15 pull-request check jobs. |
+| `1c3b6e5` | 9 | C# file-size limit; `csharp/scripts` unit tests finally executed in CI. |
+| `f1a50c9` | 10 | gitleaks secret scanning (tree + full history). |
+| `b049685` | — | Python and C# release-note checks made able to fail (see §9.3). |
+| `67ea0a8` | 9 | Python tested on three operating systems, not one. |
+| `f6f143d` | — | Change detection fixed to use package-relative paths (see §9.1). |
+| `967430d` | 9 | `detect-changes` added for Python and C#, closing the last template gap. |
+| `51f7ed4` | 12 | Release notes in all four languages, so the fixed pipeline actually publishes. |
+
+### 9.1 A false positive that only the fix made visible
+
+`js/scripts/detect-code-changes.mjs` and its Rust twin ran with
+`working-directory: ./js` but compared `git diff --name-only` output — which is
+**repository-root**-relative — against package-relative prefixes such as
+`examples/`. In this monorepo the real path is `js/examples/demo.mjs`, so:
+
+- the documented `examples/`, `experiments/`, `docs/` and `.changeset/` exclusions
+  never matched, and an examples-only pull request was reported as a code change
+  and asked for a changeset it does not need — a false positive;
+- `package-changed` could never become `true` — a false negative;
+- Rust's `toml-changed` fired on any `.toml` anywhere, including
+  `python/pyproject.toml`.
+
+This is the same defect class as issue #39. `experiments/detect-code-changes-monorepo-paths.sh`
+reproduces the original behaviour end to end in a scratch repository; the unit
+tests added alongside the fix pin each case down. The prefix is now resolved at
+run time with `git rev-parse --show-prefix`, which keeps the scripts correct in a
+single-package checkout too, where the prefix is empty. The templates are **not**
+affected: they are single-package repositories where the prefix is empty, so this
+is not an upstream report.
+
+### 9.2 Two false positives found by the new gates themselves
+
+Adding a check is only useful if the check is honest, so both new gates were run
+locally before being trusted:
+
+- **lychee** failed with five `[403] https://www.npmjs.com/package/lino-objects-codec`.
+  Verified with `curl` that npmjs.com returns 403 to every non-browser client, with
+  and without a browser `User-Agent`; the links resolve fine in a browser. Recorded
+  in `.lycheeignore` with that reasoning rather than by dropping the badges. Result:
+  `107 OK, 0 Errors, 5 Excluded`.
+- **gitleaks** reported seven `generic-api-key` findings, all of them
+  `key: macOS-cargo-<hex>` lines inside the archived CI logs in this directory —
+  `actions/cache` keys, which are content hashes of `Cargo.lock`. Fixed with a
+  documented path allowlist in `.gitleaks.toml` for the evidence directories only,
+  not by weakening the rule. Result: 0 findings across the tree and all 146 commits.
+
+### 9.3 Checks that were structurally incapable of failing
+
+The Python `changelog` job and the C# `changeset-check` job both ended in
+`::warning::` followed by `exit 0`, and both counted files sitting in a directory
+rather than files in the pull request's diff — so they were green for a pull
+request that changed source with no release note, and green for one whose only
+"fragment" was left over from an earlier unreleased pull request. Both are now
+real scripts (`csharp/scripts/check-changeset.mjs`,
+`python/scripts/validate_changeset.py`) with unit tests, deciding from
+`git diff --name-only --relative origin/<base>...HEAD`. Both also interpolated
+`github.base_ref` directly into a shell command; branch names are
+attacker-controlled and are now passed through the environment.
+
+### 9.4 actionlint and the `queue` key
+
+actionlint reports `unexpected key "queue" for "concurrency" section` on the
+release jobs. `concurrency.queue` is documented by GitHub but is not yet in
+actionlint's bundled schema, so the lint step passes
+`-ignore 'unexpected key "queue" for "concurrency" section'`. This is a tool
+limitation, recorded here so the ignore is removed rather than inherited once
+actionlint catches up.
+
+### 9.5 Parity gate
+
+`scripts/check-language-parity.mjs` fails on this pull request with
+"Changed: JavaScript, C# / Missing a matching change: Python, Rust" because the
+work is CI/CD infrastructure rather than a codec feature, and the four languages
+needed different amounts of it. The gate's own documented escape hatch applies:
+the pull request body carries `[skip-parity]` with this reasoning.

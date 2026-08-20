@@ -12,3 +12,7 @@
   0, so a pull request could change `python/src` with no release note and still
   show a green check, and it counted leftover fragments from earlier unreleased
   pull requests. The requirement is now decided from the pull-request diff.
+
+- Python is tested on macOS and Windows as well as Linux, and gains the
+  `detect-changes` job the JavaScript and Rust pipelines already had, so a
+  documentation-only pull request no longer runs the full matrix.

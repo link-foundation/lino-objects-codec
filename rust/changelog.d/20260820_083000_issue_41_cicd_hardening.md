@@ -11,3 +11,10 @@ bump: patch
   `cargo publish` can no longer be cancelled mid-flight, and pull requests are
   now validated against a fresh merge with the base branch rather than a stale
   merge preview. No change to the crate's code or public API.
+
+### Fixed
+
+- The change-detection script compared repository-root paths
+  (`rust/examples/demo.rs`) against package-relative prefixes (`examples/`), so
+  the documented exclusions never applied and `toml-changed` fired on any
+  `.toml` in the repository, including `python/pyproject.toml`.

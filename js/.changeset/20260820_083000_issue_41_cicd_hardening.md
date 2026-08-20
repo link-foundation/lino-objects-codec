@@ -9,3 +9,8 @@ run are gone. Behaviour and the public API are unchanged and the full 244-test
 suite is untouched. Part of the CI/CD clean-up in
 [issue #41](https://github.com/link-foundation/lino-objects-codec/issues/41),
 which also fixes the seven `npm audit` advisories in the dev dependency tree.
+
+The same change also fixes the JavaScript change-detection script, which
+compared repository-root paths (`js/examples/demo.mjs`) against
+package-relative prefixes (`examples/`), so an examples-only pull request was
+reported as a code change and `package-changed` could never be true.
