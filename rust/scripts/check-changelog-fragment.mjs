@@ -43,8 +43,17 @@ function getChangedFiles() {
   const baseRef = process.env.GITHUB_BASE_REF || 'main';
   console.log(`Comparing against origin/${baseRef}...HEAD`);
 
+  // `--relative` makes git report paths relative to the current working
+  // directory (the language package, e.g. `rust/`, because the CI step sets
+  // `working-directory`). Without it git prints repo-root-relative paths like
+  // `rust/src/lib.rs`, which never match the `^src/`, `^tests/`, `^scripts/`,
+  // `^Cargo.toml$` and `changelog.d/` patterns below. In a monorepo that both
+  // silently disables the check for real source changes and, worse, makes an
+  // unrelated repo-root `scripts/` change trip it. See issue #39.
   try {
-    const output = exec(`git diff --name-only origin/${baseRef}...HEAD`);
+    const output = exec(
+      `git diff --name-only --relative origin/${baseRef}...HEAD`
+    );
     return output ? output.split('\n').filter(Boolean) : [];
   } catch (error) {
     console.error(`Git diff failed: ${error.message}`);
