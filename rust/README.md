@@ -30,7 +30,8 @@ lino-objects-codec = "0.1"
 - **Special Float Values**: Full support for NaN, Infinity, -Infinity (which are not valid JSON)
 - **Circular References**: Detect and preserve circular references via object IDs
 - **Object Identity**: Maintain object identity for shared references
-- **UTF-8 Support**: Full Unicode string support using base64 encoding
+- **Readable by Default**: `encode()` writes indented, plain-text Links Notation; keys and values stay legible and diffable
+- **UTF-8 Support**: Full Unicode string support written as text; only values that cannot be written as text (control characters) are base64-encoded, and each is marked individually
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 
 ## Quick Start
@@ -47,12 +48,34 @@ let data = LinoValue::object([
 
 // Encode to Links Notation
 let encoded = encode(&data);
-println!("Encoded: {}", encoded);
+assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
 
 // Decode back
 let decoded = decode(&encoded).unwrap();
 assert_eq!(decoded, data);
 ```
+
+The encoded document reads as:
+
+```lino
+(
+  name "Alice"
+  age 30
+  active true
+)
+```
+
+## Output Formats
+
+| Function | Output |
+| --- | --- |
+| `encode(value)` | Readable, indented Links Notation (the default) |
+| `encode_with_indent(value, "\t")` | Same, with a custom indentation string |
+| `encode_compact(value)` | The previous single-line base64 form |
+| `encode_obfuscated(value)` | Alias of `encode_compact` |
+
+`decode()` accepts every one of them, so files written by older versions keep
+working and are rewritten in the readable form the next time they are saved.
 
 ## API Reference
 
@@ -97,21 +120,42 @@ pub enum CodecError {
 
 #### `encode(value: &LinoValue) -> String`
 
-Encode a value to Links Notation format.
+Encode a value to the readable, indented Links Notation format.
 
 ```rust
 let value = LinoValue::Int(42);
 let encoded = encode(&value);
-assert_eq!(encoded, "(int 42)");
+assert_eq!(encoded, "42");
 ```
+
+#### `encode_with_indent(value: &LinoValue, indent: &str) -> String`
+
+Same as `encode()`, but with a custom indentation string (the default is two spaces).
+
+#### `encode_compact(value: &LinoValue) -> String`
+
+Encode a value to the single-line, base64 form used before version 0.3.
+
+```rust
+let value = LinoValue::String("hello".to_string());
+assert_eq!(encode_compact(&value), "(str aGVsbG8=)");
+```
+
+#### `encode_obfuscated(value: &LinoValue) -> String`
+
+Alias of `encode_compact()`, named after what the base64 form actually does to the text.
 
 #### `decode(notation: &str) -> Result<LinoValue, CodecError>`
 
-Decode Links Notation format to a value.
+Decode Links Notation format to a value. Both the readable and the compact form
+are accepted.
 
 ```rust
-let decoded = decode("(int 42)").unwrap();
+let decoded = decode("42").unwrap();
 assert_eq!(decoded, LinoValue::Int(42));
+
+let legacy = decode("(int 42)").unwrap();
+assert_eq!(legacy, LinoValue::Int(42));
 ```
 
 ### `ObjectCodec`
@@ -135,30 +179,34 @@ use lino_objects_codec::{encode, decode, LinoValue};
 
 // Null
 let null = LinoValue::Null;
-assert_eq!(encode(&null), "(null)");
+assert_eq!(encode(&null), "null");
 
 // Boolean
 let bool_val = LinoValue::Bool(true);
-assert_eq!(encode(&bool_val), "(bool true)");
+assert_eq!(encode(&bool_val), "true");
 
 // Integer
 let int_val = LinoValue::Int(42);
-assert_eq!(encode(&int_val), "(int 42)");
+assert_eq!(encode(&int_val), "42");
 
 // Float
 let float_val = LinoValue::Float(3.14);
-assert!(encode(&float_val).starts_with("(float"));
+assert_eq!(encode(&float_val), "3.14");
 
 // Special floats
 let inf = LinoValue::Float(f64::INFINITY);
-assert_eq!(encode(&inf), "(float Infinity)");
+assert_eq!(encode(&inf), "Infinity");
 
 let nan = LinoValue::Float(f64::NAN);
-assert_eq!(encode(&nan), "(float NaN)");
+assert_eq!(encode(&nan), "NaN");
 
-// String (base64 encoded)
+// Strings are quoted, not encoded
 let str_val = LinoValue::String("hello".to_string());
-assert_eq!(encode(&str_val), "(str aGVsbG8=)");
+assert_eq!(encode(&str_val), "\"hello\"");
+
+// Numbers written as strings stay strings
+let numeric = LinoValue::String("42".to_string());
+assert_eq!(decode(&encode(&numeric)).unwrap(), numeric);
 ```
 
 ### Collections
@@ -235,7 +283,43 @@ let none_val: LinoValue = None::<i64>.into();
 
 ## How It Works
 
-The codec encodes values using the [Links Notation](https://github.com/link-foundation/links-notation) format:
+The codec encodes values using the [Links Notation](https://github.com/link-foundation/links-notation) format.
+
+### Readable format (the default)
+
+One `( )` construct carries both objects and arrays, at every level including
+the root. Lines of the form `key value` make an object, bare-value lines make an
+array:
+
+```lino
+(
+  type "RouterState"
+  server (
+    host "127.0.0.1"
+    port 18878
+  )
+  models (
+    "claude-haiku"
+    "claude-opus"
+  )
+)
+```
+
+- Strings are double-quoted and written as text: `name "Alice"`
+- Numbers, `true`, `false` and `null` are bare, so types survive a round trip
+- `NaN`, `Infinity` and `-Infinity` are written as such
+- An empty array is `()`; an empty object is `(` + newline + `)`
+- A value that cannot be written as text (one containing control characters) is
+  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
+  everything around it stays readable
+
+Reading the format back requires `links-notation` 0.14 semantics, where a
+parenthesis opens a nested indentation context.
+
+### Compact format (`encode_compact`)
+
+The previous single-line form, kept for compatibility and for cases where size
+matters more than legibility:
 
 - Basic types: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
 - Strings are base64-encoded to handle special characters and newlines
@@ -243,9 +327,13 @@ The codec encodes values using the [Links Notation](https://github.com/link-foun
 - Objects: `(object ((str a2V5) (int 42)) ...)`
 - Special floats: `(float NaN)`, `(float Infinity)`, `(float -Infinity)`
 
-For structures with shared references or circular references, the codec uses object IDs:
+For structures with shared references or circular references, the compact form
+uses object IDs:
 - Format: `(obj_0: array ...)` or `(obj_0: object ...)`
 - References: `obj_0`
+
+`decode()` detects which of the two forms it is given, so previously written
+files keep decoding.
 
 ## Development
 

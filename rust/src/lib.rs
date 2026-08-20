@@ -6,12 +6,15 @@
 //!
 //! # Features
 //!
+//! - **Readable by Default**: `encode()` writes plain, indented text that can be read and reviewed
 //! - **Universal Serialization**: Encode objects to Links Notation format
 //! - **Type Support**: Handle all common types: null, boolean, integer, float, string, array, object
 //! - **Special Float Values**: Support for NaN, Infinity, -Infinity (which are not valid JSON)
 //! - **Circular References**: Detect and preserve circular references (via object IDs)
 //! - **Object Identity**: Maintain object identity for shared references
-//! - **UTF-8 Support**: Full Unicode string support using base64 encoding
+//! - **UTF-8 Support**: Full Unicode string support, written as text; only values that cannot be
+//!   represented as text (strings holding control characters) are base64-encoded, and they are
+//!   marked individually as `(base64 "…")`
 //! - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 //!
 //! # Example
@@ -26,16 +29,32 @@
 //!     ("active", LinoValue::Bool(true)),
 //! ]);
 //! let encoded = encode(&data);
+//! assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
 //! let decoded = decode(&encoded).unwrap();
 //! assert_eq!(decoded, data);
 //! ```
+//!
+//! # Output formats
+//!
+//! | Function | Output |
+//! |---|---|
+//! | [`encode`] | readable, indented plain text (default) |
+//! | [`encode_with_indent`] | the same, with a custom indentation string |
+//! | [`encode_compact`] / [`encode_obfuscated`] | the previous single-line, base64 form |
+//!
+//! [`decode`] accepts both forms, so files written by earlier versions keep working
+//! and migrate to the readable form on the next write.
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use links_notation::{parse_lino_to_links, LiNo};
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
-/// Type identifiers used in Links Notation format
+pub mod readable;
+
+pub use readable::{BASE64_MARKER, DEFAULT_INDENT};
+
+/// Type identifiers used in the compact (base64) Links Notation format
 mod type_ids {
     pub const NULL: &str = "null";
     pub const BOOL: &str = "bool";
@@ -385,7 +404,11 @@ impl ObjectCodec {
         }
     }
 
-    /// Encode a LinoValue to Links Notation format.
+    /// Encode a LinoValue to the readable, indented Links Notation format.
+    ///
+    /// This is the default representation: keys and values are written as plain
+    /// text, one per line, so the result can be read and reviewed directly.
+    /// See [`readable`] for the exact shape.
     ///
     /// # Arguments
     ///
@@ -393,8 +416,35 @@ impl ObjectCodec {
     ///
     /// # Returns
     ///
-    /// A string in Links Notation format
+    /// A string in readable Links Notation format
     pub fn encode(&mut self, value: &LinoValue) -> String {
+        readable::encode(value, DEFAULT_INDENT)
+    }
+
+    /// Encode a LinoValue to the readable format using a custom indentation string.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to encode
+    /// * `indent` - The indentation string used per nesting level (for example `"    "`)
+    pub fn encode_with_indent(&mut self, value: &LinoValue, indent: &str) -> String {
+        readable::encode(value, indent)
+    }
+
+    /// Encode a LinoValue to the compact, single-line Links Notation format.
+    ///
+    /// Every value is tagged with its type and every string is base64-encoded, so
+    /// the whole document fits on one line and carries no readable text. This was
+    /// the default before the readable format; callers now opt into it explicitly.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to encode
+    ///
+    /// # Returns
+    ///
+    /// A string in compact Links Notation format
+    pub fn encode_compact(&mut self, value: &LinoValue) -> String {
         self.reset_encode_state();
 
         // First pass: identify which objects need IDs
@@ -429,6 +479,14 @@ impl ObjectCodec {
         } else {
             Self::format_link(&main_link)
         }
+    }
+
+    /// Encode a LinoValue to the compact, base64 form.
+    ///
+    /// Alias of [`ObjectCodec::encode_compact`], named after what the form does to
+    /// its content: nothing in the output can be read without decoding it.
+    pub fn encode_obfuscated(&mut self, value: &LinoValue) -> String {
+        self.encode_compact(value)
     }
 
     /// Format a single link to its string representation.
@@ -635,7 +693,31 @@ impl ObjectCodec {
     /// # Returns
     ///
     /// The reconstructed value, or an error
+    ///
+    /// Both the readable format and the compact (base64) format are accepted, so
+    /// files written by earlier versions keep working and migrate on next write.
     pub fn decode(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
+        if notation.trim().is_empty() {
+            return Ok(LinoValue::Null);
+        }
+
+        if is_compact_notation(notation) {
+            return self.decode_compact(notation);
+        }
+
+        readable::decode(notation)
+    }
+
+    /// Decode the compact (base64) Links Notation format.
+    ///
+    /// # Arguments
+    ///
+    /// * `notation` - String in compact Links Notation format
+    ///
+    /// # Returns
+    ///
+    /// The reconstructed value, or an error
+    pub fn decode_compact(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
         self.reset_decode_state();
 
         let links = parse_lino_to_links(notation)
@@ -836,12 +918,57 @@ impl ObjectCodec {
     }
 }
 
+/// Detect the compact (base64) format.
+///
+/// Compact output always starts a line with `(` immediately followed by a type
+/// marker — optionally preceded by an object id, as in `(obj_0: object …)`.
+/// Readable output never does: its first line is either a lone `(` or a scalar.
+fn is_compact_notation(notation: &str) -> bool {
+    let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
+        return false;
+    };
+
+    let Some(rest) = first_line.strip_prefix('(') else {
+        return false;
+    };
+
+    let mut tokens = rest
+        .split(|c: char| c.is_whitespace() || c == '(' || c == ')')
+        .filter(|t| !t.is_empty());
+
+    let Some(mut marker) = tokens.next() else {
+        return false;
+    };
+
+    // Skip the `obj_N:` definition id, if present.
+    if let Some(id) = marker.strip_suffix(':') {
+        if !id.starts_with("obj_") {
+            return false;
+        }
+        let Some(next) = tokens.next() else {
+            return false;
+        };
+        marker = next;
+    }
+
+    matches!(
+        marker,
+        type_ids::NULL
+            | type_ids::BOOL
+            | type_ids::INT
+            | type_ids::FLOAT
+            | type_ids::STR
+            | type_ids::ARRAY
+            | type_ids::OBJECT
+    )
+}
+
 // Global codec instance for convenience functions
 thread_local! {
     static DEFAULT_CODEC: std::cell::RefCell<ObjectCodec> = std::cell::RefCell::new(ObjectCodec::new());
 }
 
-/// Encode a value to Links Notation format.
+/// Encode a value to the readable, indented Links Notation format.
 ///
 /// This is a convenience function that uses a thread-local codec instance.
 ///
@@ -851,7 +978,7 @@ thread_local! {
 ///
 /// # Returns
 ///
-/// A string in Links Notation format
+/// A string in readable Links Notation format
 ///
 /// # Example
 ///
@@ -863,11 +990,66 @@ thread_local! {
 ///     ("age", LinoValue::Int(30)),
 /// ]);
 /// let encoded = encode(&data);
-/// // String "Alice" is base64-encoded as "QWxpY2U="
-/// assert!(encoded.contains("QWxpY2U="));
+/// // Names and values are written as they are, one per line
+/// assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n)");
 /// ```
 pub fn encode(value: &LinoValue) -> String {
     DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode(value))
+}
+
+/// Encode a value to the readable format using a custom indentation string.
+///
+/// # Arguments
+///
+/// * `value` - The value to encode
+/// * `indent` - The indentation string used per nesting level
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{encode_with_indent, LinoValue};
+///
+/// let data = LinoValue::object([("age", LinoValue::Int(30))]);
+/// assert_eq!(encode_with_indent(&data, "    "), "(\n    age 30\n)");
+/// ```
+pub fn encode_with_indent(value: &LinoValue, indent: &str) -> String {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_with_indent(value, indent))
+}
+
+/// Encode a value to the compact, single-line Links Notation format.
+///
+/// Every string is base64-encoded and the whole document is written on one line.
+/// [`decode`] reads this form as well, so stored files remain readable by the
+/// library after switching to the default readable output.
+///
+/// # Arguments
+///
+/// * `value` - The value to encode
+///
+/// # Returns
+///
+/// A string in compact Links Notation format
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{encode_compact, decode, LinoValue};
+///
+/// let data = LinoValue::object([("name", LinoValue::String("Alice".to_string()))]);
+/// let encoded = encode_compact(&data);
+/// // String "Alice" is base64-encoded as "QWxpY2U="
+/// assert!(encoded.contains("QWxpY2U="));
+/// assert_eq!(decode(&encoded).unwrap(), data);
+/// ```
+pub fn encode_compact(value: &LinoValue) -> String {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_compact(value))
+}
+
+/// Encode a value to the compact, base64 form.
+///
+/// Alias of [`encode_compact`], named after what the form does to its content.
+pub fn encode_obfuscated(value: &LinoValue) -> String {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_obfuscated(value))
 }
 
 /// Decode Links Notation format to a value.
