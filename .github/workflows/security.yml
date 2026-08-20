@@ -1,0 +1,205 @@
+name: Security
+
+# Issue #41 asked for the false negatives in this pipeline. The largest one was
+# an absence: nothing scanned this repository for vulnerable dependencies or
+# insecure code, so every pull request was green by default on those questions.
+# This workflow mirrors the `security.yml` of the org's language pipeline
+# templates, widened to the four languages that live here.
+#
+# There is deliberately no `paths:` filter: a security scan that can be skipped
+# by touching the right file is not a security scan.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    # Weekly, so newly published advisories are found without a code change.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# Least-privilege default; jobs escalate individually when needed.
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-codeql-${{ matrix.language }}
+      cancel-in-progress: true
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        # `actions` scans the workflow files themselves, which is what would
+        # have caught the `github.head_ref` interpolation fixed in this PR.
+        # Rust has no stable CodeQL pack; `cargo clippy -D warnings` in
+        # rust.yml is its static analysis.
+        language: [javascript-typescript, python, csharp, actions]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Setup .NET
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+
+  # `actions/dependency-review-action` was tried here first and fails with
+  # "Dependency review is not supported on this repository. Please ensure that
+  # Dependency graph is enabled." That is a repository/organisation setting, not
+  # something a pull request can change, and a job that can only ever fail is
+  # worse than no job. The four ecosystem audits below cover the same ground
+  # with tools that work today; see dev/log/issues/41/pulls/42/ANALYSIS.md 9.7.
+  nuget-audit:
+    name: Audit NuGet dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-nuget-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      # `dotnet list package --vulnerable` exits 0 even when it finds
+      # advisories, so the report is inspected rather than the exit code.
+      # `--include-transitive` matters: most advisories arrive indirectly.
+      - name: Audit NuGet dependencies
+        working-directory: ./csharp
+        run: |
+          dotnet restore
+          dotnet list package --vulnerable --include-transitive \
+            > nuget-audit.txt 2>&1
+          cat nuget-audit.txt
+          if grep -qiE '^\s+> ' nuget-audit.txt; then
+            echo "::error::Vulnerable NuGet packages found (see report above)"
+            exit 1
+          fi
+          echo "No vulnerable NuGet packages found."
+
+  npm-audit:
+    name: Audit npm lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-npm-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      # `--package-lock-only` audits the committed lockfile rather than an
+      # install resolved at run time, so the result matches what reviewers see.
+      - name: Audit the committed lockfile
+        working-directory: ./js
+        run: npm audit --package-lock-only --audit-level=high
+
+  cargo-audit:
+    name: Audit Cargo lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-cargo-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+
+      - name: Audit Rust dependencies
+        working-directory: ./rust
+        run: cargo audit
+
+  pip-audit:
+    name: Audit Python dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-pip-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip pip-audit
+
+      # `--skip-editable` leaves out this repository's own editable install,
+      # which has no PyPI record to audit; `--strict` cannot be used with it
+      # because the skip itself is reported as an error.
+      - name: Audit installed dependencies
+        working-directory: ./python
+        run: |
+          python -m pip install -e ".[dev]"
+          pip-audit --skip-editable --progress-spinner off
+
+  # === SECRETS DETECTION (best practice #11) ===
+  # Nothing scanned this repository for committed credentials before issue #41.
+  secrets-scan:
+    name: Scan for Committed Secrets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-secrets-scan
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: a secret that was committed and later removed is
+          # still in the repository and still has to be rotated.
+          fetch-depth: 0
+
+      # The pinned CLI is used instead of gitleaks-action because the action
+      # requires a paid licence key for organisation-owned repositories, while
+      # the binary itself is MIT-licensed and free.
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: 8.28.0
+        run: |
+          curl -sSfL \
+            "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar xz gitleaks
+          ./gitleaks version
+
+      # Scans the working tree and the full git history. Findings are redacted
+      # so a real secret is never echoed into the public log (best practice #11:
+      # "Never log environment variables or token values").
+      - name: Scan working tree
+        run: ./gitleaks dir . --no-banner --redact --config .gitleaks.toml
+
+      - name: Scan git history
+        run: ./gitleaks git . --no-banner --redact --config .gitleaks.toml

@@ -89,10 +89,7 @@ def main() -> None:
     else:
         print("✗ Found files exceeding the line limit:\n")
         for violation in violations:
-            print(
-                f"  {violation['file']}: {violation['lines']} lines "
-                f"(exceeds {MAX_LINES})"
-            )
+            print(f"  {violation['file']}: {violation['lines']} lines (exceeds {MAX_LINES})")
         print(f"\nPlease refactor these files to be under {MAX_LINES} lines\n")
         sys.exit(1)
 

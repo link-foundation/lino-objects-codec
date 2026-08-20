@@ -27,23 +27,98 @@ on:
         required: false
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# Least privilege by default (best practice #10 / template parity): individual
+# release jobs raise this to `contents: write` where they need it.
+permissions:
+  contents: read
 
 jobs:
   # REQUIRED CI CHECKS - All must pass before release
   # These jobs ensure code quality and tests pass before any release
 
-  # Linting and formatting
-  lint:
-    name: Lint and Format Check
+  # === CHANGE DETECTION ===
+  # Template parity: the JavaScript and Rust pipelines gated their expensive
+  # jobs on what actually changed, while Python and C# ran everything for a
+  # documentation-only pull request. The workflow-level `paths:` filter only
+  # decides whether this workflow runs at all; this job decides which jobs
+  # inside it are worth running.
+  detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
+    name: Detect Changes
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    outputs:
+      py-changed: ${{ steps.changes.outputs.py-changed }}
+      toml-changed: ${{ steps.changes.outputs.toml-changed }}
+      docs-changed: ${{ steps.changes.outputs.docs-changed }}
+      workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
+      any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Detect changes
+        id: changes
+        working-directory: ./python
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/detect_code_changes.py
+
+  # Linting and formatting
+  lint:
+    timeout-minutes: 15
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-lint
+      cancel-in-progress: true
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.py-changed == 'true' ||
+      needs.detect-changes.outputs.toml-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
@@ -55,11 +130,11 @@ jobs:
 
       - name: Run Ruff linting
         working-directory: ./python
-        run: ruff check src tests
+        run: ruff check src tests scripts
 
       - name: Check Ruff formatting
         working-directory: ./python
-        run: ruff format --check src tests
+        run: ruff format --check src tests scripts
 
       - name: Run mypy
         working-directory: ./python
@@ -69,15 +144,57 @@ jobs:
         working-directory: ./python
         run: python scripts/check_file_size.py
 
-  # Test on latest Python version only
+  # Test matrix: Python on multiple OS.
+  # Until issue #41 this job ran on ubuntu-latest only, while the JavaScript,
+  # Rust and C# suites all ran on three operating systems; a Windows-only
+  # failure (line endings, path separators, locale-dependent encoding) would
+  # have reached PyPI unnoticed.
   test:
-    name: Test (Python 3.13)
-    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-test-${{ matrix.os }}
+      cancel-in-progress: true
+    name: Test (Python 3.13 on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.py-changed == 'true' ||
+      needs.detect-changes.outputs.toml-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
@@ -91,22 +208,53 @@ jobs:
         working-directory: ./python
         run: pytest tests/ -v --cov=src --cov-report=xml --cov-report=term
 
+      # One upload per commit: the matrix legs produce identical coverage for a
+      # pure-Python package, and uploading all three only adds Codecov noise.
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v4
+        if: matrix.os == 'ubuntu-latest'
+        uses: codecov/codecov-action@v7
         with:
-          file: ./python/coverage.xml
+          files: ./python/coverage.xml
           fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # Build package - only runs if lint and test pass
   build:
+    timeout-minutes: 20
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-build
+      cancel-in-progress: true
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
+    # Skipped together with lint and test when nothing relevant changed.
+    if: >-
+      ${{
+      !cancelled() &&
+      needs.lint.result == 'success' &&
+      needs.test.result == 'success'
+      }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
@@ -124,62 +272,64 @@ jobs:
         run: twine check dist/*
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dist
           path: python/dist/
 
   # Check for changelog fragments in PRs (similar to changesets check)
   changelog:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-changelog
+      cancel-in-progress: true
     name: Changelog Fragment Check
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
+
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.13"
 
-      - name: Install scriv
-        run: pip install "scriv[toml]"
-
       - name: Check for changelog fragments
         working-directory: ./python
-        run: |
-          # Get list of fragment files (excluding README and template)
-          FRAGMENTS=$(find changelog.d -name "*.md" ! -name "README.md" ! -name "*.j2" 2>/dev/null | wc -l)
-
-          # Get changed files in PR
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-
-          # Check if any source files changed (excluding docs and config)
-          SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "^python/(src/|tests/|scripts/)" | wc -l)
-
-          if [ "$SOURCE_CHANGED" -gt 0 ] && [ "$FRAGMENTS" -eq 0 ]; then
-            echo "::warning::No changelog fragment found. Please run 'scriv create' and document your changes."
-            echo ""
-            echo "To create a changelog fragment:"
-            echo "  cd python"
-            echo "  pip install 'scriv[toml]'"
-            echo "  scriv create"
-            echo ""
-            echo "This is similar to adding a changeset in JavaScript projects."
-            echo "See python/changelog.d/README.md for more information."
-            # Note: This is a warning, not a failure, to allow flexibility
-            # Change 'exit 0' to 'exit 1' to make it required
-            exit 0
-          fi
-
-          echo "✓ Changelog check passed"
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          # Passed through the environment: a branch name is attacker-controlled
+          # and must never be interpolated straight into a shell script.
+          HEAD_REF: ${{ github.head_ref }}
+        run: python scripts/validate_changeset.py
 
   # RELEASE JOBS - Only run after all CI checks pass
 
   # Automatic release on push to main (if version changed)
   auto-release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Auto Release
     needs: [lint, test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -188,14 +338,21 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
+
+      - name: Setup Node.js
+        # The post-publish registry readback is a shared Node helper, so the
+        # release jobs need Node even though the package itself is Python.
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
       - name: Install dependencies
         run: |
@@ -209,8 +366,8 @@ jobs:
           # Get current version from pyproject.toml
           CURRENT_VERSION=$(grep -Po '(?<=^version = ")[^"]*' pyproject.toml)
           PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
 
           # Decide based on the registry, not on the local git tag. PyPI returns 200 for an
           # existing version's JSON metadata and 404 otherwise. See
@@ -219,18 +376,36 @@ jobs:
           echo "PyPI HTTP status for ${PACKAGE_NAME}@${CURRENT_VERSION}: ${STATUS}"
           if [ "$STATUS" = "200" ]; then
             echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} already on PyPI, skipping publish"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           else
             echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} is NOT on PyPI, will publish"
-            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Download artifacts
         if: steps.version_check.outputs.should_release == 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: dist
           path: python/dist/
+
+      - name: PyPI publish preflight
+        # Issue #41: the 0.2.0 release died inside the publish action with
+        # `invalid-publisher: valid token, but no corresponding publisher`,
+        # which names none of the values an operator has to enter on PyPI and
+        # does not say the missing piece lives outside this repository. This
+        # step prints the four claims and the registration steps up front.
+        # It reports without gating: a correctly registered *pending* publisher
+        # is indistinguishable from none at all until the first upload lands.
+        if: steps.version_check.outputs.should_release == 'true'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          # Switch to '1' to dump the resolved OIDC claims; quiet by default.
+          PYPI_PREFLIGHT_VERBOSE: '0'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.version_check.outputs.package_name }}"
 
       - name: Publish to PyPI
         id: pypi_publish
@@ -238,31 +413,39 @@ jobs:
         # Uses PyPI's OIDC Trusted Publisher flow (id-token: write below). If you see "Trusted
         # Publisher … not configured" in the logs, configure it for this repo + workflow on PyPI.
         # See docs/case-studies/issue-25/README.md for the broader context.
+        # A PYPI_API_TOKEN secret, when present, takes over so a first release
+        # can happen before trusted publishing is registered; without the
+        # secret the `password` input is empty and OIDC is used as before.
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
           skip-existing: true
 
-      - name: Verify package on PyPI
-        if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
+      - name: Explain a failed publish
+        # Turns the raw OIDC exchange error into the runbook. Without this the
+        # only guidance in the log is a list of claims and a 'not found'.
+        if: failure() && steps.pypi_publish.outcome == 'failure'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '1'
         run: |
-          PKG="${{ steps.version_check.outputs.package_name }}"
-          VER="${{ steps.version_check.outputs.current_version }}"
-          # PyPI's CDN can lag a few seconds behind a successful upload.
-          for i in 1 2 3 4 5; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PKG}/${VER}/json")
-            echo "Attempt $i: PyPI HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on PyPI"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "::error title=PyPI verification failed::${PKG}@${VER} is not on PyPI after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-29/README.md for the runbook."
-          exit 1
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.version_check.outputs.package_name }}"
+
+      - name: Verify package on PyPI
+        # Issue #41: this readback allowed twenty-five seconds, the same class
+        # of too-short budget that turned a successful NuGet publish into a red
+        # run. It now uses the shared, per-registry-tuned readback.
+        if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          node scripts/wait-for-registry.mjs --registry pypi \
+            --name "${{ steps.version_check.outputs.package_name }}" \
+            --version "${{ steps.version_check.outputs.current_version }}"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -278,6 +461,14 @@ jobs:
 
   # Manual release via workflow_dispatch - only after CI passes
   manual-release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Manual Release
     needs: [lint, test, build]
     if: github.event_name == 'workflow_dispatch'
@@ -286,13 +477,13 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.13'
 
@@ -301,6 +492,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install build twine "scriv[toml]"
+
+      - name: Setup Node.js
+        # The post-publish registry readback is a shared Node helper.
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
       - name: Configure git
         run: |
@@ -343,7 +540,17 @@ jobs:
         working-directory: ./python
         run: |
           PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
-          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: PyPI publish preflight
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '0'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.pkg.outputs.package_name }}"
 
       - name: Publish to PyPI
         id: pypi_publish
@@ -352,27 +559,28 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
           skip-existing: true
 
+      - name: Explain a failed publish
+        if: failure() && steps.pypi_publish.outcome == 'failure'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '1'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.pkg.outputs.package_name }}"
+
       - name: Verify package on PyPI
         if: (steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true') && steps.pypi_publish.outcome == 'success'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
         run: |
-          PKG="${{ steps.pkg.outputs.package_name }}"
-          VER="${{ steps.version.outputs.new_version }}"
-          for i in 1 2 3 4 5; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PKG}/${VER}/json")
-            echo "Attempt $i: PyPI HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on PyPI"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "::error title=PyPI verification failed::${PKG}@${VER} is not on PyPI after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-29/README.md for the runbook."
-          exit 1
+          node scripts/wait-for-registry.mjs --registry pypi \
+            --name "${{ steps.pkg.outputs.package_name }}" \
+            --version "${{ steps.version.outputs.new_version }}"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

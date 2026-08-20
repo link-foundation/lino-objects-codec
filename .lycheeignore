@@ -1,0 +1,9 @@
+# Hosts that answer automated requests with a rejection regardless of the link
+# being valid. Excluding them keeps the link check honest: it fails only on
+# links this repository can actually fix.
+
+# npmjs.com is fronted by a bot filter that returns 403 to every non-browser
+# client (verified locally and from CI runners), so the package badges and
+# links in README.md and js/README.md are permanently "broken" to lychee even
+# though they resolve fine in a browser.
+https://www\.npmjs\.com/.*

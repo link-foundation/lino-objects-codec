@@ -1,0 +1,22 @@
+# Gitleaks configuration for the secrets scan in .github/workflows/security.yml.
+#
+# Extends the bundled default rule set; the allowlist below removes known
+# false positives so the scan stays actionable. Everything allowlisted here is
+# archived evidence, never live code or configuration.
+
+[extend]
+useDefault = true
+
+[[rules]]
+  id = "generic-api-key"
+  [rules.allowlist]
+    description = """
+    Archived CI logs quote actions/cache output such as
+    "key: macOS-cargo-7c03a762fabedaf...", which is a content hash of
+    Cargo.lock, not a credential. The generic-api-key rule matches the
+    "key: <hex>" shape, so it flags every cached run we keep as evidence.
+    """
+    paths = [
+      '''docs/case-studies/.*''',
+      '''dev/log/.*''',
+    ]

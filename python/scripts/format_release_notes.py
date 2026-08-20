@@ -23,7 +23,6 @@ import argparse
 import re
 import subprocess
 import sys
-from typing import Optional
 
 
 def run_gh_command(args: list[str]) -> tuple[bool, str]:
@@ -50,7 +49,7 @@ def get_release_body(repository: str, release_id: str) -> tuple[bool, str]:
     return success, output.strip() if success else output
 
 
-def find_pr_for_commit(repository: str, commit_sha: str) -> Optional[str]:
+def find_pr_for_commit(repository: str, commit_sha: str) -> str | None:
     """Find the pull request that contains a specific commit."""
     if not commit_sha:
         return None
@@ -78,7 +77,7 @@ def format_release_body(
     body: str,
     version: str,
     repository: str,
-    pr_number: Optional[str],
+    pr_number: str | None,
     package_name: str,
 ) -> str:
     """Format the release body with enhanced information."""
@@ -99,7 +98,9 @@ def format_release_body(
 
     # Add PR link if available
     if pr_number:
-        pr_link = f"**Pull Request:** [#{pr_number}](https://github.com/{repository}/pull/{pr_number})"
+        pr_link = (
+            f"**Pull Request:** [#{pr_number}](https://github.com/{repository}/pull/{pr_number})"
+        )
         formatted_parts.append(pr_link)
         formatted_parts.append("")
 

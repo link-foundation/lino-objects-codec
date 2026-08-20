@@ -27,9 +27,10 @@ on:
         required: false
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# Least privilege by default (best practice #10 / template parity): individual
+# release jobs raise this to `contents: write` where they need it.
+permissions:
+  contents: read
 
 env:
   DOTNET_NOLOGO: true
@@ -37,17 +38,99 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
+  # === CHANGE DETECTION ===
+  # Template parity: the JavaScript and Rust pipelines gated their expensive
+  # jobs on what actually changed, while Python and C# ran everything for a
+  # documentation-only pull request. The workflow-level `paths:` filter only
+  # decides whether this workflow runs at all; this job decides which jobs
+  # inside it are worth running.
+  detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    outputs:
+      cs-changed: ${{ steps.changes.outputs.cs-changed }}
+      project-changed: ${{ steps.changes.outputs.project-changed }}
+      mjs-changed: ${{ steps.changes.outputs.mjs-changed }}
+      docs-changed: ${{ steps.changes.outputs.docs-changed }}
+      workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
+      any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Detect changes
+        id: changes
+        working-directory: ./csharp
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/detect-code-changes.mjs
+
   # Linting and formatting
   lint:
+    timeout-minutes: 15
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-lint
+      cancel-in-progress: true
     name: Lint and Format Check
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.cs-changed == 'true' ||
+      needs.detect-changes.outputs.project-changed == 'true' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
+
+      # Node powers the shared CI helper scripts under csharp/scripts.
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
       - name: Restore dependencies
         working-directory: ./csharp
@@ -61,19 +144,67 @@ jobs:
         working-directory: ./csharp
         run: dotnet build --configuration Release --no-restore /warnaserror
 
+      # Best practice #2: the same 1500-line ceiling the JavaScript ESLint
+      # config enforces, applied to C# sources.
+      - name: Check file size limit
+        working-directory: ./csharp
+        run: node scripts/check-file-size.mjs
+
+      # The release helpers under csharp/scripts are executed by the release
+      # jobs but their unit tests never ran in CI before issue #41, so a broken
+      # helper would only have surfaced during an actual release.
+      - name: Run CI script tests
+        working-directory: ./csharp
+        run: node --test scripts/*.test.mjs
+
   # Test matrix: .NET on multiple OS
   test:
+    timeout-minutes: 30
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-test-${{ matrix.os }}
+      cancel-in-progress: true
     name: Test (.NET on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.cs-changed == 'true' ||
+      needs.detect-changes.outputs.project-changed == 'true' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
@@ -95,20 +226,48 @@ jobs:
 
       - name: Upload coverage (Ubuntu only)
         if: matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v7
         with:
           fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   # Build NuGet package
   build:
+    timeout-minutes: 20
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-build
+      cancel-in-progress: true
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
+    # Skipped together with lint and test when nothing relevant changed.
+    if: >-
+      ${{
+      !cancelled() &&
+      needs.lint.result == 'success' &&
+      needs.test.result == 'success'
+      }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
@@ -125,60 +284,62 @@ jobs:
         run: dotnet pack --configuration Release --no-build --output ./artifacts
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget-package
           path: csharp/artifacts/*.nupkg
 
   # Check for changeset in PRs
   changeset-check:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-changeset-check
+      cancel-in-progress: true
     name: Changeset Check
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
       - name: Check for changeset
         working-directory: ./csharp
-        run: |
-          # Skip changeset check for automated release PRs
-          if [[ "${{ github.head_ref }}" == "changeset-release/"* ]] || [[ "${{ github.head_ref }}" == "changeset-manual-release-"* ]]; then
-            echo "Skipping changeset check for automated release PR"
-            exit 0
-          fi
-
-          # Get list of changeset files (excluding README.md and config.json)
-          CHANGESET_COUNT=$(find .changeset -name "*.md" ! -name "README.md" 2>/dev/null | wc -l)
-
-          # Get changed files in PR
-          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
-
-          # Check if any source files changed (excluding docs and config)
-          SOURCE_CHANGED=$(echo "$CHANGED_FILES" | grep -E "^csharp/(src/|tests/|examples/)" | wc -l)
-
-          if [ "$SOURCE_CHANGED" -gt 0 ] && [ "$CHANGESET_COUNT" -eq 0 ]; then
-            echo "::warning::No changeset found. Please add a changeset in csharp/.changeset/"
-            echo ""
-            echo "To create a changeset:"
-            echo "  cd csharp/.changeset"
-            echo "  Create a file: YYYYMMDD_HHMMSS_description.md"
-            echo ""
-            echo "See csharp/.changeset/README.md for more information."
-            # Note: This is a warning, not a failure, to allow flexibility
-            exit 0
-          fi
-
-          echo "✓ Changeset check passed"
+        env:
+          GITHUB_BASE_REF: ${{ github.base_ref }}
+          # Passed through the environment: a branch name is attacker-controlled
+          # and must never be interpolated straight into a shell script.
+          HEAD_REF: ${{ github.head_ref }}
+        run: node scripts/check-changeset.mjs
 
   # Automatic release on push to main (if version changed)
   auto-release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Auto Release
     needs: [lint, test, build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -187,17 +348,17 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -209,8 +370,8 @@ jobs:
           CURRENT_VERSION=$(grep -Po '(?<=<Version>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
           PACKAGE_ID=$(grep -Po '(?<=<PackageId>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
           PACKAGE_ID_LC=$(echo "$PACKAGE_ID" | tr '[:upper:]' '[:lower:]')
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "package_id=$PACKAGE_ID" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "package_id=$PACKAGE_ID" >> "$GITHUB_OUTPUT"
 
           # Decide based on the registry, not on the local git tag. NuGet's flat-container index
           # returns 200 for an existing package id and 404 otherwise; the version-specific .nuspec
@@ -220,15 +381,15 @@ jobs:
           echo "NuGet HTTP status for ${PACKAGE_ID}@${CURRENT_VERSION}: ${STATUS}"
           if [ "$STATUS" = "200" ]; then
             echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} already on NuGet, skipping publish"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           else
             echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} is NOT on NuGet, will publish"
-            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Download artifacts
         if: steps.version_check.outputs.should_release == 'true'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: nuget-package
           path: csharp/artifacts/
@@ -277,11 +438,18 @@ jobs:
           echo "$OUT"
 
       - name: Verify package on NuGet
-        # Mirrors the PyPI verification step (see python.yml). The NuGet CDN can
-        # take a minute or so to mirror a successful push; without an explicit
-        # registry probe the workflow can succeed even if the package never
-        # surfaces. See docs/case-studies/issue-33/README.md.
+        # Issue #41: this step used to poll the flat-container API six times at
+        # ten-second intervals. NuGet documents package validation and indexing
+        # as taking up to fifteen minutes, so a sixty-second budget reported a
+        # successful publish as a failure — run 32345106283 went red while
+        # 0.2.0 was already on its way to the CDN. The readback now waits for
+        # the window NuGet actually documents. See
+        # dev/log/issues/41/pulls/42/ANALYSIS.md and
+        # docs/case-studies/issue-33/README.md.
         if: steps.version_check.outputs.should_release == 'true' && steps.nuget_publish.outcome == 'success'
+        env:
+          # Switch to '1' when a readback needs diagnosing; quiet by default.
+          REGISTRY_WAIT_VERBOSE: '0'
         run: |
           PKG="${{ steps.version_check.outputs.package_id }}"
           VER="${{ steps.version_check.outputs.current_version }}"
@@ -289,21 +457,8 @@ jobs:
             echo "::warning title=NuGet verification skipped::package_id not exported by version_check; skipping verify."
             exit 0
           fi
-          PKG_LOWER=$(echo "$PKG" | tr '[:upper:]' '[:lower:]')
-          for i in 1 2 3 4 5 6; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' \
-              "https://api.nuget.org/v3-flatcontainer/${PKG_LOWER}/${VER}/${PKG_LOWER}.nuspec")
-            echo "Attempt $i: NuGet HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on NuGet"
-              exit 0
-            fi
-            sleep 10
-          done
-          echo "::error title=NuGet verification failed::${PKG}@${VER} is not on NuGet after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-33/README.md for the runbook."
-          exit 1
+          node scripts/wait-for-registry.mjs \
+            --registry nuget --name "$PKG" --version "$VER"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -319,6 +474,14 @@ jobs:
 
   # Manual release via workflow_dispatch
   manual-release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Manual Release
     needs: [lint, test, build]
     if: github.event_name == 'workflow_dispatch'
@@ -327,18 +490,18 @@ jobs:
       contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -404,6 +567,25 @@ jobs:
             exit 1
           fi
           echo "$OUT"
+
+      - name: Verify package on NuGet
+        # Issue #41: the manual release path published without ever reading the
+        # package back, so a rejected or partial push would still have left a
+        # green run and a version number that does not exist on NuGet. Both
+        # release paths now verify the same way.
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          PKG=$(sed -n 's|.*<PackageId>\(.*\)</PackageId>.*|\1|p' \
+            csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj | head -1)
+          VER="${{ steps.version.outputs.new_version }}"
+          if [ -z "$PKG" ] || [ -z "$VER" ]; then
+            echo "::error title=NuGet verification skipped::Could not resolve package id or version."
+            exit 1
+          fi
+          node scripts/wait-for-registry.mjs \
+            --registry nuget --name "$PKG" --version "$VER"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

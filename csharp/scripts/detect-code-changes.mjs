@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Detect code changes for CI/CD pipeline
+ * Detect code changes for the C# CI/CD pipeline
  *
  * This script detects what types of files have changed between two commits
  * and outputs the results for use in GitHub Actions workflow conditions.
@@ -27,9 +27,9 @@
  *   - GITHUB_HEAD_SHA: Head commit SHA for PR
  *
  * Outputs (written to GITHUB_OUTPUT):
+ *   - cs-changed: 'true' if any .cs files changed
+ *   - project-changed: 'true' if any .csproj/.sln/.props file changed
  *   - mjs-changed: 'true' if any .mjs files changed
- *   - js-changed: 'true' if any .js files changed
- *   - package-changed: 'true' if package.json changed
  *   - docs-changed: 'true' if any .md files changed
  *   - workflow-changed: 'true' if any .github/workflows/ files changed
  *   - any-code-changed: 'true' if any code files changed (excludes docs, changesets, experiments, examples)
@@ -113,10 +113,10 @@ export function getChangedFiles() {
  * Path of the current working directory relative to the repository root.
  *
  * `git diff --name-only` always prints paths relative to the **repository
- * root**, but this script runs with `working-directory: ./js` and compares
+ * root**, but this script runs with `working-directory: ./csharp` and compares
  * those paths against package-relative prefixes such as `examples/`. In this
- * monorepo the real paths are `js/examples/...`, so before issue #41 none of
- * the exclusions ever matched and `package.json` could never be detected -- the
+ * monorepo the real paths are `csharp/examples/...`, so before issue #41 none of
+ * the exclusions ever matched and the project files could never be detected -- the
  * same class of defect as issue #39. Resolving the prefix at run time keeps the
  * script correct both here and in a single-package checkout, where the prefix
  * is empty.
@@ -132,7 +132,7 @@ export function getPathPrefix() {
  * dropping everything that lives outside this package.
  *
  * @param {string[]} changedFiles - Repository-root-relative paths
- * @param {string} prefix - Package prefix such as `js/`
+ * @param {string} prefix - Package prefix such as `csharp/`
  * @returns {string[]} Package-relative paths
  */
 export function toPackagePaths(changedFiles, prefix) {
@@ -153,6 +153,9 @@ export function toPackagePaths(changedFiles, prefix) {
 export function isWorkflowFile(filePath) {
   return filePath.startsWith('.github/workflows/');
 }
+
+/** Project and solution files that describe how the C# code is built. */
+export const PROJECT_FILE_PATTERN = /\.(csproj|sln|props)$/;
 
 /**
  * Check if a file should be excluded from code changes detection
@@ -184,7 +187,7 @@ export function isExcludedFromCodeChanges(filePath) {
  * without a git repository.
  *
  * @param {string[]} changedFiles - Repository-root-relative changed paths
- * @param {string} prefix - Package prefix such as `js/`
+ * @param {string} prefix - Package prefix such as `csharp/`
  * @returns {{outputs: Record<string, string>, packageFiles: string[], codeChangedFiles: string[]}}
  */
 export function classifyChanges(changedFiles, prefix) {
@@ -199,7 +202,7 @@ export function classifyChanges(changedFiles, prefix) {
 
   // A workflow change still counts as a code change: it can alter how this
   // package is built and published even when no package file moved.
-  const codePattern = /\.(mjs|js|json|yml|yaml)$/;
+  const codePattern = /\.(cs|csproj|sln|props|mjs|json|yml|yaml)$/;
   const codeChanged =
     codeChangedFiles.some((file) => codePattern.test(file)) ||
     workflowFiles.length > 0;
@@ -208,9 +211,11 @@ export function classifyChanges(changedFiles, prefix) {
     packageFiles,
     codeChangedFiles,
     outputs: {
+      'cs-changed': String(packageFiles.some((f) => f.endsWith('.cs'))),
+      'project-changed': String(
+        packageFiles.some((f) => PROJECT_FILE_PATTERN.test(f))
+      ),
       'mjs-changed': String(packageFiles.some((f) => f.endsWith('.mjs'))),
-      'js-changed': String(packageFiles.some((f) => f.endsWith('.js'))),
-      'package-changed': String(packageFiles.includes('package.json')),
       'docs-changed': String(packageFiles.some((f) => f.endsWith('.md'))),
       'workflow-changed': String(workflowFiles.length > 0),
       'any-code-changed': String(codeChanged),

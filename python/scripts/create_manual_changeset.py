@@ -123,9 +123,7 @@ def create_with_scriv(bump_type: str, description: str) -> int:
         return 1
 
 
-def create_manual_fragment(
-    changelog_dir: Path, bump_type: str, description: str
-) -> int:
+def create_manual_fragment(changelog_dir: Path, bump_type: str, description: str) -> int:
     """Create a changelog fragment manually without scriv."""
     # Generate filename
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -238,9 +236,7 @@ The fragment will be collected into CHANGELOG.md during release.
     else:
         if not args.no_scriv:
             print("Note: scriv not found, creating fragment manually")
-            print(
-                "Install scriv for better fragment management: pip install scriv[toml]"
-            )
+            print("Install scriv for better fragment management: pip install scriv[toml]")
             print()
         return create_manual_fragment(changelog_dir, args.bump_type, args.description)
 

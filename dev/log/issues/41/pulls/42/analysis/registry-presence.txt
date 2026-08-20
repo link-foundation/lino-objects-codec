@@ -1,0 +1,17 @@
+# Registry presence probe (captured 2026-08-20T07:49:23Z)
+
+## NuGet Lino.Objects.Codec index.json
+{
+  "versions": [
+    "0.2.0"
+  ]
+}
+## NuGet 0.2.0 nuspec status
+200
+## PyPI lino-objects-codec
+404
+## npm lino-objects-codec
+latest: {'latest': '0.5.0'}
+versions: ['0.3.1', '0.3.5', '0.3.6', '0.4.0', '0.5.0']
+## crates.io lino-objects-codec
+0.4.0 ['0.4.0', '0.3.0', '0.2.1', '0.2.0']

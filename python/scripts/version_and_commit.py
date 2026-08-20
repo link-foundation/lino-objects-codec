@@ -218,9 +218,7 @@ def main() -> int:
             # Push to main
             run_command(["git", "push", "origin", "main"])
 
-            print(
-                f"\n✅ Version bump committed and pushed: {old_version} → {new_version}"
-            )
+            print(f"\n✅ Version bump committed and pushed: {old_version} → {new_version}")
             set_github_output("version_committed", "true")
         else:
             print("\nNo changes to commit")

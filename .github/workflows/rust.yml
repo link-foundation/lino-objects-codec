@@ -35,9 +35,10 @@ on:
         required: false
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# Least privilege by default (best practice #10 / template parity): individual
+# release jobs raise this to `contents: write` where they need it.
+permissions:
+  contents: read
 
 env:
   CARGO_TERM_COLOR: always
@@ -46,6 +47,11 @@ env:
 jobs:
   # === DETECT CHANGES - determines which jobs should run ===
   detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
     name: Detect Changes
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch'
@@ -57,12 +63,12 @@ jobs:
       workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
       any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -78,17 +84,34 @@ jobs:
   # === CHANGELOG CHECK - only runs on PRs with code changes ===
   # Docs-only PRs (./docs folder, markdown files) don't require changelog fragments
   changelog:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-changelog
+      cancel-in-progress: true
     name: Changelog Fragment Check
     runs-on: ubuntu-latest
     needs: [detect-changes]
     if: github.event_name == 'pull_request' && needs.detect-changes.outputs.any-code-changed == 'true'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
+
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -101,16 +124,21 @@ jobs:
   # === VERSION CHECK - prevents manual version modification in PRs ===
   # This ensures versions are only modified by the automated release pipeline
   version-check:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-version-check
+      cancel-in-progress: true
     name: Version Modification Check
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -125,22 +153,44 @@ jobs:
   # === LINT AND FORMAT CHECK ===
   # Lint runs independently of changelog check - it's a fast check that should always run
   lint:
+    timeout-minutes: 20
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-lint
+      cancel-in-progress: true
     name: Lint and Format Check
     runs-on: ubuntu-latest
     needs: [detect-changes]
-    # Note: always() is required because detect-changes is skipped on workflow_dispatch
-    if: |
-      always() && !cancelled() && (
-        github.event_name == 'push' ||
-        github.event_name == 'workflow_dispatch' ||
-        needs.detect-changes.outputs.rs-changed == 'true' ||
-        needs.detect-changes.outputs.toml-changed == 'true' ||
-        needs.detect-changes.outputs.mjs-changed == 'true' ||
-        needs.detect-changes.outputs.docs-changed == 'true' ||
-        needs.detect-changes.outputs.workflow-changed == 'true'
+    # Note: !cancelled() is required because detect-changes is skipped on workflow_dispatch
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.rs-changed == 'true' ||
+      needs.detect-changes.outputs.toml-changed == 'true' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
       )
+      }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
@@ -148,12 +198,12 @@ jobs:
           components: rustfmt, clippy
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/bin/
@@ -182,23 +232,43 @@ jobs:
   # === TEST ===
   # Test runs independently of changelog check
   test:
+    timeout-minutes: 45
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-test-${{ matrix.os }}
+      cancel-in-progress: true
     name: Test (Rust on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     needs: [detect-changes, changelog]
     # Run if: push event, OR changelog succeeded, OR changelog was skipped (docs-only PR)
-    if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
+    if: ${{ !cancelled() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || needs.changelog.result == 'success' || needs.changelog.result == 'skipped') }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/bin/
@@ -223,18 +293,38 @@ jobs:
   # === BUILD ===
   # Build package - only runs if lint and test pass
   build:
+    timeout-minutes: 30
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-build
+      cancel-in-progress: true
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
-    if: always() && !cancelled() && needs.lint.result == 'success' && needs.test.result == 'success'
+    if: ${{ !cancelled() && needs.lint.result == 'success' && needs.test.result == 'success' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
         uses: dtolnay/rust-toolchain@stable
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: |
             ~/.cargo/bin/
@@ -255,18 +345,28 @@ jobs:
   # === AUTO RELEASE ===
   # Automatic release on push to main using changelog fragments
   auto-release:
+    timeout-minutes: 60
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Auto Release
     needs: [lint, test, build]
-    if: |
-      always() && !cancelled() &&
+    if: >-
+      ${{
+      !cancelled() &&
       github.event_name == 'push' &&
       github.ref == 'refs/heads/main' &&
       needs.build.result == 'success'
+      }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -275,7 +375,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -309,7 +409,7 @@ jobs:
         working-directory: ./rust
         run: |
           VERSION=$(grep -Po '(?<=^version = ")[^"]*' Cargo.toml)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build release
         if: steps.release_check.outputs.should_release == 'true'
@@ -362,6 +462,21 @@ jobs:
           fi
           echo "$OUT"
 
+      - name: Verify crate on crates.io
+        # Issue #41: Rust was the only language that published without ever
+        # reading the result back, so a rejected or half-completed upload would
+        # still have produced a green run, a git tag and a GitHub release for a
+        # version nobody can depend on. JavaScript, Python and C# all verify;
+        # now Rust does too.
+        if: steps.release_check.outputs.should_release == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          VER=$(sed -n 's|^version = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          node scripts/wait-for-registry.mjs \
+            --registry crates --name "$CRATE" --version "$VER"
+
       - name: Create GitHub Release
         if: steps.release_check.outputs.should_release == 'true'
         env:
@@ -377,18 +492,28 @@ jobs:
   # === MANUAL INSTANT RELEASE ===
   # Manual release via workflow_dispatch - only after CI passes
   manual-release:
+    timeout-minutes: 60
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Instant Release
     needs: [lint, test, build]
-    if: |
-      always() && !cancelled() &&
+    if: >-
+      ${{
+      !cancelled() &&
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.release_mode == 'instant' &&
       needs.build.result == 'success'
+      }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -397,7 +522,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -465,6 +590,15 @@ jobs:
           fi
           echo "$OUT"
 
+      - name: Verify crate on crates.io
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' rust/Cargo.toml | head -1)
+          node scripts/wait-for-registry.mjs --registry crates \
+            --name "$CRATE" --version "${{ steps.version.outputs.new_version }}"
+
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
         env:
@@ -479,6 +613,14 @@ jobs:
 
   # === MANUAL CHANGELOG PR ===
   changelog-pr:
+    timeout-minutes: 20
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Create Changelog PR
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_mode == 'changelog-pr'
     runs-on: ubuntu-latest
@@ -486,12 +628,12 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: '22'
 
@@ -514,7 +656,7 @@ jobs:
           echo "Created changelog fragment: $FILENAME"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: add changelog for manual ${{ github.event.inputs.bump_type }} release'

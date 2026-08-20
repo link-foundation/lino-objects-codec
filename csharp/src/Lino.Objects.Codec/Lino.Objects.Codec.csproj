@@ -13,7 +13,13 @@
     <RepositoryUrl>https://github.com/link-foundation/lino-objects-codec.git</RepositoryUrl>
     <PackageTags>links-notation;serialization;codec;object-graph;circular-references</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- NuGet warns "Readme missing" without a packed readme (NU5039 family). -->
+    <None Include="..\..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Link.Foundation.Links.Notation" Version="0.13.0" />

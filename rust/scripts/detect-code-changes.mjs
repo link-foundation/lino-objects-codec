@@ -35,8 +35,9 @@
  *   - any-code-changed: 'true' if any code files changed (excludes docs, changelog.d, experiments, examples)
  */
 
-import { execSync } from 'child_process';
-import { appendFileSync } from 'fs';
+import { execSync } from "child_process";
+import { appendFileSync } from "fs";
+import { pathToFileURL } from "url";
 
 /**
  * Execute a shell command and return trimmed output
@@ -45,11 +46,11 @@ import { appendFileSync } from 'fs';
  */
 function exec(command) {
   try {
-    return execSync(command, { encoding: 'utf-8' }).trim();
+    return execSync(command, { encoding: "utf-8" }).trim();
   } catch (error) {
     console.error(`Error executing command: ${command}`);
     console.error(error.message);
-    return '';
+    return "";
   }
 }
 
@@ -70,10 +71,10 @@ function setOutput(name, value) {
  * Get the list of changed files between two commits
  * @returns {string[]} Array of changed file paths
  */
-function getChangedFiles() {
-  const eventName = process.env.GITHUB_EVENT_NAME || 'local';
+export function getChangedFiles() {
+  const eventName = process.env.GITHUB_EVENT_NAME || "local";
 
-  if (eventName === 'pull_request') {
+  if (eventName === "pull_request") {
     const baseSha = process.env.GITHUB_BASE_SHA;
     const headSha = process.env.GITHUB_HEAD_SHA;
 
@@ -82,13 +83,13 @@ function getChangedFiles() {
       try {
         // Ensure we have the base commit
         try {
-          execSync(`git cat-file -e ${baseSha}`, { stdio: 'ignore' });
+          execSync(`git cat-file -e ${baseSha}`, { stdio: "ignore" });
         } catch {
-          console.log('Base commit not available locally, attempting fetch...');
-          execSync(`git fetch origin ${baseSha}`, { stdio: 'inherit' });
+          console.log("Base commit not available locally, attempting fetch...");
+          execSync(`git fetch origin ${baseSha}`, { stdio: "inherit" });
         }
         const output = exec(`git diff --name-only ${baseSha} ${headSha}`);
-        return output ? output.split('\n').filter(Boolean) : [];
+        return output ? output.split("\n").filter(Boolean) : [];
       } catch (error) {
         console.error(`Git diff failed: ${error.message}`);
       }
@@ -96,16 +97,61 @@ function getChangedFiles() {
   }
 
   // For push events or fallback
-  console.log('Comparing HEAD^ to HEAD');
+  console.log("Comparing HEAD^ to HEAD");
   try {
-    const output = exec('git diff --name-only HEAD^ HEAD');
-    return output ? output.split('\n').filter(Boolean) : [];
+    const output = exec("git diff --name-only HEAD^ HEAD");
+    return output ? output.split("\n").filter(Boolean) : [];
   } catch {
     // If HEAD^ doesn't exist (first commit), list all files in HEAD
-    console.log('HEAD^ not available, listing all files in HEAD');
-    const output = exec('git ls-tree --name-only -r HEAD');
-    return output ? output.split('\n').filter(Boolean) : [];
+    console.log("HEAD^ not available, listing all files in HEAD");
+    const output = exec("git ls-tree --name-only -r HEAD");
+    return output ? output.split("\n").filter(Boolean) : [];
   }
+}
+
+/**
+ * Path of the current working directory relative to the repository root.
+ *
+ * `git diff --name-only` always prints paths relative to the **repository
+ * root**, but this script runs with `working-directory: ./rust` and compares
+ * those paths against package-relative prefixes such as `examples/`. In this
+ * monorepo the real paths are `rust/examples/...`, so before issue #41 none of
+ * the exclusions ever matched and `Cargo.toml` could never be detected -- the
+ * same class of defect as issue #39. Resolving the prefix at run time keeps the
+ * script correct both here and in a single-package checkout, where the prefix
+ * is empty.
+ *
+ * @returns {string} The prefix, ending with `/`, or `''` at the repository root
+ */
+export function getPathPrefix() {
+  return exec("git rev-parse --show-prefix");
+}
+
+/**
+ * Re-express repository-root-relative paths as package-relative paths,
+ * dropping everything that lives outside this package.
+ *
+ * @param {string[]} changedFiles - Repository-root-relative paths
+ * @param {string} prefix - Package prefix such as `rust/`
+ * @returns {string[]} Package-relative paths
+ */
+export function toPackagePaths(changedFiles, prefix) {
+  if (!prefix) {
+    return changedFiles;
+  }
+  return changedFiles
+    .filter((file) => file.startsWith(prefix))
+    .map((file) => file.slice(prefix.length));
+}
+
+/**
+ * Check whether a repository-root-relative path is a workflow definition.
+ *
+ * @param {string} filePath - Repository-root-relative path
+ * @returns {boolean} True for files under `.github/workflows/`
+ */
+export function isWorkflowFile(filePath) {
+  return filePath.startsWith(".github/workflows/");
 }
 
 /**
@@ -113,14 +159,19 @@ function getChangedFiles() {
  * @param {string} filePath - The file path to check
  * @returns {boolean} True if the file should be excluded
  */
-function isExcludedFromCodeChanges(filePath) {
+export function isExcludedFromCodeChanges(filePath) {
   // Exclude markdown files in any folder
-  if (filePath.endsWith('.md')) {
+  if (filePath.endsWith(".md")) {
     return true;
   }
 
   // Exclude specific folders from code changes
-  const excludedFolders = ['changelog.d/', 'docs/', 'experiments/', 'examples/'];
+  const excludedFolders = [
+    "changelog.d/",
+    "docs/",
+    "experiments/",
+    "examples/",
+  ];
 
   for (const folder of excludedFolders) {
     if (filePath.startsWith(folder)) {
@@ -132,63 +183,85 @@ function isExcludedFromCodeChanges(filePath) {
 }
 
 /**
+ * Classify a set of repository-root-relative changed paths.
+ *
+ * Split out from `detectChanges` so the classification can be unit tested
+ * without a git repository.
+ *
+ * @param {string[]} changedFiles - Repository-root-relative changed paths
+ * @param {string} prefix - Package prefix such as `rust/`
+ * @returns {{outputs: Record<string, string>, packageFiles: string[], codeChangedFiles: string[]}}
+ */
+export function classifyChanges(changedFiles, prefix) {
+  const packageFiles = toPackagePaths(changedFiles, prefix);
+  const workflowFiles = changedFiles.filter(isWorkflowFile);
+
+  // Code changes are judged on package-relative paths, so the documented
+  // `examples/`, `experiments/`, `docs/` and `.changeset/` exclusions apply.
+  const codeChangedFiles = packageFiles.filter(
+    (file) => !isExcludedFromCodeChanges(file),
+  );
+
+  // A workflow change still counts as a code change: it can alter how this
+  // package is built and published even when no package file moved.
+  const codePattern = /\.(rs|toml|mjs|js|yml|yaml)$/;
+  const codeChanged =
+    codeChangedFiles.some((file) => codePattern.test(file)) ||
+    workflowFiles.length > 0;
+
+  return {
+    packageFiles,
+    codeChangedFiles,
+    outputs: {
+      "rs-changed": String(packageFiles.some((f) => f.endsWith(".rs"))),
+      "toml-changed": String(packageFiles.some((f) => f.endsWith(".toml"))),
+      "mjs-changed": String(packageFiles.some((f) => f.endsWith(".mjs"))),
+      "docs-changed": String(packageFiles.some((f) => f.endsWith(".md"))),
+      "workflow-changed": String(workflowFiles.length > 0),
+      "any-code-changed": String(codeChanged),
+    },
+  };
+}
+
+/**
  * Main function to detect changes
  */
-function detectChanges() {
-  console.log('Detecting file changes for CI/CD...\n');
+export function detectChanges() {
+  console.log("Detecting file changes for CI/CD...\n");
 
   const changedFiles = getChangedFiles();
+  const prefix = getPathPrefix();
 
-  console.log('Changed files:');
+  console.log(`Package prefix: ${prefix || "(repository root)"}`);
+  console.log("Changed files:");
   if (changedFiles.length === 0) {
-    console.log('  (none)');
+    console.log("  (none)");
   } else {
     changedFiles.forEach((file) => console.log(`  ${file}`));
   }
-  console.log('');
+  console.log("");
 
-  // Detect .rs file changes (Rust source)
-  const rsChanged = changedFiles.some((file) => file.endsWith('.rs'));
-  setOutput('rs-changed', rsChanged ? 'true' : 'false');
+  const { codeChangedFiles, outputs } = classifyChanges(changedFiles, prefix);
 
-  // Detect .toml file changes (Cargo.toml, Cargo.lock, etc.)
-  const tomlChanged = changedFiles.some((file) => file.endsWith('.toml'));
-  setOutput('toml-changed', tomlChanged ? 'true' : 'false');
-
-  // Detect .mjs file changes (scripts)
-  const mjsChanged = changedFiles.some((file) => file.endsWith('.mjs'));
-  setOutput('mjs-changed', mjsChanged ? 'true' : 'false');
-
-  // Detect documentation changes (any .md file)
-  const docsChanged = changedFiles.some((file) => file.endsWith('.md'));
-  setOutput('docs-changed', docsChanged ? 'true' : 'false');
-
-  // Detect workflow changes
-  const workflowChanged = changedFiles.some((file) =>
-    file.startsWith('.github/workflows/')
-  );
-  setOutput('workflow-changed', workflowChanged ? 'true' : 'false');
-
-  // Detect code changes (excluding docs, changelog.d, experiments, examples folders, and markdown files)
-  const codeChangedFiles = changedFiles.filter(
-    (file) => !isExcludedFromCodeChanges(file)
-  );
-
-  console.log('\nFiles considered as code changes:');
+  console.log("Files considered as code changes:");
   if (codeChangedFiles.length === 0) {
-    console.log('  (none)');
+    console.log("  (none)");
   } else {
     codeChangedFiles.forEach((file) => console.log(`  ${file}`));
   }
-  console.log('');
+  console.log("");
 
-  // Check if any code files changed (.rs, .toml, .mjs, .yml, .yaml, or workflow files)
-  const codePattern = /\.(rs|toml|mjs|js|yml|yaml)$|\.github\/workflows\//;
-  const codeChanged = codeChangedFiles.some((file) => codePattern.test(file));
-  setOutput('any-code-changed', codeChanged ? 'true' : 'false');
+  for (const [name, value] of Object.entries(outputs)) {
+    setOutput(name, value);
+  }
 
-  console.log('\nChange detection completed.');
+  console.log("\nChange detection completed.");
 }
 
-// Run the detection
-detectChanges();
+// Run the detection unless this module was imported by a test.
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  detectChanges();
+}

@@ -49,22 +49,16 @@ def update_pyproject(pyproject_path: Path, old_version: str, new_version: str) -
     """Update version in pyproject.toml."""
     content = pyproject_path.read_text()
     pattern = rf'^(version\s*=\s*["\']){re.escape(old_version)}(["\'])'
-    new_content = re.sub(
-        pattern, rf"\g<1>{new_version}\g<2>", content, flags=re.MULTILINE
-    )
+    new_content = re.sub(pattern, rf"\g<1>{new_version}\g<2>", content, flags=re.MULTILINE)
 
     if content == new_content:
-        raise ValueError(
-            f"Failed to update version from {old_version} to {new_version}"
-        )
+        raise ValueError(f"Failed to update version from {old_version} to {new_version}")
 
     pyproject_path.write_text(new_content)
     print(f"✓ Updated pyproject.toml: {old_version} → {new_version}")
 
 
-def update_changelog(
-    changelog_path: Path, version: str, bump_type: str, description: str
-) -> None:
+def update_changelog(changelog_path: Path, version: str, bump_type: str, description: str) -> None:
     """Update CHANGELOG.md with new version entry."""
     if not changelog_path.exists():
         print(f"Warning: {changelog_path} not found, skipping changelog update")
@@ -95,9 +89,7 @@ def update_changelog(
         main_heading_match = re.search(r"^# .+$", content, re.MULTILINE)
         if main_heading_match:
             insert_pos = main_heading_match.end()
-            new_content = (
-                content[:insert_pos] + "\n\n" + new_entry + content[insert_pos:]
-            )
+            new_content = content[:insert_pos] + "\n\n" + new_entry + content[insert_pos:]
         else:
             # Prepend if no headings at all
             new_content = new_entry + "\n" + content
@@ -154,9 +146,7 @@ def main() -> int:
         print(f"\n✅ Version bump complete: {old_version} → {new_version}")
         print("\nNext steps:")
         print("  1. Review changes: git diff")
-        print(
-            "  2. Commit: git add . && git commit -m 'chore: bump version to {new_version}'"
-        )
+        print("  2. Commit: git add . && git commit -m 'chore: bump version to {new_version}'")
         print("  3. Tag: git tag v{new_version}")
         print("  4. Push: git push && git push --tags")
 
