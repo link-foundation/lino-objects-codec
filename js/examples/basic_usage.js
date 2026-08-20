@@ -2,7 +2,13 @@
  * Basic usage examples for lino-objects-codec.
  */
 
-import { encode, decode, formatIndented, parseIndented } from '../src/index.js';
+import {
+  encode,
+  encodeCompact,
+  decode,
+  formatIndented,
+  parseIndented,
+} from '../src/index.js';
 
 function runReadableIndentedExample() {
   console.log('1. Readable Indented Data:');
@@ -97,12 +103,15 @@ function runTypedNestedStructuresExample() {
 
 function runCircularReferencesExample() {
   console.log('\n5. Circular References:');
+  // Object identity is a property of the compact format, which names shared
+  // nodes with `obj_N` ids. The readable format writes a plain tree, so it
+  // rejects a cycle instead of silently unrolling it.
 
   // Self-referencing array
   const arr = [1, 2, 3];
   arr.push(arr);
   console.log('  Created self-referencing array');
-  const encodedCircular = encode({ obj: arr });
+  const encodedCircular = encodeCompact({ obj: arr });
   console.log(`  Encoded: ${encodedCircular}`);
   const decodedCircular = decode({ notation: encodedCircular });
   console.log(
@@ -119,7 +128,7 @@ function runCircularReferencesExample() {
   const obj = { name: 'root' };
   obj.self = obj;
   console.log('\n  Created self-referencing object');
-  const encodedObjectCircular = encode({ obj });
+  const encodedObjectCircular = encodeCompact({ obj });
   console.log(`  Encoded: ${encodedObjectCircular}`);
   const decodedObjectCircular = decode({ notation: encodedObjectCircular });
   console.log(`  Decoded correctly: ${decodedObjectCircular.name === 'root'}`);
@@ -133,10 +142,11 @@ function runCircularReferencesExample() {
 
 function runSharedReferencesExample() {
   console.log('\n6. Shared Object References:');
+  // Also a compact-format property, for the same reason.
   const shared = { shared: 'data', value: 42 };
   const container = { first: shared, second: shared, third: shared };
   console.log('  Created container with 3 references to same object');
-  const encodedShared = encode({ obj: container });
+  const encodedShared = encodeCompact({ obj: container });
   console.log(`  Encoded: ${encodedShared}`);
   const decodedShared = decode({ notation: encodedShared });
   const allSame =
@@ -159,6 +169,43 @@ function runSharedReferencesExample() {
   }
 }
 
+function runOutputFormatsExample() {
+  console.log('\n7. Output Formats:');
+  const data = {
+    users: [
+      { id: 1, name: 'Alice' },
+      { id: 2, name: 'Bob' },
+    ],
+    count: 2,
+  };
+
+  // The default output is readable: values are written as they are.
+  const readable = encode({ obj: data });
+  console.log('  Readable (default):');
+  console.log(readable);
+
+  // The compact form carries a type marker per value and base64 encodes strings.
+  const compact = encodeCompact({ obj: data });
+  console.log(`  Compact: ${compact}`);
+
+  // `decode` recognises both.
+  const fromReadable = JSON.stringify(decode({ notation: readable }));
+  const fromCompact = JSON.stringify(decode({ notation: compact }));
+  console.log(
+    `  Both decode back to the same value: ${fromReadable === JSON.stringify(data) && fromCompact === JSON.stringify(data)}`
+  );
+
+  // A cycle has no readable form; use the compact one.
+  const cyclic = {};
+  cyclic.self = cyclic;
+  try {
+    encode({ obj: cyclic });
+    console.error('  ERROR: a cycle should not be writable as readable text!');
+  } catch (error) {
+    console.log(`  Readable format rejects a cycle: ${error.name}`);
+  }
+}
+
 function main() {
   console.log('=== Link Notation Objects Codec Examples ===\n');
 
@@ -168,6 +215,7 @@ function main() {
   runTypedNestedStructuresExample();
   runCircularReferencesExample();
   runSharedReferencesExample();
+  runOutputFormatsExample();
 
   console.log('\n=== All examples completed successfully! ===');
 }

@@ -1,6 +1,11 @@
 """Basic usage examples for lino-objects-codec."""
 
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import (
+    CircularReferenceError,
+    decode,
+    encode,
+    encode_compact,
+)
 
 
 def main():
@@ -60,12 +65,15 @@ def main():
 
     # Example 4: Circular references
     print("\n4. Circular References:")
+    # Object identity is a property of the compact format, which names shared
+    # nodes with ``obj_N`` ids. The readable format writes a plain tree, so it
+    # rejects a cycle instead of silently unrolling it.
 
     # Self-referencing list
     lst = [1, 2, 3]
     lst.append(lst)
     print("  Created self-referencing list")
-    encoded_circular = encode(lst)
+    encoded_circular = encode_compact(lst)
     print(f"  Encoded: {encoded_circular}")
     decoded_circular = decode(encoded_circular)
     print(f"  Decoded correctly: {decoded_circular[:3] == [1, 2, 3]}")
@@ -76,7 +84,7 @@ def main():
     d = {"name": "root"}
     d["self"] = d
     print("\n  Created self-referencing dict")
-    encoded_dict_circular = encode(d)
+    encoded_dict_circular = encode_compact(d)
     print(f"  Encoded: {encoded_dict_circular}")
     decoded_dict_circular = decode(encoded_dict_circular)
     print(f"  Decoded correctly: {decoded_dict_circular['name'] == 'root'}")
@@ -87,10 +95,11 @@ def main():
 
     # Example 5: Shared references
     print("\n5. Shared Object References:")
+    # Also a compact-format property, for the same reason.
     shared = {"shared": "data", "value": 42}
     container = {"first": shared, "second": shared, "third": shared}
     print("  Created container with 3 references to same object")
-    encoded_shared = encode(container)
+    encoded_shared = encode_compact(container)
     print(f"  Encoded: {encoded_shared}")
     decoded_shared = decode(encoded_shared)
     print(
@@ -105,6 +114,39 @@ def main():
         f"  Modified through 'first', visible in 'second': {decoded_shared['second'].get('modified')}"
     )
     assert decoded_shared["second"]["modified"] is True
+
+    # Example 6: Output formats
+    print("\n6. Output Formats:")
+    data = {
+        "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
+        "count": 2,
+    }
+
+    # The default output is readable: values are written as they are.
+    readable = encode(data)
+    print("  Readable (default):")
+    print(readable)
+
+    # The compact form carries a type marker per value and base64 encodes strings.
+    compact = encode_compact(data)
+    print(f"  Compact: {compact}")
+
+    # ``decode`` recognises both.
+    print(
+        "  Both decode back to the same value: "
+        f"{decode(readable) == data and decode(compact) == data}"
+    )
+    assert decode(readable) == data
+    assert decode(compact) == data
+
+    # A cycle has no readable form; use the compact one.
+    cyclic: dict[str, object] = {}
+    cyclic["self"] = cyclic
+    try:
+        encode(cyclic)
+        raise AssertionError("a cycle should not be writable as readable text")
+    except CircularReferenceError as error:
+        print(f"  Readable format rejects a cycle: {type(error).__name__}")
 
     print("\n=== All examples completed successfully! ===")
 
