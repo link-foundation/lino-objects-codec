@@ -197,6 +197,13 @@ jobs:
         with:
           python-version: '3.13'
 
+      - name: Setup Node.js
+        # The post-publish registry readback is a shared Node helper, so the
+        # release jobs need Node even though the package itself is Python.
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -232,37 +239,63 @@ jobs:
           name: dist
           path: python/dist/
 
+      - name: PyPI publish preflight
+        # Issue #41: the 0.2.0 release died inside the publish action with
+        # `invalid-publisher: valid token, but no corresponding publisher`,
+        # which names none of the values an operator has to enter on PyPI and
+        # does not say the missing piece lives outside this repository. This
+        # step prints the four claims and the registration steps up front.
+        # It reports without gating: a correctly registered *pending* publisher
+        # is indistinguishable from none at all until the first upload lands.
+        if: steps.version_check.outputs.should_release == 'true'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          # Switch to '1' to dump the resolved OIDC claims; quiet by default.
+          PYPI_PREFLIGHT_VERBOSE: '0'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.version_check.outputs.package_name }}"
+
       - name: Publish to PyPI
         id: pypi_publish
         if: steps.version_check.outputs.should_release == 'true'
         # Uses PyPI's OIDC Trusted Publisher flow (id-token: write below). If you see "Trusted
         # Publisher … not configured" in the logs, configure it for this repo + workflow on PyPI.
         # See docs/case-studies/issue-25/README.md for the broader context.
+        # A PYPI_API_TOKEN secret, when present, takes over so a first release
+        # can happen before trusted publishing is registered; without the
+        # secret the `password` input is empty and OIDC is used as before.
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
           skip-existing: true
 
-      - name: Verify package on PyPI
-        if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
+      - name: Explain a failed publish
+        # Turns the raw OIDC exchange error into the runbook. Without this the
+        # only guidance in the log is a list of claims and a 'not found'.
+        if: failure() && steps.pypi_publish.outcome == 'failure'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '1'
         run: |
-          PKG="${{ steps.version_check.outputs.package_name }}"
-          VER="${{ steps.version_check.outputs.current_version }}"
-          # PyPI's CDN can lag a few seconds behind a successful upload.
-          for i in 1 2 3 4 5; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PKG}/${VER}/json")
-            echo "Attempt $i: PyPI HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on PyPI"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "::error title=PyPI verification failed::${PKG}@${VER} is not on PyPI after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-29/README.md for the runbook."
-          exit 1
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.version_check.outputs.package_name }}"
+
+      - name: Verify package on PyPI
+        # Issue #41: this readback allowed twenty-five seconds, the same class
+        # of too-short budget that turned a successful NuGet publish into a red
+        # run. It now uses the shared, per-registry-tuned readback.
+        if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
+        run: |
+          node scripts/wait-for-registry.mjs --registry pypi \
+            --name "${{ steps.version_check.outputs.package_name }}" \
+            --version "${{ steps.version_check.outputs.current_version }}"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
@@ -301,6 +334,12 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install build twine "scriv[toml]"
+
+      - name: Setup Node.js
+        # The post-publish registry readback is a shared Node helper.
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
 
       - name: Configure git
         run: |
@@ -345,6 +384,16 @@ jobs:
           PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
           echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
 
+      - name: PyPI publish preflight
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '0'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.pkg.outputs.package_name }}"
+
       - name: Publish to PyPI
         id: pypi_publish
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
@@ -352,27 +401,28 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: python/dist/
+          password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
           skip-existing: true
 
+      - name: Explain a failed publish
+        if: failure() && steps.pypi_publish.outcome == 'failure'
+        working-directory: ./python
+        env:
+          PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+          PYPI_PREFLIGHT_VERBOSE: '1'
+        run: |
+          python scripts/pypi_publish_preflight.py \
+            --package "${{ steps.pkg.outputs.package_name }}"
+
       - name: Verify package on PyPI
         if: (steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true') && steps.pypi_publish.outcome == 'success'
+        env:
+          REGISTRY_WAIT_VERBOSE: '0'
         run: |
-          PKG="${{ steps.pkg.outputs.package_name }}"
-          VER="${{ steps.version.outputs.new_version }}"
-          for i in 1 2 3 4 5; do
-            STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PKG}/${VER}/json")
-            echo "Attempt $i: PyPI HTTP status for ${PKG}@${VER}: ${STATUS}"
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Verified ${PKG}@${VER} is on PyPI"
-              exit 0
-            fi
-            sleep 5
-          done
-          echo "::error title=PyPI verification failed::${PKG}@${VER} is not on PyPI after publish."
-          echo "The publish step reported success but the registry does not see the version."
-          echo "See docs/case-studies/issue-29/README.md for the runbook."
-          exit 1
+          node scripts/wait-for-registry.mjs --registry pypi \
+            --name "${{ steps.pkg.outputs.package_name }}" \
+            --version "${{ steps.version.outputs.new_version }}"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
