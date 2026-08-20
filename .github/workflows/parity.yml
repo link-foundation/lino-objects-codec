@@ -1,0 +1,43 @@
+name: Cross-Language Parity
+
+# Runs on every pull request with no `paths:` filter, so it cannot be skipped by
+# touching only one language's subtree. It enforces that the four
+# implementations (JavaScript, Python, Rust, C#) are always changed together, so
+# they never drift apart the way they did in PR #38 (issue #39).
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  parity:
+    name: Languages Change Together
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check parity-gate helper's own tests
+        run: node --test scripts/check-language-parity.test.mjs
+
+      - name: Enforce cross-language parity
+        env:
+          PARITY_BASE_REF: ${{ github.base_ref }}
+          # An intentional single-language change opts out by writing
+          # `[skip-parity]` in the pull request title or body.
+          PARITY_SKIP_REASON: >-
+            ${{ (contains(github.event.pull_request.title, '[skip-parity]') ||
+                 contains(github.event.pull_request.body, '[skip-parity]'))
+                && 'opted out with [skip-parity] in the pull request' || '' }}
+        run: node scripts/check-language-parity.mjs
