@@ -22,16 +22,15 @@ on:
 permissions:
   contents: read
 
-# A read-only check, so superseded runs are safe to cancel.
-concurrency:
-  group: check-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   test:
     name: Test Shared Scripts
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # Read-only checks, so superseded runs are safe to cancel.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-test
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
 
@@ -42,3 +41,28 @@ jobs:
 
       - name: Run shared script tests
         run: node --test scripts/*.test.mjs
+
+  actionlint:
+    name: Lint Workflows
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-actionlint
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      # A malformed workflow file is rejected by GitHub at dispatch time with no
+      # check attached to the pull request, i.e. a silent false negative: the PR
+      # looks green while a pipeline no longer runs at all. actionlint parses
+      # every workflow and also catches shell-injection and stale-context bugs.
+      - name: Run actionlint
+        env:
+          ACTIONLINT_VERSION: 1.7.7
+        run: |
+          curl -sSfL \
+            "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            | tar xz actionlint
+          # `queue:` is valid workflow syntax (documented under `concurrency`)
+          # but is newer than actionlint's bundled schema, so it is filtered out.
+          ./actionlint -ignore 'unexpected key "queue" for "concurrency" section'
