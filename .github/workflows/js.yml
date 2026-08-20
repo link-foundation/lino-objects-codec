@@ -119,8 +119,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
@@ -188,8 +188,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
@@ -243,8 +243,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 

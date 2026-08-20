@@ -60,8 +60,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
@@ -69,6 +69,12 @@ jobs:
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '8.0.x'
+
+      # Node powers the shared CI helper scripts under csharp/scripts.
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
 
       - name: Restore dependencies
         working-directory: ./csharp
@@ -81,6 +87,19 @@ jobs:
       - name: Build with warnings as errors
         working-directory: ./csharp
         run: dotnet build --configuration Release --no-restore /warnaserror
+
+      # Best practice #2: the same 1500-line ceiling the JavaScript ESLint
+      # config enforces, applied to C# sources.
+      - name: Check file size limit
+        working-directory: ./csharp
+        run: node scripts/check-file-size.mjs
+
+      # The release helpers under csharp/scripts are executed by the release
+      # jobs but their unit tests never ran in CI before issue #41, so a broken
+      # helper would only have surfaced during an actual release.
+      - name: Run CI script tests
+        working-directory: ./csharp
+        run: node --test scripts/*.test.mjs
 
   # Test matrix: .NET on multiple OS
   test:
@@ -108,8 +127,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
@@ -164,8 +183,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
@@ -214,8 +233,8 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.base_ref }}
-        # Explicit shell: the matrix includes Windows runners, where the
-        # default shell is PowerShell.
+        # Explicit shell: some of these jobs run on Windows runners, where
+        # the default shell is PowerShell.
         shell: bash
         run: bash scripts/simulate-fresh-merge.sh
 
