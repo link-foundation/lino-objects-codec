@@ -488,7 +488,44 @@ actionlint -shellcheck /path/to/shellcheck \
   -ignore 'unexpected key "queue" for "concurrency" section'
 ```
 
-### 9.6 Parity gate
+### 9.7 Dependency review is unavailable, NuGet was uncovered
+
+The first security run reported:
+
+```
+##[error]Dependency review is not supported on this repository.
+Please ensure that Dependency graph is enabled
+```
+
+`actions/dependency-review-action` needs GitHub's Dependency graph switched on
+for the repository. `gh api repos/link-foundation/lino-objects-codec` confirms
+the repository is public but reports no dependency-graph entry under
+`security_and_analysis`, and enabling it is a repository/organisation setting
+that a pull request cannot carry. Leaving the job in place would have created a
+check that can *only* fail -- the mirror image of the checks in 9.3 that could
+only pass, and equally useless.
+
+It was removed rather than marked `continue-on-error`, because a job whose
+failure is ignored is exactly the false negative issue #41 is about.
+
+Removing it did expose a real gap: `npm audit`, `cargo audit` and `pip-audit`
+cover three of the four ecosystems here, and dependency review had been the only
+thing that would have looked at **NuGet**. It is replaced by a native
+`dotnet list package --vulnerable --include-transitive` job, so all four
+languages are now audited by tools that work today.
+
+One detail is worth recording: `dotnet list package --vulnerable` **exits 0 even
+when it finds advisories**, so trusting its exit code would have produced
+another silently-passing check. The job greps the report instead. Both paths
+were verified locally -- the real project reports "no vulnerable packages", and
+a synthetic report containing a `> Newtonsoft.Json ... High` row is detected.
+
+**Follow-up for a repository admin** (not blocking this pull request): enabling
+Dependency graph, Dependabot alerts and secret-scanning push protection at
+https://github.com/link-foundation/lino-objects-codec/settings/security_analysis
+would allow the dependency-review job to be restored on top of these audits.
+
+### 9.8 Parity gate
 
 `scripts/check-language-parity.mjs` fails on this pull request with
 "Changed: JavaScript, C# / Missing a matching change: Python, Rust" because the
