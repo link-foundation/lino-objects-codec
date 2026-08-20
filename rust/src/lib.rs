@@ -50,6 +50,7 @@ use links_notation::{parse_lino_to_links, LiNo};
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
+pub mod debug;
 pub mod readable;
 
 pub use readable::{BASE64_MARKER, DEFAULT_INDENT};
@@ -702,9 +703,11 @@ impl ObjectCodec {
         }
 
         if is_compact_notation(notation) {
+            crate::debug::trace("codec.decode", || "compact notation detected".to_string());
             return self.decode_compact(notation);
         }
 
+        crate::debug::trace("codec.decode", || "readable notation detected".to_string());
         readable::decode(notation)
     }
 
@@ -802,7 +805,7 @@ impl ObjectCodec {
                     type_ids::BOOL => {
                         if values.len() > 1 {
                             if let LiNo::Ref(val) = &values[1] {
-                                return Ok(LinoValue::Bool(val == "true"));
+                                return Ok(LinoValue::Bool(val.eq_ignore_ascii_case("true")));
                             }
                         }
                         Ok(LinoValue::Bool(false))
@@ -923,6 +926,25 @@ impl ObjectCodec {
 /// Compact output always starts a line with `(` immediately followed by a type
 /// marker — optionally preceded by an object id, as in `(obj_0: object …)`.
 /// Readable output never does: its first line is either a lone `(` or a scalar.
+/// Type markers that open a compact document, across all implementations.
+///
+/// The languages historically disagreed on three of them -- Python writes
+/// `None`/`list`/`dict` where JavaScript and Rust write `null`/`array`/`object`
+/// -- so every implementation accepts the union and can read a compact document
+/// written by any of the others.
+const COMPACT_TYPE_MARKERS: [&str; 10] = [
+    type_ids::NULL,
+    "None",
+    type_ids::BOOL,
+    type_ids::INT,
+    type_ids::FLOAT,
+    type_ids::STR,
+    type_ids::ARRAY,
+    "list",
+    type_ids::OBJECT,
+    "dict",
+];
+
 fn is_compact_notation(notation: &str) -> bool {
     let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
         return false;
@@ -951,16 +973,7 @@ fn is_compact_notation(notation: &str) -> bool {
         marker = next;
     }
 
-    matches!(
-        marker,
-        type_ids::NULL
-            | type_ids::BOOL
-            | type_ids::INT
-            | type_ids::FLOAT
-            | type_ids::STR
-            | type_ids::ARRAY
-            | type_ids::OBJECT
-    )
+    COMPACT_TYPE_MARKERS.contains(&marker)
 }
 
 // Global codec instance for convenience functions

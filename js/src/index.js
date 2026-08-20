@@ -15,8 +15,27 @@
  * @module lino-objects-codec
  */
 
-// Typed object codec (preserves types with markers like (int 42), (str base64))
-export { ObjectCodec, encode, decode } from './codec.js';
+// Object codec: `encode` writes the readable, indented format; `decode` reads
+// both that and the compact (type-tagged, base64) format.
+export {
+  ObjectCodec,
+  encode,
+  encodeCompact,
+  encodeObfuscated,
+  decode,
+  decodeCompact,
+  isCompactNotation,
+} from './codec.js';
+
+// Readable format internals: constants and the error raised on circular values
+export {
+  DEFAULT_INDENT,
+  BASE64_MARKER,
+  CircularReferenceError,
+} from './readable.js';
+
+// Opt-in tracing, shared switch across all four language implementations
+export { DEBUG_ENV_VAR, isDebugEnabled, setDebugEnabled } from './debug.js';
 
 // Formatting utilities for readable indented data and compact JSON/Lino conversion
 export {

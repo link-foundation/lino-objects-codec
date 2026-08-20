@@ -41,6 +41,7 @@
 //! CRLF normalisation would corrupt) are marked individually as
 //! `(base64 "…")` instead of encoding the whole document.
 
+use crate::debug::trace;
 use crate::{CodecError, LinoValue};
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 
@@ -60,6 +61,7 @@ pub fn encode(value: &LinoValue, indent: &str) -> String {
 /// Decode the readable, indented Links Notation form back into a value.
 pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
     let tokens = tokenize(text)?;
+    trace("readable.decode", || format!("{} tokens", tokens.len()));
     let mut cursor = Cursor { tokens, pos: 0 };
     let rows = cursor.parse_rows(true)?;
 

@@ -107,11 +107,38 @@ public class ObjectCodec
     }
 
     /// <summary>
-    /// Encode a C# object to Links Notation format.
+    /// Encode a C# object into the readable, indented Links Notation format.
+    /// </summary>
+    /// <remarks>
+    /// This is the default output: keys and values are written as they are, so the
+    /// document can be read, grepped and reviewed without decoding anything. Use
+    /// <see cref="EncodeCompact"/> for the single-line, base64 encoded form, which
+    /// is the only one that can represent shared nodes and circular references.
+    /// </remarks>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in readable Links Notation format</returns>
+    public string Encode(object? obj) => Readable.Encode(obj, Readable.DefaultIndent);
+
+    /// <summary>
+    /// Encode a C# object into the readable format with a custom indentation.
     /// </summary>
     /// <param name="obj">The C# object to encode</param>
-    /// <returns>String representation in Links Notation format</returns>
-    public string Encode(object? obj)
+    /// <param name="indent">Indentation string used per nesting level</param>
+    /// <returns>String representation in readable Links Notation format</returns>
+    public string Encode(object? obj, string indent) => Readable.Encode(obj, indent);
+
+    /// <summary>
+    /// Encode a C# object to the compact Links Notation format.
+    /// </summary>
+    /// <remarks>
+    /// Every value carries its type marker and every string is base64 encoded, so
+    /// the result is a single machine-oriented line. Unlike the readable format,
+    /// this one names shared nodes with <c>obj_N</c> ids and can therefore
+    /// represent circular references.
+    /// </remarks>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in compact Links Notation format</returns>
+    public string EncodeCompact(object? obj)
     {
         // Reset state for each encode operation
         _encodeMemo = new Dictionary<object, string>(ReferenceEqualityComparer.Instance);
@@ -149,11 +176,46 @@ public class ObjectCodec
     }
 
     /// <summary>
-    /// Decode Links Notation format to a C# object.
+    /// Encode a C# object to the compact Links Notation format.
     /// </summary>
+    /// <remarks>Kept as the historical name of <see cref="EncodeCompact"/>.</remarks>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in compact Links Notation format</returns>
+    public string EncodeObfuscated(object? obj) => EncodeCompact(obj);
+
+    /// <summary>
+    /// Decode Links Notation format to a C# object, in either format.
+    /// </summary>
+    /// <remarks>
+    /// The format is detected from the document itself, so a document written by
+    /// <see cref="Encode(object?)"/> and one written by <see cref="EncodeCompact"/>
+    /// are both read back here.
+    /// </remarks>
     /// <param name="notation">String in Links Notation format</param>
     /// <returns>Reconstructed C# object</returns>
     public object? Decode(string notation)
+    {
+        if (string.IsNullOrWhiteSpace(notation))
+        {
+            return null;
+        }
+
+        if (IsCompactNotation(notation))
+        {
+            CodecDebug.Trace("decode", () => "compact notation detected");
+            return DecodeCompact(notation);
+        }
+
+        CodecDebug.Trace("decode", () => "readable notation detected");
+        return Readable.Decode(notation);
+    }
+
+    /// <summary>
+    /// Decode the compact Links Notation format to a C# object.
+    /// </summary>
+    /// <param name="notation">String in compact Links Notation format</param>
+    /// <returns>Reconstructed C# object</returns>
+    public object? DecodeCompact(string notation)
     {
         // Reset state for each decode operation
         _decodeMemo = new Dictionary<string, object?>();
@@ -237,7 +299,7 @@ public class ObjectCodec
 
         if (obj is bool boolVal)
         {
-            return MakeLink(TypeBool, boolVal ? "True" : "False");
+            return MakeLink(TypeBool, boolVal ? "true" : "false");
         }
 
         if (obj is int intVal)
@@ -451,7 +513,7 @@ public class ObjectCodec
                 var boolValue = link.Values[1];
                 if (boolValue.Id is not null)
                 {
-                    return boolValue.Id == "True";
+                    return string.Equals(boolValue.Id, "true", StringComparison.OrdinalIgnoreCase);
                 }
             }
             return false;
@@ -576,6 +638,67 @@ public class ObjectCodec
         // Unknown type marker
         throw new InvalidOperationException($"Unknown type marker: {typeMarker}");
     }
+
+    /// <summary>
+    /// Type markers that open a compact document, across all implementations.
+    /// </summary>
+    /// <remarks>
+    /// The languages historically disagreed on three of them — Python writes
+    /// <c>None</c>/<c>list</c>/<c>dict</c> where JavaScript and Rust write
+    /// <c>null</c>/<c>array</c>/<c>object</c> — so every implementation accepts
+    /// the union and can read a compact document written by any of the others.
+    /// </remarks>
+    private static readonly HashSet<string> CompactTypeMarkers = new(StringComparer.Ordinal)
+    {
+        TypeNull, "None", TypeBool, TypeInt, TypeFloat, TypeStr,
+        "array", TypeList, "object", TypeDict,
+    };
+
+    /// <summary>
+    /// Whether a document is in the compact format.
+    /// </summary>
+    /// <remarks>
+    /// A compact document always opens with a parenthesis followed by a type
+    /// marker — optionally preceded by an object id, as in <c>(obj_0: object …)</c>.
+    /// Readable output never does: its first line is either a lone <c>(</c> or a
+    /// scalar.
+    /// </remarks>
+    /// <param name="notation">The document to classify</param>
+    /// <returns>True when the document should be read by <see cref="DecodeCompact"/></returns>
+    public static bool IsCompactNotation(string notation)
+    {
+        var firstLine = notation
+            .Split('\n')
+            .Select(line => line.Trim())
+            .FirstOrDefault(line => line.Length > 0);
+
+        if (firstLine is null || !firstLine.StartsWith('('))
+        {
+            return false;
+        }
+
+        var tokens = firstLine[1..]
+            .Split(new[] { ' ', '\t', '\r', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (tokens.Length == 0)
+        {
+            return false;
+        }
+
+        var marker = tokens[0];
+
+        // Skip the `obj_N:` definition id, if present.
+        if (marker.EndsWith(':'))
+        {
+            if (!marker[..^1].StartsWith("obj_", StringComparison.Ordinal) || tokens.Length < 2)
+            {
+                return false;
+            }
+            marker = tokens[1];
+        }
+
+        return CompactTypeMarkers.Contains(marker);
+    }
 }
 
 /// <summary>
@@ -596,18 +719,54 @@ internal class ReferenceEqualityComparer : IEqualityComparer<object>
 public static class Codec
 {
     /// <summary>
-    /// Encode a C# object to Links Notation format.
+    /// Encode a C# object into the readable, indented Links Notation format.
     /// </summary>
     /// <param name="obj">The C# object to encode</param>
-    /// <returns>String representation in Links Notation format</returns>
+    /// <returns>String representation in readable Links Notation format</returns>
     public static string Encode(object? obj) => new ObjectCodec().Encode(obj);
 
     /// <summary>
-    /// Decode Links Notation format to a C# object.
+    /// Encode a C# object into the readable format with a custom indentation.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <param name="indent">Indentation string used per nesting level</param>
+    /// <returns>String representation in readable Links Notation format</returns>
+    public static string Encode(object? obj, string indent) => new ObjectCodec().Encode(obj, indent);
+
+    /// <summary>
+    /// Encode a C# object to the compact Links Notation format.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in compact Links Notation format</returns>
+    public static string EncodeCompact(object? obj) => new ObjectCodec().EncodeCompact(obj);
+
+    /// <summary>
+    /// Encode a C# object to the compact Links Notation format.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in compact Links Notation format</returns>
+    public static string EncodeObfuscated(object? obj) => new ObjectCodec().EncodeCompact(obj);
+
+    /// <summary>
+    /// Decode Links Notation format to a C# object, in either format.
     /// </summary>
     /// <param name="notation">String in Links Notation format</param>
     /// <returns>Reconstructed C# object</returns>
     public static object? Decode(string notation) => new ObjectCodec().Decode(notation);
+
+    /// <summary>
+    /// Decode the compact Links Notation format to a C# object.
+    /// </summary>
+    /// <param name="notation">String in compact Links Notation format</param>
+    /// <returns>Reconstructed C# object</returns>
+    public static object? DecodeCompact(string notation) => new ObjectCodec().DecodeCompact(notation);
+
+    /// <summary>
+    /// Whether a document is in the compact format.
+    /// </summary>
+    /// <param name="notation">The document to classify</param>
+    /// <returns>True when the document is compact</returns>
+    public static bool IsCompactNotation(string notation) => ObjectCodec.IsCompactNotation(notation);
 }
 
 /// <summary>

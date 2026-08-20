@@ -1,4 +1,9 @@
 // Tests for encoding/decoding objects with circular references.
+//
+// Object identity — shared nodes and cycles — is a property of the compact
+// format, which names nodes with `obj_N` ids. These tests therefore encode with
+// `Codec.EncodeCompact`; `Codec.Decode` reads either format back. The readable
+// format writes a plain tree and rejects cycles, which the last tests cover.
 
 using Xunit;
 using Lino.Objects.Codec;
@@ -16,7 +21,7 @@ public class CircularReferencesTests
         var lst = new List<object?>();
         lst.Add(lst);
 
-        var encoded = Codec.Encode(lst);
+        var encoded = Codec.EncodeCompact(lst);
         // Verify correct Links Notation format with built-in self-reference syntax
         Assert.Equal("(obj_0: list obj_0)", encoded);
 
@@ -34,7 +39,7 @@ public class CircularReferencesTests
         var d = new Dictionary<string, object?>();
         d["self"] = d;
 
-        var encoded = Codec.Encode(d);
+        var encoded = Codec.EncodeCompact(d);
         // Verify correct Links Notation format with built-in self-reference syntax
         Assert.Equal("(obj_0: dict ((str c2VsZg==) obj_0))", encoded);
 
@@ -55,7 +60,7 @@ public class CircularReferencesTests
         list1.Add(list2);
         list2.Add(list1);
 
-        var encoded = Codec.Encode(list1);
+        var encoded = Codec.EncodeCompact(list1);
         // Multi-link format is used to avoid parser bug with nested self-references
         var expected = "(obj_0: list (int 1) (int 2) obj_1)\n(obj_1: list (int 3) (int 4) obj_0)";
         Assert.Equal(expected, encoded);
@@ -84,7 +89,7 @@ public class CircularReferencesTests
         dict1["other"] = dict2;
         dict2["other"] = dict1;
 
-        var encoded = Codec.Encode(dict1);
+        var encoded = Codec.EncodeCompact(dict1);
         var decoded = Codec.Decode(encoded);
 
         // Check the structure
@@ -108,7 +113,7 @@ public class CircularReferencesTests
         ((List<object?>)root["children"]!).Add(child1);
         ((List<object?>)root["children"]!).Add(child2);
 
-        var encoded = Codec.Encode(root);
+        var encoded = Codec.EncodeCompact(root);
         var decoded = Codec.Decode(encoded);
 
         // Check the structure
@@ -135,7 +140,7 @@ public class CircularReferencesTests
         var shared = new Dictionary<string, object?> { { "shared", "value" } };
         var lst = new List<object?> { shared, shared, shared };
 
-        var encoded = Codec.Encode(lst);
+        var encoded = Codec.EncodeCompact(lst);
         var decoded = Codec.Decode(encoded);
 
         // Check that all three items reference the same object
@@ -159,7 +164,7 @@ public class CircularReferencesTests
             { "third", shared }
         };
 
-        var encoded = Codec.Encode(d);
+        var encoded = Codec.EncodeCompact(d);
         var decoded = Codec.Decode(encoded);
 
         // Check that all three values reference the same object
@@ -186,7 +191,7 @@ public class CircularReferencesTests
         // Create circular reference
         level4["root"] = level1;
 
-        var encoded = Codec.Encode(level1);
+        var encoded = Codec.EncodeCompact(level1);
         var decoded = Codec.Decode(encoded);
 
         // Navigate down the structure
@@ -204,5 +209,39 @@ public class CircularReferencesTests
 
         // Check circular reference back to root
         Assert.Same(decodedLevel1, decodedLevel4["root"]);
+    }
+
+    [Fact]
+    public void ReadableFormat_RejectsSelfReferencingDict()
+    {
+        var d = new Dictionary<string, object?>();
+        d["self"] = d;
+
+        Assert.Throws<CircularReferenceException>(() => Codec.Encode(d));
+    }
+
+    [Fact]
+    public void ReadableFormat_RejectsSelfReferencingList()
+    {
+        var lst = new List<object?>();
+        lst.Add(lst);
+
+        Assert.Throws<CircularReferenceException>(() => Codec.Encode(lst));
+    }
+
+    [Fact]
+    public void ReadableFormat_WritesSharedObjectTwice()
+    {
+        var shared = new Dictionary<string, object?> { ["shared"] = "value" };
+        var root = new Dictionary<string, object?> { ["a"] = shared, ["b"] = shared };
+
+        var decoded = Assert.IsType<Dictionary<string, object?>>(Codec.Decode(Codec.Encode(root)));
+        var a = Assert.IsType<Dictionary<string, object?>>(decoded["a"]);
+        var b = Assert.IsType<Dictionary<string, object?>>(decoded["b"]);
+
+        // Equal in content, but no longer the same node: the readable format has
+        // no place for the `obj_N` id that names a shared one.
+        Assert.Equal(a, b);
+        Assert.NotSame(a, b);
     }
 }

@@ -28,8 +28,9 @@ lino-objects-codec = "0.1"
   - `array` (Array)
   - `object` (Object)
 - **Special Float Values**: Full support for NaN, Infinity, -Infinity (which are not valid JSON)
-- **Circular References**: Detect and preserve circular references via object IDs
-- **Object Identity**: Maintain object identity for shared references
+- **Circular References**: Preserved by the compact format (`encode_compact`) via object ids; the readable format is a plain tree and returns a `CircularReference` error instead
+- **Object Identity**: Shared references are preserved by the compact format
+- **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Readable by Default**: `encode()` writes indented, plain-text Links Notation; keys and values stay legible and diffable
 - **UTF-8 Support**: Full Unicode string support written as text; only values that cannot be written as text (control characters) are base64-encoded, and each is marked individually
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
@@ -334,6 +335,26 @@ uses object IDs:
 
 `decode()` detects which of the two forms it is given, so previously written
 files keep decoding.
+
+## Debugging
+
+Tracing is off by default. Turn it on to see what the codec does, either from
+the environment or from code:
+
+```bash
+LINO_CODEC_DEBUG=1 cargo run --example basic_usage   # 1, true, yes or on
+```
+
+```rust
+use lino_objects_codec::debug;
+
+debug::set_debug_enabled(Some(true)); // force on
+debug::set_debug_enabled(None);       // follow LINO_CODEC_DEBUG again
+```
+
+Trace lines are written to standard error, prefixed with `[lino-codec]`. The
+same switch and the same `LINO_CODEC_DEBUG` variable exist in the JavaScript,
+Python and C# implementations.
 
 ## Development
 

@@ -6,7 +6,7 @@ Uses the links-notation library for parsing to ensure compatibility with the sta
 """
 
 import re
-from typing import Any, Dict, Optional, Tuple
+from typing import Any
 
 from links_notation import Parser
 
@@ -62,7 +62,7 @@ def escape_reference(value: Any) -> str:
     return f"'{s}'"
 
 
-def unescape_reference(s: Optional[str]) -> Optional[str]:
+def unescape_reference(s: str | None) -> str | None:
     """
     Unescape a reference from Links Notation format.
 
@@ -120,8 +120,8 @@ def _format_indented_value(value: Any) -> str:
 
 
 def format_indented(
-    id: str,
-    obj: Dict[str, Any],
+    id: str,  # noqa: A002 - part of the public API since 0.1.0; renaming would break callers
+    obj: dict[str, Any],
     indent: str = "  ",
 ) -> str:
     """
@@ -139,7 +139,8 @@ def format_indented(
         ...     '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
         ...     {'uuid': '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', 'status': 'executed'}
         ... )
-        '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\\n  uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"\\n  status "executed"'
+        '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019\\n  uuid \\
+"6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"\\n  status "executed"'
 
     Args:
         id: The object identifier (displayed on first line)
@@ -168,7 +169,7 @@ def format_indented(
     return "\n".join(lines)
 
 
-def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
+def parse_indented(text: str) -> tuple[str, dict[str, Any]]:
     """
     Parse an indented Links Notation string back to an object.
 
@@ -227,7 +228,7 @@ def parse_indented(text: str) -> Tuple[str, Dict[str, Any]]:
     # Extract id and key-value pairs from parsed result
     main_link = parsed[0]
     result_id = main_link.id or ""
-    obj: Dict[str, Any] = {}
+    obj: dict[str, Any] = {}
 
     # Process the values array - each entry is a doublet (key value)
     for child in main_link.values or []:

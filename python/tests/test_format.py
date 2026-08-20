@@ -126,8 +126,8 @@ class TestParseIndented:
   command "echo test"
   exitCode "0\""""
 
-        id, obj = parse_indented(text)
-        assert id == "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
+        identifier, obj = parse_indented(text)
+        assert identifier == "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
         assert obj["uuid"] == "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
         assert obj["status"] == "executed"
         assert obj["command"] == "echo test"
@@ -138,8 +138,8 @@ class TestParseIndented:
         text = """test-id
   message 'He said "hello"'"""
 
-        id, obj = parse_indented(text)
-        assert id == "test-id"
+        identifier, obj = parse_indented(text)
+        assert identifier == "test-id"
         assert obj["message"] == 'He said "hello"'
 
     def test_empty_lines_are_skipped(self):
@@ -149,8 +149,8 @@ class TestParseIndented:
 
   another "value2\""""
 
-        id, obj = parse_indented(text)
-        assert id == "test-id"
+        identifier, obj = parse_indented(text)
+        assert identifier == "test-id"
         assert obj["key"] == "value"
         assert obj["another"] == "value2"
 

@@ -14,9 +14,10 @@ A C# library for working with Links Notation format. This library provides unive
   - Basic types: `null`, `bool`, `int`, `long`, `float`, `double`, `string`
   - Collections: `List<object?>`, `Dictionary<string, object?>`
   - Special float values: `NaN`, `Infinity`, `-Infinity`
-- **Circular References**: Automatically detect and preserve circular references
-- **Object Identity**: Maintain object identity for shared references
-- **UTF-8 Support**: Full Unicode string support using base64 encoding
+- **Readable by Default**: `Codec.Encode()` writes plain, indented text that can be read and reviewed
+- **Object Identity**: Shared references and circular references are preserved by the compact format (`Codec.EncodeCompact`) via object ids
+- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `Codec.Encode()` and `Codec.Decode()` functions
 - **Thread Safe**: Each operation uses a fresh codec instance
 
@@ -53,7 +54,12 @@ var encoded = Codec.Encode(new Dictionary<string, object?>
     { "active", true }
 });
 Console.WriteLine(encoded);
-// Output: (dict ((str bmFtZQ==) (str QWxpY2U=)) ((str YWdl) (int 30)) ((str YWN0aXZl) (bool True)))
+// Output:
+// (
+//   name "Alice"
+//   age 30
+//   active true
+// )
 
 // Decode back to C# object
 var decoded = Codec.Decode(encoded) as Dictionary<string, object?>;
@@ -141,68 +147,110 @@ var complexData = new Dictionary<string, object?>
 decoded = Codec.Decode(Codec.Encode(complexData));
 ```
 
+## Output Formats
+
+| Method | Output |
+| --- | --- |
+| `Codec.Encode(obj)` | Readable, indented Links Notation (the default) |
+| `Codec.Encode(obj, "\t")` | Same, with a custom indentation string |
+| `Codec.EncodeCompact(obj)` | The previous single-line, base64 form |
+| `Codec.EncodeObfuscated(obj)` | Alias of `Codec.EncodeCompact` |
+
+`Codec.Decode()` accepts every one of them, so files written by older versions
+keep working and are rewritten in the readable form the next time they are saved.
+
 ### Circular References
 
-The library automatically handles circular references and shared objects:
+Object identity -- shared nodes and cycles -- is a property of the **compact**
+format, which names shared nodes with `obj_N` ids. The readable format is a plain
+tree with nowhere to put those ids, so `Codec.Encode` throws
+`CircularReferenceException` on a cycle. Use `Codec.EncodeCompact` when you need
+identity preserved:
 
 ```csharp
 using Lino.Objects.Codec;
 
-// Self-referencing list
+// Self-referencing list -- preserved by the compact format
 var selfRef = new List<object?>();
 selfRef.Add(selfRef);  // Circular reference
-var encoded = Codec.Encode(selfRef);
+var encoded = Codec.EncodeCompact(selfRef);
 // Output: (obj_0: list obj_0)
 var decoded = Codec.Decode(encoded) as List<object?>;
 Console.WriteLine(ReferenceEquals(decoded, decoded?[0])); // True - Reference preserved
 
-// Self-referencing dictionary
-var selfRefDict = new Dictionary<string, object?>();
-selfRefDict["self"] = selfRefDict;  // Circular reference
-encoded = Codec.Encode(selfRefDict);
-// Output: (obj_0: dict ((str c2VsZg==) obj_0))
-var decodedDict = Codec.Decode(encoded) as Dictionary<string, object?>;
-Console.WriteLine(ReferenceEquals(decodedDict, decodedDict?["self"])); // True
-
-// Shared references
+// Shared references -- the same object is restored once
 var shared = new Dictionary<string, object?> { { "shared", "data" } };
 var container = new Dictionary<string, object?>
 {
     { "first", shared },
     { "second", shared }
 };
-encoded = Codec.Encode(container);
-var decodedContainer = Codec.Decode(encoded) as Dictionary<string, object?>;
-// Both references point to the same object
+var decodedContainer = Codec.Decode(Codec.EncodeCompact(container)) as Dictionary<string, object?>;
 Console.WriteLine(ReferenceEquals(decodedContainer?["first"], decodedContainer?["second"])); // True
 
-// Complex circular structure (tree with back-references)
-var root = new Dictionary<string, object?> { { "name", "root" }, { "children", new List<object?>() } };
-var child = new Dictionary<string, object?> { { "name", "child" }, { "parent", root } };
-((List<object?>)root["children"]!).Add(child);
-encoded = Codec.Encode(root);
-var decodedRoot = Codec.Decode(encoded) as Dictionary<string, object?>;
-var decodedChild = ((List<object?>)decodedRoot?["children"]!)[0] as Dictionary<string, object?>;
-Console.WriteLine(ReferenceEquals(decodedRoot, decodedChild?["parent"])); // True
+// The readable format rejects a cycle rather than losing the identity
+try
+{
+    Codec.Encode(selfRef);
+}
+catch (CircularReferenceException error)
+{
+    Console.WriteLine(error.GetType().Name); // CircularReferenceException
+}
 ```
 
 ## How It Works
 
-The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target. Each C# object is encoded as a Link with type information:
+The library uses the [links-notation](https://github.com/link-foundation/links-notation) format as the serialization target.
 
-- Basic types are encoded with type markers: `(int 42)`, `(str SGVsbG8=)`, `(bool True)`
+### Readable format (the default)
+
+`Codec.Encode` writes one `( )` construct for both dictionaries and lists, at
+every level including the root. Lines of the form `key value` make a dictionary,
+bare-value lines make a list:
+
+- Strings are double-quoted and written as text: `name "Alice"`
+- Numbers, `true`, `false` and `null` are bare, so types survive a round trip
+- `NaN`, `Infinity` and `-Infinity` are written as such
+- An empty list is `()`; an empty dictionary is `(` + newline + `)`
+- A value that cannot be written as text (one containing control characters) is
+  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
+  everything around it stays readable
+
+### Compact format (`Codec.EncodeCompact`)
+
+The previous single-line form, kept for compatibility and for the object graphs
+the readable tree cannot express (shared and circular references):
+
+- Basic types carry a type marker: `(int 42)`, `(str SGVsbG8=)`, `(bool true)`
 - Strings are base64-encoded to handle special characters and newlines
-- Collections with self-references use built-in links notation self-reference syntax:
-  - **Format**: `(obj_id: type content...)`
-  - **Example**: `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
-- Simple collections without shared references use format: `(list item1 item2 ...)` or `(dict (key val) ...)`
-- Circular references use direct object ID references: `obj_0` (without the `ref` keyword)
+- Collections with self-references use `(obj_id: type content...)`, e.g.
+  `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
+- Circular references use direct object ID references: `obj_0` (without a `ref` keyword)
 
-This approach allows for:
-- Universal representation of object graphs
-- Preservation of object identity
-- Natural handling of circular references using built-in links notation syntax
-- Cross-language compatibility with Python and JavaScript implementations
+`Codec.Decode` detects which of the two forms it is given, so previously written
+files keep decoding, and every language reads the compact documents the others
+write.
+
+## Debugging
+
+Tracing is off by default. Turn it on to see what the codec does, either from
+the environment or from code:
+
+```bash
+LINO_CODEC_DEBUG=1 dotnet run   # 1, true, yes or on
+```
+
+```csharp
+using Lino.Objects.Codec;
+
+CodecDebug.SetEnabled(true); // force on
+CodecDebug.SetEnabled(null); // follow LINO_CODEC_DEBUG again
+```
+
+Trace lines are written to standard error, prefixed with `[lino-codec]`. The
+same switch and the same `LINO_CODEC_DEBUG` variable exist in the JavaScript,
+Python and Rust implementations.
 
 ## API Reference
 

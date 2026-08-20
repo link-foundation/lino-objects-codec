@@ -1,0 +1,1834 @@
+diff --git a/.gitkeep b/.gitkeep
+index a6e2948..824bd1a 100644
+--- a/.gitkeep
++++ b/.gitkeep
+@@ -1 +1,2 @@
+-# .gitkeep file auto-generated at 2026-05-10T19:22:27.543Z for PR creation at branch issue-35-03946ff48852 for issue https://github.com/link-foundation/lino-objects-codec/issues/35
+\ No newline at end of file
++# .gitkeep file auto-generated at 2026-05-10T19:22:27.543Z for PR creation at branch issue-35-03946ff48852 for issue https://github.com/link-foundation/lino-objects-codec/issues/35
++# Updated: 2026-08-20T05:25:16.696Z
+\ No newline at end of file
+diff --git a/README.md b/README.md
+index 3a6c9ba..24908d2 100644
+--- a/README.md
++++ b/README.md
+@@ -42,6 +42,7 @@ All implementations share the same design philosophy and provide feature parity.
+ - **Circular References**: Automatically detect and preserve circular references
+ - **Object Identity**: Maintain object identity for shared references
+ - **UTF-8 Support**: Full Unicode string support using base64 encoding
++- **Readable by Default (Rust)**: `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()`
+ - **Simple API**: Easy-to-use `encode()` and `decode()` functions
+ - **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
+ - **Reference Escaping**: Properly escape strings for Links Notation format (JavaScript)
+@@ -98,11 +99,25 @@ let data = LinoValue::object([
+     ("age", LinoValue::Int(30)),
+     ("active", LinoValue::Bool(true)),
+ ]);
++// `encode` produces readable, indented Links Notation
+ let encoded = encode(&data);
++assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
++
+ let decoded = decode(&encoded).unwrap();
+ assert_eq!(decoded, data);
+ ```
+ 
++```lino
++(
++  name "Alice"
++  age 30
++  active true
++)
++```
++
++The single-line base64 form is still available as `encode_compact()` (alias
++`encode_obfuscated()`), and `decode()` accepts both forms.
++
+ ### C#
+ 
+ ```bash
+@@ -354,6 +369,10 @@ The library uses the [links-notation](https://github.com/link-foundation/links-n
+ 
+ - Basic types are encoded with type markers: `(int 42)`, `(str aGVsbG8=)`, `(bool True)`
+ - Strings are base64-encoded to handle special characters and newlines
++- **Rust exception**: `encode()` defaults to the readable indented form described in
++  [rust/README.md](rust/README.md), where strings are quoted rather than encoded and
++  only values containing control characters are marked as `(base64 "...")`; the form
++  above is what `encode_compact()` produces
+ - Collections with self-references use built-in links notation self-reference syntax:
+   - **Format**: `(obj_id: type content...)`
+   - **Python example**: `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
+diff --git a/experiments/issue-37/parenthesis-indentation/.gitignore b/experiments/issue-37/parenthesis-indentation/.gitignore
+new file mode 100644
+index 0000000..2c96eb1
+--- /dev/null
++++ b/experiments/issue-37/parenthesis-indentation/.gitignore
+@@ -0,0 +1,2 @@
++target/
++Cargo.lock
+diff --git a/experiments/issue-37/parenthesis-indentation/Cargo.toml b/experiments/issue-37/parenthesis-indentation/Cargo.toml
+new file mode 100644
+index 0000000..5f426c9
+--- /dev/null
++++ b/experiments/issue-37/parenthesis-indentation/Cargo.toml
+@@ -0,0 +1,8 @@
++[package]
++name = "parenthesis-indentation-probe"
++version = "0.1.0"
++edition = "2021"
++
++# Switch this between "0.14.0" and "0.13.0" to compare parser behaviour.
++[dependencies]
++links-notation = "0.14.0"
+diff --git a/experiments/issue-37/parenthesis-indentation/src/bin/shapes.rs b/experiments/issue-37/parenthesis-indentation/src/bin/shapes.rs
+new file mode 100644
+index 0000000..bba9bfe
+--- /dev/null
++++ b/experiments/issue-37/parenthesis-indentation/src/bin/shapes.rs
+@@ -0,0 +1,25 @@
++use links_notation::parse_lino_to_links;
++
++fn show(name: &str, text: &str) {
++    println!("=== {} ===\n{}\n---", name, text);
++    match parse_lino_to_links(text) {
++        Ok(links) => {
++            for l in &links {
++                println!("{:?}", l);
++            }
++        }
++        Err(e) => println!("ERR: {:?}", e),
++    }
++    println!();
++}
++
++fn main() {
++    show("doc", "(\n  type \"RouterState\"\n  server (\n    host \"127.0.0.1\"\n    port 18878\n  )\n  models (\n    \"claude-haiku\"\n    \"claude-opus\"\n  )\n)");
++    show("array of objects", "(\n  value (\n    (\n      id \"1\"\n      label \"one\"\n    )\n    (\n      id \"2\"\n      label \"two\"\n    )\n  )\n)");
++    show("empty link", "(\n  a ()\n  b ()\n)");
++    show("scalar root", "42");
++    show("string root", "(\n  \"hello\"\n)");
++    show("quotes", "(\n  a \"say \"\"hi\"\"\"\n  b 'it''s'\n)");
++    show("newline in quotes", "(\n  a \"line1\nline2\"\n)");
++    show("single pair obj", "(\n  a 1\n)");
++}
+diff --git a/experiments/issue-37/parenthesis-indentation/src/main.rs b/experiments/issue-37/parenthesis-indentation/src/main.rs
+new file mode 100644
+index 0000000..3f9cc07
+--- /dev/null
++++ b/experiments/issue-37/parenthesis-indentation/src/main.rs
+@@ -0,0 +1,24 @@
++//! Experiment for issue #37: does `( )` open a nested indentation context?
++//!
++//! Run with links-notation 0.13 and 0.14 to compare:
++//!   cargo run                                  # 0.14 (as pinned in Cargo.toml)
++//!   cargo add links-notation@0.13.0 && cargo run
++//!
++//! 0.13 ignores indentation inside `( )` and flattens every line into one list,
++//! so record boundaries and nested objects cannot be recovered. 0.14 keeps them.
++
++use links_notation::parse_lino_to_links;
++
++const DOCUMENT: &str = "(\n  server (\n    host \"127.0.0.1\"\n    port 18878\n  )\n)";
++
++fn main() {
++    println!("input:\n{DOCUMENT}\n");
++    match parse_lino_to_links(DOCUMENT) {
++        Ok(links) => {
++            for link in &links {
++                println!("parsed: {link:?}");
++            }
++        }
++        Err(e) => println!("parse error: {e:?}"),
++    }
++}
+diff --git a/rust/Cargo.lock b/rust/Cargo.lock
+index 459386d..a9d339b 100644
+--- a/rust/Cargo.lock
++++ b/rust/Cargo.lock
+@@ -10,13 +10,25 @@ checksum = "72b3254f16251a8381aa12e40e3c4d2f0199f8c6508fbecb9d91f575e0fbb8c6"
+ 
+ [[package]]
+ name = "links-notation"
+-version = "0.13.0"
++version = "0.14.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e4c952b42a8c6ff6f849d7cafe3b1e13f1063a51bbb144bc6c62026ab327814c"
++checksum = "9b6e5f36d99612ea82da43dbd5efb37b0b4e9c4b8197228e073b60ef5a0e78f2"
+ dependencies = [
++ "links-notation-macro",
+  "nom",
+ ]
+ 
++[[package]]
++name = "links-notation-macro"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "f30ea96250240a92d69d45579dbd199a713e7a79acfa53033d24628dad23cff5"
++dependencies = [
++ "proc-macro2",
++ "quote",
++ "syn",
++]
++
+ [[package]]
+ name = "lino-objects-codec"
+ version = "0.2.1"
+@@ -39,3 +51,38 @@ checksum = "df9761775871bdef83bee530e60050f7e54b1105350d6884eb0fb4f46c2f9405"
+ dependencies = [
+  "memchr",
+ ]
++
++[[package]]
++name = "proc-macro2"
++version = "1.0.107"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "985e7ec9bb745e6ce6535b544d84d6cd6f7ad8bd711c398938ae983b91a766d9"
++dependencies = [
++ "unicode-ident",
++]
++
++[[package]]
++name = "quote"
++version = "1.0.47"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "1fbf4db142a473a8d80c26bbf18454ed458bf8d26c8219c331daecfdbd079001"
++dependencies = [
++ "proc-macro2",
++]
++
++[[package]]
++name = "syn"
++version = "3.0.3"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "53e9bae58849f64dfa4f5d5ae372c8341f7305f82a3868709269343628b659a3"
++dependencies = [
++ "proc-macro2",
++ "quote",
++ "unicode-ident",
++]
++
++[[package]]
++name = "unicode-ident"
++version = "1.0.24"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
+diff --git a/rust/Cargo.toml b/rust/Cargo.toml
+index ac773b1..22e0b57 100644
+--- a/rust/Cargo.toml
++++ b/rust/Cargo.toml
+@@ -12,7 +12,7 @@ keywords = ["links-notation", "serialization", "codec", "object-graph", "circula
+ categories = ["encoding", "parser-implementations"]
+ 
+ [dependencies]
+-links-notation = "0.13.0"
++links-notation = "0.14.0"
+ base64 = "0.22"
+ 
+ [dev-dependencies]
+diff --git a/rust/README.md b/rust/README.md
+index 251b405..8cf757a 100644
+--- a/rust/README.md
++++ b/rust/README.md
+@@ -30,7 +30,8 @@ lino-objects-codec = "0.1"
+ - **Special Float Values**: Full support for NaN, Infinity, -Infinity (which are not valid JSON)
+ - **Circular References**: Detect and preserve circular references via object IDs
+ - **Object Identity**: Maintain object identity for shared references
+-- **UTF-8 Support**: Full Unicode string support using base64 encoding
++- **Readable by Default**: `encode()` writes indented, plain-text Links Notation; keys and values stay legible and diffable
++- **UTF-8 Support**: Full Unicode string support written as text; only values that cannot be written as text (control characters) are base64-encoded, and each is marked individually
+ - **Simple API**: Easy-to-use `encode()` and `decode()` functions
+ 
+ ## Quick Start
+@@ -47,13 +48,35 @@ let data = LinoValue::object([
+ 
+ // Encode to Links Notation
+ let encoded = encode(&data);
+-println!("Encoded: {}", encoded);
++assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
+ 
+ // Decode back
+ let decoded = decode(&encoded).unwrap();
+ assert_eq!(decoded, data);
+ ```
+ 
++The encoded document reads as:
++
++```lino
++(
++  name "Alice"
++  age 30
++  active true
++)
++```
++
++## Output Formats
++
++| Function | Output |
++| --- | --- |
++| `encode(value)` | Readable, indented Links Notation (the default) |
++| `encode_with_indent(value, "\t")` | Same, with a custom indentation string |
++| `encode_compact(value)` | The previous single-line base64 form |
++| `encode_obfuscated(value)` | Alias of `encode_compact` |
++
++`decode()` accepts every one of them, so files written by older versions keep
++working and are rewritten in the readable form the next time they are saved.
++
+ ## API Reference
+ 
+ ### Types
+@@ -97,21 +120,42 @@ pub enum CodecError {
+ 
+ #### `encode(value: &LinoValue) -> String`
+ 
+-Encode a value to Links Notation format.
++Encode a value to the readable, indented Links Notation format.
+ 
+ ```rust
+ let value = LinoValue::Int(42);
+ let encoded = encode(&value);
+-assert_eq!(encoded, "(int 42)");
++assert_eq!(encoded, "42");
+ ```
+ 
++#### `encode_with_indent(value: &LinoValue, indent: &str) -> String`
++
++Same as `encode()`, but with a custom indentation string (the default is two spaces).
++
++#### `encode_compact(value: &LinoValue) -> String`
++
++Encode a value to the single-line, base64 form used before version 0.3.
++
++```rust
++let value = LinoValue::String("hello".to_string());
++assert_eq!(encode_compact(&value), "(str aGVsbG8=)");
++```
++
++#### `encode_obfuscated(value: &LinoValue) -> String`
++
++Alias of `encode_compact()`, named after what the base64 form actually does to the text.
++
+ #### `decode(notation: &str) -> Result<LinoValue, CodecError>`
+ 
+-Decode Links Notation format to a value.
++Decode Links Notation format to a value. Both the readable and the compact form
++are accepted.
+ 
+ ```rust
+-let decoded = decode("(int 42)").unwrap();
++let decoded = decode("42").unwrap();
+ assert_eq!(decoded, LinoValue::Int(42));
++
++let legacy = decode("(int 42)").unwrap();
++assert_eq!(legacy, LinoValue::Int(42));
+ ```
+ 
+ ### `ObjectCodec`
+@@ -135,30 +179,34 @@ use lino_objects_codec::{encode, decode, LinoValue};
+ 
+ // Null
+ let null = LinoValue::Null;
+-assert_eq!(encode(&null), "(null)");
++assert_eq!(encode(&null), "null");
+ 
+ // Boolean
+ let bool_val = LinoValue::Bool(true);
+-assert_eq!(encode(&bool_val), "(bool true)");
++assert_eq!(encode(&bool_val), "true");
+ 
+ // Integer
+ let int_val = LinoValue::Int(42);
+-assert_eq!(encode(&int_val), "(int 42)");
++assert_eq!(encode(&int_val), "42");
+ 
+ // Float
+ let float_val = LinoValue::Float(3.14);
+-assert!(encode(&float_val).starts_with("(float"));
++assert_eq!(encode(&float_val), "3.14");
+ 
+ // Special floats
+ let inf = LinoValue::Float(f64::INFINITY);
+-assert_eq!(encode(&inf), "(float Infinity)");
++assert_eq!(encode(&inf), "Infinity");
+ 
+ let nan = LinoValue::Float(f64::NAN);
+-assert_eq!(encode(&nan), "(float NaN)");
++assert_eq!(encode(&nan), "NaN");
+ 
+-// String (base64 encoded)
++// Strings are quoted, not encoded
+ let str_val = LinoValue::String("hello".to_string());
+-assert_eq!(encode(&str_val), "(str aGVsbG8=)");
++assert_eq!(encode(&str_val), "\"hello\"");
++
++// Numbers written as strings stay strings
++let numeric = LinoValue::String("42".to_string());
++assert_eq!(decode(&encode(&numeric)).unwrap(), numeric);
+ ```
+ 
+ ### Collections
+@@ -235,7 +283,43 @@ let none_val: LinoValue = None::<i64>.into();
+ 
+ ## How It Works
+ 
+-The codec encodes values using the [Links Notation](https://github.com/link-foundation/links-notation) format:
++The codec encodes values using the [Links Notation](https://github.com/link-foundation/links-notation) format.
++
++### Readable format (the default)
++
++One `( )` construct carries both objects and arrays, at every level including
++the root. Lines of the form `key value` make an object, bare-value lines make an
++array:
++
++```lino
++(
++  type "RouterState"
++  server (
++    host "127.0.0.1"
++    port 18878
++  )
++  models (
++    "claude-haiku"
++    "claude-opus"
++  )
++)
++```
++
++- Strings are double-quoted and written as text: `name "Alice"`
++- Numbers, `true`, `false` and `null` are bare, so types survive a round trip
++- `NaN`, `Infinity` and `-Infinity` are written as such
++- An empty array is `()`; an empty object is `(` + newline + `)`
++- A value that cannot be written as text (one containing control characters) is
++  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
++  everything around it stays readable
++
++Reading the format back requires `links-notation` 0.14 semantics, where a
++parenthesis opens a nested indentation context.
++
++### Compact format (`encode_compact`)
++
++The previous single-line form, kept for compatibility and for cases where size
++matters more than legibility:
+ 
+ - Basic types: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
+ - Strings are base64-encoded to handle special characters and newlines
+@@ -243,10 +327,14 @@ The codec encodes values using the [Links Notation](https://github.com/link-foun
+ - Objects: `(object ((str a2V5) (int 42)) ...)`
+ - Special floats: `(float NaN)`, `(float Infinity)`, `(float -Infinity)`
+ 
+-For structures with shared references or circular references, the codec uses object IDs:
++For structures with shared references or circular references, the compact form
++uses object IDs:
+ - Format: `(obj_0: array ...)` or `(obj_0: object ...)`
+ - References: `obj_0`
+ 
++`decode()` detects which of the two forms it is given, so previously written
++files keep decoding.
++
+ ## Development
+ 
+ ```bash
+diff --git a/rust/changelog.d/20260820_120000_readable_default_format.md b/rust/changelog.d/20260820_120000_readable_default_format.md
+new file mode 100644
+index 0000000..71872b3
+--- /dev/null
++++ b/rust/changelog.d/20260820_120000_readable_default_format.md
+@@ -0,0 +1,14 @@
++---
++bump: minor
++---
++
++### Added
++- `encode_with_indent()` for choosing the indentation string of the readable format.
++- `encode_compact()` (alias `encode_obfuscated()`) keeping the previous single-line base64 output under an explicit name.
++- `readable` module with the indented encoder/decoder, plus `DEFAULT_INDENT` and `BASE64_MARKER` constants.
++
++### Changed
++- `encode()` now produces indented, plain-text Links Notation by default: one `( )` construct for objects and arrays at every level, keys and values written verbatim, strings double-quoted, and numbers/`true`/`false`/`null` bare so types survive a round trip.
++- Values are base64-encoded only when they cannot be written as text (control characters), and each such value is marked individually as `(base64 "...")`.
++- `decode()` accepts both the readable and the previous compact form, so existing files keep working and migrate to the readable form on the next write.
++- Raised the `links-notation` dependency to 0.14, where parentheses open a nested indentation context.
+diff --git a/rust/examples/basic_usage.rs b/rust/examples/basic_usage.rs
+index a1c926a..7f75c2c 100644
+--- a/rust/examples/basic_usage.rs
++++ b/rust/examples/basic_usage.rs
+@@ -1,6 +1,6 @@
+ //! Basic usage example for the lino-objects-codec library.
+ 
+-use lino_objects_codec::{decode, encode, LinoValue};
++use lino_objects_codec::{decode, encode, encode_compact, LinoValue};
+ 
+ fn main() {
+     println!("=== Links Notation Objects Codec - Rust Example ===\n");
+@@ -89,7 +89,7 @@ fn main() {
+     let array_val = LinoValue::array([LinoValue::Int(1), LinoValue::Int(2), LinoValue::Int(3)]);
+     let encoded = encode(&array_val);
+     let decoded = decode(&encoded).unwrap();
+-    println!("   Array [1, 2, 3]: {}", encoded);
++    println!("   Array [1, 2, 3]:\n{}", encoded);
+     println!("   Decoded: {:?}", decoded);
+ 
+     // Object
+@@ -100,7 +100,7 @@ fn main() {
+     ]);
+     let encoded = encode(&obj_val);
+     let decoded = decode(&encoded).unwrap();
+-    println!("   Object {{name, age, active}}: {}", encoded);
++    println!("   Object {{name, age, active}}:\n{}", encoded);
+     println!("   Decoded: {:?}", decoded);
+ 
+     println!();
+@@ -130,7 +130,7 @@ fn main() {
+     let encoded = encode(&complex);
+     let decoded = decode(&encoded).unwrap();
+ 
+-    println!("   Encoded: {}", encoded);
++    println!("   Encoded:\n{}", encoded);
+     println!("   Decoded name: {:?}", decoded.get("name"));
+     println!("   Decoded tags: {:?}", decoded.get("tags"));
+     println!(
+@@ -154,7 +154,7 @@ fn main() {
+     let encoded = encode(&mixed);
+     let decoded = decode(&encoded).unwrap();
+ 
+-    println!("   Encoded: {}", encoded);
++    println!("   Encoded:\n{}", encoded);
+     println!("   Decoded: {:?}", decoded);
+ 
+     println!();
+@@ -184,5 +184,17 @@ fn main() {
+ 
+     println!("   Original == Decoded: {}", data == decoded);
+ 
++    println!();
++
++    // Example 6: The compact (base64) form is still available under its own name
++    println!("6. Compact Form:");
++
++    let compact = encode_compact(&data);
++    println!("   Compact: {}", compact);
++    println!(
++        "   Compact decodes back to the same value: {}",
++        decode(&compact).unwrap() == data
++    );
++
+     println!("\n=== Example completed successfully! ===");
+ }
+diff --git a/rust/src/lib.rs b/rust/src/lib.rs
+index 00f8b2b..7934c39 100644
+--- a/rust/src/lib.rs
++++ b/rust/src/lib.rs
+@@ -6,12 +6,15 @@
+ //!
+ //! # Features
+ //!
++//! - **Readable by Default**: `encode()` writes plain, indented text that can be read and reviewed
+ //! - **Universal Serialization**: Encode objects to Links Notation format
+ //! - **Type Support**: Handle all common types: null, boolean, integer, float, string, array, object
+ //! - **Special Float Values**: Support for NaN, Infinity, -Infinity (which are not valid JSON)
+ //! - **Circular References**: Detect and preserve circular references (via object IDs)
+ //! - **Object Identity**: Maintain object identity for shared references
+-//! - **UTF-8 Support**: Full Unicode string support using base64 encoding
++//! - **UTF-8 Support**: Full Unicode string support, written as text; only values that cannot be
++//!   represented as text (strings holding control characters) are base64-encoded, and they are
++//!   marked individually as `(base64 "…")`
+ //! - **Simple API**: Easy-to-use `encode()` and `decode()` functions
+ //!
+ //! # Example
+@@ -26,16 +29,32 @@
+ //!     ("active", LinoValue::Bool(true)),
+ //! ]);
+ //! let encoded = encode(&data);
++//! assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
+ //! let decoded = decode(&encoded).unwrap();
+ //! assert_eq!(decoded, data);
+ //! ```
++//!
++//! # Output formats
++//!
++//! | Function | Output |
++//! |---|---|
++//! | [`encode`] | readable, indented plain text (default) |
++//! | [`encode_with_indent`] | the same, with a custom indentation string |
++//! | [`encode_compact`] / [`encode_obfuscated`] | the previous single-line, base64 form |
++//!
++//! [`decode`] accepts both forms, so files written by earlier versions keep working
++//! and migrate to the readable form on the next write.
+ 
+ use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
+ use links_notation::{parse_lino_to_links, LiNo};
+ use std::collections::{HashMap, HashSet};
+ use std::fmt;
+ 
+-/// Type identifiers used in Links Notation format
++pub mod readable;
++
++pub use readable::{BASE64_MARKER, DEFAULT_INDENT};
++
++/// Type identifiers used in the compact (base64) Links Notation format
+ mod type_ids {
+     pub const NULL: &str = "null";
+     pub const BOOL: &str = "bool";
+@@ -385,7 +404,11 @@ impl ObjectCodec {
+         }
+     }
+ 
+-    /// Encode a LinoValue to Links Notation format.
++    /// Encode a LinoValue to the readable, indented Links Notation format.
++    ///
++    /// This is the default representation: keys and values are written as plain
++    /// text, one per line, so the result can be read and reviewed directly.
++    /// See [`readable`] for the exact shape.
+     ///
+     /// # Arguments
+     ///
+@@ -393,8 +416,35 @@ impl ObjectCodec {
+     ///
+     /// # Returns
+     ///
+-    /// A string in Links Notation format
++    /// A string in readable Links Notation format
+     pub fn encode(&mut self, value: &LinoValue) -> String {
++        readable::encode(value, DEFAULT_INDENT)
++    }
++
++    /// Encode a LinoValue to the readable format using a custom indentation string.
++    ///
++    /// # Arguments
++    ///
++    /// * `value` - The value to encode
++    /// * `indent` - The indentation string used per nesting level (for example `"    "`)
++    pub fn encode_with_indent(&mut self, value: &LinoValue, indent: &str) -> String {
++        readable::encode(value, indent)
++    }
++
++    /// Encode a LinoValue to the compact, single-line Links Notation format.
++    ///
++    /// Every value is tagged with its type and every string is base64-encoded, so
++    /// the whole document fits on one line and carries no readable text. This was
++    /// the default before the readable format; callers now opt into it explicitly.
++    ///
++    /// # Arguments
++    ///
++    /// * `value` - The value to encode
++    ///
++    /// # Returns
++    ///
++    /// A string in compact Links Notation format
++    pub fn encode_compact(&mut self, value: &LinoValue) -> String {
+         self.reset_encode_state();
+ 
+         // First pass: identify which objects need IDs
+@@ -431,6 +481,14 @@ impl ObjectCodec {
+         }
+     }
+ 
++    /// Encode a LinoValue to the compact, base64 form.
++    ///
++    /// Alias of [`ObjectCodec::encode_compact`], named after what the form does to
++    /// its content: nothing in the output can be read without decoding it.
++    pub fn encode_obfuscated(&mut self, value: &LinoValue) -> String {
++        self.encode_compact(value)
++    }
++
+     /// Format a single link to its string representation.
+     fn format_link(link: &LiNo<String>) -> String {
+         match link {
+@@ -635,7 +693,31 @@ impl ObjectCodec {
+     /// # Returns
+     ///
+     /// The reconstructed value, or an error
++    ///
++    /// Both the readable format and the compact (base64) format are accepted, so
++    /// files written by earlier versions keep working and migrate on next write.
+     pub fn decode(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
++        if notation.trim().is_empty() {
++            return Ok(LinoValue::Null);
++        }
++
++        if is_compact_notation(notation) {
++            return self.decode_compact(notation);
++        }
++
++        readable::decode(notation)
++    }
++
++    /// Decode the compact (base64) Links Notation format.
++    ///
++    /// # Arguments
++    ///
++    /// * `notation` - String in compact Links Notation format
++    ///
++    /// # Returns
++    ///
++    /// The reconstructed value, or an error
++    pub fn decode_compact(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
+         self.reset_decode_state();
+ 
+         let links = parse_lino_to_links(notation)
+@@ -836,12 +918,57 @@ impl ObjectCodec {
+     }
+ }
+ 
++/// Detect the compact (base64) format.
++///
++/// Compact output always starts a line with `(` immediately followed by a type
++/// marker — optionally preceded by an object id, as in `(obj_0: object …)`.
++/// Readable output never does: its first line is either a lone `(` or a scalar.
++fn is_compact_notation(notation: &str) -> bool {
++    let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
++        return false;
++    };
++
++    let Some(rest) = first_line.strip_prefix('(') else {
++        return false;
++    };
++
++    let mut tokens = rest
++        .split(|c: char| c.is_whitespace() || c == '(' || c == ')')
++        .filter(|t| !t.is_empty());
++
++    let Some(mut marker) = tokens.next() else {
++        return false;
++    };
++
++    // Skip the `obj_N:` definition id, if present.
++    if let Some(id) = marker.strip_suffix(':') {
++        if !id.starts_with("obj_") {
++            return false;
++        }
++        let Some(next) = tokens.next() else {
++            return false;
++        };
++        marker = next;
++    }
++
++    matches!(
++        marker,
++        type_ids::NULL
++            | type_ids::BOOL
++            | type_ids::INT
++            | type_ids::FLOAT
++            | type_ids::STR
++            | type_ids::ARRAY
++            | type_ids::OBJECT
++    )
++}
++
+ // Global codec instance for convenience functions
+ thread_local! {
+     static DEFAULT_CODEC: std::cell::RefCell<ObjectCodec> = std::cell::RefCell::new(ObjectCodec::new());
+ }
+ 
+-/// Encode a value to Links Notation format.
++/// Encode a value to the readable, indented Links Notation format.
+ ///
+ /// This is a convenience function that uses a thread-local codec instance.
+ ///
+@@ -851,7 +978,7 @@ thread_local! {
+ ///
+ /// # Returns
+ ///
+-/// A string in Links Notation format
++/// A string in readable Links Notation format
+ ///
+ /// # Example
+ ///
+@@ -863,13 +990,68 @@ thread_local! {
+ ///     ("age", LinoValue::Int(30)),
+ /// ]);
+ /// let encoded = encode(&data);
+-/// // String "Alice" is base64-encoded as "QWxpY2U="
+-/// assert!(encoded.contains("QWxpY2U="));
++/// // Names and values are written as they are, one per line
++/// assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n)");
+ /// ```
+ pub fn encode(value: &LinoValue) -> String {
+     DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode(value))
+ }
+ 
++/// Encode a value to the readable format using a custom indentation string.
++///
++/// # Arguments
++///
++/// * `value` - The value to encode
++/// * `indent` - The indentation string used per nesting level
++///
++/// # Example
++///
++/// ```rust
++/// use lino_objects_codec::{encode_with_indent, LinoValue};
++///
++/// let data = LinoValue::object([("age", LinoValue::Int(30))]);
++/// assert_eq!(encode_with_indent(&data, "    "), "(\n    age 30\n)");
++/// ```
++pub fn encode_with_indent(value: &LinoValue, indent: &str) -> String {
++    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_with_indent(value, indent))
++}
++
++/// Encode a value to the compact, single-line Links Notation format.
++///
++/// Every string is base64-encoded and the whole document is written on one line.
++/// [`decode`] reads this form as well, so stored files remain readable by the
++/// library after switching to the default readable output.
++///
++/// # Arguments
++///
++/// * `value` - The value to encode
++///
++/// # Returns
++///
++/// A string in compact Links Notation format
++///
++/// # Example
++///
++/// ```rust
++/// use lino_objects_codec::{encode_compact, decode, LinoValue};
++///
++/// let data = LinoValue::object([("name", LinoValue::String("Alice".to_string()))]);
++/// let encoded = encode_compact(&data);
++/// // String "Alice" is base64-encoded as "QWxpY2U="
++/// assert!(encoded.contains("QWxpY2U="));
++/// assert_eq!(decode(&encoded).unwrap(), data);
++/// ```
++pub fn encode_compact(value: &LinoValue) -> String {
++    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_compact(value))
++}
++
++/// Encode a value to the compact, base64 form.
++///
++/// Alias of [`encode_compact`], named after what the form does to its content.
++pub fn encode_obfuscated(value: &LinoValue) -> String {
++    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_obfuscated(value))
++}
++
+ /// Decode Links Notation format to a value.
+ ///
+ /// This is a convenience function that uses a thread-local codec instance.
+diff --git a/rust/src/readable.rs b/rust/src/readable.rs
+new file mode 100644
+index 0000000..79af927
+--- /dev/null
++++ b/rust/src/readable.rs
+@@ -0,0 +1,591 @@
++//! Readable, indented Links Notation representation.
++//!
++//! This module implements the default output of [`crate::encode`]: a plain-text,
++//! indented projection where keys and values are written as they are, so the file
++//! can be read, grepped and reviewed without decoding anything.
++//!
++//! # Shape
++//!
++//! One construct — `( )` — is used for both objects and arrays, at every level
++//! including the root. What distinguishes them is the content of the lines:
++//! `key value` pairs make an object, bare values make an array.
++//!
++//! ```text
++//! (
++//!   type "RouterState"
++//!   server (
++//!     host "127.0.0.1"
++//!     port 18878
++//!   )
++//!   models (
++//!     "claude-haiku"
++//!     "claude-opus"
++//!   )
++//! )
++//! ```
++//!
++//! # Value mapping
++//!
++//! | `LinoValue`                | Readable form                                  |
++//! |----------------------------|------------------------------------------------|
++//! | `Object`                   | `( )` with one `key value` pair per line        |
++//! | `Array`                    | `( )` with one value per line                   |
++//! | `String`                   | quoted, never encoded                           |
++//! | `Int` / `Float` / `Bool` / `Null` | bare, so the type survives the round trip |
++//!
++//! Empty containers keep their type: an empty array is `()` on one line, while an
++//! empty object is written as `(` and `)` on two lines.
++//!
++//! Only values that cannot be written as plain text are encoded: strings holding
++//! control characters (including newlines and tabs, which line-based tooling and
++//! CRLF normalisation would corrupt) are marked individually as
++//! `(base64 "…")` instead of encoding the whole document.
++
++use crate::{CodecError, LinoValue};
++use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
++
++/// Default indentation used by [`encode`].
++pub const DEFAULT_INDENT: &str = "  ";
++
++/// Marker used for values that cannot be represented as plain text.
++pub const BASE64_MARKER: &str = "base64";
++
++/// Encode a value into the readable, indented Links Notation form.
++pub fn encode(value: &LinoValue, indent: &str) -> String {
++    let mut out = String::new();
++    write_value(value, indent, 0, &mut out);
++    out
++}
++
++/// Decode the readable, indented Links Notation form back into a value.
++pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
++    let tokens = tokenize(text)?;
++    let mut cursor = Cursor { tokens, pos: 0 };
++    let rows = cursor.parse_rows(true)?;
++
++    if cursor.pos < cursor.tokens.len() {
++        return Err(CodecError::ParseError(
++            "unexpected ')' in readable notation".to_string(),
++        ));
++    }
++
++    // A document holding a single value (for example `42`) is that value.
++    if rows.len() == 1 && rows[0].len() == 1 {
++        return node_to_value(&rows[0][0]);
++    }
++
++    rows_to_value(&rows, true)
++}
++
++// === Encoding ===
++
++fn write_value(value: &LinoValue, indent: &str, level: usize, out: &mut String) {
++    match value {
++        LinoValue::Object(pairs) => {
++            if pairs.is_empty() {
++                // An empty object spans two lines; `()` on one line is an empty array.
++                out.push_str("(\n");
++                push_indent(indent, level, out);
++                out.push(')');
++                return;
++            }
++
++            out.push('(');
++            for (key, child) in pairs {
++                out.push('\n');
++                push_indent(indent, level + 1, out);
++                out.push_str(&format_key(key));
++                out.push(' ');
++                write_value(child, indent, level + 1, out);
++            }
++            out.push('\n');
++            push_indent(indent, level, out);
++            out.push(')');
++        }
++
++        LinoValue::Array(items) => {
++            if items.is_empty() {
++                out.push_str("()");
++                return;
++            }
++
++            out.push('(');
++            for item in items {
++                out.push('\n');
++                push_indent(indent, level + 1, out);
++                write_value(item, indent, level + 1, out);
++            }
++            out.push('\n');
++            push_indent(indent, level, out);
++            out.push(')');
++        }
++
++        scalar => out.push_str(&format_scalar(scalar)),
++    }
++}
++
++fn push_indent(indent: &str, level: usize, out: &mut String) {
++    for _ in 0..level {
++        out.push_str(indent);
++    }
++}
++
++/// Format a scalar value. Strings are quoted, everything else stays bare so that
++/// its type is recoverable when reading the document back.
++fn format_scalar(value: &LinoValue) -> String {
++    match value {
++        LinoValue::Null => "null".to_string(),
++        LinoValue::Bool(b) => b.to_string(),
++        LinoValue::Int(i) => i.to_string(),
++        LinoValue::Float(f) => format_float(*f),
++        LinoValue::String(s) => format_string(s),
++        // Containers are handled by write_value.
++        LinoValue::Array(_) | LinoValue::Object(_) => String::new(),
++    }
++}
++
++fn format_float(f: f64) -> String {
++    if f.is_nan() {
++        "NaN".to_string()
++    } else if f.is_infinite() {
++        if f.is_sign_positive() {
++            "Infinity".to_string()
++        } else {
++            "-Infinity".to_string()
++        }
++    } else {
++        // `{:?}` keeps the decimal point for whole floats (`1.0`), which is what
++        // tells a float apart from an integer when reading the document back.
++        format!("{:?}", f)
++    }
++}
++
++/// Format a string value: quoted plain text, or an individually marked
++/// base64 payload when the text cannot be written literally.
++fn format_string(value: &str) -> String {
++    if needs_encoding(value) {
++        return format!(
++            "({} {})",
++            BASE64_MARKER,
++            quote(&BASE64.encode(value.as_bytes()))
++        );
++    }
++    quote(value)
++}
++
++/// A value can be written as text unless it contains control characters:
++/// newlines break the line structure and CRLF normalisation would rewrite them.
++fn needs_encoding(value: &str) -> bool {
++    value.chars().any(char::is_control)
++}
++
++fn quote(value: &str) -> String {
++    let has_double = value.contains('"');
++    let has_single = value.contains('\'');
++
++    if !has_double {
++        return format!("\"{}\"", value);
++    }
++    if !has_single {
++        return format!("'{}'", value);
++    }
++    // Both quote styles are present: double the double quotes, as the parser expects.
++    format!("\"{}\"", value.replace('"', "\"\""))
++}
++
++/// Format an object key. Keys are bare when they read as plain identifiers.
++fn format_key(key: &str) -> String {
++    let plain = !key.is_empty()
++        && key != BASE64_MARKER
++        && !needs_encoding(key)
++        && !key
++            .chars()
++            .any(|c| c.is_whitespace() || matches!(c, '(' | ')' | '\'' | '"' | ':' | '`'));
++
++    if plain {
++        key.to_string()
++    } else {
++        format_string(key)
++    }
++}
++
++// === Decoding ===
++
++#[derive(Debug, Clone, PartialEq, Eq)]
++enum Token {
++    Open,
++    Close,
++    Newline,
++    Ref { value: String, quoted: bool },
++}
++
++/// A parsed element of the readable form: either a reference (remembering whether
++/// it was quoted, which is what distinguishes a string from a number) or a link.
++#[derive(Debug, Clone)]
++enum Node {
++    Ref {
++        value: String,
++        quoted: bool,
++    },
++    Link {
++        rows: Vec<Vec<Node>>,
++        multiline: bool,
++    },
++}
++
++fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
++    let chars: Vec<char> = text.chars().collect();
++    let mut tokens = Vec::new();
++    let mut i = 0;
++
++    while i < chars.len() {
++        let c = chars[i];
++
++        if c == '\n' {
++            tokens.push(Token::Newline);
++            i += 1;
++        } else if c.is_whitespace() {
++            i += 1;
++        } else if c == '(' {
++            tokens.push(Token::Open);
++            i += 1;
++        } else if c == ')' {
++            tokens.push(Token::Close);
++            i += 1;
++        } else if matches!(c, '"' | '\'' | '`') {
++            let (value, next) = read_quoted(&chars, i, c)?;
++            tokens.push(Token::Ref {
++                value,
++                quoted: true,
++            });
++            i = next;
++        } else {
++            let start = i;
++            while i < chars.len()
++                && !chars[i].is_whitespace()
++                && !matches!(chars[i], '(' | ')' | '"' | '\'' | '`')
++            {
++                i += 1;
++            }
++            tokens.push(Token::Ref {
++                value: chars[start..i].iter().collect(),
++                quoted: false,
++            });
++        }
++    }
++
++    Ok(tokens)
++}
++
++/// Read a quoted reference, where a doubled quote character means a literal one.
++fn read_quoted(
++    chars: &[char],
++    start: usize,
++    quote_char: char,
++) -> Result<(String, usize), CodecError> {
++    let mut value = String::new();
++    let mut i = start + 1;
++
++    while i < chars.len() {
++        if chars[i] == quote_char {
++            if chars.get(i + 1) == Some(&quote_char) {
++                value.push(quote_char);
++                i += 2;
++                continue;
++            }
++            return Ok((value, i + 1));
++        }
++        value.push(chars[i]);
++        i += 1;
++    }
++
++    Err(CodecError::ParseError(format!(
++        "unterminated quoted value starting at character {}",
++        start
++    )))
++}
++
++struct Cursor {
++    tokens: Vec<Token>,
++    pos: usize,
++}
++
++impl Cursor {
++    /// Parse rows until the matching `)` (or the end of input at the top level).
++    /// A row is one line: the values written between two newlines.
++    fn parse_rows(&mut self, top_level: bool) -> Result<Vec<Vec<Node>>, CodecError> {
++        let mut rows: Vec<Vec<Node>> = Vec::new();
++        let mut row: Vec<Node> = Vec::new();
++
++        while self.pos < self.tokens.len() {
++            match &self.tokens[self.pos] {
++                Token::Close => {
++                    if top_level {
++                        break;
++                    }
++                    self.pos += 1;
++                    if !row.is_empty() {
++                        rows.push(row);
++                    }
++                    return Ok(rows);
++                }
++                Token::Newline => {
++                    self.pos += 1;
++                    if !row.is_empty() {
++                        rows.push(std::mem::take(&mut row));
++                    }
++                }
++                _ => row.push(self.parse_node()?),
++            }
++        }
++
++        if !top_level {
++            return Err(CodecError::ParseError(
++                "unterminated '(' in readable notation".to_string(),
++            ));
++        }
++
++        if !row.is_empty() {
++            rows.push(row);
++        }
++        Ok(rows)
++    }
++
++    fn parse_node(&mut self) -> Result<Node, CodecError> {
++        match self.tokens[self.pos].clone() {
++            Token::Ref { value, quoted } => {
++                self.pos += 1;
++                Ok(Node::Ref { value, quoted })
++            }
++            Token::Open => {
++                self.pos += 1;
++                let multiline = self.link_is_multiline();
++                let rows = self.parse_rows(false)?;
++                Ok(Node::Link { rows, multiline })
++            }
++            Token::Close | Token::Newline => Err(CodecError::ParseError(
++                "unexpected token in readable notation".to_string(),
++            )),
++        }
++    }
++
++    /// Whether the link that just opened spans more than one line, which is what
++    /// tells an empty object (`(\n)`) from an empty array (`()`).
++    fn link_is_multiline(&self) -> bool {
++        self.tokens[self.pos..]
++            .iter()
++            .take_while(|t| **t != Token::Close)
++            .any(|t| *t == Token::Newline)
++    }
++}
++
++fn node_to_value(node: &Node) -> Result<LinoValue, CodecError> {
++    match node {
++        Node::Ref { value, quoted } => Ok(ref_to_value(value, *quoted)),
++        Node::Link { rows, multiline } => rows_to_value(rows, *multiline),
++    }
++}
++
++fn rows_to_value(rows: &[Vec<Node>], multiline: bool) -> Result<LinoValue, CodecError> {
++    if rows.is_empty() {
++        return Ok(if multiline {
++            LinoValue::Object(vec![])
++        } else {
++            LinoValue::Array(vec![])
++        });
++    }
++
++    if let Some(marked) = decode_marked_value(rows) {
++        return marked;
++    }
++
++    // `key value` on every line makes an object; anything else is a list of values.
++    let is_object = rows
++        .iter()
++        .all(|row| row.len() == 2 && matches!(row[0], Node::Ref { .. }));
++
++    if is_object {
++        let mut pairs = Vec::with_capacity(rows.len());
++        for row in rows {
++            let Node::Ref { value: key, .. } = &row[0] else {
++                unreachable!("checked by is_object")
++            };
++            pairs.push((key.clone(), node_to_value(&row[1])?));
++        }
++        return Ok(LinoValue::Object(pairs));
++    }
++
++    let mut items = Vec::new();
++    for row in rows {
++        for node in row {
++            items.push(node_to_value(node)?);
++        }
++    }
++    Ok(LinoValue::Array(items))
++}
++
++/// Recognise `(base64 "…")`, the individual marker for values that could not be
++/// written as text. A quoted `base64` key is an ordinary object key, not a marker.
++fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecError>> {
++    if rows.len() != 1 || rows[0].len() != 2 {
++        return None;
++    }
++
++    let Node::Ref {
++        value: marker,
++        quoted: false,
++    } = &rows[0][0]
++    else {
++        return None;
++    };
++    if marker != BASE64_MARKER {
++        return None;
++    }
++
++    let Node::Ref {
++        value: payload,
++        quoted: true,
++    } = &rows[0][1]
++    else {
++        return None;
++    };
++
++    Some(
++        BASE64
++            .decode(payload)
++            .map_err(|e| CodecError::DecodeError(format!("invalid base64 value: {}", e)))
++            .and_then(|bytes| {
++                String::from_utf8(bytes)
++                    .map(LinoValue::String)
++                    .map_err(|e| CodecError::DecodeError(format!("invalid UTF-8 value: {}", e)))
++            }),
++    )
++}
++
++/// Convert a reference to a value. Quoted references are always strings; bare
++/// references keep the type they were written with.
++fn ref_to_value(value: &str, quoted: bool) -> LinoValue {
++    if quoted {
++        return LinoValue::String(value.to_string());
++    }
++
++    match value {
++        "null" => return LinoValue::Null,
++        "true" => return LinoValue::Bool(true),
++        "false" => return LinoValue::Bool(false),
++        "NaN" => return LinoValue::Float(f64::NAN),
++        "Infinity" => return LinoValue::Float(f64::INFINITY),
++        "-Infinity" => return LinoValue::Float(f64::NEG_INFINITY),
++        _ => {}
++    }
++
++    if let Ok(i) = value.parse::<i64>() {
++        return LinoValue::Int(i);
++    }
++    if value.contains(['.', 'e', 'E']) {
++        if let Ok(f) = value.parse::<f64>() {
++            return LinoValue::Float(f);
++        }
++    }
++
++    LinoValue::String(value.to_string())
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++
++    fn roundtrip(value: &LinoValue) -> LinoValue {
++        let text = encode(value, DEFAULT_INDENT);
++        decode(&text).unwrap_or_else(|e| panic!("failed to decode {:?}: {}", text, e))
++    }
++
++    #[test]
++    fn empty_containers_keep_their_type() {
++        assert_eq!(encode(&LinoValue::Array(vec![]), DEFAULT_INDENT), "()");
++        assert_eq!(encode(&LinoValue::Object(vec![]), DEFAULT_INDENT), "(\n)");
++        assert_eq!(
++            roundtrip(&LinoValue::Array(vec![])),
++            LinoValue::Array(vec![])
++        );
++        assert_eq!(
++            roundtrip(&LinoValue::Object(vec![])),
++            LinoValue::Object(vec![])
++        );
++    }
++
++    #[test]
++    fn single_pair_object_is_not_an_array() {
++        let value = LinoValue::object([("a", LinoValue::Int(1))]);
++        assert_eq!(encode(&value, DEFAULT_INDENT), "(\n  a 1\n)");
++        assert_eq!(roundtrip(&value), value);
++    }
++
++    #[test]
++    fn numeric_looking_strings_stay_strings() {
++        let value = LinoValue::object([
++            ("count", LinoValue::Int(42)),
++            ("zip", LinoValue::String("10001".to_string())),
++            ("flag", LinoValue::String("true".to_string())),
++        ]);
++        assert_eq!(roundtrip(&value), value);
++    }
++
++    #[test]
++    fn whole_floats_stay_floats() {
++        let value = LinoValue::Float(1.0);
++        assert_eq!(encode(&value, DEFAULT_INDENT), "1.0");
++        assert!(matches!(roundtrip(&value), LinoValue::Float(f) if (f - 1.0).abs() < f64::EPSILON));
++    }
++
++    #[test]
++    fn base64_key_is_quoted_so_it_is_not_a_marker() {
++        let value = LinoValue::object([("base64", LinoValue::String("plain".to_string()))]);
++        assert_eq!(
++            encode(&value, DEFAULT_INDENT),
++            "(\n  \"base64\" \"plain\"\n)"
++        );
++        assert_eq!(roundtrip(&value), value);
++    }
++
++    #[test]
++    fn control_characters_are_marked_individually() {
++        let value = LinoValue::object([
++            ("plain", LinoValue::String("visible".to_string())),
++            ("raw", LinoValue::String("line1\nline2".to_string())),
++        ]);
++        let text = encode(&value, DEFAULT_INDENT);
++        assert!(text.contains("plain \"visible\""), "{}", text);
++        assert!(
++            text.contains("raw (base64 \"bGluZTEKbGluZTI=\")"),
++            "{}",
++            text
++        );
++        assert_eq!(roundtrip(&value), value);
++    }
++
++    #[test]
++    fn custom_indent_is_used() {
++        let value = LinoValue::object([("a", LinoValue::Int(1))]);
++        assert_eq!(encode(&value, "    "), "(\n    a 1\n)");
++    }
++
++    #[test]
++    fn handwritten_document_without_root_parentheses_decodes() {
++        let decoded = decode("a 1\nb \"two\"").unwrap();
++        assert_eq!(
++            decoded,
++            LinoValue::object([
++                ("a", LinoValue::Int(1)),
++                ("b", LinoValue::String("two".into()))
++            ])
++        );
++    }
++
++    #[test]
++    fn unterminated_input_is_an_error() {
++        assert!(decode("(\n  a 1\n").is_err());
++        assert!(decode("(\n  a \"unterminated\n").is_err());
++        assert!(decode("a 1)").is_err());
++    }
++}
+diff --git a/rust/tests/documented_examples.rs b/rust/tests/documented_examples.rs
+new file mode 100644
+index 0000000..30d1e04
+--- /dev/null
++++ b/rust/tests/documented_examples.rs
+@@ -0,0 +1,52 @@
++//! Checks that the snippets shown in `README.md` and the crate docs stay true.
++
++use lino_objects_codec::{decode, encode, encode_compact, LinoValue};
++
++#[test]
++fn scalars_are_written_as_documented() {
++    assert_eq!(encode(&LinoValue::Null), "null");
++    assert_eq!(encode(&LinoValue::Bool(true)), "true");
++    assert_eq!(encode(&LinoValue::Int(42)), "42");
++    assert_eq!(encode(&LinoValue::Float(3.14)), "3.14");
++    assert_eq!(encode(&LinoValue::Float(f64::INFINITY)), "Infinity");
++    assert_eq!(encode(&LinoValue::Float(f64::NAN)), "NaN");
++    assert_eq!(encode(&LinoValue::String("hello".into())), "\"hello\"");
++}
++
++#[test]
++fn quick_start_object_matches_the_readme() {
++    let data = LinoValue::object([
++        ("name", LinoValue::String("Alice".to_string())),
++        ("age", LinoValue::Int(30)),
++        ("active", LinoValue::Bool(true)),
++    ]);
++
++    assert_eq!(
++        encode(&data),
++        "(\n  name \"Alice\"\n  age 30\n  active true\n)"
++    );
++}
++
++#[test]
++fn empty_containers_are_written_as_documented() {
++    assert_eq!(encode(&LinoValue::Array(vec![])), "()");
++    assert_eq!(encode(&LinoValue::Object(vec![])), "(\n)");
++}
++
++#[test]
++fn unrepresentable_values_use_the_documented_marker() {
++    assert_eq!(
++        encode(&LinoValue::String("line1\nline2".into())),
++        "(base64 \"bGluZTEKbGluZTI=\")"
++    );
++}
++
++#[test]
++fn both_forms_decode_as_documented() {
++    assert_eq!(
++        encode_compact(&LinoValue::String("hello".into())),
++        "(str aGVsbG8=)"
++    );
++    assert_eq!(decode("42").unwrap(), LinoValue::Int(42));
++    assert_eq!(decode("(int 42)").unwrap(), LinoValue::Int(42));
++}
+diff --git a/rust/tests/readable_format.rs b/rust/tests/readable_format.rs
+new file mode 100644
+index 0000000..4a2feed
+--- /dev/null
++++ b/rust/tests/readable_format.rs
+@@ -0,0 +1,368 @@
++//! Tests for the readable, indented format produced by `encode()` (issue #37).
++
++use links_notation::{parse_lino_to_links, LiNo};
++use lino_objects_codec::{decode, encode, encode_compact, encode_obfuscated, LinoValue};
++
++/// The document from the issue, as a `LinoValue`.
++fn router_state() -> LinoValue {
++    LinoValue::object([
++        ("type", LinoValue::String("RouterState".to_string())),
++        (
++            "server",
++            LinoValue::object([
++                ("host", LinoValue::String("127.0.0.1".to_string())),
++                ("port", LinoValue::Int(18878)),
++            ]),
++        ),
++        (
++            "models",
++            LinoValue::array([
++                LinoValue::String("claude-haiku".to_string()),
++                LinoValue::String("claude-opus".to_string()),
++            ]),
++        ),
++        (
++            "value",
++            LinoValue::array([
++                LinoValue::object([
++                    ("id", LinoValue::String("7cf7abf6".to_string())),
++                    ("label", LinoValue::String("bootstrap-admin".to_string())),
++                    ("ttl_hours", LinoValue::Int(24)),
++                    ("revoked", LinoValue::Bool(false)),
++                ]),
++                LinoValue::object([
++                    ("id", LinoValue::String("94b36f7e".to_string())),
++                    ("label", LinoValue::String("wrapper-run".to_string())),
++                    ("ttl_hours", LinoValue::Int(720)),
++                    ("revoked", LinoValue::Bool(false)),
++                ]),
++            ]),
++        ),
++    ])
++}
++
++#[test]
++fn encode_writes_keys_and_values_verbatim() {
++    let encoded = encode(&router_state());
++
++    for expected in [
++        "type \"RouterState\"",
++        "host \"127.0.0.1\"",
++        "port 18878",
++        "\"claude-haiku\"",
++        "label \"bootstrap-admin\"",
++        "revoked false",
++    ] {
++        assert!(
++            encoded.contains(expected),
++            "missing {expected} in:\n{encoded}"
++        );
++    }
++
++    // Nothing is base64-encoded any more.
++    assert!(!encoded.contains("Um91dGVyU3RhdGU="), "{encoded}");
++}
++
++#[test]
++fn encode_spans_multiple_indented_lines() {
++    let encoded = encode(&router_state());
++    let lines: Vec<&str> = encoded.lines().collect();
++
++    assert!(
++        lines.len() > 10,
++        "expected an indented document:\n{encoded}"
++    );
++    assert_eq!(lines[0], "(");
++    assert_eq!(lines[1], "  type \"RouterState\"");
++    assert_eq!(*lines.last().unwrap(), ")");
++    // Nested values are indented deeper than their key.
++    assert!(encoded.contains("\n    host \"127.0.0.1\""), "{encoded}");
++}
++
++#[test]
++fn encode_matches_the_documented_shape() {
++    let value = LinoValue::object([
++        ("type", LinoValue::String("RouterState".to_string())),
++        (
++            "server",
++            LinoValue::object([
++                ("host", LinoValue::String("127.0.0.1".to_string())),
++                ("port", LinoValue::Int(18878)),
++            ]),
++        ),
++        (
++            "models",
++            LinoValue::array([
++                LinoValue::String("claude-haiku".to_string()),
++                LinoValue::String("claude-opus".to_string()),
++            ]),
++        ),
++    ]);
++
++    let expected = "(\n  \
++        type \"RouterState\"\n  \
++        server (\n    \
++            host \"127.0.0.1\"\n    \
++            port 18878\n  \
++        )\n  \
++        models (\n    \
++            \"claude-haiku\"\n    \
++            \"claude-opus\"\n  \
++        )\n\
++        )";
++
++    assert_eq!(encode(&value), expected);
++}
++
++#[test]
++fn readable_output_is_valid_links_notation() {
++    let encoded = encode(&router_state());
++    let links = parse_lino_to_links(&encoded)
++        .unwrap_or_else(|e| panic!("links-notation rejected the output: {e:?}\n{encoded}"));
++    assert_eq!(
++        links.len(),
++        1,
++        "expected a single document link:\n{encoded}"
++    );
++
++    // Parentheses open a nested indentation context (links-notation >= 0.14):
++    // `server` holds one link of two pairs, not four loose references.
++    let LiNo::Link { values, .. } = &links[0] else {
++        panic!("expected a link:\n{encoded}");
++    };
++    let server = values
++        .iter()
++        .find_map(|v| match v {
++            LiNo::Link { values: pair, .. }
++                if matches!(pair.first(), Some(LiNo::Ref(k)) if k == "server") =>
++            {
++                pair.get(1)
++            }
++            _ => None,
++        })
++        .expect("server pair");
++
++    let LiNo::Link { values: fields, .. } = server else {
++        panic!("server should be a link:\n{encoded}");
++    };
++    assert_eq!(fields.len(), 2, "server fields were flattened: {fields:?}");
++    assert!(fields.iter().all(LiNo::is_link), "{fields:?}");
++}
++
++#[test]
++fn nested_structures_roundtrip() {
++    let value = router_state();
++    assert_eq!(decode(&encode(&value)).unwrap(), value);
++}
++
++#[test]
++fn object_used_as_array_element_keeps_its_boundary() {
++    let value = LinoValue::array([
++        LinoValue::object([
++            ("id", LinoValue::String("1".to_string())),
++            ("label", LinoValue::String("one".to_string())),
++        ]),
++        LinoValue::object([
++            ("id", LinoValue::String("2".to_string())),
++            ("label", LinoValue::String("two".to_string())),
++        ]),
++    ]);
++
++    let decoded = decode(&encode(&value)).unwrap();
++    assert_eq!(decoded, value);
++
++    let items = decoded.as_array().expect("array");
++    assert_eq!(items.len(), 2, "record boundaries were lost: {items:?}");
++    assert_eq!(items[0].get("label").unwrap().as_str(), Some("one"));
++}
++
++#[test]
++fn numbers_and_booleans_keep_their_types() {
++    let value = LinoValue::object([
++        ("int", LinoValue::Int(-7)),
++        ("float", LinoValue::Float(3.5)),
++        ("whole_float", LinoValue::Float(2.0)),
++        ("yes", LinoValue::Bool(true)),
++        ("no", LinoValue::Bool(false)),
++        ("nothing", LinoValue::Null),
++        ("numeric_string", LinoValue::String("18878".to_string())),
++        ("boolean_string", LinoValue::String("true".to_string())),
++    ]);
++
++    let decoded = decode(&encode(&value)).unwrap();
++
++    assert!(matches!(decoded.get("int"), Some(LinoValue::Int(-7))));
++    assert!(matches!(decoded.get("float"), Some(LinoValue::Float(_))));
++    assert!(matches!(
++        decoded.get("whole_float"),
++        Some(LinoValue::Float(_))
++    ));
++    assert!(matches!(decoded.get("yes"), Some(LinoValue::Bool(true))));
++    assert!(matches!(decoded.get("no"), Some(LinoValue::Bool(false))));
++    assert!(matches!(decoded.get("nothing"), Some(LinoValue::Null)));
++    assert_eq!(
++        decoded.get("numeric_string").and_then(LinoValue::as_str),
++        Some("18878")
++    );
++    assert_eq!(
++        decoded.get("boolean_string").and_then(LinoValue::as_str),
++        Some("true")
++    );
++}
++
++#[test]
++fn special_floats_roundtrip() {
++    let value = LinoValue::object([
++        ("nan", LinoValue::Float(f64::NAN)),
++        ("inf", LinoValue::Float(f64::INFINITY)),
++        ("neg_inf", LinoValue::Float(f64::NEG_INFINITY)),
++    ]);
++
++    let decoded = decode(&encode(&value)).unwrap();
++    assert!(decoded.get("nan").unwrap().as_float().unwrap().is_nan());
++    assert_eq!(decoded.get("inf").unwrap().as_float(), Some(f64::INFINITY));
++    assert_eq!(
++        decoded.get("neg_inf").unwrap().as_float(),
++        Some(f64::NEG_INFINITY)
++    );
++}
++
++#[test]
++fn quotes_and_unicode_roundtrip_as_text() {
++    let values = [
++        "plain",
++        "",
++        "with spaces",
++        "it's",
++        "he said \"hello\"",
++        "both \"kinds\" of 'quotes'",
++        "unicode: 你好世界 🌍",
++        "parens (and) colons: yes",
++    ];
++
++    for text in values {
++        let value = LinoValue::object([("message", LinoValue::String(text.to_string()))]);
++        let encoded = encode(&value);
++        assert!(!encoded.contains("base64"), "{text} was encoded: {encoded}");
++        assert_eq!(
++            decode(&encoded).unwrap(),
++            value,
++            "roundtrip failed for {text:?}: {encoded}"
++        );
++    }
++}
++
++#[test]
++fn values_that_cannot_be_written_as_text_are_marked_individually() {
++    let value = LinoValue::object([
++        ("readable", LinoValue::String("still visible".to_string())),
++        ("multiline", LinoValue::String("line1\nline2".to_string())),
++        ("tabbed", LinoValue::String("a\tb".to_string())),
++    ]);
++
++    let encoded = encode(&value);
++
++    // Only the values that need it are encoded; the rest stays readable.
++    assert!(encoded.contains("readable \"still visible\""), "{encoded}");
++    assert!(encoded.contains("multiline (base64 \""), "{encoded}");
++    assert!(encoded.contains("tabbed (base64 \""), "{encoded}");
++    assert_eq!(decode(&encoded).unwrap(), value);
++}
++
++#[test]
++fn base64_key_is_not_mistaken_for_a_marker() {
++    let value = LinoValue::object([("base64", LinoValue::String("plain text".to_string()))]);
++    assert_eq!(decode(&encode(&value)).unwrap(), value);
++}
++
++#[test]
++fn empty_containers_keep_their_type() {
++    let value = LinoValue::object([
++        ("empty_array", LinoValue::Array(vec![])),
++        ("empty_object", LinoValue::Object(vec![])),
++    ]);
++    assert_eq!(decode(&encode(&value)).unwrap(), value);
++}
++
++#[test]
++fn scalars_at_the_root_roundtrip() {
++    for value in [
++        LinoValue::Null,
++        LinoValue::Bool(true),
++        LinoValue::Int(42),
++        LinoValue::Float(0.5),
++        LinoValue::String("root".to_string()),
++        LinoValue::String("multi\nline".to_string()),
++    ] {
++        assert_eq!(decode(&encode(&value)).unwrap(), value, "{value:?}");
++    }
++}
++
++#[test]
++fn files_written_in_the_previous_base64_form_still_decode() {
++    // A real stored document, as quoted in issue #37.
++    let stored = "(object ((str dHlwZQ==) (str Um91dGVyU3RhdGU=)) ((str c3VidHlwZQ==) (str VG9rZW5TdG9yZQ==)))";
++
++    let decoded = decode(stored).unwrap();
++    assert_eq!(
++        decoded,
++        LinoValue::object([
++            ("type", LinoValue::String("RouterState".to_string())),
++            ("subtype", LinoValue::String("TokenStore".to_string())),
++        ])
++    );
++}
++
++#[test]
++fn compact_form_is_still_available_and_still_decodes() {
++    let value = router_state();
++
++    let compact = encode_compact(&value);
++    assert_eq!(
++        compact.lines().count(),
++        1,
++        "compact output must be one line"
++    );
++    assert!(compact.contains("Um91dGVyU3RhdGU="), "{compact}");
++    assert_eq!(decode(&compact).unwrap(), value);
++
++    // The obfuscated alias is the same encoder under an explicit name.
++    assert_eq!(encode_obfuscated(&value), compact);
++}
++
++#[test]
++fn compact_scalars_and_containers_still_decode() {
++    for value in [
++        LinoValue::Null,
++        LinoValue::Bool(false),
++        LinoValue::Int(-1),
++        LinoValue::Float(f64::INFINITY),
++        LinoValue::String("hello".to_string()),
++        LinoValue::Array(vec![]),
++        LinoValue::Object(vec![]),
++        LinoValue::array([LinoValue::Int(1), LinoValue::String("two".to_string())]),
++    ] {
++        let compact = encode_compact(&value);
++        assert_eq!(decode(&compact).unwrap(), value, "compact: {compact}");
++    }
++}
++
++#[test]
++fn hand_written_documents_are_accepted() {
++    let text = "(\n  name \"Alice\"\n  age 30\n  tags (\n    \"a\"\n    \"b\"\n  )\n)";
++    let decoded = decode(text).unwrap();
++
++    assert_eq!(
++        decoded.get("name").and_then(LinoValue::as_str),
++        Some("Alice")
++    );
++    assert_eq!(decoded.get("age").and_then(LinoValue::as_int), Some(30));
++    assert_eq!(
++        decoded
++            .get("tags")
++            .and_then(LinoValue::as_array)
++            .unwrap()
++            .len(),
++        2
++    );
++}

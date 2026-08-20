@@ -146,3 +146,42 @@ This bug prevents the `lino-objects-codec` library from properly encoding/decodi
 ## Requested Action
 
 Please fix the Python `links-notation` parser to correctly handle self-referenced object definitions when they appear as values inside pairs, matching the behavior of the JavaScript implementation.
+
+---
+
+## Status update (issue #39 investigation, 2026-08-20)
+
+This document was captured during earlier work on the compact format. During the
+issue #39 investigation it was re-verified and its resolution established, so no
+new upstream issue needs to be filed:
+
+- **Still present in `links-notation` 0.11.2** (the version the Python package
+  currently pins via `links-notation>=0.11.0,<0.12.0`). Minimal reproduction with
+  the raw parser:
+
+  ```python
+  import links_notation as ln
+  ln.Parser().parse("(list (obj_1: list a b))")
+  # -> mis-parsed: the nested `(id: ...)` definition corrupts the enclosing link
+  ```
+
+- **Fixed in `links-notation` 0.14.0.** The same inputs round-trip correctly
+  there:
+
+  ```python
+  ln.Parser().parse("(key (obj_1: list a b))")   # -> (key (obj_1: list a b))
+  ln.Parser().parse("(list (obj_1: list a b))")  # -> (list (obj_1: list a b))
+  ```
+
+- **Impact on this repository is already contained.** The compact encoder was
+  changed (commits `a769d70`, `97706dc`) to emit sibling `obj_N` definitions with
+  back-references instead of nesting a definition inside a pair value, so the
+  round-trip works even on the buggy 0.11.2 parser. The readable format, now the
+  default, is a plain tree and never uses the `(id: ...)` syntax at all, so it is
+  unaffected regardless of parser version.
+
+- **Recommended follow-up (out of scope for issue #39):** bump the Python pin to
+  `links-notation>=0.14.0` (Rust already uses 0.14.0) and, once on the fixed
+  parser, the compact encoder's sibling-definition workaround could be simplified.
+  This is a dependency upgrade with its own API-compatibility surface and is
+  tracked here rather than bundled into the readable-format change.

@@ -1,10 +1,21 @@
 /**
  * Tests for encoding/decoding circular references and shared object references.
+ *
+ * Object identity -- a cycle, or two fields pointing at the same object -- is a
+ * property of the compact format, which names shared nodes with `obj_N` ids. The
+ * readable format writes a plain tree and has nowhere to put those ids, so it
+ * rejects a circular value instead of looping; that is covered at the end of
+ * this file. `decode` reads both formats, so it is used unaliased throughout.
  */
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { encode, decode } from '../src/index.js';
+import {
+  encodeCompact as encode,
+  decode,
+  encode as encodeReadable,
+  CircularReferenceError,
+} from '../src/index.js';
 
 // Tests for circular references in arrays
 test('self-referencing array', () => {
@@ -278,4 +289,32 @@ test('decoder rejects legacy (ref X) marker as unknown type', () => {
     () => decode({ notation: legacy }),
     /Unknown type marker:\s*ref/
   );
+});
+
+// The readable format cannot name a shared node, so it refuses a cycle rather
+// than looping forever or silently writing a truncated document.
+test('readable format rejects a self-referencing object', () => {
+  const obj = { name: 'root' };
+  obj.self = obj;
+
+  assert.throws(() => encodeReadable({ obj }), CircularReferenceError);
+});
+
+test('readable format rejects a self-referencing array', () => {
+  const arr = [1, 2];
+  arr.push(arr);
+
+  assert.throws(() => encodeReadable({ obj: arr }), CircularReferenceError);
+});
+
+test('readable format writes a shared object twice', () => {
+  const shared = { x: 1 };
+
+  const text = encodeReadable({ obj: { a: shared, b: shared } });
+  const decoded = decode({ notation: text });
+
+  assert.deepEqual(decoded, { a: { x: 1 }, b: { x: 1 } });
+  // The values are equal but no longer the same object: only the compact format
+  // keeps identity.
+  assert.notEqual(decoded.a, decoded.b);
 });
