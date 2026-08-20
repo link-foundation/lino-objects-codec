@@ -35,13 +35,19 @@ on:
         required: false
         type: string
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+# Least privilege by default (best practice #10 / template parity): individual
+# release jobs raise this to `contents: write` where they need it.
+permissions:
+  contents: read
 
 jobs:
   # === DETECT CHANGES - determines which jobs should run ===
   detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
     name: Detect Changes
     runs-on: ubuntu-latest
     if: github.event_name != 'workflow_dispatch'
@@ -69,6 +75,11 @@ jobs:
   # === VERSION CHANGE CHECK ===
   # Prohibit manual version changes in package.json - versions should only be changed by CI/CD
   version-check:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-version-check
+      cancel-in-progress: true
     name: Check for Manual Version Changes
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
@@ -87,6 +98,11 @@ jobs:
   # === CHANGESET CHECK - only runs on PRs with code changes ===
   # Docs-only PRs (./docs folder, markdown files) don't require changesets
   changeset-check:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-changeset-check
+      cancel-in-progress: true
     name: Check for Changesets
     runs-on: ubuntu-latest
     needs: [detect-changes]
@@ -111,9 +127,12 @@ jobs:
           GITHUB_BASE_REF: ${{ github.base_ref }}
           GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          # Passed through the environment: a branch name is attacker-controlled
+          # and must never be interpolated straight into a shell script.
+          HEAD_REF: ${{ github.head_ref }}
         run: |
           # Skip changeset check for automated version PRs
-          if [[ "${{ github.head_ref }}" == "changeset-release/"* ]]; then
+          if [[ "$HEAD_REF" == "changeset-release/"* ]]; then
             echo "Skipping changeset check for automated release PR"
             exit 0
           fi
@@ -124,19 +143,26 @@ jobs:
   # === LINT AND FORMAT CHECK ===
   # Lint runs independently of changeset-check - it's a fast check that should always run
   lint:
+    timeout-minutes: 15
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-lint
+      cancel-in-progress: true
     name: Lint and Format Check
     runs-on: ubuntu-latest
     needs: [detect-changes]
-    if: |
-      always() && !cancelled() && (
-        github.event_name == 'push' ||
-        github.event_name == 'workflow_dispatch' ||
-        needs.detect-changes.outputs.mjs-changed == 'true' ||
-        needs.detect-changes.outputs.js-changed == 'true' ||
-        needs.detect-changes.outputs.docs-changed == 'true' ||
-        needs.detect-changes.outputs.package-changed == 'true' ||
-        needs.detect-changes.outputs.workflow-changed == 'true'
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.js-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.package-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
       )
+      }}
     steps:
       - uses: actions/checkout@v7
 
@@ -163,11 +189,16 @@ jobs:
 
   # Test matrix: Node.js on multiple OS
   test:
+    timeout-minutes: 30
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-test-${{ matrix.os }}
+      cancel-in-progress: true
     name: Test (Node.js on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     needs: [detect-changes, changeset-check]
     # Run if: push event, OR changeset-check succeeded, OR changeset-check was skipped (docs-only PR)
-    if: always() && !cancelled() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || needs.changeset-check.result == 'success' || needs.changeset-check.result == 'skipped')
+    if: ${{ !cancelled() && (github.event_name == 'push' || github.event_name == 'workflow_dispatch' || needs.changeset-check.result == 'success' || needs.changeset-check.result == 'skipped') }}
     strategy:
       fail-fast: false
       matrix:
@@ -194,11 +225,19 @@ jobs:
 
   # Release - only runs on main after tests pass (for push events)
   release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Release
     needs: [lint, test]
-    # Use always() to ensure this job runs even if changeset-check was skipped
+    # Use !cancelled() so this job still runs when changeset-check was skipped
     # This is needed because lint/test jobs have a transitive dependency on changeset-check
-    if: always() && !cancelled() && github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.lint.result == 'success' && needs.test.result == 'success'
+    if: ${{ !cancelled() && github.ref == 'refs/heads/main' && github.event_name == 'push' && needs.lint.result == 'success' && needs.test.result == 'success' }}
     runs-on: ubuntu-latest
     # Permissions required for npm OIDC trusted publishing
     permissions:
@@ -265,15 +304,25 @@ jobs:
 
   # Manual Instant Release - triggered via workflow_dispatch with instant mode
   instant-release:
+    timeout-minutes: 45
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Instant Release
     needs: [lint, test]
-    # Note: always() is required to evaluate the condition when dependencies use always()
-    if: |
-      always() && !cancelled() &&
+    # Note: !cancelled() is required to evaluate the condition when dependencies may be skipped
+    if: >-
+      ${{
+      !cancelled() &&
       github.event_name == 'workflow_dispatch' &&
       github.event.inputs.release_mode == 'instant' &&
       needs.lint.result == 'success' &&
       needs.test.result == 'success'
+      }}
     runs-on: ubuntu-latest
     # Permissions required for npm OIDC trusted publishing
     permissions:
@@ -327,6 +376,14 @@ jobs:
 
   # Manual Changeset PR - creates a pull request with the changeset for review
   changeset-pr:
+    timeout-minutes: 20
+    # Writer: every job in the repository that pushes commits, tags or
+    # packages shares this group, so releases queue instead of racing, and a
+    # started release is never cancelled mid-publish.
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
     name: Create Changeset PR
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.release_mode == 'changeset-pr'
     runs-on: ubuntu-latest
