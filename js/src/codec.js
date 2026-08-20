@@ -405,7 +405,7 @@ export class ObjectCodec {
       if (link.values.length > 1) {
         const boolValue = link.values[1];
         if (boolValue && boolValue.id) {
-          return boolValue.id === 'true';
+          return boolValue.id.toLowerCase() === 'true';
         }
       }
       return false;

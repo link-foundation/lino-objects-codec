@@ -299,7 +299,7 @@ public class ObjectCodec
 
         if (obj is bool boolVal)
         {
-            return MakeLink(TypeBool, boolVal ? "True" : "False");
+            return MakeLink(TypeBool, boolVal ? "true" : "false");
         }
 
         if (obj is int intVal)
@@ -513,7 +513,7 @@ public class ObjectCodec
                 var boolValue = link.Values[1];
                 if (boolValue.Id is not null)
                 {
-                    return boolValue.Id == "True";
+                    return string.Equals(boolValue.Id, "true", StringComparison.OrdinalIgnoreCase);
                 }
             }
             return false;

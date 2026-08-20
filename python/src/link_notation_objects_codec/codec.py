@@ -355,7 +355,7 @@ class ObjectCodec:
 
         elif isinstance(obj, bool):
             # Must check bool before int because bool is a subclass of int
-            return self._make_link(self.TYPE_BOOL, str(obj))
+            return self._make_link(self.TYPE_BOOL, "true" if obj else "false")
 
         elif isinstance(obj, int):
             return self._make_link(self.TYPE_INT, str(obj))
@@ -489,7 +489,7 @@ class ObjectCodec:
             if len(link.values) > 1:
                 bool_value = link.values[1]
                 if hasattr(bool_value, "id"):
-                    return bool_value.id == "True"
+                    return bool_value.id.lower() == "true"
             return False
 
         elif type_marker == self.TYPE_INT:

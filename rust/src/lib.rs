@@ -805,7 +805,7 @@ impl ObjectCodec {
                     type_ids::BOOL => {
                         if values.len() > 1 {
                             if let LiNo::Ref(val) = &values[1] {
-                                return Ok(LinoValue::Bool(val == "true"));
+                                return Ok(LinoValue::Bool(val.eq_ignore_ascii_case("true")));
                             }
                         }
                         Ok(LinoValue::Bool(false))
