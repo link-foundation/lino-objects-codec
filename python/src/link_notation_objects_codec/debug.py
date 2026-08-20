@@ -11,14 +11,14 @@ language.
 
 import os
 import sys
-from typing import Callable, Optional
+from collections.abc import Callable
 
 #: Name of the environment variable that turns tracing on.
 DEBUG_ENV_VAR = "LINO_CODEC_DEBUG"
 
 _TRUTHY = frozenset({"1", "true", "yes", "on"})
 
-_overridden: Optional[bool] = None
+_overridden: bool | None = None
 
 
 def is_debug_enabled() -> bool:
@@ -29,7 +29,7 @@ def is_debug_enabled() -> bool:
     return raw is not None and raw.strip().lower() in _TRUTHY
 
 
-def set_debug_enabled(enabled: Optional[bool]) -> None:
+def set_debug_enabled(enabled: bool | None) -> None:
     """Turn tracing on or off from code, overriding the environment variable.
 
     Args:

@@ -15,7 +15,7 @@ keep working and migrate to the readable form on the next write.
 import base64
 import math
 import re
-from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
+from typing import Any
 
 from links_notation import Link, Parser
 
@@ -28,7 +28,7 @@ from .debug import trace
 #: ``None``/``list``/``dict`` where JavaScript and Rust write
 #: ``null``/``array``/``object`` -- so every implementation accepts the union and
 #: can read a compact document written by any of the others.
-_COMPACT_TYPE_MARKERS: FrozenSet[str] = frozenset(
+_COMPACT_TYPE_MARKERS: frozenset[str] = frozenset(
     {
         "null",
         "None",
@@ -95,16 +95,16 @@ class ObjectCodec:
         """Initialize the codec."""
         self.parser = Parser()
         # For tracking object identity during encoding
-        self._encode_memo: Dict[int, str] = {}
+        self._encode_memo: dict[int, str] = {}
         self._encode_counter: int = 0
         # For tracking which objects need IDs (referenced multiple times or circularly)
-        self._needs_id: Set[int] = set()
+        self._needs_id: set[int] = set()
         # For storing all definitions during encoding
-        self._all_definitions: List[Tuple[str, Link]] = []
+        self._all_definitions: list[tuple[str, Link]] = []
         # For tracking references during decoding
-        self._decode_memo: Dict[str, Any] = {}
+        self._decode_memo: dict[str, Any] = {}
         # For storing all links during multi-link decoding
-        self._all_links: List[Any] = []
+        self._all_links: list[Any] = []
 
     def _make_link(self, *parts: str) -> Link:
         """
@@ -123,8 +123,8 @@ class ObjectCodec:
     def _find_objects_needing_ids(
         self,
         obj: Any,
-        seen: Optional[Dict[int, List[int]]] = None,
-        path: Optional[List[int]] = None,
+        seen: dict[int, list[int]] | None = None,
+        path: list[int] | None = None,
     ) -> None:
         """
         First pass: identify which objects need IDs (referenced multiple times or circularly).
@@ -309,9 +309,7 @@ class ObjectCodec:
 
         return self._decode_link(link)
 
-    def _encode_value(
-        self, obj: Any, visited: Optional[Set[int]] = None, depth: int = 0
-    ) -> Link:
+    def _encode_value(self, obj: Any, visited: set[int] | None = None, depth: int = 0) -> Link:
         """
         Encode a value into a Link.
 
@@ -390,9 +388,7 @@ class ObjectCodec:
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
                 # Create the definition with self-reference ID
-                definition = Link(
-                    link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts
-                )
+                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_LIST)] + parts)
                 # Store for multi-link output if not at top level
                 if depth > 0:
                     self._all_definitions.append((ref_id, definition))
@@ -417,9 +413,7 @@ class ObjectCodec:
             if obj_id in self._encode_memo:
                 ref_id = self._encode_memo[obj_id]
                 # Create the definition with self-reference ID
-                definition = Link(
-                    link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts
-                )
+                definition = Link(link_id=ref_id, values=[Link(link_id=self.TYPE_DICT)] + parts)
                 # Store for multi-link output if not at top level
                 if depth > 0:
                     self._all_definitions.append((ref_id, definition))
@@ -464,7 +458,7 @@ class ObjectCodec:
                             return self._decode_link(other_link)
 
                     # Not found in links - create empty list as fallback
-                    result: List[Any] = []
+                    result: list[Any] = []
                     self._decode_memo[link.id] = result
                     return result
 
@@ -539,7 +533,7 @@ class ObjectCodec:
             start_idx = 1
             list_id = self_ref_id  # Use self-reference ID from link.id if present
 
-            result_list: List[Any] = []
+            result_list: list[Any] = []
             if list_id:
                 self._decode_memo[list_id] = result_list
 
@@ -553,7 +547,7 @@ class ObjectCodec:
             start_idx = 1
             dict_id = self_ref_id  # Use self-reference ID from link.id if present
 
-            result_dict: Dict[Any, Any] = {}
+            result_dict: dict[Any, Any] = {}
             if dict_id:
                 self._decode_memo[dict_id] = result_dict
 

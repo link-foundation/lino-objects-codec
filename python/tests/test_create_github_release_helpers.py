@@ -8,9 +8,7 @@ from pathlib import Path
 
 # Load create_github_release as a regular module without requiring it to be on
 # the package path (it lives under scripts/ which is not part of the package).
-SCRIPT_PATH = (
-    Path(__file__).resolve().parent.parent / "scripts" / "create_github_release.py"
-)
+SCRIPT_PATH = Path(__file__).resolve().parent.parent / "scripts" / "create_github_release.py"
 spec = importlib.util.spec_from_file_location("create_github_release", SCRIPT_PATH)
 module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = module
@@ -28,14 +26,8 @@ def test_normalize_strips_bare_v() -> None:
 
 
 def test_normalize_handles_prerelease_and_build_metadata() -> None:
-    assert (
-        module.normalize_release_version_for_badge("python_v1.0.0-beta.1")
-        == "1.0.0-beta.1"
-    )
-    assert (
-        module.normalize_release_version_for_badge("python_v1.0.0+build.7")
-        == "1.0.0+build.7"
-    )
+    assert module.normalize_release_version_for_badge("python_v1.0.0-beta.1") == "1.0.0-beta.1"
+    assert module.normalize_release_version_for_badge("python_v1.0.0+build.7") == "1.0.0+build.7"
 
 
 def test_pypi_badge_uses_bare_semver() -> None:

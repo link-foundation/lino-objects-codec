@@ -24,7 +24,12 @@ from .format import (
     parse_indented,
     unescape_reference,
 )
-from .readable import BASE64_MARKER, DEFAULT_INDENT, ReadableFormatError
+from .readable import (
+    BASE64_MARKER,
+    DEFAULT_INDENT,
+    CircularReferenceError,
+    ReadableFormatError,
+)
 
 __version__ = "0.3.0"
 __all__ = [
@@ -42,6 +47,7 @@ __all__ = [
     "DEFAULT_INDENT",
     "BASE64_MARKER",
     "ReadableFormatError",
+    "CircularReferenceError",
     "DEBUG_ENV_VAR",
     "is_debug_enabled",
     "set_debug_enabled",

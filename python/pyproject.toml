@@ -47,14 +47,22 @@ addopts = "-v --cov=link_notation_objects_codec --cov-report=term-missing"
 
 [tool.ruff]
 line-length = 100
-target-version = "py38"
+# Matches `requires-python` above: an older target silently keeps deprecated
+# typing constructs passing review.
+target-version = "py313"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM"]
 ignore = []
 
+# Kept in pyproject.toml on purpose: ruff reads exactly one configuration file,
+# so a `.ruff.toml` next to this file would replace everything above rather than
+# add to it, and the rule selection would silently become ruff's default one.
+[tool.ruff.lint.isort]
+known-first-party = ["link_notation_objects_codec"]
+
 [tool.mypy]
-python_version = "3.9"
+python_version = "3.13"
 warn_return_any = false
 warn_unused_configs = true
 disallow_untyped_defs = false

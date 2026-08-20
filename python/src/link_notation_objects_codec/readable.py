@@ -48,7 +48,9 @@ import base64
 import math
 import re
 import unicodedata
-from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
+from collections.abc import Iterator, Sequence
+from contextlib import contextmanager
+from typing import Any
 
 from .debug import trace
 
@@ -72,6 +74,15 @@ class ReadableFormatError(ValueError):
     """Raised when a readable document cannot be parsed."""
 
 
+class CircularReferenceError(ValueError):
+    """Raised when a value cannot be written because it refers back to itself.
+
+    The readable form writes a plain tree and has no place to put the ``obj_N``
+    definition ids that name a shared node, so a cycle cannot be represented.
+    :func:`link_notation_objects_codec.encode_compact` handles cycles.
+    """
+
+
 def encode(value: Any, indent: str = DEFAULT_INDENT) -> str:
     """Encode a value into the readable, indented Links Notation form.
 
@@ -81,9 +92,13 @@ def encode(value: Any, indent: str = DEFAULT_INDENT) -> str:
 
     Returns:
         The readable Links Notation document.
+
+    Raises:
+        CircularReferenceError: If the value refers back to itself.
+        TypeError: If the value holds a type this format cannot write.
     """
-    out: List[str] = []
-    _write_value(value, indent, 0, out)
+    out: list[str] = []
+    _write_value(value, indent, 0, out, set())
     return "".join(out)
 
 
@@ -117,38 +132,62 @@ def decode(text: str) -> Any:
 # === Encoding ===
 
 
-def _write_value(value: Any, indent: str, level: int, out: List[str]) -> None:
+def _write_value(value: Any, indent: str, level: int, out: list[str], path: set[int]) -> None:
     if isinstance(value, dict):
-        items = list(value.items())
-        if not items:
-            # An empty dict spans two lines; ``()`` on one line is an empty list.
-            out.append("(\n")
-            _push_indent(indent, level, out)
-            out.append(")")
-            return
+        with _on_path(value, path):
+            items = list(value.items())
+            if not items:
+                # An empty dict spans two lines; ``()`` on one line is an empty list.
+                out.append("(\n")
+                _push_indent(indent, level, out)
+                out.append(")")
+                return
 
-        def write_pair(pair: Tuple[Any, Any]) -> None:
-            key, child = pair
-            out.append(_format_key(key))
-            out.append(" ")
-            _write_value(child, indent, level + 1, out)
+            def write_pair(pair: tuple[Any, Any]) -> None:
+                key, child = pair
+                out.append(_format_key(key))
+                out.append(" ")
+                _write_value(child, indent, level + 1, out, path)
 
-        _write_rows(items, indent, level, out, write_pair)
+            _write_rows(items, indent, level, out, write_pair)
         return
 
     if isinstance(value, (list, tuple, set, frozenset)):
-        items_seq: Sequence[Any] = list(value)
+        with _on_path(value, path):
+            items_seq: Sequence[Any] = list(value)
 
-        def write_item(item: Any) -> None:
-            _write_value(item, indent, level + 1, out)
+            def write_item(item: Any) -> None:
+                _write_value(item, indent, level + 1, out, path)
 
-        _write_rows(items_seq, indent, level, out, write_item)
+            _write_rows(items_seq, indent, level, out, write_item)
         return
 
     out.append(_format_scalar(value))
 
 
-def _write_rows(items: Sequence[Any], indent: str, level: int, out: List[str], write_item: Any) -> None:
+@contextmanager
+def _on_path(value: Any, path: set[int]) -> Iterator[None]:
+    """Mark a container as being written, so a reference back to it is caught.
+
+    Only the containers on the way down are tracked: the same object appearing
+    twice side by side is written twice, which reads back as two equal values.
+    """
+    marker = id(value)
+    if marker in path:
+        raise CircularReferenceError(
+            "Cannot write a circular reference in the readable format; "
+            "use encode_compact, which names shared nodes with obj_N ids"
+        )
+    path.add(marker)
+    try:
+        yield
+    finally:
+        path.discard(marker)
+
+
+def _write_rows(
+    items: Sequence[Any], indent: str, level: int, out: list[str], write_item: Any
+) -> None:
     """Write a container as ``(``, one indented line per item, then ``)``.
 
     An empty container collapses to ``()``, which reads back as an empty list.
@@ -167,7 +206,7 @@ def _write_rows(items: Sequence[Any], indent: str, level: int, out: List[str], w
     out.append(")")
 
 
-def _push_indent(indent: str, level: int, out: List[str]) -> None:
+def _push_indent(indent: str, level: int, out: list[str]) -> None:
     for _ in range(level):
         out.append(indent)
 
@@ -281,7 +320,7 @@ class _Node:
         is_ref: bool,
         value: str = "",
         quoted: bool = False,
-        rows: Optional[List[List["_Node"]]] = None,
+        rows: list[list["_Node"]] | None = None,
         multiline: bool = False,
     ) -> None:
         self.is_ref = is_ref
@@ -291,9 +330,9 @@ class _Node:
         self.multiline = multiline
 
 
-def _tokenize(text: str) -> List[_Token]:
+def _tokenize(text: str) -> list[_Token]:
     """Split a document into parentheses, newlines and references."""
-    tokens: List[_Token] = []
+    tokens: list[_Token] = []
     i = 0
     length = len(text)
 
@@ -316,16 +355,21 @@ def _tokenize(text: str) -> List[_Token]:
             tokens.append(_Token(_TOKEN_REF, value, quoted=True))
         else:
             start = i
-            while i < length and not text[i].isspace() and text[i] not in "()" and text[i] not in _QUOTE_CHARS:
+            while (
+                i < length
+                and not text[i].isspace()
+                and text[i] not in "()"
+                and text[i] not in _QUOTE_CHARS
+            ):
                 i += 1
             tokens.append(_Token(_TOKEN_REF, text[start:i], quoted=False))
 
     return tokens
 
 
-def _read_quoted(text: str, start: int, quote_char: str) -> Tuple[str, int]:
+def _read_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
     """Read a quoted reference, where a doubled quote character means a literal one."""
-    parts: List[str] = []
+    parts: list[str] = []
     i = start + 1
     length = len(text)
 
@@ -345,17 +389,17 @@ def _read_quoted(text: str, start: int, quote_char: str) -> Tuple[str, int]:
 class _Cursor:
     """Cursor over the token stream, turning tokens into nodes and rows."""
 
-    def __init__(self, tokens: List[_Token]) -> None:
+    def __init__(self, tokens: list[_Token]) -> None:
         self.tokens = tokens
         self.pos = 0
 
-    def parse_rows(self, top_level: bool) -> List[List[_Node]]:
+    def parse_rows(self, top_level: bool) -> list[list[_Node]]:
         """Parse rows until the matching ``)`` (or the end of input at the top level).
 
         A row is one line: the values written between two newlines.
         """
-        rows: List[List[_Node]] = []
-        row: List[_Node] = []
+        rows: list[list[_Node]] = []
+        row: list[_Node] = []
 
         while self.pos < len(self.tokens):
             token = self.tokens[self.pos]
@@ -417,7 +461,7 @@ def _node_to_value(node: _Node) -> Any:
     return _rows_to_value(node.rows, node.multiline)
 
 
-def _rows_to_value(rows: List[List[_Node]], multiline: bool) -> Any:
+def _rows_to_value(rows: list[list[_Node]], multiline: bool) -> Any:
     if not rows:
         return {} if multiline else []
 
@@ -429,19 +473,19 @@ def _rows_to_value(rows: List[List[_Node]], multiline: bool) -> Any:
     is_dict = all(len(row) == 2 and row[0].is_ref for row in rows)
 
     if is_dict:
-        result: Dict[str, Any] = {}
+        result: dict[str, Any] = {}
         for row in rows:
             result[row[0].value] = _node_to_value(row[1])
         return result
 
-    items: List[Any] = []
+    items: list[Any] = []
     for row in rows:
         for node in row:
             items.append(_node_to_value(node))
     return items
 
 
-def _decode_marked_value(rows: List[List[_Node]]) -> Optional[Tuple[str]]:
+def _decode_marked_value(rows: list[list[_Node]]) -> tuple[str] | None:
     """Recognise ``(base64 "...")``, the individual marker for values that could
     not be written as text.
 
@@ -465,7 +509,7 @@ def _decode_marked_value(rows: List[List[_Node]]) -> Optional[Tuple[str]]:
     return (decoded,)
 
 
-def _ref_to_value(value: str, quoted: bool) -> Union[None, bool, int, float, str]:
+def _ref_to_value(value: str, quoted: bool) -> None | bool | int | float | str:
     """Convert a reference to a value.
 
     Quoted references are always strings; bare references keep the type they were

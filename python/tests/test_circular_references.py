@@ -1,8 +1,25 @@
-"""Tests for encoding/decoding objects with circular references."""
+"""Tests for encoding/decoding objects with circular references.
+
+Object identity -- a cycle, or two keys pointing at the same object -- is a
+property of the compact format, which names shared nodes with ``obj_N`` ids. The
+readable format writes a plain tree and has nowhere to put those ids, so it
+rejects a circular value instead of looping; that is covered by
+``TestReadableFormatAndCircularReferences``. :func:`decode` reads both formats,
+so it is used unaliased throughout.
+"""
 
 import pytest
 
-from link_notation_objects_codec import decode, encode
+from link_notation_objects_codec import (
+    CircularReferenceError,
+    decode,
+)
+from link_notation_objects_codec import (
+    encode as encode_readable,
+)
+from link_notation_objects_codec import (
+    encode_compact as encode,
+)
 
 
 class TestCircularReferences:
@@ -49,9 +66,7 @@ class TestCircularReferences:
 
         encoded = encode(list1)
         # Multi-link format is used to avoid parser bug with nested self-references
-        expected = (
-            "(obj_0: list (int 1) (int 2) obj_1)\n(obj_1: list (int 3) (int 4) obj_0)"
-        )
+        expected = "(obj_0: list (int 1) (int 2) obj_1)\n(obj_1: list (int 3) (int 4) obj_0)"
         assert encoded == expected
 
         decoded = decode(encoded)
@@ -170,3 +185,35 @@ class TestCircularReferences:
         legacy = "(dict obj_0 ((str c2VsZg==) (ref obj_0)))"
         with pytest.raises(ValueError, match=r"Unknown type marker:\s*ref"):
             decode(legacy)
+
+
+class TestReadableFormatAndCircularReferences:
+    """The readable format cannot name a shared node, so it refuses a cycle."""
+
+    def test_readable_format_rejects_self_referencing_dict(self):
+        """A dict holding itself cannot be written as a tree."""
+        obj = {"name": "root"}
+        obj["self"] = obj
+
+        with pytest.raises(CircularReferenceError):
+            encode_readable(obj)
+
+    def test_readable_format_rejects_self_referencing_list(self):
+        """A list holding itself cannot be written as a tree."""
+        lst = [1, 2]
+        lst.append(lst)
+
+        with pytest.raises(CircularReferenceError):
+            encode_readable(lst)
+
+    def test_readable_format_writes_shared_object_twice(self):
+        """A shared object is written once per place it appears."""
+        shared = {"x": 1}
+
+        text = encode_readable({"a": shared, "b": shared})
+        decoded = decode(text)
+
+        assert decoded == {"a": {"x": 1}, "b": {"x": 1}}
+        # The values are equal but no longer the same object: only the compact
+        # format keeps identity.
+        assert decoded["a"] is not decoded["b"]

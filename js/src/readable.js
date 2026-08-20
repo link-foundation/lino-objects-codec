@@ -67,24 +67,35 @@ const BARE_LITERALS = new Map([
 /** Characters that cannot appear in a bare (unquoted) reference. */
 const QUOTE_CHARS = ['"', "'", '`'];
 
-/**
- * Unicode control characters (categories Cc): the only characters that cannot be
- * written as plain text, because they break the line structure of the document.
- */
-const CONTROL_CHARACTERS = /[\u0000-\u001f\u007f-\u009f]/;
-
 /** Characters that force an object key to be quoted. */
 const KEY_NEEDS_QUOTES = /[\s()':`"]/;
+
+/**
+ * Raised when a value cannot be written because it refers back to itself.
+ *
+ * The readable form writes a plain tree and has no place to put the `obj_N`
+ * definition ids that name a shared node, so a cycle cannot be represented.
+ * `encodeCompact` handles cycles.
+ */
+export class CircularReferenceError extends TypeError {
+  /** @param {string} message - Why the value could not be written */
+  constructor(message) {
+    super(message);
+    this.name = 'CircularReferenceError';
+  }
+}
 
 /**
  * Encode a value into the readable, indented Links Notation form.
  * @param {*} value - The value to encode
  * @param {string} [indent] - Indentation string used per nesting level
  * @returns {string} The readable Links Notation document
+ * @throws {CircularReferenceError} If the value refers back to itself
+ * @throws {TypeError} If the value holds a type this format cannot write
  */
 export function encode(value, indent = DEFAULT_INDENT) {
   const out = [];
-  writeValue(value, indent, 0, out);
+  writeValue(value, indent, 0, out, new Set());
   return out.join('');
 }
 
@@ -113,32 +124,55 @@ export function decode(text) {
 
 // === Encoding ===
 
-function writeValue(value, indent, level, out) {
+function writeValue(value, indent, level, out, path) {
   if (Array.isArray(value)) {
+    enterPath(value, path);
     writeRows(value, indent, level, out, (item) =>
-      writeValue(item, indent, level + 1, out)
+      writeValue(item, indent, level + 1, out, path)
     );
+    path.delete(value);
     return;
   }
 
   if (isPlainContainer(value)) {
+    enterPath(value, path);
     const entries = Object.entries(value);
     if (entries.length === 0) {
       // An empty object spans two lines; `()` on one line is an empty array.
       out.push('(\n');
       pushIndent(indent, level, out);
       out.push(')');
+      path.delete(value);
       return;
     }
     writeRows(entries, indent, level, out, ([key, child]) => {
       out.push(formatKey(key));
       out.push(' ');
-      writeValue(child, indent, level + 1, out);
+      writeValue(child, indent, level + 1, out, path);
     });
+    path.delete(value);
     return;
   }
 
   out.push(formatScalar(value));
+}
+
+/**
+ * Mark a container as being written, so a reference back to it is caught.
+ *
+ * Only the containers on the way down are tracked: the same object appearing
+ * twice side by side is written twice, which reads back as two equal values.
+ * @param {object} value - The container being entered
+ * @param {Set<object>} path - Containers currently being written
+ */
+function enterPath(value, path) {
+  if (path.has(value)) {
+    throw new CircularReferenceError(
+      'Cannot write a circular reference in the readable format; ' +
+        'use encodeCompact, which names shared nodes with obj_N ids'
+    );
+  }
+  path.add(value);
 }
 
 /**
@@ -246,7 +280,14 @@ function formatString(value) {
  * @returns {boolean} True when the string has to be encoded
  */
 function needsEncoding(value) {
-  return CONTROL_CHARACTERS.test(value);
+  for (const char of value) {
+    const code = char.codePointAt(0);
+    // Unicode category Cc: the C0 and C1 control ranges.
+    if (code <= 0x1f || (code >= 0x7f && code <= 0x9f)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function quote(value) {
