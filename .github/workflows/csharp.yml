@@ -370,8 +370,8 @@ jobs:
           CURRENT_VERSION=$(grep -Po '(?<=<Version>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
           PACKAGE_ID=$(grep -Po '(?<=<PackageId>)[^<]*' src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
           PACKAGE_ID_LC=$(echo "$PACKAGE_ID" | tr '[:upper:]' '[:lower:]')
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "package_id=$PACKAGE_ID" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "package_id=$PACKAGE_ID" >> "$GITHUB_OUTPUT"
 
           # Decide based on the registry, not on the local git tag. NuGet's flat-container index
           # returns 200 for an existing package id and 404 otherwise; the version-specific .nuspec
@@ -381,10 +381,10 @@ jobs:
           echo "NuGet HTTP status for ${PACKAGE_ID}@${CURRENT_VERSION}: ${STATUS}"
           if [ "$STATUS" = "200" ]; then
             echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} already on NuGet, skipping publish"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           else
             echo "Version ${PACKAGE_ID}@${CURRENT_VERSION} is NOT on NuGet, will publish"
-            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Download artifacts

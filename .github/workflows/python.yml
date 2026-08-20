@@ -366,8 +366,8 @@ jobs:
           # Get current version from pyproject.toml
           CURRENT_VERSION=$(grep -Po '(?<=^version = ")[^"]*' pyproject.toml)
           PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
-          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
 
           # Decide based on the registry, not on the local git tag. PyPI returns 200 for an
           # existing version's JSON metadata and 404 otherwise. See
@@ -376,10 +376,10 @@ jobs:
           echo "PyPI HTTP status for ${PACKAGE_NAME}@${CURRENT_VERSION}: ${STATUS}"
           if [ "$STATUS" = "200" ]; then
             echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} already on PyPI, skipping publish"
-            echo "should_release=false" >> $GITHUB_OUTPUT
+            echo "should_release=false" >> "$GITHUB_OUTPUT"
           else
             echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} is NOT on PyPI, will publish"
-            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "should_release=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Download artifacts
@@ -540,7 +540,7 @@ jobs:
         working-directory: ./python
         run: |
           PACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)
-          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"
 
       - name: PyPI publish preflight
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'

@@ -409,7 +409,7 @@ jobs:
         working-directory: ./rust
         run: |
           VERSION=$(grep -Po '(?<=^version = ")[^"]*' Cargo.toml)
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build release
         if: steps.release_check.outputs.should_release == 'true'

@@ -465,7 +465,30 @@ actionlint's bundled schema, so the lint step passes
 limitation, recorded here so the ignore is removed rather than inherited once
 actionlint catches up.
 
-### 9.5 Parity gate
+### 9.5 shellcheck: unquoted `$GITHUB_OUTPUT` (found only by CI)
+
+The first pipeline run of the pushed branch failed the `Lint Workflows` job with
+nine `SC2086 Double quote to prevent globbing and word splitting` reports across
+`csharp.yml:368`, `python.yml:365`, `python.yml:541` and `rust.yml:410` -- every
+one an unquoted `>> $GITHUB_OUTPUT`.
+
+This is worth recording because **the local verification could not have caught
+it**: actionlint only runs shellcheck when a `shellcheck` binary is on `PATH`,
+and it silently skips that analysis when there is none. Locally there was none,
+so `actionlint` exited 0 while the same version on the runner -- where
+shellcheck is preinstalled -- exited 1. A green local lint was itself a false
+negative, which is precisely the class of defect issue #41 is about.
+
+The fix quotes every such redirection repository-wide (10 occurrences in three
+workflows), not only the four the linter happened to point at. Reproducing the
+CI result locally now requires passing the binary explicitly:
+
+```
+actionlint -shellcheck /path/to/shellcheck \
+  -ignore 'unexpected key "queue" for "concurrency" section'
+```
+
+### 9.6 Parity gate
 
 `scripts/check-language-parity.mjs` fails on this pull request with
 "Changed: JavaScript, C# / Missing a matching change: Python, Rust" because the
