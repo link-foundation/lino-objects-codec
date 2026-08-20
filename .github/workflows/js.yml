@@ -214,6 +214,13 @@ jobs:
         working-directory: ./js
         run: npm run check:duplication
 
+      # `npm test` only covers `tests/`, so the CI helper scripts under
+      # `js/scripts` had no automated coverage before issue #41 even though the
+      # release jobs depend on them.
+      - name: Run CI script tests
+        working-directory: ./js
+        run: node --test scripts/*.test.mjs
+
   # Test matrix: Node.js on multiple OS
   test:
     timeout-minutes: 30
