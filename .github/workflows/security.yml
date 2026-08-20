@@ -63,25 +63,42 @@ jobs:
       - name: Analyze
         uses: github/codeql-action/analyze@v4
 
-  dependency-review:
-    name: Dependency Review
-    if: github.event_name == 'pull_request'
+  # `actions/dependency-review-action` was tried here first and fails with
+  # "Dependency review is not supported on this repository. Please ensure that
+  # Dependency graph is enabled." That is a repository/organisation setting, not
+  # something a pull request can change, and a job that can only ever fail is
+  # worse than no job. The four ecosystem audits below cover the same ground
+  # with tools that work today; see dev/log/issues/41/pulls/42/ANALYSIS.md 9.7.
+  nuget-audit:
+    name: Audit NuGet dependencies
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     concurrency:
-      group: check-${{ github.workflow }}-${{ github.ref }}-dependency-review
+      group: check-${{ github.workflow }}-${{ github.ref }}-nuget-audit
       cancel-in-progress: true
-    permissions:
-      contents: read
-      pull-requests: write
     steps:
       - uses: actions/checkout@v7
 
-      - name: Review dependency changes
-        uses: actions/dependency-review-action@v5
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v6
         with:
-          fail-on-severity: high
-          comment-summary-in-pr: on-failure
+          dotnet-version: '8.0.x'
+
+      # `dotnet list package --vulnerable` exits 0 even when it finds
+      # advisories, so the report is inspected rather than the exit code.
+      # `--include-transitive` matters: most advisories arrive indirectly.
+      - name: Audit NuGet dependencies
+        working-directory: ./csharp
+        run: |
+          dotnet restore
+          dotnet list package --vulnerable --include-transitive \
+            > nuget-audit.txt 2>&1
+          cat nuget-audit.txt
+          if grep -qiE '^\s+> ' nuget-audit.txt; then
+            echo "::error::Vulnerable NuGet packages found (see report above)"
+            exit 1
+          fi
+          echo "No vulnerable NuGet packages found."
 
   npm-audit:
     name: Audit npm lock
