@@ -47,6 +47,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: the matrix includes Windows runners, where the
+        # default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -86,6 +101,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: the matrix includes Windows runners, where the
+        # default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -121,6 +151,21 @@ jobs:
     needs: [lint, test]
     steps:
       - uses: actions/checkout@v7
+        with:
+          # Full history: the merge simulation below needs the base branch.
+          fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: the matrix includes Windows runners, where the
+        # default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -160,6 +205,18 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+
+      # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
+      # the base branch moves, so checks would validate code that is not what
+      # will actually land. Merge the latest base branch first.
+      - name: Simulate fresh merge with base branch (PR only)
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        # Explicit shell: the matrix includes Windows runners, where the
+        # default shell is PowerShell.
+        shell: bash
+        run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Python
         uses: actions/setup-python@v7
