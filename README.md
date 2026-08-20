@@ -42,6 +42,7 @@ All implementations share the same design philosophy and provide feature parity.
 - **Circular References**: Automatically detect and preserve circular references
 - **Object Identity**: Maintain object identity for shared references
 - **UTF-8 Support**: Full Unicode string support using base64 encoding
+- **Readable by Default (Rust)**: `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()`
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 - **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
 - **Reference Escaping**: Properly escape strings for Links Notation format (JavaScript)
@@ -98,10 +99,24 @@ let data = LinoValue::object([
     ("age", LinoValue::Int(30)),
     ("active", LinoValue::Bool(true)),
 ]);
+// `encode` produces readable, indented Links Notation
 let encoded = encode(&data);
+assert_eq!(encoded, "(\n  name \"Alice\"\n  age 30\n  active true\n)");
+
 let decoded = decode(&encoded).unwrap();
 assert_eq!(decoded, data);
 ```
+
+```lino
+(
+  name "Alice"
+  age 30
+  active true
+)
+```
+
+The single-line base64 form is still available as `encode_compact()` (alias
+`encode_obfuscated()`), and `decode()` accepts both forms.
 
 ### C#
 
@@ -354,6 +369,10 @@ The library uses the [links-notation](https://github.com/link-foundation/links-n
 
 - Basic types are encoded with type markers: `(int 42)`, `(str aGVsbG8=)`, `(bool True)`
 - Strings are base64-encoded to handle special characters and newlines
+- **Rust exception**: `encode()` defaults to the readable indented form described in
+  [rust/README.md](rust/README.md), where strings are quoted rather than encoded and
+  only values containing control characters are marked as `(base64 "...")`; the form
+  above is what `encode_compact()` produces
 - Collections with self-references use built-in links notation self-reference syntax:
   - **Format**: `(obj_id: type content...)`
   - **Python example**: `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`

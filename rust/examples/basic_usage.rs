@@ -1,6 +1,6 @@
 //! Basic usage example for the lino-objects-codec library.
 
-use lino_objects_codec::{decode, encode, LinoValue};
+use lino_objects_codec::{decode, encode, encode_compact, LinoValue};
 
 fn main() {
     println!("=== Links Notation Objects Codec - Rust Example ===\n");
@@ -89,7 +89,7 @@ fn main() {
     let array_val = LinoValue::array([LinoValue::Int(1), LinoValue::Int(2), LinoValue::Int(3)]);
     let encoded = encode(&array_val);
     let decoded = decode(&encoded).unwrap();
-    println!("   Array [1, 2, 3]: {}", encoded);
+    println!("   Array [1, 2, 3]:\n{}", encoded);
     println!("   Decoded: {:?}", decoded);
 
     // Object
@@ -100,7 +100,7 @@ fn main() {
     ]);
     let encoded = encode(&obj_val);
     let decoded = decode(&encoded).unwrap();
-    println!("   Object {{name, age, active}}: {}", encoded);
+    println!("   Object {{name, age, active}}:\n{}", encoded);
     println!("   Decoded: {:?}", decoded);
 
     println!();
@@ -130,7 +130,7 @@ fn main() {
     let encoded = encode(&complex);
     let decoded = decode(&encoded).unwrap();
 
-    println!("   Encoded: {}", encoded);
+    println!("   Encoded:\n{}", encoded);
     println!("   Decoded name: {:?}", decoded.get("name"));
     println!("   Decoded tags: {:?}", decoded.get("tags"));
     println!(
@@ -154,7 +154,7 @@ fn main() {
     let encoded = encode(&mixed);
     let decoded = decode(&encoded).unwrap();
 
-    println!("   Encoded: {}", encoded);
+    println!("   Encoded:\n{}", encoded);
     println!("   Decoded: {:?}", decoded);
 
     println!();
@@ -183,6 +183,18 @@ fn main() {
     let decoded = decode(&encoded).unwrap();
 
     println!("   Original == Decoded: {}", data == decoded);
+
+    println!();
+
+    // Example 6: The compact (base64) form is still available under its own name
+    println!("6. Compact Form:");
+
+    let compact = encode_compact(&data);
+    println!("   Compact: {}", compact);
+    println!(
+        "   Compact decodes back to the same value: {}",
+        decode(&compact).unwrap() == data
+    );
 
     println!("\n=== Example completed successfully! ===");
 }
