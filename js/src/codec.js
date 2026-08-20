@@ -1,8 +1,17 @@
 /**
  * Object encoder/decoder for Links Notation format.
+ *
+ * `encode()` writes the readable, indented form documented in `readable.js`:
+ * keys and values appear as plain text, so a stored document can be read,
+ * grepped and reviewed directly. The previous single-line, fully base64-encoded
+ * form stays available under the explicit names `encodeCompact()` /
+ * `encodeObfuscated()`, and `decode()` accepts both, so documents written by
+ * earlier versions keep working and migrate on the next write.
  */
 
 import { Parser, Link } from 'links-notation';
+import * as readable from './readable.js';
+import { trace } from './debug.js';
 
 /**
  * Codec for encoding/decoding JavaScript objects to/from Links Notation.
@@ -74,12 +83,34 @@ export class ObjectCodec {
   }
 
   /**
-   * Encode a JavaScript object to Links Notation format.
+   * Encode a JavaScript object to the readable, indented Links Notation format.
+   *
+   * This is the default representation: keys and values are written as plain
+   * text, one per line, so the result can be read and reviewed directly.
+   * See `readable.js` for the exact shape.
+   *
    * @param {Object} options - Options
    * @param {*} options.obj - The JavaScript object to encode
-   * @returns {string} String representation in Links Notation format
+   * @param {string} [options.indent] - Indentation string used per nesting level
+   * @returns {string} String representation in readable Links Notation format
    */
   encode(options = {}) {
+    const { obj, indent = readable.DEFAULT_INDENT } = options;
+    return readable.encode(obj, indent);
+  }
+
+  /**
+   * Encode a JavaScript object to the compact, single-line Links Notation format.
+   *
+   * Every value is tagged with its type and every string is base64-encoded, so
+   * the whole document fits on one line and carries no readable text. This was
+   * the default before the readable format; callers now opt into it explicitly.
+   *
+   * @param {Object} options - Options
+   * @param {*} options.obj - The JavaScript object to encode
+   * @returns {string} String representation in compact Links Notation format
+   */
+  encodeCompact(options = {}) {
     const { obj } = options;
     // Reset state for each encode operation
     this._encodeMemo = new Map();
@@ -97,12 +128,52 @@ export class ObjectCodec {
   }
 
   /**
+   * Encode a JavaScript object to the compact, base64 form.
+   *
+   * Alias of {@link ObjectCodec#encodeCompact}, named after what the form does to
+   * its content: nothing in the output can be read without decoding it.
+   *
+   * @param {Object} options - Options
+   * @param {*} options.obj - The JavaScript object to encode
+   * @returns {string} String representation in compact Links Notation format
+   */
+  encodeObfuscated(options = {}) {
+    return this.encodeCompact(options);
+  }
+
+  /**
    * Decode Links Notation format to a JavaScript object.
+   *
+   * Both the readable format and the compact (base64) format are accepted, so
+   * documents written by earlier versions keep working and migrate on next write.
+   *
    * @param {Object} options - Options
    * @param {string} options.notation - String in Links Notation format
    * @returns {*} Reconstructed JavaScript object
    */
   decode(options = {}) {
+    const { notation } = options;
+
+    if (notation === undefined || notation === null || notation.trim() === '') {
+      return null;
+    }
+
+    if (isCompactNotation(notation)) {
+      trace('codec.decode', () => 'compact notation detected');
+      return this.decodeCompact({ notation });
+    }
+
+    trace('codec.decode', () => 'readable notation detected');
+    return readable.decode(notation);
+  }
+
+  /**
+   * Decode the compact (base64) Links Notation format.
+   * @param {Object} options - Options
+   * @param {string} options.notation - String in compact Links Notation format
+   * @returns {*} Reconstructed JavaScript object
+   */
+  decodeCompact(options = {}) {
     const { notation } = options;
     // Reset memo for each decode operation
     this._decodeMemo = new Map();
@@ -454,25 +525,130 @@ export class ObjectCodec {
   }
 }
 
+/**
+ * Type markers that can open a compact document.
+ *
+ * The set is the union of the markers used by every implementation, so a
+ * document written by the Python (`None`, `list`, `dict`) or C# (`list`, `dict`)
+ * codec is recognised here as well.
+ */
+const COMPACT_TYPE_MARKERS = new Set([
+  ObjectCodec.TYPE_NULL,
+  ObjectCodec.TYPE_UNDEFINED,
+  ObjectCodec.TYPE_BOOL,
+  ObjectCodec.TYPE_INT,
+  ObjectCodec.TYPE_FLOAT,
+  ObjectCodec.TYPE_STR,
+  ObjectCodec.TYPE_ARRAY,
+  ObjectCodec.TYPE_OBJECT,
+  'None',
+  'list',
+  'dict',
+]);
+
+/**
+ * Whether a document is in the compact (base64) format rather than the readable
+ * one. The compact format always opens with `(` followed by a type marker,
+ * optionally preceded by an `obj_N:` definition id.
+ *
+ * @param {string} notation - The document to classify
+ * @returns {boolean} True when the document is in the compact format
+ */
+export function isCompactNotation(notation) {
+  const firstLine = notation
+    .split('\n')
+    .map((line) => line.trim())
+    .find((line) => line.length > 0);
+
+  if (!firstLine || !firstLine.startsWith('(')) {
+    return false;
+  }
+
+  const tokens = firstLine
+    .slice(1)
+    .split(/[\s()]+/)
+    .filter((token) => token.length > 0);
+
+  let marker = tokens[0];
+  if (marker === undefined) {
+    return false;
+  }
+
+  // Skip the `obj_N:` definition id, if present.
+  if (marker.endsWith(':')) {
+    if (!marker.startsWith('obj_')) {
+      return false;
+    }
+    marker = tokens[1];
+    if (marker === undefined) {
+      return false;
+    }
+  }
+
+  return COMPACT_TYPE_MARKERS.has(marker);
+}
+
 // Convenience functions
 const _defaultCodec = new ObjectCodec();
 
 /**
- * Encode a JavaScript object to Links Notation format.
+ * Encode a JavaScript object to the readable, indented Links Notation format.
  * @param {Object} options - Options
  * @param {*} options.obj - The JavaScript object to encode
- * @returns {string} String representation in Links Notation format
+ * @param {string} [options.indent] - Indentation string used per nesting level
+ * @returns {string} String representation in readable Links Notation format
  */
 export function encode(options = {}) {
   return _defaultCodec.encode(options);
 }
 
 /**
+ * Encode a JavaScript object to the compact, single-line Links Notation format.
+ *
+ * Every string is base64-encoded and the whole document is written on one line.
+ * {@link decode} reads this form as well, so stored documents remain readable by
+ * the library after switching to the default readable output.
+ *
+ * @param {Object} options - Options
+ * @param {*} options.obj - The JavaScript object to encode
+ * @returns {string} String representation in compact Links Notation format
+ */
+export function encodeCompact(options = {}) {
+  return _defaultCodec.encodeCompact(options);
+}
+
+/**
+ * Encode a JavaScript object to the compact, base64 form.
+ *
+ * Alias of {@link encodeCompact}, named after what the form does to its content.
+ *
+ * @param {Object} options - Options
+ * @param {*} options.obj - The JavaScript object to encode
+ * @returns {string} String representation in compact Links Notation format
+ */
+export function encodeObfuscated(options = {}) {
+  return _defaultCodec.encodeObfuscated(options);
+}
+
+/**
  * Decode Links Notation format to a JavaScript object.
+ *
+ * Both the readable format and the compact (base64) format are accepted.
+ *
  * @param {Object} options - Options
  * @param {string} options.notation - String in Links Notation format
  * @returns {*} Reconstructed JavaScript object
  */
 export function decode(options = {}) {
   return _defaultCodec.decode(options);
+}
+
+/**
+ * Decode the compact (base64) Links Notation format.
+ * @param {Object} options - Options
+ * @param {string} options.notation - String in compact Links Notation format
+ * @returns {*} Reconstructed JavaScript object
+ */
+export function decodeCompact(options = {}) {
+  return _defaultCodec.decodeCompact(options);
 }

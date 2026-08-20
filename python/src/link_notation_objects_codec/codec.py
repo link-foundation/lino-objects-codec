@@ -1,10 +1,82 @@
-"""Object encoder/decoder for Links Notation format."""
+"""Object encoder/decoder for Links Notation format.
+
+Two output formats are available:
+
+* :meth:`ObjectCodec.encode` -- the default. A readable, indented document where
+  keys and values are written as they are, so it can be read and reviewed
+  directly. See :mod:`link_notation_objects_codec.readable`.
+* :meth:`ObjectCodec.encode_compact` -- the previous default. A single line where
+  every value is type-tagged and every string is base64-encoded.
+
+:meth:`ObjectCodec.decode` accepts both, so documents written by earlier versions
+keep working and migrate to the readable form on the next write.
+"""
 
 import base64
 import math
-from typing import Any, Dict, List, Optional, Set, Tuple
+import re
+from typing import Any, Dict, FrozenSet, List, Optional, Set, Tuple
 
 from links_notation import Link, Parser
+
+from . import readable
+from .debug import trace
+
+#: Type markers that open a compact document, across all implementations.
+#:
+#: The languages historically disagreed on three of them -- Python writes
+#: ``None``/``list``/``dict`` where JavaScript and Rust write
+#: ``null``/``array``/``object`` -- so every implementation accepts the union and
+#: can read a compact document written by any of the others.
+_COMPACT_TYPE_MARKERS: FrozenSet[str] = frozenset(
+    {
+        "null",
+        "None",
+        "bool",
+        "int",
+        "float",
+        "str",
+        "array",
+        "list",
+        "object",
+        "dict",
+    }
+)
+
+
+def is_compact_notation(notation: str) -> bool:
+    """Whether a document is in the compact (type-tagged, base64) format.
+
+    The check looks at the first non-empty line: a compact document opens with
+    ``(`` followed by a type marker, optionally preceded by an ``obj_N:``
+    definition id. A readable document opens with ``(`` followed by a key, a
+    value or a newline, so it is not mistaken for a compact one.
+
+    Args:
+        notation: The document to inspect.
+
+    Returns:
+        ``True`` when the document should be read by :func:`decode_compact`.
+    """
+    first_line = next((line.strip() for line in notation.splitlines() if line.strip()), None)
+    if first_line is None or not first_line.startswith("("):
+        return False
+
+    tokens = [token for token in re.split(r"[\s()]+", first_line[1:]) if token]
+    if not tokens:
+        return False
+
+    marker = tokens[0]
+
+    # Skip the ``obj_N:`` definition id, if present.
+    if marker.endswith(":"):
+        if not marker[:-1].startswith("obj_"):
+            return False
+        if len(tokens) < 2:
+            return False
+        marker = tokens[1]
+
+    return marker in _COMPACT_TYPE_MARKERS
 
 
 class ObjectCodec:
@@ -98,9 +170,26 @@ class ObjectCodec:
                 self._find_objects_needing_ids(key, seen, new_path)
                 self._find_objects_needing_ids(value, seen, new_path)
 
-    def encode(self, obj: Any) -> str:
+    def encode(self, obj: Any, indent: str = readable.DEFAULT_INDENT) -> str:
         """
-        Encode a Python object to Links Notation format.
+        Encode a Python object to the readable, indented Links Notation format.
+
+        Args:
+            obj: The Python object to encode
+            indent: Indentation string used per nesting level (for example ``"    "``)
+
+        Returns:
+            Readable Links Notation document
+        """
+        return readable.encode(obj, indent)
+
+    def encode_compact(self, obj: Any) -> str:
+        """
+        Encode a Python object to the compact, single-line Links Notation format.
+
+        Every value is tagged with its type and every string is base64-encoded, so
+        the whole document fits on one line and carries no readable text. This was
+        the default before the readable format; callers now opt into it explicitly.
 
         Uses multi-link format to avoid parser bugs with nested self-references.
         Each self-referenced object is defined at the top level.
@@ -109,7 +198,7 @@ class ObjectCodec:
             obj: The Python object to encode
 
         Returns:
-            String representation in Links Notation format
+            String representation in compact Links Notation format
         """
         # Reset state for each encode operation
         self._encode_memo = {}
@@ -139,12 +228,50 @@ class ObjectCodec:
         # Single link output
         return main_link.format()
 
+    def encode_obfuscated(self, obj: Any) -> str:
+        """
+        Encode a Python object to the compact format.
+
+        Deprecated alias of :meth:`encode_compact`, kept for callers written
+        against the earlier name.
+
+        Args:
+            obj: The Python object to encode
+
+        Returns:
+            String representation in compact Links Notation format
+        """
+        return self.encode_compact(obj)
+
     def decode(self, notation: str) -> Any:
         """
         Decode Links Notation format to a Python object.
 
+        Both the readable format and the compact (base64) format are accepted, so
+        files written by earlier versions keep working and migrate on next write.
+
         Args:
             notation: String in Links Notation format
+
+        Returns:
+            Reconstructed Python object
+        """
+        if notation is None or not notation.strip():
+            return None
+
+        if is_compact_notation(notation):
+            trace("codec.decode", lambda: "compact notation detected")
+            return self.decode_compact(notation)
+
+        trace("codec.decode", lambda: "readable notation detected")
+        return readable.decode(notation)
+
+    def decode_compact(self, notation: str) -> Any:
+        """
+        Decode the compact (type-tagged, base64) Links Notation format.
+
+        Args:
+            notation: String in compact Links Notation format
 
         Returns:
             Reconstructed Python object
@@ -450,22 +577,61 @@ class ObjectCodec:
 _default_codec = ObjectCodec()
 
 
-def encode(obj: Any) -> str:
+def encode(obj: Any, indent: str = readable.DEFAULT_INDENT) -> str:
     """
-    Encode a Python object to Links Notation format.
+    Encode a Python object to the readable, indented Links Notation format.
+
+    Args:
+        obj: The Python object to encode
+        indent: Indentation string used per nesting level
+
+    Returns:
+        Readable Links Notation document
+
+    Example:
+        >>> encode({"age": 30})
+        '(\n  age 30\n)'
+    """
+    return _default_codec.encode(obj, indent)
+
+
+def encode_compact(obj: Any) -> str:
+    """
+    Encode a Python object to the compact, single-line Links Notation format.
+
+    Every string is base64-encoded and the whole document is written on one line.
+    :func:`decode` reads this form as well, so stored documents remain readable by
+    the current version.
 
     Args:
         obj: The Python object to encode
 
     Returns:
-        String representation in Links Notation format
+        String representation in compact Links Notation format
     """
-    return _default_codec.encode(obj)
+    return _default_codec.encode_compact(obj)
+
+
+def encode_obfuscated(obj: Any) -> str:
+    """
+    Encode a Python object to the compact format.
+
+    Deprecated alias of :func:`encode_compact`.
+
+    Args:
+        obj: The Python object to encode
+
+    Returns:
+        String representation in compact Links Notation format
+    """
+    return _default_codec.encode_obfuscated(obj)
 
 
 def decode(notation: str) -> Any:
     """
     Decode Links Notation format to a Python object.
+
+    Both the readable format and the compact (base64) format are accepted.
 
     Args:
         notation: String in Links Notation format
@@ -474,3 +640,16 @@ def decode(notation: str) -> Any:
         Reconstructed Python object
     """
     return _default_codec.decode(notation)
+
+
+def decode_compact(notation: str) -> Any:
+    """
+    Decode the compact (type-tagged, base64) Links Notation format.
+
+    Args:
+        notation: String in compact Links Notation format
+
+    Returns:
+        Reconstructed Python object
+    """
+    return _default_codec.decode_compact(notation)
