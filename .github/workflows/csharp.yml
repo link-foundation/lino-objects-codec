@@ -38,6 +38,47 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
 
 jobs:
+  # === CHANGE DETECTION ===
+  # Template parity: the JavaScript and Rust pipelines gated their expensive
+  # jobs on what actually changed, while Python and C# ran everything for a
+  # documentation-only pull request. The workflow-level `paths:` filter only
+  # decides whether this workflow runs at all; this job decides which jobs
+  # inside it are worth running.
+  detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    outputs:
+      cs-changed: ${{ steps.changes.outputs.cs-changed }}
+      project-changed: ${{ steps.changes.outputs.project-changed }}
+      mjs-changed: ${{ steps.changes.outputs.mjs-changed }}
+      docs-changed: ${{ steps.changes.outputs.docs-changed }}
+      workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
+      any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Detect changes
+        id: changes
+        working-directory: ./csharp
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/detect-code-changes.mjs
+
   # Linting and formatting
   lint:
     timeout-minutes: 15
@@ -47,6 +88,21 @@ jobs:
       cancel-in-progress: true
     name: Lint and Format Check
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.cs-changed == 'true' ||
+      needs.detect-changes.outputs.project-changed == 'true' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -110,6 +166,21 @@ jobs:
       cancel-in-progress: true
     name: Test (.NET on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.cs-changed == 'true' ||
+      needs.detect-changes.outputs.project-changed == 'true' ||
+      needs.detect-changes.outputs.mjs-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     strategy:
       fail-fast: false
       matrix:
@@ -170,6 +241,13 @@ jobs:
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
+    # Skipped together with lint and test when nothing relevant changed.
+    if: >-
+      ${{
+      !cancelled() &&
+      needs.lint.result == 'success' &&
+      needs.test.result == 'success'
+      }}
     steps:
       - uses: actions/checkout@v7
         with:

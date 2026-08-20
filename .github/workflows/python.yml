@@ -36,6 +36,46 @@ jobs:
   # REQUIRED CI CHECKS - All must pass before release
   # These jobs ensure code quality and tests pass before any release
 
+  # === CHANGE DETECTION ===
+  # Template parity: the JavaScript and Rust pipelines gated their expensive
+  # jobs on what actually changed, while Python and C# ran everything for a
+  # documentation-only pull request. The workflow-level `paths:` filter only
+  # decides whether this workflow runs at all; this job decides which jobs
+  # inside it are worth running.
+  detect-changes:
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
+      cancel-in-progress: true
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_dispatch'
+    outputs:
+      py-changed: ${{ steps.changes.outputs.py-changed }}
+      toml-changed: ${{ steps.changes.outputs.toml-changed }}
+      docs-changed: ${{ steps.changes.outputs.docs-changed }}
+      workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
+      any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Detect changes
+        id: changes
+        working-directory: ./python
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
+          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: python scripts/detect_code_changes.py
+
   # Linting and formatting
   lint:
     timeout-minutes: 15
@@ -45,6 +85,20 @@ jobs:
       cancel-in-progress: true
     name: Lint and Format Check
     runs-on: ubuntu-latest
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.py-changed == 'true' ||
+      needs.detect-changes.outputs.toml-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -103,6 +157,20 @@ jobs:
       cancel-in-progress: true
     name: Test (Python 3.13 on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    needs: [detect-changes]
+    # `!cancelled()` is required because detect-changes is skipped on
+    # workflow_dispatch; it still propagates a real workflow cancellation.
+    if: >-
+      ${{
+      !cancelled() && (
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      needs.detect-changes.outputs.py-changed == 'true' ||
+      needs.detect-changes.outputs.toml-changed == 'true' ||
+      needs.detect-changes.outputs.docs-changed == 'true' ||
+      needs.detect-changes.outputs.workflow-changed == 'true'
+      )
+      }}
     strategy:
       fail-fast: false
       matrix:
@@ -160,6 +228,13 @@ jobs:
     name: Build Package
     runs-on: ubuntu-latest
     needs: [lint, test]
+    # Skipped together with lint and test when nothing relevant changed.
+    if: >-
+      ${{
+      !cancelled() &&
+      needs.lint.result == 'success' &&
+      needs.test.result == 'success'
+      }}
     steps:
       - uses: actions/checkout@v7
         with:
