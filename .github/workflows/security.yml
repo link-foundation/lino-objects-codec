@@ -1,0 +1,151 @@
+name: Security
+
+# Issue #41 asked for the false negatives in this pipeline. The largest one was
+# an absence: nothing scanned this repository for vulnerable dependencies or
+# insecure code, so every pull request was green by default on those questions.
+# This workflow mirrors the `security.yml` of the org's language pipeline
+# templates, widened to the four languages that live here.
+#
+# There is deliberately no `paths:` filter: a security scan that can be skipped
+# by touching the right file is not a security scan.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    # Weekly, so newly published advisories are found without a code change.
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# Least-privilege default; jobs escalate individually when needed.
+permissions:
+  contents: read
+
+jobs:
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-codeql-${{ matrix.language }}
+      cancel-in-progress: true
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        # `actions` scans the workflow files themselves, which is what would
+        # have caught the `github.head_ref` interpolation fixed in this PR.
+        # Rust has no stable CodeQL pack; `cargo clippy -D warnings` in
+        # rust.yml is its static analysis.
+        language: [javascript-typescript, python, csharp, actions]
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Setup .NET
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v4
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+
+  dependency-review:
+    name: Dependency Review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-dependency-review
+      cancel-in-progress: true
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: on-failure
+
+  npm-audit:
+    name: Audit npm lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-npm-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      # `--package-lock-only` audits the committed lockfile rather than an
+      # install resolved at run time, so the result matches what reviewers see.
+      - name: Audit the committed lockfile
+        working-directory: ./js
+        run: npm audit --package-lock-only --audit-level=high
+
+  cargo-audit:
+    name: Audit Cargo lock
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-cargo-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+
+      - name: Audit Rust dependencies
+        working-directory: ./rust
+        run: cargo audit
+
+  pip-audit:
+    name: Audit Python dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-pip-audit
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+
+      - name: Install pip-audit
+        run: python -m pip install --upgrade pip pip-audit
+
+      # `--skip-editable` leaves out this repository's own editable install,
+      # which has no PyPI record to audit; `--strict` cannot be used with it
+      # because the skip itself is reported as an error.
+      - name: Audit installed dependencies
+        working-directory: ./python
+        run: |
+          python -m pip install -e ".[dev]"
+          pip-audit --skip-editable --progress-spinner off
