@@ -147,8 +147,24 @@
       "value": {
         "str": "both \"kinds\" of 'quotes'"
       },
-      "text": "\"both \"\"kinds\"\" of 'quotes'\"",
-      "line": "\"both \"\"kinds\"\" of 'quotes'\""
+      "text": "\"\"\"both \"kinds\" of 'quotes'\"\"\"",
+      "line": "\"\"\"both \"kinds\" of 'quotes'\"\"\""
+    },
+    {
+      "name": "string_ending_with_the_quote_delimiter",
+      "value": {
+        "str": "it's \"quoted\""
+      },
+      "text": "\"\"\"it's \"quoted\"\"\"\"",
+      "line": "\"\"\"it's \"quoted\"\"\"\""
+    },
+    {
+      "name": "string_starting_with_the_quote_delimiter",
+      "value": {
+        "str": "\"quoted\" and it's"
+      },
+      "text": "'''\"quoted\" and it's'''",
+      "line": "'''\"quoted\" and it's'''"
     },
     {
       "name": "string_unicode",
@@ -187,16 +203,40 @@
       "value": {
         "str": "line1\nline2"
       },
-      "text": "(base64 \"bGluZTEKbGluZTI=\")",
-      "line": "(base64 \"bGluZTEKbGluZTI=\")"
+      "text": "\"line1\nline2\"",
+      "line": "(escaped \"line1%0Aline2\")"
     },
     {
       "name": "string_with_tab",
       "value": {
         "str": "a\tb"
       },
-      "text": "(base64 \"YQli\")",
-      "line": "(base64 \"YQli\")"
+      "text": "\"a\tb\"",
+      "line": "\"a\tb\""
+    },
+    {
+      "name": "string_with_carriage_return",
+      "value": {
+        "str": "line1\r\nline2"
+      },
+      "text": "(escaped \"line1%0D\nline2\")",
+      "line": "(escaped \"line1%0D%0Aline2\")"
+    },
+    {
+      "name": "string_with_control_character",
+      "value": {
+        "str": "a\u0000b"
+      },
+      "text": "(escaped \"a%00b\")",
+      "line": "(escaped \"a%00b\")"
+    },
+    {
+      "name": "string_with_percent_sign",
+      "value": {
+        "str": "100% done, %0A is not an escape here"
+      },
+      "text": "\"100% done, %0A is not an escape here\"",
+      "line": "\"100% done, %0A is not an escape here\""
     },
     {
       "name": "empty_array",
@@ -484,21 +524,27 @@
             }
           ],
           [
-            "with:colon",
+            "escaped",
             {
               "int": 4
             }
           ],
           [
-            "with\"quote",
+            "with:colon",
             {
               "int": 5
+            }
+          ],
+          [
+            "with\"quote",
+            {
+              "int": 6
             }
           ]
         ]
       },
-      "text": "(\n  \"two words\" 1\n  \"\" 2\n  \"base64\" 3\n  \"with:colon\" 4\n  'with\"quote' 5\n)",
-      "line": "(o: (\"two words\" 1) (\"\" 2) (\"base64\" 3) (\"with:colon\" 4) ('with\"quote' 5))"
+      "text": "(\n  \"two words\" 1\n  \"\" 2\n  \"base64\" 3\n  \"escaped\" 4\n  \"with:colon\" 5\n  'with\"quote' 6\n)",
+      "line": "(o: (\"two words\" 1) (\"\" 2) (\"base64\" 3) (\"escaped\" 4) (\"with:colon\" 5) ('with\"quote' 6))"
     },
     {
       "name": "base64_key_with_plain_value_is_not_a_marker",
@@ -514,6 +560,36 @@
       },
       "text": "(\n  \"base64\" \"plain text\"\n)",
       "line": "(o: (\"base64\" \"plain text\"))"
+    },
+    {
+      "name": "escaped_key_with_plain_value_is_not_a_marker",
+      "value": {
+        "object": [
+          [
+            "escaped",
+            {
+              "str": "plain text"
+            }
+          ]
+        ]
+      },
+      "text": "(\n  \"escaped\" \"plain text\"\n)",
+      "line": "(o: (\"escaped\" \"plain text\"))"
+    },
+    {
+      "name": "key_holding_a_newline_stays_a_key",
+      "value": {
+        "object": [
+          [
+            "a\nb",
+            {
+              "int": 1
+            }
+          ]
+        ]
+      },
+      "text": "(\n  \"a\nb\" 1\n)",
+      "line": "(o: ((escaped \"a%0Ab\") 1))"
     },
     {
       "name": "documented_router_state",
@@ -643,11 +719,71 @@
             {
               "str": "a\tb"
             }
+          ],
+          [
+            "returned",
+            {
+              "str": "line1\rline2"
+            }
+          ],
+          [
+            "control",
+            {
+              "str": "a\u0000b"
+            }
           ]
         ]
       },
-      "text": "(\n  readable \"still visible\"\n  multiline (base64 \"bGluZTEKbGluZTI=\")\n  tabbed (base64 \"YQli\")\n)",
-      "line": "(o: (readable \"still visible\") (multiline (base64 \"bGluZTEKbGluZTI=\")) (tabbed (base64 \"YQli\")))"
+      "text": "(\n  readable \"still visible\"\n  multiline \"line1\nline2\"\n  tabbed \"a\tb\"\n  returned (escaped \"line1%0Dline2\")\n  control (escaped \"a%00b\")\n)",
+      "line": "(o: (readable \"still visible\") (multiline (escaped \"line1%0Aline2\")) (tabbed \"a\tb\") (returned (escaped \"line1%0Dline2\")) (control (escaped \"a%00b\")))"
+    },
+    {
+      "name": "repeated_value_is_written_every_time",
+      "value": {
+        "object": [
+          [
+            "first",
+            {
+              "str": "same"
+            }
+          ],
+          [
+            "second",
+            {
+              "str": "same"
+            }
+          ],
+          [
+            "third",
+            {
+              "str": "same"
+            }
+          ]
+        ]
+      },
+      "text": "(\n  first \"same\"\n  second \"same\"\n  third \"same\"\n)",
+      "line": "(o: (first \"same\") (second \"same\") (third \"same\"))"
+    },
+    {
+      "name": "multi_line_log_record_stays_greppable",
+      "value": {
+        "object": [
+          [
+            "level",
+            {
+              "str": "error"
+            }
+          ],
+          [
+            "message",
+            {
+              "str": "Traceback (most recent call last):\n  File \"app.py\", line 42\nValueError: boom"
+            }
+          ]
+        ]
+      },
+      "text": "(\n  level \"error\"\n  message 'Traceback (most recent call last):\n  File \"app.py\", line 42\nValueError: boom'\n)",
+      "line": "(o: (level \"error\") (message (escaped 'Traceback (most recent call last):%0A  File \"app.py\", line 42%0AValueError: boom')))"
     },
     {
       "name": "deeply_nested_objects",
@@ -683,5 +819,56 @@
       "line": "(o: (a (o: (b (o: (c (1)))))))"
     }
   ],
-  "lineEncoding": "`line` is the single-line form: the same document written without any line break, one record per line. Line breaks no longer separate rows there, so an object names itself with the `o` link id (`(o: (key value) ...)`, `(o:)` when empty) and a bare link is always an array."
+  "lineEncoding": "`line` is the single-line form: the same document written without any line break, one record per line. Line breaks no longer separate rows there, so an object names itself with the `o` link id (`(o: (key value) ...)`, `(o:)` when empty) and a bare link is always an array.",
+  "legacyDecoding": "`legacy` holds documents written by versions up to 0.6.0, which every implementation must still decode: a string holding a control character was replaced by a `(base64 \"...\")` payload, and a string holding both quote kinds was written with its double quotes doubled. These are read only -- no implementation writes them any more, so they have no `line` of their own.",
+  "legacy": [
+    {
+      "name": "base64_marked_string",
+      "value": {
+        "str": "line1\nline2"
+      },
+      "text": "(base64 \"bGluZTEKbGluZTI=\")"
+    },
+    {
+      "name": "base64_marked_value_in_an_object",
+      "value": {
+        "object": [
+          [
+            "readable",
+            {
+              "str": "still visible"
+            }
+          ],
+          [
+            "multiline",
+            {
+              "str": "line1\nline2"
+            }
+          ]
+        ]
+      },
+      "text": "(\n  readable \"still visible\"\n  multiline (base64 \"bGluZTEKbGluZTI=\")\n)"
+    },
+    {
+      "name": "base64_marked_value_on_one_line",
+      "value": {
+        "object": [
+          [
+            "multiline",
+            {
+              "str": "line1\nline2"
+            }
+          ]
+        ]
+      },
+      "text": "(o: (multiline (base64 \"bGluZTEKbGluZTI=\")))"
+    },
+    {
+      "name": "doubled_quotes_in_a_string",
+      "value": {
+        "str": "both \"kinds\" of 'quotes'"
+      },
+      "text": "\"both \"\"kinds\"\" of 'quotes'\""
+    }
+  ]
 }

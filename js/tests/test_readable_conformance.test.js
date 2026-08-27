@@ -31,7 +31,7 @@ const SPECIAL_FLOATS = new Map([
   ['-Infinity', -Infinity],
 ]);
 
-const { cases } = JSON.parse(readFileSync(FIXTURES, 'utf-8'));
+const { cases, legacy } = JSON.parse(readFileSync(FIXTURES, 'utf-8'));
 
 /**
  * Turn a fixture value specification into a JavaScript value.
@@ -144,3 +144,23 @@ for (const testCase of cases) {
     );
   });
 }
+
+for (const testCase of legacy) {
+  // Documents written before this format wrote text as text keep decoding, so
+  // upgrading a reader never loses a stored record.
+  test(`decode reads the document an earlier version wrote: ${testCase.name}`, () => {
+    assert.ok(
+      same(decode({ notation: testCase.text }), build(testCase.value)),
+      `${JSON.stringify(decode({ notation: testCase.text }))} != ${JSON.stringify(build(testCase.value))}`
+    );
+  });
+}
+
+test('no shared document hides its text in base64', () => {
+  // The point of the change: an implementation may not reach for base64 while
+  // writing a readable document, whatever the text holds.
+  for (const testCase of cases) {
+    assert.ok(!testCase.text.includes('base64 "'), testCase.name);
+    assert.ok(!testCase.line.includes('base64 "'), testCase.name);
+  }
+});

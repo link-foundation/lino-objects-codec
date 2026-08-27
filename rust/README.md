@@ -33,7 +33,7 @@ lino-objects-codec = "0.1"
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Readable by Default**: `encode()` writes indented, plain-text Links Notation; keys and values stay legible and diffable
 - **One Record per Line**: `encode_line()` writes the same document on one line and `decode_line()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
-- **UTF-8 Support**: Full Unicode string support written as text; only values that cannot be written as text (control characters) are base64-encoded, and each is marked individually
+- **UTF-8 Support**: Full Unicode string support written as text — a newline stays a newline and a tab stays a tab; only the characters a form cannot carry are percent-escaped, and each such value is marked individually
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 
 ## Quick Start
@@ -333,9 +333,16 @@ array:
 - Numbers, `true`, `false` and `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
 - An empty array is `()`; an empty object is `(` + newline + `)`
-- A value that cannot be written as text (one containing control characters) is
-  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
-  everything around it stays readable
+- A string is written as text whatever it holds: a newline stays a newline and
+  a tab stays a tab, so every word stays greppable
+- A string containing the quote delimiter is written between a run of at least
+  three of them — `"""say "hi""""` — rather than by doubling the quote
+- Only the characters this form cannot carry — a carriage return and the
+  remaining control characters — are percent-escaped, in a value marked on its
+  own as `(escaped "first%0D")`; everything around it stays readable, and
+  `(base64 "…")` written by earlier versions is still decoded
+- A value that occurs more than once is written out every time: a shared
+  reference would make one record depend on another
 
 Reading the format back requires `links-notation` 0.14 semantics, where a
 parenthesis opens a nested indentation context.
@@ -346,7 +353,8 @@ The previous single-line form, kept for compatibility and for cases where size
 matters more than legibility:
 
 - Basic types: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
-- Strings are base64-encoded to handle special characters and newlines
+- Strings are base64-encoded here, and only here: this is the one form that
+  asks for it by name, and `encode()` never reaches for it
 - Arrays: `(array (int 1) (int 2) (int 3))`
 - Objects: `(object ((str a2V5) (int 42)) ...)`
 - Special floats: `(float NaN)`, `(float Infinity)`, `(float -Infinity)`

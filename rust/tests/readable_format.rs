@@ -258,14 +258,22 @@ fn values_that_cannot_be_written_as_text_are_marked_individually() {
         ("readable", LinoValue::String("still visible".to_string())),
         ("multiline", LinoValue::String("line1\nline2".to_string())),
         ("tabbed", LinoValue::String("a\tb".to_string())),
+        ("returned", LinoValue::String("line1\rline2".to_string())),
     ]);
 
     let encoded = encode(&value);
 
-    // Only the values that need it are encoded; the rest stays readable.
+    // An indented document holds line breaks and tabs of its own, so only the
+    // carriage return -- which a line ending would rewrite -- is escaped, and
+    // only that one value is marked.
     assert!(encoded.contains("readable \"still visible\""), "{encoded}");
-    assert!(encoded.contains("multiline (base64 \""), "{encoded}");
-    assert!(encoded.contains("tabbed (base64 \""), "{encoded}");
+    assert!(encoded.contains("multiline \"line1\nline2\""), "{encoded}");
+    assert!(encoded.contains("tabbed \"a\tb\""), "{encoded}");
+    assert!(
+        encoded.contains("returned (escaped \"line1%0Dline2\")"),
+        "{encoded}"
+    );
+    assert!(!encoded.contains("base64"), "{encoded}");
     assert_eq!(decode(&encoded).unwrap(), value);
 }
 

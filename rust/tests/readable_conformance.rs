@@ -24,9 +24,18 @@ fn fixtures() -> Json {
 }
 
 fn cases() -> Vec<Json> {
-    match fixtures()["cases"].take() {
+    section("cases")
+}
+
+/// Documents earlier versions wrote, which are read but never written again.
+fn legacy() -> Vec<Json> {
+    section("legacy")
+}
+
+fn section(key: &str) -> Vec<Json> {
+    match fixtures()[key].take() {
         Json::Array(cases) => cases,
-        other => panic!("`cases` must be an array, got {other}"),
+        other => panic!("`{key}` must be an array, got {other}"),
     }
 }
 
@@ -294,4 +303,44 @@ fn the_plain_decoder_reads_every_shared_line() {
         "single-line decoding mismatches through `decode`:\n{}",
         failures.join("\n")
     );
+}
+
+/// Documents written before this format wrote text as text keep decoding, so
+/// upgrading a reader never loses a stored record.
+#[test]
+fn decodes_every_document_earlier_versions_wrote() {
+    let mut failures = Vec::new();
+    let legacy = legacy();
+    assert!(!legacy.is_empty(), "the fixtures must contain legacy cases");
+    for case in legacy {
+        let expected = build(&case["value"]);
+        match decode(text(&case)) {
+            Ok(decoded) if same(&decoded, &expected) => {}
+            Ok(decoded) => failures.push(format!(
+                "{}: expected {:?}, got {:?}",
+                name(&case),
+                expected,
+                decoded
+            )),
+            Err(error) => failures.push(format!("{}: {error}", name(&case))),
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "legacy decoding mismatches:\n{}",
+        failures.join("\n")
+    );
+}
+
+/// The point of the change: an implementation may not reach for base64 while
+/// writing a readable document, whatever the text holds.
+#[test]
+fn no_shared_document_hides_its_text_in_base64() {
+    for case in cases() {
+        assert!(
+            !text(&case).contains("base64 \"") && !line(&case).contains("base64 \""),
+            "case {} still marks a value with base64",
+            name(&case)
+        );
+    }
 }

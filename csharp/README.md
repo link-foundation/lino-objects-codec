@@ -17,7 +17,7 @@ A C# library for working with Links Notation format. This library provides unive
 - **Readable by Default**: `Codec.Encode()` writes plain, indented text that can be read and reviewed
 - **One Record per Line**: `Codec.EncodeLine()` writes the same document on one line and `Codec.DecodeLine()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Object Identity**: Shared references and circular references are preserved by the compact format (`Codec.EncodeCompact`) via object ids
-- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Full Unicode**: Strings are always written as text — a newline stays a newline and a tab stays a tab, so every word stays greppable; only the characters a form cannot carry are percent-escaped, in a value marked individually as `(escaped "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `Codec.Encode()` and `Codec.Decode()` functions
 - **Thread Safe**: Each operation uses a fresh codec instance
@@ -215,9 +215,16 @@ bare-value lines make a list:
 - Numbers, `true`, `false` and `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
 - An empty list is `()`; an empty dictionary is `(` + newline + `)`
-- A value that cannot be written as text (one containing control characters) is
-  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
-  everything around it stays readable
+- A string is written as text whatever it holds: a newline stays a newline and
+  a tab stays a tab, so every word stays greppable
+- A string containing the quote delimiter is written between a run of at least
+  three of them — `"""say "hi""""` — rather than by doubling the quote
+- Only the characters this form cannot carry — a carriage return and the
+  remaining control characters — are percent-escaped, in a value marked on its
+  own as `(escaped "first%0D")`; everything around it stays readable, and
+  `(base64 "…")` written by earlier versions is still decoded
+- A value that occurs more than once is written out every time: a shared
+  reference would make one record depend on another
 
 ### Single-line format (`Codec.EncodeLine`)
 
@@ -244,7 +251,8 @@ The previous single-line form, kept for compatibility and for the object graphs
 the readable tree cannot express (shared and circular references):
 
 - Basic types carry a type marker: `(int 42)`, `(str SGVsbG8=)`, `(bool true)`
-- Strings are base64-encoded to handle special characters and newlines
+- Strings are base64-encoded here, and only here: this is the one form that
+  asks for it by name, and `encode()` never reaches for it
 - Collections with self-references use `(obj_id: type content...)`, e.g.
   `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
 - Circular references use direct object ID references: `obj_0` (without a `ref` keyword)

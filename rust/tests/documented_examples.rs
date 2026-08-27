@@ -1,6 +1,6 @@
 //! Checks that the snippets shown in `README.md` and the crate docs stay true.
 
-use lino_objects_codec::{decode, encode, encode_compact, LinoValue};
+use lino_objects_codec::{decode, encode, encode_compact, encode_line, LinoValue};
 
 #[test]
 fn scalars_are_written_as_documented() {
@@ -34,11 +34,10 @@ fn empty_containers_are_written_as_documented() {
 }
 
 #[test]
-fn unrepresentable_values_use_the_documented_marker() {
-    assert_eq!(
-        encode(&LinoValue::String("line1\nline2".into())),
-        "(base64 \"bGluZTEKbGluZTI=\")"
-    );
+fn a_newline_stays_a_newline_and_only_a_line_escapes_it() {
+    let value = LinoValue::String("line1\nline2".into());
+    assert_eq!(encode(&value), "\"line1\nline2\"");
+    assert_eq!(encode_line(&value), "(escaped \"line1%0Aline2\")");
 }
 
 #[test]

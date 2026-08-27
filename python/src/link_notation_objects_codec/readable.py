@@ -31,17 +31,23 @@ Python value                   Readable form
 ============================== ==========================================
 ``dict``                       ``( )`` with one ``key value`` pair per line
 ``list`` / ``tuple``           ``( )`` with one value per line
-``str``                        quoted, never encoded
+``str``                        quoted text, never base64
 ``int`` / ``float`` / ``bool`` / ``None``  bare, so the type survives the round trip
 ============================== ==========================================
 
 Empty containers keep their type: an empty list is ``()`` on one line, while an
 empty dict is written as ``(`` and ``)`` on two lines.
 
-Only values that cannot be written as plain text are encoded: strings holding
-control characters (including newlines and tabs, which line-based tooling and
-CRLF normalisation would corrupt) are marked individually as ``(base64 "...")``
-instead of encoding the whole document.
+Text is written as text. A string keeps every character a reader would grep
+for, including newlines and tabs, and is quoted with a run of delimiters --
+``\"\"\"say \"hi\"\"\"\"`` -- when it holds the delimiter itself. Only the characters a
+form cannot carry are escaped, and only they: the value is then written as
+``(escaped "...")``, where ``%XX`` stands for one escaped byte. The indented form
+escapes the carriage return, which CRLF normalisation would otherwise rewrite,
+and the other control characters; the single-line form escapes the newline as
+well, because there a record ends at the end of the line. Nothing else is
+encoded: base64 lives in :func:`link_notation_objects_codec.encode_compact`,
+which a caller asks for by name.
 
 Single-line form
 ----------------
@@ -86,8 +92,17 @@ from .debug import trace
 #: Default indentation used by :func:`encode`.
 DEFAULT_INDENT = "  "
 
-#: Marker used for values that cannot be represented as plain text.
+#: Marker of a base64 payload, written by
+#: :func:`link_notation_objects_codec.encode_compact` and by versions up to 0.6.0
+#: of the readable form, which is still read back.
 BASE64_MARKER = "base64"
+
+#: Marker of a string whose unwritable characters are percent-escaped.
+#:
+#: It reads as ``(escaped "line one%0Aline two")``. Only those characters change;
+#: the rest of the text is written as it is, so the value stays readable and
+#: greppable.
+ESCAPED_MARKER = "escaped"
 
 #: Link id naming a dict in the single-line form, written as ``(o: ...)``.
 OBJECT_MARKER = "o"
@@ -96,7 +111,16 @@ OBJECT_MARKER = "o"
 _QUOTE_CHARS = ("'", '"', "`")
 
 #: Characters that force an object key to be quoted.
-_KEY_NEEDS_QUOTES = re.compile(r"[\s()':`\"]")
+_KEY_NEEDS_QUOTES = re.compile(r"[\s()':`\"\x00-\x1f\x7f-\x9f]")
+
+#: The indented form, where a value may span several lines.
+_FORM_INDENTED = "indented"
+
+#: The single-line form, where a record ends at the end of the line.
+_FORM_LINE = "line"
+
+#: The two hexadecimal digits of a percent escape.
+_HEX_ESCAPE = re.compile(r"^[0-9a-fA-F]{2}$")
 
 _INTEGER_PATTERN = re.compile(r"^[+-]?\d+$")
 _FLOAT_PATTERN = re.compile(r"^[+-]?(\d+\.?\d*|\.\d+)([eE][+-]?\d+)?$")
@@ -220,7 +244,7 @@ def _write_value(value: Any, indent: str, level: int, out: list[str], path: set[
 
             def write_pair(pair: tuple[Any, Any]) -> None:
                 key, child = pair
-                out.append(_format_key(key))
+                out.append(_format_key(key, _FORM_INDENTED))
                 out.append(" ")
                 _write_value(child, indent, level + 1, out, path)
 
@@ -237,7 +261,7 @@ def _write_value(value: Any, indent: str, level: int, out: list[str], path: set[
             _write_rows(items_seq, indent, level, out, write_item)
         return
 
-    out.append(_format_scalar(value))
+    out.append(_format_scalar(value, _FORM_INDENTED))
 
 
 def _write_line_value(value: Any, out: list[str], path: set[int]) -> None:
@@ -256,7 +280,7 @@ def _write_line_value(value: Any, out: list[str], path: set[int]) -> None:
 
             out.append(f"({OBJECT_MARKER}:")
             for key, child in items:
-                out.append(f" ({_format_key(key)} ")
+                out.append(f" ({_format_key(key, _FORM_LINE)} ")
                 _write_line_value(child, out, path)
                 out.append(")")
             out.append(")")
@@ -272,7 +296,7 @@ def _write_line_value(value: Any, out: list[str], path: set[int]) -> None:
             out.append(")")
         return
 
-    out.append(_format_scalar(value))
+    out.append(_format_scalar(value, _FORM_LINE))
 
 
 @contextmanager
@@ -321,7 +345,7 @@ def _push_indent(indent: str, level: int, out: list[str]) -> None:
         out.append(indent)
 
 
-def _format_scalar(value: Any) -> str:
+def _format_scalar(value: Any, form: str) -> str:
     """Format a scalar value.
 
     Strings are quoted, everything else stays bare so that its type is
@@ -336,7 +360,7 @@ def _format_scalar(value: Any) -> str:
     if isinstance(value, float):
         return _format_float(value)
     if isinstance(value, str):
-        return _format_string(value)
+        return _format_string(value, form)
     if isinstance(value, (bytes, bytearray)):
         return f"({BASE64_MARKER} {_quote(base64.b64encode(bytes(value)).decode('ascii'))})"
     raise TypeError(f"Unsupported type: {type(value).__name__}")
@@ -352,33 +376,90 @@ def _format_float(value: float) -> str:
     return repr(value)
 
 
-def _format_string(value: str) -> str:
-    """Format a string: quoted plain text, or an individually marked payload."""
-    if _needs_encoding(value):
-        payload = base64.b64encode(value.encode("utf-8")).decode("ascii")
-        return f"({BASE64_MARKER} {_quote(payload)})"
-    return _quote(value)
+def _format_string(value: str, form: str) -> str:
+    """Format a string value.
 
-
-def _needs_encoding(value: str) -> bool:
-    """Whether a string has to be encoded rather than written as text.
-
-    A value can be written as text unless it contains control characters:
-    newlines break the line structure and CRLF normalisation would rewrite them.
+    The text is written as text; when it holds characters this form cannot carry,
+    those characters -- and only those -- are percent-escaped and the value is
+    marked, so the rest of it stays readable and greppable.
     """
-    return any(unicodedata.category(char) == "Cc" for char in value)
+    escaped = _escape_unwritable(value, form)
+    if escaped is None:
+        return _quote(value)
+    return f"({ESCAPED_MARKER} {_quote(escaped)})"
+
+
+def _escape_unwritable(value: str, form: str) -> str | None:
+    """Percent-escape the characters this form cannot carry.
+
+    Returns ``None`` when the text can be written as it is. ``%`` is escaped too,
+    so escaping is reversible.
+    """
+    if not any(_is_unwritable(char, form) for char in value):
+        return None
+
+    parts: list[str] = []
+    for char in value:
+        if char == "%" or _is_unwritable(char, form):
+            parts.extend(f"%{byte:02X}" for byte in char.encode("utf-8"))
+        else:
+            parts.append(char)
+    return "".join(parts)
+
+
+def _is_unwritable(char: str, form: str) -> bool:
+    """Whether a character has to be escaped in this form.
+
+    A tab is text a reader can see, and so is a newline in the indented form,
+    where a value may span lines. A carriage return is escaped because CRLF
+    normalisation rewrites it, and the remaining control characters because they
+    are not text at all.
+    """
+    if unicodedata.category(char) != "Cc":
+        return False
+    if char == "\t":
+        return False
+    if char == "\n":
+        return form == _FORM_LINE
+    return True
 
 
 def _quote(value: str) -> str:
+    """Quote a value so that both this reader and the notation's own parser read
+    it back unchanged.
+
+    One delimiter is enough while the text holds none of that kind; when it holds
+    both kinds, a run of at least three opens the notation's n-quote form, where
+    the text is literal and only a run at least as long closes it. A value
+    starting with the delimiter would lengthen the opening run, so the other
+    delimiter is used for it.
+    """
     if '"' not in value:
         return f'"{value}"'
     if "'" not in value:
         return f"'{value}'"
-    # Both quote styles are present: double the double quotes, as the parser expects.
-    return '"' + value.replace('"', '""') + '"'
+
+    delimiter = "'" if value.startswith('"') else '"'
+    # A run of two delimiters is the empty value, so the n-quote form starts at
+    # three; beyond that the run only has to outrun the longest one inside.
+    run = delimiter * max(_longest_run(value, delimiter) + 1, 3)
+    return f"{run}{value}{run}"
 
 
-def _format_key(key: Any) -> str:
+def _longest_run(value: str, char: str) -> int:
+    """The length of the longest run of ``char`` in ``value``."""
+    longest = 0
+    current = 0
+    for candidate in value:
+        if candidate == char:
+            current += 1
+            longest = max(longest, current)
+        else:
+            current = 0
+    return longest
+
+
+def _format_key(key: Any, form: str) -> str:
     """Format an object key. Keys are bare when they read as plain identifiers.
 
     The readable form has string keys, like JSON: a non-string key is written as
@@ -387,17 +468,17 @@ def _format_key(key: Any) -> str:
     if isinstance(key, str):
         text = key
     elif key is None or isinstance(key, (bool, int, float)):
-        text = _format_scalar(key)
+        text = _format_scalar(key, form)
     else:
         raise TypeError(f"Unsupported key type: {type(key).__name__}")
 
     plain = (
         bool(text)
         and text != BASE64_MARKER
-        and not _needs_encoding(text)
+        and text != ESCAPED_MARKER
         and not _KEY_NEEDS_QUOTES.search(text)
     )
-    return text if plain else _format_string(text)
+    return text if plain else _format_string(text, form)
 
 
 # === Decoding ===
@@ -480,7 +561,44 @@ def _tokenize(text: str) -> list[_Token]:
 
 
 def _read_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
-    """Read a quoted reference, where a doubled quote character means a literal one."""
+    """Read a quoted reference.
+
+    The opening run of delimiters says how it is read, which is what the
+    notation's own parser does:
+
+    * one delimiter -- the text is literal and a doubled delimiter is one literal
+      delimiter, which is how versions up to 0.6.0 wrote such values;
+    * two -- the empty value;
+    * three or more -- the n-quote form: the text is literal, and the value ends
+      at the first run at least as long, whose last delimiters close it. A longer
+      run therefore belongs to the text, so a value may end with a delimiter.
+    """
+    opening = _run_length(text, start, quote_char)
+
+    if opening == 2:
+        return "", start + 2
+
+    if opening == 1:
+        return _read_doubled_quoted(text, start, quote_char)
+
+    length = len(text)
+    i = start + opening
+    while i < length:
+        if text[i] != quote_char:
+            i += 1
+            continue
+
+        run = _run_length(text, i, quote_char)
+        if run >= opening:
+            return text[start + opening : i + run - opening], i + run
+        i += run
+
+    raise _unterminated_quote(start)
+
+
+def _read_doubled_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
+    """Read a value opened by a single delimiter, where a doubled delimiter means
+    one literal delimiter."""
     parts: list[str] = []
     i = start + 1
     length = len(text)
@@ -495,7 +613,19 @@ def _read_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
         parts.append(text[i])
         i += 1
 
-    raise ReadableFormatError(f"unterminated quoted value starting at character {start}")
+    raise _unterminated_quote(start)
+
+
+def _run_length(text: str, start: int, char: str) -> int:
+    """The length of the run of ``char`` that starts at ``start``."""
+    i = start
+    while i < len(text) and text[i] == char:
+        i += 1
+    return i - start
+
+
+def _unterminated_quote(start: int) -> ReadableFormatError:
+    return ReadableFormatError(f"unterminated quoted value starting at character {start}")
 
 
 class _Cursor:
@@ -604,12 +734,14 @@ def _rows_to_value(rows: list[list[_Node]], multiline: bool, object_marker: bool
         return [_node_to_value(node) for row in rows for node in row]
 
     # ``key value`` on every line makes a dict; anything else is a list of values.
-    is_dict = all(len(row) == 2 and row[0].is_ref for row in rows)
+    is_dict = all(len(row) == 2 and _node_to_key(row[0]) is not None for row in rows)
 
     if is_dict:
         result: dict[str, Any] = {}
         for row in rows:
-            result[row[0].value] = _node_to_value(row[1])
+            key = _node_to_key(row[0])
+            assert key is not None  # checked by is_dict
+            result[key] = _node_to_value(row[1])
         return result
 
     items: list[Any] = []
@@ -639,38 +771,98 @@ def _marked_object_to_value(rows: list[list[_Node]]) -> dict[str, Any]:
                 f"found a link of {len(node.rows)} lines"
             )
         row = node.rows[0]
-        if len(row) != 2 or not row[0].is_ref:
+        if len(row) != 2:
             raise ReadableFormatError(
                 f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
                 f"found a link of {len(row)} values"
             )
-        result[row[0].value] = _node_to_value(row[1])
+        key = _node_to_key(row[0])
+        if key is None:
+            raise ReadableFormatError(
+                f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
+                "found a pair whose key is not text"
+            )
+        result[key] = _node_to_value(row[1])
 
     return result
 
 
-def _decode_marked_value(rows: list[list[_Node]]) -> tuple[str] | None:
-    """Recognise ``(base64 "...")``, the individual marker for values that could
-    not be written as text.
+def _node_to_key(node: _Node) -> str | None:
+    """The key a node in key position spells.
 
-    A quoted ``base64`` key is an ordinary dict key, not a marker. The result is
-    wrapped in a tuple so that an empty string is still distinguishable from
-    "not a marker".
+    A reference is the key itself, and a marked link is the text its marker
+    escapes, which is how a key holding a character the form cannot carry stays a
+    key instead of turning its dict into a list.
+    """
+    if node.is_ref:
+        return node.value
+    if node.is_object:
+        return None
+    try:
+        marked = _decode_marked_value(node.rows)
+    except ReadableFormatError:
+        return None
+    return None if marked is None else marked[0]
+
+
+def _decode_marked_value(rows: list[list[_Node]]) -> tuple[str] | None:
+    """Recognise a marked value.
+
+    ``(escaped "...")`` holds text written as it is except for the
+    percent-escaped characters the form cannot carry; ``(base64 "...")`` is what
+    versions up to 0.6.0 wrote, and is still read. A quoted marker is an ordinary
+    dict key, not a marker. The result is wrapped in a tuple so that an empty
+    string is still distinguishable from "not a marker".
     """
     if len(rows) != 1 or len(rows[0]) != 2:
         return None
 
     marker, payload = rows[0]
-    if not marker.is_ref or marker.quoted or marker.value != BASE64_MARKER:
+    if not marker.is_ref or marker.quoted:
+        return None
+    if marker.value not in (ESCAPED_MARKER, BASE64_MARKER):
         return None
     if not payload.is_ref or not payload.quoted:
         return None
+
+    if marker.value == ESCAPED_MARKER:
+        return (_unescape(payload.value),)
 
     try:
         decoded = base64.b64decode(payload.value, validate=True).decode("utf-8")
     except Exception as error:  # noqa: BLE001 - reported as a format error
         raise ReadableFormatError(f"invalid base64 value: {error}") from error
     return (decoded,)
+
+
+def _unescape(payload: str) -> str:
+    """Undo the percent-escaping of an ``(escaped "...")`` payload.
+
+    Escapes stand for bytes, so a character outside ASCII is written as its UTF-8
+    bytes and read back from them.
+    """
+    out = bytearray()
+    i = 0
+    length = len(payload)
+
+    while i < length:
+        if payload[i] != "%":
+            out.extend(payload[i].encode("utf-8"))
+            i += 1
+            continue
+
+        escape = payload[i + 1 : i + 3]
+        if len(escape) != 2:
+            raise ReadableFormatError(f"truncated escape at character {i} of an escaped value")
+        if not _HEX_ESCAPE.match(escape):
+            raise ReadableFormatError(f"invalid escape '%{escape}' in an escaped value")
+        out.append(int(escape, 16))
+        i += 3
+
+    try:
+        return out.decode("utf-8")
+    except UnicodeDecodeError as error:
+        raise ReadableFormatError(f"invalid UTF-8 escaped value: {error}") from error
 
 
 def _ref_to_value(value: str, quoted: bool) -> None | bool | int | float | str:

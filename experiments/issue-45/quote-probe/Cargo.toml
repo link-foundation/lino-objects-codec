@@ -1,0 +1,7 @@
+[package]
+name = "quote-probe"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+links-notation = "0.14.0"

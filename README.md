@@ -42,7 +42,7 @@ All implementations share the same design philosophy and provide feature parity.
 - **Readable by Default**: In every language `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()` (alias `encode_obfuscated()`)
 - **One Record per Line**: `encode_line()` writes the same readable document on one line and `decode_line()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Object Identity**: Shared references and circular references are preserved by the compact format via object ids; the readable format is a plain tree and raises a circular-reference error instead
-- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Full Unicode**: Strings are always written as text — a newline stays a newline, a tab stays a tab, and every word stays greppable; only the characters a form cannot carry are percent-escaped, in a value marked individually as `(escaped "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 - **JSON/Lino Conversion**: Convert between JSON and Links Notation (JavaScript)
@@ -420,8 +420,17 @@ object, bare-value lines make an array:
   `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
 - An empty array is `()`; an empty object is `(` + newline + `)`
-- Only a value that cannot be written as text (one containing control characters)
-  is base64-encoded, and it is marked individually as `(base64 "bGluZTEKbGluZTI=")`
+- A string is written as text whatever it holds: a newline stays a newline and
+  a tab stays a tab, so every word stays greppable
+- A string containing the quote delimiter is written between a run of at least
+  three of them — `"""say "hi""""` — which the notation's own parser reads back
+  unchanged, rather than by doubling the quote
+- Only the characters this form cannot carry — a carriage return, which CRLF
+  normalisation would rewrite, and the remaining control characters — are
+  percent-escaped, in a value marked individually as `(escaped "first%0D")`.
+  `(base64 "…")` written by versions up to 0.6.0 is still decoded
+- A value that occurs more than once is written out every time: a shared
+  reference would make one record depend on another
 - The four languages produce byte-identical output, checked by the shared
   fixtures in [`fixtures/readable-format/cases.json`](fixtures/readable-format/cases.json)
 
@@ -438,7 +447,9 @@ record per line — appending is one write, compaction cuts at a newline, and
 - An object is `(o: (key value) …)` and an empty object is `(o:)`
 - An array is `(value …)` and an empty array is `()`
 - Scalars and strings are written exactly as in the indented form, so a string
-  keeps its own characters and a number keeps its type
+  keeps its own characters and a number keeps its type — except that a newline
+  would end the record, so on this form the newline, and nothing else, is
+  escaped: `(escaped "line one%0Aline two")` keeps both lines readable
 - The `o` marker is what removes the ambiguity a flat layout otherwise has:
   without it `((key value))` reads both as a one-pair object and as an array
   holding a two-element array. With it a bare `( )` on one line is always an
@@ -454,7 +465,8 @@ The previous single-line form, kept for compatibility and for the object graphs
 the readable tree cannot express (shared and circular references):
 
 - Basic types are encoded with type markers: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
-- Strings are base64-encoded to handle special characters and newlines
+- Strings are base64-encoded here, and only here: this is the one form that
+  asks for it by name, and `encode()` never reaches for it
 - Collections with self-references use `(obj_id: type content...)`, e.g.
   `(obj_0: dict ((str c2VsZg==) obj_0))` for `{"self": obj}`
 - Circular references use direct object id references: `obj_0` (without a `ref` keyword)

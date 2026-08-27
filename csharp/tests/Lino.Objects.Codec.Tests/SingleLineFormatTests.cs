@@ -101,8 +101,8 @@ public class SingleLineFormatTests
     }
 
     /// <summary>
-    /// A newline inside a string would end the record, so such a string is the
-    /// one thing written encoded -- individually, so the rest stays readable.
+    /// A newline inside a string would end the record, so the newline -- and
+    /// nothing else -- is escaped: the rest of the text stays as it was written.
     /// </summary>
     [Fact]
     public void AStringHoldingANewlineStillFitsOnOneLine()
@@ -114,9 +114,11 @@ public class SingleLineFormatTests
         };
         var line = Codec.EncodeLine(value);
         Assert.Equal(
-            "(o: (readable \"still visible\") (multiline (base64 \"bGluZTEKbGluZTI=\")))",
+            "(o: (readable \"still visible\") (multiline (escaped \"line1%0Aline2\")))",
             line);
         Assert.DoesNotContain('\n', line);
+        Assert.Contains("line1", line, StringComparison.Ordinal);
+        Assert.Contains("line2", line, StringComparison.Ordinal);
         Assert.True(Equivalent(Codec.DecodeLine(line), value));
     }
 
