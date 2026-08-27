@@ -90,9 +90,9 @@ fn a_string_keeps_its_own_characters_on_one_line() {
     assert_eq!(decode_line(&line), Ok(value));
 }
 
-/// A newline inside a string would end the record, so such a string is the one
-/// thing written encoded -- individually, so the rest of the record stays
-/// readable.
+/// A newline inside a string would end the record, so on one line -- and only
+/// there -- it is escaped. The escape covers the newline, not the string: the
+/// words around it stay greppable, and so does the rest of the record.
 #[test]
 fn a_string_holding_a_newline_still_fits_on_one_line() {
     let value = LinoValue::object([
@@ -102,8 +102,9 @@ fn a_string_holding_a_newline_still_fits_on_one_line() {
     let line = encode_line(&value);
     assert_eq!(
         line,
-        r#"(o: (readable "still visible") (multiline (base64 "bGluZTEKbGluZTI=")))"#
+        r#"(o: (readable "still visible") (multiline (escaped "line1%0Aline2")))"#
     );
+    assert!(line.contains("line1") && line.contains("line2"), "{line:?}");
     assert!(
         !line.contains('\n'),
         "a record must stay on one line: {line:?}"

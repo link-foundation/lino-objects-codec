@@ -36,10 +36,16 @@
 //! Empty containers keep their type: an empty array is `()` on one line, while an
 //! empty object is written as `(` and `)` on two lines.
 //!
-//! Only values that cannot be written as plain text are encoded: strings holding
-//! control characters (including newlines and tabs, which line-based tooling and
-//! CRLF normalisation would corrupt) are marked individually as
-//! `(base64 "…")` instead of encoding the whole document.
+//! Text is written as text. A string keeps every character a reader would grep
+//! for, including newlines and tabs, and is quoted with a run of delimiters —
+//! `"""say "hi""""` — when it holds the delimiter itself. Only the characters a
+//! form cannot carry are escaped, and only they: the value is then written as
+//! `(escaped "…")`, where `%XX` stands for one escaped byte. The indented form
+//! escapes the carriage return, which CRLF normalisation would otherwise rewrite,
+//! and the other control characters; the single-line form escapes the newline as
+//! well, because there a record ends at the end of the line. Nothing else is
+//! encoded: base64 lives in [`crate::encode_compact`], which a caller asks for by
+//! name.
 //!
 //! # Single-line form
 //!
@@ -76,8 +82,16 @@ use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 /// Default indentation used by [`encode`].
 pub const DEFAULT_INDENT: &str = "  ";
 
-/// Marker used for values that cannot be represented as plain text.
+/// Marker of a base64 payload. Written by [`crate::encode_compact`] and by
+/// versions up to 0.6.0 of the readable form, which is why it is still read.
 pub const BASE64_MARKER: &str = "base64";
+
+/// Marker of a string whose unwritable characters are percent-escaped.
+///
+/// It reads as `(escaped "line one%0Aline two")`. Only those characters change;
+/// the rest of the text is written as it is, so the value stays readable and
+/// greppable.
+pub const ESCAPED_MARKER: &str = "escaped";
 
 /// Link id naming an object in the single-line form, written as `(o: …)`.
 pub const OBJECT_MARKER: &str = "o";
@@ -137,6 +151,16 @@ pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
 
 // === Encoding ===
 
+/// The line structure of the text being written, which is what decides whether a
+/// newline can be written literally: in the indented form a value ends at its
+/// closing quote, so it may span lines; in the single-line form a record ends at
+/// the end of the line, so a newline inside a value would end the record.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum Form {
+    Indented,
+    Line,
+}
+
 fn write_value(value: &LinoValue, indent: &str, level: usize, out: &mut String) {
     match value {
         LinoValue::Object(pairs) => {
@@ -152,7 +176,7 @@ fn write_value(value: &LinoValue, indent: &str, level: usize, out: &mut String) 
             for (key, child) in pairs {
                 out.push('\n');
                 push_indent(indent, level + 1, out);
-                out.push_str(&format_key(key));
+                out.push_str(&format_key(key, Form::Indented));
                 out.push(' ');
                 write_value(child, indent, level + 1, out);
             }
@@ -178,7 +202,7 @@ fn write_value(value: &LinoValue, indent: &str, level: usize, out: &mut String) 
             out.push(')');
         }
 
-        scalar => out.push_str(&format_scalar(scalar)),
+        scalar => out.push_str(&format_scalar(scalar, Form::Indented)),
     }
 }
 
@@ -200,7 +224,7 @@ fn write_line_value(value: &LinoValue, out: &mut String) {
             out.push(':');
             for (key, child) in pairs {
                 out.push_str(" (");
-                out.push_str(&format_key(key));
+                out.push_str(&format_key(key, Form::Line));
                 out.push(' ');
                 write_line_value(child, out);
                 out.push(')');
@@ -219,7 +243,7 @@ fn write_line_value(value: &LinoValue, out: &mut String) {
             out.push(')');
         }
 
-        scalar => out.push_str(&format_scalar(scalar)),
+        scalar => out.push_str(&format_scalar(scalar, Form::Line)),
     }
 }
 
@@ -231,13 +255,13 @@ fn push_indent(indent: &str, level: usize, out: &mut String) {
 
 /// Format a scalar value. Strings are quoted, everything else stays bare so that
 /// its type is recoverable when reading the document back.
-fn format_scalar(value: &LinoValue) -> String {
+fn format_scalar(value: &LinoValue, form: Form) -> String {
     match value {
         LinoValue::Null => "null".to_string(),
         LinoValue::Bool(b) => b.to_string(),
         LinoValue::Int(i) => i.to_string(),
         LinoValue::Float(f) => format_float(*f),
-        LinoValue::String(s) => format_string(s),
+        LinoValue::String(s) => format_string(s, form),
         // Containers are handled by write_value.
         LinoValue::Array(_) | LinoValue::Object(_) => String::new(),
     }
@@ -259,52 +283,109 @@ fn format_float(f: f64) -> String {
     }
 }
 
-/// Format a string value: quoted plain text, or an individually marked
-/// base64 payload when the text cannot be written literally.
-fn format_string(value: &str) -> String {
-    if needs_encoding(value) {
-        return format!(
-            "({} {})",
-            BASE64_MARKER,
-            quote(&BASE64.encode(value.as_bytes()))
-        );
+/// Format a string value. The text is written as text; when it holds characters
+/// this form cannot carry, those characters — and only those — are percent-escaped
+/// and the value is marked, so the rest of it stays readable and greppable.
+fn format_string(value: &str, form: Form) -> String {
+    match escape_unwritable(value, form) {
+        Some(escaped) => format!("({} {})", ESCAPED_MARKER, quote(&escaped)),
+        None => quote(value),
     }
-    quote(value)
 }
 
-/// A value can be written as text unless it contains control characters:
-/// newlines break the line structure and CRLF normalisation would rewrite them.
-fn needs_encoding(value: &str) -> bool {
-    value.chars().any(char::is_control)
+/// Percent-escape the characters this form cannot carry, or `None` when the text
+/// can be written as it is. `%` is escaped too, so escaping is reversible.
+fn escape_unwritable(value: &str, form: Form) -> Option<String> {
+    if !value.chars().any(|c| is_unwritable(c, form)) {
+        return None;
+    }
+
+    let mut out = String::with_capacity(value.len());
+    let mut buffer = [0u8; 4];
+    for c in value.chars() {
+        if c == '%' || is_unwritable(c, form) {
+            for byte in c.encode_utf8(&mut buffer).as_bytes() {
+                out.push('%');
+                out.push(hex_digit(byte >> 4));
+                out.push(hex_digit(byte & 0xf));
+            }
+        } else {
+            out.push(c);
+        }
+    }
+    Some(out)
 }
 
+/// One upper-case hexadecimal digit of a percent escape.
+fn hex_digit(value: u8) -> char {
+    char::from_digit(u32::from(value), 16).map_or('0', |digit| digit.to_ascii_uppercase())
+}
+
+/// Whether a character has to be escaped in this form. A tab is text a reader can
+/// see, and so is a newline in the indented form, where a value may span lines.
+/// A carriage return is escaped because CRLF normalisation rewrites it, and the
+/// remaining control characters because they are not text at all.
+fn is_unwritable(c: char, form: Form) -> bool {
+    if !c.is_control() {
+        return false;
+    }
+    match c {
+        '\t' => false,
+        '\n' => form == Form::Line,
+        _ => true,
+    }
+}
+
+/// Quote a value so that both this reader and the notation's own parser read it
+/// back unchanged. One delimiter is enough while the text holds none of that
+/// kind; when it holds both kinds, a run of at least three opens the notation's
+/// n-quote form, where the text is literal and only a run at least as long closes
+/// it. A value starting with the delimiter would lengthen the opening run, so the
+/// other delimiter is used for it.
 fn quote(value: &str) -> String {
-    let has_double = value.contains('"');
-    let has_single = value.contains('\'');
-
-    if !has_double {
+    if !value.contains('"') {
         return format!("\"{}\"", value);
     }
-    if !has_single {
+    if !value.contains('\'') {
         return format!("'{}'", value);
     }
-    // Both quote styles are present: double the double quotes, as the parser expects.
-    format!("\"{}\"", value.replace('"', "\"\""))
+
+    let delimiter = if value.starts_with('"') { '\'' } else { '"' };
+    // A run of two delimiters is the empty value, so the n-quote form starts at
+    // three; beyond that the run only has to outrun the longest one inside.
+    let count = (longest_run(value, delimiter) + 1).max(3);
+    let run: String = std::iter::repeat(delimiter).take(count).collect();
+    format!("{run}{value}{run}")
+}
+
+/// The length of the longest run of `c` in `value`.
+fn longest_run(value: &str, c: char) -> usize {
+    let mut longest = 0;
+    let mut current = 0;
+    for candidate in value.chars() {
+        if candidate == c {
+            current += 1;
+            longest = longest.max(current);
+        } else {
+            current = 0;
+        }
+    }
+    longest
 }
 
 /// Format an object key. Keys are bare when they read as plain identifiers.
-fn format_key(key: &str) -> String {
+fn format_key(key: &str, form: Form) -> String {
     let plain = !key.is_empty()
         && key != BASE64_MARKER
-        && !needs_encoding(key)
-        && !key
-            .chars()
-            .any(|c| c.is_whitespace() || matches!(c, '(' | ')' | '\'' | '"' | ':' | '`'));
+        && key != ESCAPED_MARKER
+        && !key.chars().any(|c| {
+            c.is_whitespace() || c.is_control() || matches!(c, '(' | ')' | '\'' | '"' | ':' | '`')
+        });
 
     if plain {
         key.to_string()
     } else {
-        format_string(key)
+        format_string(key, form)
     }
 }
 
@@ -378,32 +459,74 @@ fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
     Ok(tokens)
 }
 
-/// Read a quoted reference, where a doubled quote character means a literal one.
+/// Read a quoted reference. The opening run of delimiters says how it is read,
+/// which is what the notation's own parser does:
+///
+/// * one delimiter — the text is literal and a doubled delimiter is one literal
+///   delimiter, which is how versions up to 0.6.0 wrote such values;
+/// * two — the empty value;
+/// * three or more — the n-quote form: the text is literal, and the value ends at
+///   the first run at least as long, whose last delimiters close it. A longer run
+///   therefore belongs to the text, so a value may end with a delimiter.
 fn read_quoted(
     chars: &[char],
     start: usize,
     quote_char: char,
 ) -> Result<(String, usize), CodecError> {
-    let mut value = String::new();
-    let mut i = start + 1;
+    let opening = run_length(chars, start, quote_char);
 
-    while i < chars.len() {
-        if chars[i] == quote_char {
-            if chars.get(i + 1) == Some(&quote_char) {
-                value.push(quote_char);
-                i += 2;
-                continue;
-            }
-            return Ok((value, i + 1));
-        }
-        value.push(chars[i]);
-        i += 1;
+    if opening == 2 {
+        return Ok((String::new(), start + 2));
     }
 
-    Err(CodecError::ParseError(format!(
+    if opening == 1 {
+        let mut value = String::new();
+        let mut i = start + 1;
+
+        while i < chars.len() {
+            if chars[i] == quote_char {
+                if chars.get(i + 1) == Some(&quote_char) {
+                    value.push(quote_char);
+                    i += 2;
+                    continue;
+                }
+                return Ok((value, i + 1));
+            }
+            value.push(chars[i]);
+            i += 1;
+        }
+
+        return Err(unterminated_quote(start));
+    }
+
+    let mut i = start + opening;
+    while i < chars.len() {
+        if chars[i] != quote_char {
+            i += 1;
+            continue;
+        }
+
+        let run = run_length(chars, i, quote_char);
+        if run >= opening {
+            let value = chars[start + opening..i + run - opening].iter().collect();
+            return Ok((value, i + run));
+        }
+        i += run;
+    }
+
+    Err(unterminated_quote(start))
+}
+
+/// The length of the run of `c` that starts at `start`.
+fn run_length(chars: &[char], start: usize, c: char) -> usize {
+    chars[start..].iter().take_while(|&&x| x == c).count()
+}
+
+fn unterminated_quote(start: usize) -> CodecError {
+    CodecError::ParseError(format!(
         "unterminated quoted value starting at character {}",
         start
-    )))
+    ))
 }
 
 struct Cursor {
@@ -546,15 +669,15 @@ fn rows_to_value(
     // `key value` on every line makes an object; anything else is a list of values.
     let is_object = rows
         .iter()
-        .all(|row| row.len() == 2 && matches!(row[0], Node::Ref { .. }));
+        .all(|row| row.len() == 2 && node_to_key(&row[0]).is_some());
 
     if is_object {
         let mut pairs = Vec::with_capacity(rows.len());
         for row in rows {
-            let Node::Ref { value: key, .. } = &row[0] else {
+            let Some(key) = node_to_key(&row[0]) else {
                 unreachable!("checked by is_object")
             };
-            pairs.push((key.clone(), node_to_value(&row[1])?));
+            pairs.push((key, node_to_value(&row[1])?));
         }
         return Ok(LinoValue::Object(pairs));
     }
@@ -594,7 +717,7 @@ fn marked_object_to_value(rows: &[Vec<Node>]) -> Result<LinoValue, CodecError> {
             )));
         };
 
-        let [Node::Ref { value: key, .. }, value] = row.as_slice() else {
+        let [key_node, value] = row.as_slice() else {
             return Err(CodecError::ParseError(format!(
                 "an object marked '{}:' holds (key value) pairs, found a link of {} values",
                 OBJECT_MARKER,
@@ -602,14 +725,42 @@ fn marked_object_to_value(rows: &[Vec<Node>]) -> Result<LinoValue, CodecError> {
             )));
         };
 
-        pairs.push((key.clone(), node_to_value(value)?));
+        let Some(key) = node_to_key(key_node) else {
+            return Err(CodecError::ParseError(format!(
+                "an object marked '{}:' holds (key value) pairs, found a pair whose key is not text",
+                OBJECT_MARKER
+            )));
+        };
+
+        pairs.push((key, node_to_value(value)?));
     }
 
     Ok(LinoValue::Object(pairs))
 }
 
-/// Recognise `(base64 "…")`, the individual marker for values that could not be
-/// written as text. A quoted `base64` key is an ordinary object key, not a marker.
+/// The key a node in key position spells: a reference is the key itself, and a
+/// marked link is the text its marker escapes, which is how a key holding a
+/// character the form cannot carry stays a key instead of turning its object into
+/// an array.
+fn node_to_key(node: &Node) -> Option<String> {
+    match node {
+        Node::Ref { value, .. } => Some(value.clone()),
+        Node::Link {
+            rows,
+            object: false,
+            ..
+        } => match decode_marked_value(rows)? {
+            Ok(LinoValue::String(key)) => Some(key),
+            _ => None,
+        },
+        Node::Link { .. } => None,
+    }
+}
+
+/// Recognise a marked value: `(escaped "…")`, whose text is written as it is
+/// except for the percent-escaped characters this form cannot carry, and
+/// `(base64 "…")`, which versions up to 0.6.0 wrote and which is still read. A
+/// quoted marker is an ordinary object key, not a marker.
 fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecError>> {
     if rows.len() != 1 || rows[0].len() != 2 {
         return None;
@@ -622,9 +773,6 @@ fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecErro
     else {
         return None;
     };
-    if marker != BASE64_MARKER {
-        return None;
-    }
 
     let Node::Ref {
         value: payload,
@@ -634,16 +782,56 @@ fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecErro
         return None;
     };
 
-    Some(
-        BASE64
-            .decode(payload)
-            .map_err(|e| CodecError::DecodeError(format!("invalid base64 value: {}", e)))
-            .and_then(|bytes| {
-                String::from_utf8(bytes)
-                    .map(LinoValue::String)
-                    .map_err(|e| CodecError::DecodeError(format!("invalid UTF-8 value: {}", e)))
-            }),
-    )
+    if marker == ESCAPED_MARKER {
+        return Some(unescape(payload).map(LinoValue::String));
+    }
+
+    if marker == BASE64_MARKER {
+        return Some(
+            BASE64
+                .decode(payload)
+                .map_err(|e| CodecError::DecodeError(format!("invalid base64 value: {}", e)))
+                .and_then(|bytes| {
+                    String::from_utf8(bytes)
+                        .map(LinoValue::String)
+                        .map_err(|e| CodecError::DecodeError(format!("invalid UTF-8 value: {}", e)))
+                }),
+        );
+    }
+
+    None
+}
+
+/// Undo the percent-escaping of an `(escaped "…")` payload. Escapes stand for
+/// bytes, so a character outside ASCII is written as its UTF-8 bytes and read
+/// back from them.
+fn unescape(payload: &str) -> Result<String, CodecError> {
+    let bytes = payload.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(bytes.len());
+    let mut i = 0;
+
+    while i < bytes.len() {
+        if bytes[i] != b'%' {
+            out.push(bytes[i]);
+            i += 1;
+            continue;
+        }
+
+        let escape = payload.get(i + 1..i + 3).ok_or_else(|| {
+            CodecError::DecodeError(format!(
+                "truncated escape at character {} of an escaped value",
+                i
+            ))
+        })?;
+        let byte = u8::from_str_radix(escape, 16).map_err(|_| {
+            CodecError::DecodeError(format!("invalid escape '%{}' in an escaped value", escape))
+        })?;
+        out.push(byte);
+        i += 3;
+    }
+
+    String::from_utf8(out)
+        .map_err(|e| CodecError::DecodeError(format!("invalid UTF-8 escaped value: {}", e)))
 }
 
 /// Convert a reference to a value. Quoted references are always strings; bare
@@ -733,19 +921,96 @@ mod tests {
     }
 
     #[test]
-    fn control_characters_are_marked_individually() {
+    fn text_is_written_as_text_and_only_the_rest_is_escaped() {
         let value = LinoValue::object([
             ("plain", LinoValue::String("visible".to_string())),
             ("raw", LinoValue::String("line1\nline2".to_string())),
+            ("returned", LinoValue::String("line1\r\nline2".to_string())),
         ]);
         let text = encode(&value, DEFAULT_INDENT);
         assert!(text.contains("plain \"visible\""), "{}", text);
+        assert!(text.contains("raw \"line1\nline2\""), "{}", text);
         assert!(
-            text.contains("raw (base64 \"bGluZTEKbGluZTI=\")"),
+            text.contains("returned (escaped \"line1%0D\nline2\")"),
             "{}",
             text
         );
+        assert!(!text.contains("base64"), "{}", text);
         assert_eq!(roundtrip(&value), value);
+    }
+
+    /// The readable form is Links Notation, so the notation's own parser has to
+    /// read every document it writes -- quotes, newlines and escapes included.
+    #[test]
+    fn every_written_document_parses_as_links_notation() {
+        let texts = [
+            "plain",
+            "it's",
+            "he said \"hello\"",
+            "both \"kinds\" of 'quotes'",
+            "a\"\"b'c",
+            "a\"\"\"b'c",
+            "trailing quote\"'",
+            "'\"",
+            "line one\nline two",
+            "a\tb",
+            "null\u{0}byte",
+            "unicode: 你好世界 🌍",
+        ];
+
+        for text in texts {
+            let value = LinoValue::object([
+                ("message", LinoValue::String(text.to_string())),
+                ("level", LinoValue::String("info".to_string())),
+            ]);
+
+            for document in [encode(&value, DEFAULT_INDENT), encode_line(&value)] {
+                assert!(
+                    links_notation::parse_lino(&document).is_ok(),
+                    "links-notation rejected {:?}",
+                    document
+                );
+            }
+        }
+    }
+
+    /// The value the notation's parser reads back has to be the value written,
+    /// not merely something that parses.
+    #[test]
+    fn links_notation_reads_back_the_text_that_was_written() {
+        for text in [
+            "he said \"hello\"",
+            "both \"kinds\" of 'quotes'",
+            "a\"\"b'c",
+            "line one\nline two",
+        ] {
+            let document = encode(
+                &LinoValue::object([("message", LinoValue::String(text.to_string()))]),
+                DEFAULT_INDENT,
+            );
+            let parsed = links_notation::parse_lino(&document)
+                .unwrap_or_else(|e| panic!("links-notation rejected {:?}: {}", document, e));
+
+            let mut refs = Vec::new();
+            collect_refs(&parsed, &mut refs);
+            assert!(
+                refs.contains(&text.to_string()),
+                "links-notation read {:?} out of {:?}",
+                refs,
+                document
+            );
+        }
+    }
+
+    fn collect_refs(node: &links_notation::LiNo<String>, out: &mut Vec<String>) {
+        match node {
+            links_notation::LiNo::Ref(value) => out.push(value.clone()),
+            links_notation::LiNo::Link { values, .. } => {
+                for value in values {
+                    collect_refs(value, out);
+                }
+            }
+        }
     }
 
     #[test]
@@ -869,6 +1134,25 @@ mod tests {
     fn unterminated_input_is_an_error() {
         assert!(decode("(\n  a 1\n").is_err());
         assert!(decode("(\n  a \"unterminated\n").is_err());
+        assert!(decode("(\n  a \"\"\"unterminated\n").is_err());
         assert!(decode("a 1)").is_err());
+    }
+
+    /// The three ways a run of delimiters reads, which is what keeps documents
+    /// written by earlier versions decoding as they did.
+    #[test]
+    fn a_run_of_delimiters_says_how_the_value_is_read() {
+        // One delimiter: a doubled delimiter is one literal delimiter.
+        assert_eq!(
+            decode("\"both \"\"kinds\"\" of 'quotes'\"").unwrap(),
+            LinoValue::String("both \"kinds\" of 'quotes'".to_string())
+        );
+        // Two: the empty value.
+        assert_eq!(decode("\"\"").unwrap(), LinoValue::String(String::new()));
+        // Three or more: the text is literal, and the last delimiters close it.
+        assert_eq!(
+            decode("\"\"\"say \"hi\"\"\"\"").unwrap(),
+            LinoValue::String("say \"hi\"".to_string())
+        );
     }
 }

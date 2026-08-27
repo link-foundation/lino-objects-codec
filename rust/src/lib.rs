@@ -12,9 +12,10 @@
 //! - **Special Float Values**: Support for NaN, Infinity, -Infinity (which are not valid JSON)
 //! - **Circular References**: Detect and preserve circular references (via object IDs)
 //! - **Object Identity**: Maintain object identity for shared references
-//! - **UTF-8 Support**: Full Unicode string support, written as text; only values that cannot be
-//!   represented as text (strings holding control characters) are base64-encoded, and they are
-//!   marked individually as `(base64 "…")`
+//! - **UTF-8 Support**: Full Unicode string support, always written as text -- a string is never
+//!   base64-encoded, so every word of it stays greppable. A character the chosen form cannot hold
+//!   (a carriage return in either form, a newline on a single line) is percent-escaped, and only
+//!   that one value is marked, as `(escaped "line one%0Aline two")`
 //! - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 //!
 //! # Example
@@ -55,7 +56,7 @@ use std::fmt;
 pub mod debug;
 pub mod readable;
 
-pub use readable::{BASE64_MARKER, DEFAULT_INDENT, OBJECT_MARKER};
+pub use readable::{BASE64_MARKER, DEFAULT_INDENT, ESCAPED_MARKER, OBJECT_MARKER};
 
 /// Type identifiers used in the compact (base64) Links Notation format
 mod type_ids {
