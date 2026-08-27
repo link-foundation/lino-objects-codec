@@ -40,6 +40,34 @@
 //! control characters (including newlines and tabs, which line-based tooling and
 //! CRLF normalisation would corrupt) are marked individually as
 //! `(base64 "…")` instead of encoding the whole document.
+//!
+//! # Single-line form
+//!
+//! [`encode_line`] writes the same document on one line, so one record is one
+//! line and an append-only log stays greppable, tailable and countable by
+//! `wc -l`. Rows can no longer be told apart by line breaks there, so an object
+//! names itself with the `o` link id the notation already has, and its pairs are
+//! written as their own links:
+//!
+//! ```text
+//! (o: (type "RouterState") (server (o: (host "127.0.0.1") (port 18878))) (models ("claude-haiku" "claude-opus")))
+//! ```
+//!
+//! | Value            | Single-line form              |
+//! |------------------|-------------------------------|
+//! | `Object`         | `(o: (key value) …)`          |
+//! | empty `Object`   | `(o:)`                        |
+//! | `Array`          | `(value …)`                   |
+//! | empty `Array`    | `()`                          |
+//! | scalars          | exactly as in the indented form |
+//!
+//! The marker is what answers the ambiguity a flat layout otherwise has: without
+//! it `((key value))` reads both as the one-pair object and as the array holding
+//! the two-element array, and an empty key makes it worse. With it, a bare `( )`
+//! is always an array and a marked one is always an object, so every value —
+//! empty key included — survives the round trip. Consequently a *hand-written*
+//! one-line link such as `(a 1)` is the two-element array, not the one-pair
+//! object: on one line, objects say so.
 
 use crate::debug::trace;
 use crate::{CodecError, LinoValue};
@@ -51,11 +79,39 @@ pub const DEFAULT_INDENT: &str = "  ";
 /// Marker used for values that cannot be represented as plain text.
 pub const BASE64_MARKER: &str = "base64";
 
+/// Link id naming an object in the single-line form, written as `(o: …)`.
+pub const OBJECT_MARKER: &str = "o";
+
 /// Encode a value into the readable, indented Links Notation form.
 pub fn encode(value: &LinoValue, indent: &str) -> String {
     let mut out = String::new();
     write_value(value, indent, 0, &mut out);
     out
+}
+
+/// Encode a value into the readable, single-line Links Notation form.
+///
+/// The result never contains a newline, so one value is one line of an
+/// append-only log. See the module documentation for the shape.
+pub fn encode_line(value: &LinoValue) -> String {
+    let mut out = String::new();
+    write_line_value(value, &mut out);
+    out
+}
+
+/// Decode the readable, single-line Links Notation form back into a value.
+///
+/// This is the exact inverse of [`encode_line`]. Input spanning more than one
+/// line is rejected: a line-based reader hands over one record at a time, and
+/// silently accepting several would merge two records into one value.
+pub fn decode_line(text: &str) -> Result<LinoValue, CodecError> {
+    let line = text.trim_matches(|c: char| c == '\n' || c == '\r');
+    if line.contains('\n') || line.contains('\r') {
+        return Err(CodecError::ParseError(
+            "a single-line document cannot contain a line break".to_string(),
+        ));
+    }
+    decode(line)
 }
 
 /// Decode the readable, indented Links Notation form back into a value.
@@ -76,7 +132,7 @@ pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
         return node_to_value(&rows[0][0]);
     }
 
-    rows_to_value(&rows, true)
+    rows_to_value(&rows, true, false)
 }
 
 // === Encoding ===
@@ -119,6 +175,47 @@ fn write_value(value: &LinoValue, indent: &str, level: usize, out: &mut String) 
             }
             out.push('\n');
             push_indent(indent, level, out);
+            out.push(')');
+        }
+
+        scalar => out.push_str(&format_scalar(scalar)),
+    }
+}
+
+/// Write a value on one line. Objects name themselves with the `o` link id and
+/// write each pair as its own link, so nothing depends on where lines break.
+fn write_line_value(value: &LinoValue, out: &mut String) {
+    match value {
+        LinoValue::Object(pairs) => {
+            if pairs.is_empty() {
+                // `()` is the empty array, so the empty object keeps its marker.
+                out.push('(');
+                out.push_str(OBJECT_MARKER);
+                out.push_str(":)");
+                return;
+            }
+
+            out.push('(');
+            out.push_str(OBJECT_MARKER);
+            out.push(':');
+            for (key, child) in pairs {
+                out.push_str(" (");
+                out.push_str(&format_key(key));
+                out.push(' ');
+                write_line_value(child, out);
+                out.push(')');
+            }
+            out.push(')');
+        }
+
+        LinoValue::Array(items) => {
+            out.push('(');
+            for (index, item) in items.iter().enumerate() {
+                if index > 0 {
+                    out.push(' ');
+                }
+                write_line_value(item, out);
+            }
             out.push(')');
         }
 
@@ -232,6 +329,8 @@ enum Node {
     Link {
         rows: Vec<Vec<Node>>,
         multiline: bool,
+        /// Whether the link named itself an object with the `o:` marker.
+        object: bool,
     },
 }
 
@@ -361,14 +460,33 @@ impl Cursor {
             }
             Token::Open => {
                 self.pos += 1;
+                let object = self.take_object_marker();
                 let multiline = self.link_is_multiline();
                 let rows = self.parse_rows(false)?;
-                Ok(Node::Link { rows, multiline })
+                Ok(Node::Link {
+                    rows,
+                    multiline,
+                    object,
+                })
             }
             Token::Close | Token::Newline => Err(CodecError::ParseError(
                 "unexpected token in readable notation".to_string(),
             )),
         }
+    }
+
+    /// Consume the `o:` marker if the link that just opened carries one, which is
+    /// how the single-line form says "this link is an object, not an array".
+    fn take_object_marker(&mut self) -> bool {
+        let marker = format!("{}:", OBJECT_MARKER);
+        let is_marker = matches!(
+            self.tokens.get(self.pos),
+            Some(Token::Ref { value, quoted: false }) if *value == marker
+        );
+        if is_marker {
+            self.pos += 1;
+        }
+        is_marker
     }
 
     /// Whether the link that just opened spans more than one line, which is what
@@ -384,11 +502,23 @@ impl Cursor {
 fn node_to_value(node: &Node) -> Result<LinoValue, CodecError> {
     match node {
         Node::Ref { value, quoted } => Ok(ref_to_value(value, *quoted)),
-        Node::Link { rows, multiline } => rows_to_value(rows, *multiline),
+        Node::Link {
+            rows,
+            multiline,
+            object,
+        } => rows_to_value(rows, *multiline, *object),
     }
 }
 
-fn rows_to_value(rows: &[Vec<Node>], multiline: bool) -> Result<LinoValue, CodecError> {
+fn rows_to_value(
+    rows: &[Vec<Node>],
+    multiline: bool,
+    object_marker: bool,
+) -> Result<LinoValue, CodecError> {
+    if object_marker {
+        return marked_object_to_value(rows);
+    }
+
     if rows.is_empty() {
         return Ok(if multiline {
             LinoValue::Object(vec![])
@@ -399,6 +529,18 @@ fn rows_to_value(rows: &[Vec<Node>], multiline: bool) -> Result<LinoValue, Codec
 
     if let Some(marked) = decode_marked_value(rows) {
         return marked;
+    }
+
+    // Written on one line, a link is a list of values: an object on one line says
+    // so with the `o:` marker, which is what keeps `(key value)` unambiguous.
+    if !multiline {
+        let mut items = Vec::new();
+        for row in rows {
+            for node in row {
+                items.push(node_to_value(node)?);
+            }
+        }
+        return Ok(LinoValue::Array(items));
     }
 
     // `key value` on every line makes an object; anything else is a list of values.
@@ -424,6 +566,46 @@ fn rows_to_value(rows: &[Vec<Node>], multiline: bool) -> Result<LinoValue, Codec
         }
     }
     Ok(LinoValue::Array(items))
+}
+
+/// Build the object a `(o: (key value) …)` link describes. Every value in it is
+/// a pair, so anything else is a malformed document rather than a silent array.
+fn marked_object_to_value(rows: &[Vec<Node>]) -> Result<LinoValue, CodecError> {
+    let mut pairs = Vec::new();
+
+    for node in rows.iter().flatten() {
+        let Node::Link {
+            rows: pair,
+            object: false,
+            ..
+        } = node
+        else {
+            return Err(CodecError::ParseError(format!(
+                "an object marked '{}:' holds (key value) pairs, found a value that is not a pair",
+                OBJECT_MARKER
+            )));
+        };
+
+        let [row] = pair.as_slice() else {
+            return Err(CodecError::ParseError(format!(
+                "an object marked '{}:' holds (key value) pairs, found a link of {} lines",
+                OBJECT_MARKER,
+                pair.len()
+            )));
+        };
+
+        let [Node::Ref { value: key, .. }, value] = row.as_slice() else {
+            return Err(CodecError::ParseError(format!(
+                "an object marked '{}:' holds (key value) pairs, found a link of {} values",
+                OBJECT_MARKER,
+                row.len()
+            )));
+        };
+
+        pairs.push((key.clone(), node_to_value(value)?));
+    }
+
+    Ok(LinoValue::Object(pairs))
 }
 
 /// Recognise `(base64 "…")`, the individual marker for values that could not be
@@ -581,6 +763,98 @@ mod tests {
                 ("a", LinoValue::Int(1)),
                 ("b", LinoValue::String("two".into()))
             ])
+        );
+    }
+
+    fn line_roundtrip(value: &LinoValue) -> LinoValue {
+        let text = encode_line(value);
+        assert!(!text.contains('\n'), "line form must hold no newline: {:?}", text);
+        decode_line(&text).unwrap_or_else(|e| panic!("failed to decode {:?}: {}", text, e))
+    }
+
+    #[test]
+    fn line_form_marks_objects_and_leaves_arrays_bare() {
+        assert_eq!(encode_line(&LinoValue::Array(vec![])), "()");
+        assert_eq!(encode_line(&LinoValue::Object(vec![])), "(o:)");
+        assert_eq!(
+            encode_line(&LinoValue::object([("a", LinoValue::Int(1))])),
+            "(o: (a 1))"
+        );
+        assert_eq!(
+            encode_line(&LinoValue::array([
+                LinoValue::String("key".into()),
+                LinoValue::String("value".into()),
+            ])),
+            "(\"key\" \"value\")"
+        );
+    }
+
+    #[test]
+    fn line_form_tells_a_one_pair_object_from_a_two_element_array() {
+        let object = LinoValue::object([("key", LinoValue::String("value".into()))]);
+        let array = LinoValue::array([
+            LinoValue::String("key".into()),
+            LinoValue::String("value".into()),
+        ]);
+        assert_ne!(encode_line(&object), encode_line(&array));
+        assert_eq!(line_roundtrip(&object), object);
+        assert_eq!(line_roundtrip(&array), array);
+    }
+
+    #[test]
+    fn line_form_roundtrips_nested_and_empty_containers() {
+        let value = LinoValue::object([
+            ("empty_array", LinoValue::Array(vec![])),
+            ("empty_object", LinoValue::Object(vec![])),
+            (
+                "records",
+                LinoValue::array([
+                    LinoValue::object([("id", LinoValue::Int(1))]),
+                    LinoValue::object([("id", LinoValue::Int(2))]),
+                ]),
+            ),
+        ]);
+        assert_eq!(
+            encode_line(&value),
+            "(o: (empty_array ()) (empty_object (o:)) (records ((o: (id 1)) (o: (id 2)))))"
+        );
+        assert_eq!(line_roundtrip(&value), value);
+    }
+
+    #[test]
+    fn line_form_keeps_the_empty_key() {
+        let value = LinoValue::object([("", LinoValue::Int(2))]);
+        assert_eq!(encode_line(&value), "(o: (\"\" 2))");
+        assert_eq!(line_roundtrip(&value), value);
+    }
+
+    #[test]
+    fn line_form_keeps_strings_on_one_line() {
+        let value = LinoValue::object([
+            ("quotes", LinoValue::String("both \"kinds\" of 'quotes'".into())),
+            ("unicode", LinoValue::String("héllo 世界 🌍".into())),
+            ("multiline", LinoValue::String("line1\nline2".into())),
+        ]);
+        let text = encode_line(&value);
+        assert!(!text.contains('\n'), "{}", text);
+        assert_eq!(line_roundtrip(&value), value);
+    }
+
+    #[test]
+    fn a_line_form_object_holds_pairs_only() {
+        assert!(decode_line("(o: 1 2)").is_err());
+        assert!(decode_line("(o: (a 1 2))").is_err());
+        assert!(decode_line("(o: (a))").is_err());
+    }
+
+    #[test]
+    fn decode_line_rejects_a_document_of_several_lines() {
+        assert!(decode_line("(o: (a 1))\n(o: (a 2))").is_err());
+        // A trailing line break is what a line-based reader hands over, so it is
+        // stripped rather than rejected.
+        assert_eq!(
+            decode_line("(o: (a 1))\n").unwrap(),
+            LinoValue::object([("a", LinoValue::Int(1))])
         );
     }
 

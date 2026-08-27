@@ -1,0 +1,9 @@
+[package]
+name = "line-format-probe"
+version = "0.1.0"
+edition = "2021"
+
+# Probe for issue #43: which single-line spellings does the notation's own
+# parser accept, and what shape do they parse into?
+[dependencies]
+links-notation = "0.14.0"
