@@ -169,3 +169,41 @@ fn every_kind_of_text_roundtrips_through_both_forms() {
         }
     }
 }
+
+/// The evidence the issue reports: `parse_lino` desynchronises on a doubled
+/// quote, so 241 of 6,000 fuzzed values came back as something else. Whatever a
+/// value holds, the notation's own parser must now read the encoder's output
+/// back as exactly that value.
+#[test]
+fn the_notation_s_own_parser_reads_every_written_value_back() {
+    let texts = [
+        "plain",
+        "with spaces",
+        "it's",
+        "he said \"hello\"",
+        "both \"kinds\" of 'quotes'",
+        "\"leading quote",
+        "trailing quote\"",
+        "a\"\"b",
+        "a\"\"\"b'c",
+        "'\"",
+        "\"'",
+        "unicode: 你好世界 🌍",
+    ];
+
+    for text in texts {
+        let encoded = encode(&LinoValue::String(text.to_string()));
+        let links = links_notation::parse_lino_to_links(&encoded)
+            .unwrap_or_else(|e| panic!("links-notation rejected {encoded:?}: {e:?}"));
+
+        assert_eq!(
+            links.len(),
+            1,
+            "links-notation read {encoded:?} as {links:?} instead of one value"
+        );
+        let links_notation::LiNo::Ref(read) = &links[0] else {
+            panic!("links-notation read {encoded:?} as a link: {links:?}");
+        };
+        assert_eq!(read, text, "links-notation lost the text of {encoded:?}");
+    }
+}
