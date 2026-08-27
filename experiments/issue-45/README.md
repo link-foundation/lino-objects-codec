@@ -16,3 +16,21 @@ Its output is the evidence behind `quote()` in the four readable encoders:
   are the closing ones -- so a value ending with the delimiter still reads back
   unchanged, while a value *starting* with it would lengthen the opening run and
   has to use the other delimiter instead.
+
+## Which parser reads the n-quote form
+
+The four packages pin different `links-notation` releases, and the quoting rule
+changed between them, so the same document is read differently:
+
+| package | version | `"""say "hi""""` | `"say ""hi"""` |
+| --- | --- | --- | --- |
+| `links-notation` (Rust) | 0.14.0 | `say "hi"` | desynchronises |
+| `Link.Foundation.Links.Notation` (C#) | 0.13.0 | desynchronises | `say "hi"` |
+| `links-notation` (npm) | 0.11.2 | desynchronises | desynchronises |
+| `links-notation` (PyPI) | 0.11.x | as npm | as npm |
+
+The readable format is read by this repository's own tokenizer in every
+language, so a value reads back unchanged everywhere regardless. The n-quote
+form is chosen because it is what the newest notation release implements, which
+is the rule the issue asks the encoder to write against; the Rust suite is the
+one that can prove it, in `rust/tests/plain_text_values.rs`.
