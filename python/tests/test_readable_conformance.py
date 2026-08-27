@@ -2,8 +2,9 @@
 
 The cases live in ``fixtures/readable-format/cases.json`` at the repository root
 and are shared by the JavaScript, Python, Rust and C# suites: every
-implementation has to encode the same value to exactly the same text, which is
-what keeps the four outputs byte-identical.
+implementation has to encode the same value to exactly the same text and to
+exactly the same single line, which is what keeps the four outputs
+byte-identical.
 """
 
 import json
@@ -13,7 +14,7 @@ from typing import Any
 
 import pytest
 
-from link_notation_objects_codec import decode, encode
+from link_notation_objects_codec import decode, decode_line, encode, encode_line
 
 LANGUAGE = "python"
 
@@ -82,4 +83,28 @@ def test_encode_matches_the_shared_text(case: dict[str, Any]) -> None:
 def test_decode_matches_the_shared_value(case: dict[str, Any]) -> None:
     expected = _build(case["value"])
     decoded = decode(case["text"])
+    assert _same(decoded, expected), f"{decoded!r} != {expected!r}"
+
+
+@pytest.mark.parametrize("case", ACTIVE, ids=lambda case: case["name"])
+def test_encode_line_matches_the_shared_line(case: dict[str, Any]) -> None:
+    assert encode_line(_build(case["value"])) == case["line"]
+
+
+@pytest.mark.parametrize("case", CASES, ids=lambda case: case["name"])
+def test_the_shared_line_holds_no_line_break(case: dict[str, Any]) -> None:
+    assert "\n" not in case["line"] and "\r" not in case["line"], case["line"]
+
+
+@pytest.mark.parametrize("case", ACTIVE, ids=lambda case: case["name"])
+def test_decode_line_matches_the_shared_value(case: dict[str, Any]) -> None:
+    expected = _build(case["value"])
+    decoded = decode_line(case["line"])
+    assert _same(decoded, expected), f"{decoded!r} != {expected!r}"
+
+
+@pytest.mark.parametrize("case", ACTIVE, ids=lambda case: case["name"])
+def test_decode_reads_the_shared_line_too(case: dict[str, Any]) -> None:
+    expected = _build(case["value"])
+    decoded = decode(case["line"])
     assert _same(decoded, expected), f"{decoded!r} != {expected!r}"

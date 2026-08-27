@@ -40,6 +40,7 @@ All implementations share the same design philosophy and provide feature parity.
   - **C#**: `null`, `bool`, `int`, `long`, `float`, `double`, `string`, `List<object?>`, `Dictionary<string, object?>`
   - Special float/number values: `NaN`, `Infinity`, `-Infinity`
 - **Readable by Default**: In every language `encode()` writes indented, plain-text Links Notation; the previous single-line base64 form stays available as `encode_compact()` (alias `encode_obfuscated()`)
+- **One Record per Line**: `encode_line()` writes the same readable document on one line and `decode_line()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Object Identity**: Shared references and circular references are preserved by the compact format via object ids; the readable format is a plain tree and raises a circular-reference error instead
 - **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
@@ -115,8 +116,37 @@ assert_eq!(decoded, data);
 )
 ```
 
+For an append-only log, `encode_line()` writes the same document on one line:
+
+```lino
+(o: (name "Alice") (age 30) (active true))
+```
+
+```python
+from link_notation_objects_codec import encode_line, decode_line
+
+decode_line(encode_line(data)) == data
+```
+
+```javascript
+import { encodeLine, decodeLine } from "lino-objects-codec";
+
+decodeLine({ notation: encodeLine({ obj: data }) });
+```
+
+```rust
+use lino_objects_codec::{decode_line, encode_line};
+
+assert_eq!(decode_line(&encode_line(&data)).unwrap(), data);
+```
+
+```csharp
+var line = Codec.EncodeLine(data);
+var record = Codec.DecodeLine(line);
+```
+
 The single-line base64 form is still available as `encode_compact()` (alias
-`encode_obfuscated()`) in every language, and `decode()` accepts both forms.
+`encode_obfuscated()`) in every language, and `decode()` accepts all three forms.
 
 ### C#
 
@@ -394,6 +424,29 @@ object, bare-value lines make an array:
   is base64-encoded, and it is marked individually as `(base64 "bGluZTEKbGluZTI=")`
 - The four languages produce byte-identical output, checked by the shared
   fixtures in [`fixtures/readable-format/cases.json`](fixtures/readable-format/cases.json)
+
+### Single-line format (`encode_line`)
+
+The same readable document written on one line, so an append-only log holds one
+record per line — appending is one write, compaction cuts at a newline, and
+`grep`, `tail -f` and `wc -l` all treat a line as one event:
+
+```lino
+(o: (bytes 2827) (complete true) (server (o: (host "127.0.0.1") (port 18878))))
+```
+
+- An object is `(o: (key value) …)` and an empty object is `(o:)`
+- An array is `(value …)` and an empty array is `()`
+- Scalars and strings are written exactly as in the indented form, so a string
+  keeps its own characters and a number keeps its type
+- The `o` marker is what removes the ambiguity a flat layout otherwise has:
+  without it `((key value))` reads both as a one-pair object and as an array
+  holding a two-element array. With it a bare `( )` on one line is always an
+  array, so a *hand-written* `(a 1)` is the two-element array — on one line,
+  objects say so
+- `decode()` reads this form too, so a log reader needs no flag saying which form
+  a file holds; `decode_line()` is the exact inverse of `encode_line()` and
+  rejects input spanning more than one line
 
 ### Compact format (`encode_compact`)
 

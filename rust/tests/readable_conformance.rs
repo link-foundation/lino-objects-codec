@@ -1,12 +1,13 @@
-//! Cross-language conformance tests for the readable, indented format.
+//! Cross-language conformance tests for the readable format, indented and on a
+//! single line.
 //!
 //! The fixtures in `fixtures/readable-format/cases.json` are shared by the
 //! JavaScript, Python, Rust and C# suites. Each case is written by hand from the
 //! format specification, so the four implementations check each other instead of
 //! agreeing on a shared mistake: every language must encode `value` to exactly
-//! `text` and decode `text` back to exactly `value`.
+//! `text` and to exactly `line`, and decode both back to exactly `value`.
 
-use lino_objects_codec::{decode, encode, LinoValue};
+use lino_objects_codec::{decode, decode_line, encode, encode_line, LinoValue};
 use serde_json::Value as Json;
 
 /// The language id this suite answers to in a case's `skip` map.
@@ -124,6 +125,10 @@ fn text(case: &Json) -> &str {
     case["text"].as_str().expect("every case has a text")
 }
 
+fn line(case: &Json) -> &str {
+    case["line"].as_str().expect("every case has a line")
+}
+
 #[test]
 fn every_case_is_either_active_or_skipped_with_a_reason() {
     let cases = cases();
@@ -196,6 +201,97 @@ fn decodes_every_shared_text_back_to_the_case_value() {
     assert!(
         failures.is_empty(),
         "decoding mismatches:\n{}",
+        failures.join("\n")
+    );
+}
+
+#[test]
+fn encodes_every_case_to_the_shared_line() {
+    let mut failures = Vec::new();
+    for case in cases() {
+        if is_skipped(&case) {
+            continue;
+        }
+        let encoded = encode_line(&build(&case["value"]));
+        if encoded != line(&case) {
+            failures.push(format!(
+                "{}: expected {:?}, got {:?}",
+                name(&case),
+                line(&case),
+                encoded
+            ));
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "single-line encoding mismatches:\n{}",
+        failures.join("\n")
+    );
+}
+
+#[test]
+fn decodes_every_shared_line_back_to_the_case_value() {
+    let mut failures = Vec::new();
+    for case in cases() {
+        if is_skipped(&case) {
+            continue;
+        }
+        let expected = build(&case["value"]);
+        match decode_line(line(&case)) {
+            Ok(decoded) if same(&decoded, &expected) => {}
+            Ok(decoded) => failures.push(format!(
+                "{}: expected {:?}, got {:?}",
+                name(&case),
+                expected,
+                decoded
+            )),
+            Err(error) => failures.push(format!("{}: {error}", name(&case))),
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "single-line decoding mismatches:\n{}",
+        failures.join("\n")
+    );
+}
+
+/// A log record is one line, so no case may spread over two of them.
+#[test]
+fn no_shared_line_contains_a_line_break() {
+    for case in cases() {
+        let line = line(&case);
+        assert!(
+            !line.contains('\n') && !line.contains('\r'),
+            "case {} has a line break in its single-line form: {line:?}",
+            name(&case)
+        );
+    }
+}
+
+/// `decode` reads both forms, so a log reader needs no flag saying which one it
+/// holds.
+#[test]
+fn the_plain_decoder_reads_every_shared_line() {
+    let mut failures = Vec::new();
+    for case in cases() {
+        if is_skipped(&case) {
+            continue;
+        }
+        let expected = build(&case["value"]);
+        match decode(line(&case)) {
+            Ok(decoded) if same(&decoded, &expected) => {}
+            Ok(decoded) => failures.push(format!(
+                "{}: expected {:?}, got {:?}",
+                name(&case),
+                expected,
+                decoded
+            )),
+            Err(error) => failures.push(format!("{}: {error}", name(&case))),
+        }
+    }
+    assert!(
+        failures.is_empty(),
+        "single-line decoding mismatches through `decode`:\n{}",
         failures.join("\n")
     );
 }

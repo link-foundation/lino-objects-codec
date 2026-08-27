@@ -3,6 +3,7 @@
  *
  * This library provides:
  * - Readable recursive indented Links Notation for JSON-style repository data
+ * - Readable single-line Links Notation for append-only logs, one record per line
  * - Typed serialization/deserialization for exact JavaScript object graphs
  * - Typed support for circular references and shared object identity
  * - JSON to Links Notation conversion utilities
@@ -20,6 +21,8 @@
 export {
   ObjectCodec,
   encode,
+  encodeLine,
+  decodeLine,
   encodeCompact,
   encodeObfuscated,
   decode,
@@ -31,6 +34,7 @@ export {
 export {
   DEFAULT_INDENT,
   BASE64_MARKER,
+  OBJECT_MARKER,
   CircularReferenceError,
 } from './readable.js';
 

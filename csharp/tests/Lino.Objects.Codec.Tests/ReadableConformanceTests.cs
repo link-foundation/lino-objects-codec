@@ -1,10 +1,11 @@
-// Cross-language conformance tests for the readable, indented format.
+// Cross-language conformance tests for the readable format, indented and on a
+// single line.
 //
 // The fixtures in fixtures/readable-format/cases.json are shared by the
 // JavaScript, Python, Rust and C# suites. Each case is written by hand from the
 // format specification, so the four implementations check each other instead of
 // agreeing on a shared mistake: every language must encode `value` to exactly
-// `text` and decode `text` back to exactly `value`.
+// `text` and to exactly `line`, and decode both back to exactly `value`.
 
 using System.Globalization;
 using System.Text.Json;
@@ -176,6 +177,60 @@ public class ReadableConformanceTests
         }
         var expected = Build(@case.GetProperty("value"));
         var decoded = Codec.Decode(@case.GetProperty("text").GetString()!);
+        Assert.True(Same(expected, decoded), $"case {name} decoded to a different value");
+    }
+
+    [Theory]
+    [MemberData(nameof(AllCases))]
+    public void EncodesEachCaseToTheSharedLine(string name, JsonElement @case)
+    {
+        _ = name;
+        if (IsSkipped(@case))
+        {
+            return;
+        }
+        var encoded = Codec.EncodeLine(Build(@case.GetProperty("value")));
+        Assert.Equal(@case.GetProperty("line").GetString(), encoded);
+    }
+
+    [Theory]
+    [MemberData(nameof(AllCases))]
+    public void DecodesEachSharedLineBackToTheCaseValue(string name, JsonElement @case)
+    {
+        if (IsSkipped(@case))
+        {
+            return;
+        }
+        var expected = Build(@case.GetProperty("value"));
+        var decoded = Codec.DecodeLine(@case.GetProperty("line").GetString()!);
+        Assert.True(Same(expected, decoded), $"case {name} decoded to a different value");
+    }
+
+    /// <summary>A log record is one line, so no case may spread over two of them.</summary>
+    [Theory]
+    [MemberData(nameof(AllCases))]
+    public void NoSharedLineContainsALineBreak(string name, JsonElement @case)
+    {
+        var line = @case.GetProperty("line").GetString()!;
+        Assert.True(
+            !line.Contains('\n') && !line.Contains('\r'),
+            $"case {name} has a line break in its single-line form");
+    }
+
+    /// <summary>
+    /// <see cref="Codec.Decode"/> reads both forms, so a log reader needs no flag
+    /// saying which one it holds.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(AllCases))]
+    public void ThePlainDecoderReadsEachSharedLine(string name, JsonElement @case)
+    {
+        if (IsSkipped(@case))
+        {
+            return;
+        }
+        var expected = Build(@case.GetProperty("value"));
+        var decoded = Codec.Decode(@case.GetProperty("line").GetString()!);
         Assert.True(Same(expected, decoded), $"case {name} decoded to a different value");
     }
 }

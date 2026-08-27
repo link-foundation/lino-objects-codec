@@ -40,10 +40,12 @@
 //! |---|---|
 //! | [`encode`] | readable, indented plain text (default) |
 //! | [`encode_with_indent`] | the same, with a custom indentation string |
+//! | [`encode_line`] | readable plain text on a single line, one record per line |
 //! | [`encode_compact`] / [`encode_obfuscated`] | the previous single-line, base64 form |
 //!
-//! [`decode`] accepts both forms, so files written by earlier versions keep working
-//! and migrate to the readable form on the next write.
+//! [`decode`] accepts all of them, so files written by earlier versions keep working
+//! and migrate to the readable form on the next write. [`decode_line`] is the exact
+//! inverse of [`encode_line`] and reads one record at a time.
 
 use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
 use links_notation::{parse_lino_to_links, LiNo};
@@ -53,7 +55,7 @@ use std::fmt;
 pub mod debug;
 pub mod readable;
 
-pub use readable::{BASE64_MARKER, DEFAULT_INDENT};
+pub use readable::{BASE64_MARKER, DEFAULT_INDENT, OBJECT_MARKER};
 
 /// Type identifiers used in the compact (base64) Links Notation format
 mod type_ids {
@@ -432,6 +434,24 @@ impl ObjectCodec {
         readable::encode(value, indent)
     }
 
+    /// Encode a LinoValue to the readable, single-line Links Notation format.
+    ///
+    /// The document is written as plain text on one line, so one value is one
+    /// line of an append-only log: appending is a single write, `grep`, `tail -f`
+    /// and `wc -l` keep working, and a compactor can cut at any newline without
+    /// splitting a record. See [`readable`] for the exact shape.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The value to encode
+    ///
+    /// # Returns
+    ///
+    /// A string in readable Links Notation format, containing no newline
+    pub fn encode_line(&mut self, value: &LinoValue) -> String {
+        readable::encode_line(value)
+    }
+
     /// Encode a LinoValue to the compact, single-line Links Notation format.
     ///
     /// Every value is tagged with its type and every string is base64-encoded, so
@@ -711,6 +731,23 @@ impl ObjectCodec {
         readable::decode(notation)
     }
 
+    /// Decode the readable, single-line Links Notation format.
+    ///
+    /// This is the exact inverse of [`ObjectCodec::encode_line`]. A document
+    /// spanning more than one line is rejected, so a reader that hands over one
+    /// record at a time cannot silently merge two records into one value.
+    ///
+    /// # Arguments
+    ///
+    /// * `notation` - One line in readable Links Notation format
+    ///
+    /// # Returns
+    ///
+    /// The reconstructed value, or an error
+    pub fn decode_line(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
+        readable::decode_line(notation)
+    }
+
     /// Decode the compact (base64) Links Notation format.
     ///
     /// # Arguments
@@ -945,6 +982,10 @@ const COMPACT_TYPE_MARKERS: [&str; 10] = [
     "dict",
 ];
 
+/// Markers a compact document writes without a payload, so `(null)` is a compact
+/// null while `(null 1)` is a readable line holding two values.
+const EMPTY_BODY_MARKERS: [&str; 2] = [type_ids::NULL, "None"];
+
 fn is_compact_notation(notation: &str) -> bool {
     let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
         return false;
@@ -954,26 +995,38 @@ fn is_compact_notation(notation: &str) -> bool {
         return false;
     };
 
-    let mut tokens = rest
-        .split(|c: char| c.is_whitespace() || c == '(' || c == ')')
-        .filter(|t| !t.is_empty());
-
-    let Some(mut marker) = tokens.next() else {
-        return false;
-    };
+    // A compact document names the type of its value first, so a link that opens
+    // another link straight away is the readable form, whose links nest.
+    let (mut marker, mut rest) = split_token(rest.trim_start());
 
     // Skip the `obj_N:` definition id, if present.
     if let Some(id) = marker.strip_suffix(':') {
         if !id.starts_with("obj_") {
             return false;
         }
-        let Some(next) = tokens.next() else {
-            return false;
-        };
-        marker = next;
+        (marker, rest) = split_token(rest.trim_start());
     }
 
-    COMPACT_TYPE_MARKERS.contains(&marker)
+    if !COMPACT_TYPE_MARKERS.contains(&marker) {
+        return false;
+    }
+
+    // A compact null is the whole link: `(null)`. A link that holds more than the
+    // marker is a readable line whose first value happens to be null.
+    if EMPTY_BODY_MARKERS.contains(&marker) {
+        return rest.trim_start().starts_with(')');
+    }
+
+    true
+}
+
+/// Split off the first token of a link body: the text up to the next whitespace
+/// or parenthesis. A body that opens with a parenthesis has no token of its own.
+fn split_token(input: &str) -> (&str, &str) {
+    let end = input
+        .find(|c: char| c.is_whitespace() || c == '(' || c == ')')
+        .unwrap_or(input.len());
+    input.split_at(end)
 }
 
 // Global codec instance for convenience functions
@@ -1027,6 +1080,78 @@ pub fn encode(value: &LinoValue) -> String {
 /// ```
 pub fn encode_with_indent(value: &LinoValue, indent: &str) -> String {
     DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_with_indent(value, indent))
+}
+
+/// Encode a value to the readable, single-line Links Notation format.
+///
+/// This is a convenience function that uses a thread-local codec instance.
+///
+/// The output holds no newline, so a record written with it is a line: an
+/// append-only log stays greppable, tailable and countable by `wc -l`, and the
+/// values in it can be read without decoding anything.
+///
+/// # Arguments
+///
+/// * `value` - The value to encode
+///
+/// # Returns
+///
+/// A string in readable Links Notation format, containing no newline
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{decode_line, encode_line, LinoValue};
+///
+/// let record = LinoValue::object([
+///     ("bytes", LinoValue::Int(2827)),
+///     ("complete", LinoValue::Bool(true)),
+///     ("phase", LinoValue::String("stream_end".to_string())),
+/// ]);
+/// let line = encode_line(&record);
+/// assert_eq!(line, r#"(o: (bytes 2827) (complete true) (phase "stream_end"))"#);
+/// assert_eq!(decode_line(&line).unwrap(), record);
+/// ```
+pub fn encode_line(value: &LinoValue) -> String {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().encode_line(value))
+}
+
+/// Decode one line of readable Links Notation back into a value.
+///
+/// This is a convenience function that uses a thread-local codec instance. It is
+/// the exact inverse of [`encode_line`]; input spanning more than one line is an
+/// error rather than a silently merged value.
+///
+/// # Arguments
+///
+/// * `notation` - One line in readable Links Notation format
+///
+/// # Returns
+///
+/// The reconstructed value, or an error
+///
+/// # Example
+///
+/// ```rust
+/// use lino_objects_codec::{decode_line, LinoValue};
+///
+/// let decoded = decode_line("(o: (id 1) (tags (\"a\" \"b\")))").unwrap();
+/// assert_eq!(
+///     decoded,
+///     LinoValue::object([
+///         ("id", LinoValue::Int(1)),
+///         (
+///             "tags",
+///             LinoValue::array([
+///                 LinoValue::String("a".to_string()),
+///                 LinoValue::String("b".to_string()),
+///             ])
+///         ),
+///     ])
+/// );
+/// ```
+pub fn decode_line(notation: &str) -> Result<LinoValue, CodecError> {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().decode_line(notation))
 }
 
 /// Encode a value to the compact, single-line Links Notation format.

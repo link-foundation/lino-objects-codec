@@ -10,6 +10,7 @@ A Python library to encode/decode objects to/from Links Notation format. This li
 ## Features
 
 - **Readable by Default**: `encode()` writes plain, indented text that can be read and reviewed
+- **One Record per Line**: `encode_line()` writes the same document on one line and `decode_line()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Universal Serialization**: Encode Python objects to Links Notation format
 - **Type Support**: Handle all common Python types:
   - Basic types: `None`, `bool`, `int`, `float`, `str`
@@ -120,6 +121,7 @@ assert decode(encode(complex_data)) == complex_data
 | --- | --- |
 | `encode(obj)` | Readable, indented Links Notation (the default) |
 | `encode(obj, indent="\t")` | Same, with a custom indentation string |
+| `encode_line(obj)` | The same readable document on one line, for append-only logs |
 | `encode_compact(obj)` | The previous single-line, base64 form |
 | `encode_obfuscated(obj)` | Alias of `encode_compact` |
 
@@ -192,6 +194,25 @@ list:
   base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
   everything around it stays readable
 
+### Single-line format (`encode_line`)
+
+The same readable document on one line, so an append-only log holds one record
+per line — appending is one write, compaction cuts at a newline, and `grep`,
+`tail -f` and `wc -l` all treat a line as one event:
+
+```lino
+(o: (bytes 2827) (complete true) (server (o: (host "127.0.0.1") (port 18878))))
+```
+
+- A dict is `(o: (key value) …)` and an empty dict is `(o:)`
+- A list is `(value …)` and an empty list is `()`
+- Scalars and strings are written exactly as in the indented form
+- The `o` marker removes the ambiguity a flat layout otherwise has: a bare `( )`
+  on one line is always a list, so a *hand-written* `(a 1)` is the two-element
+  list, not the one-pair dict
+- `decode()` reads this form too; `decode_line()` is its exact inverse and
+  rejects input spanning more than one line
+
 ### Compact format (`encode_compact`)
 
 The previous single-line form, kept for compatibility and for the object graphs
@@ -252,6 +273,36 @@ Decode Links Notation format to a Python object.
 
 **Returns:**
 - Reconstructed Python object
+
+### `encode_line(obj: Any) -> str`
+
+Encode a Python object into the readable format on one line.
+
+**Parameters:**
+- `obj`: The Python object to encode
+
+**Returns:**
+- String representation in readable Links Notation format, holding no newline
+
+```python
+>>> from link_notation_objects_codec import encode_line
+>>> encode_line({"age": 30})
+'(o: (age 30))'
+```
+
+### `decode_line(notation: str) -> Any`
+
+Decode one line of a readable Links Notation log. The exact inverse of
+`encode_line()`.
+
+**Parameters:**
+- `notation`: One line written by `encode_line()`
+
+**Returns:**
+- Reconstructed Python object
+
+**Raises:**
+- `ReadableFormatError`: If the input spans more than one line or is malformed
 
 ### `ObjectCodec`
 

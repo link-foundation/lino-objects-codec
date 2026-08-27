@@ -6,6 +6,8 @@ Links Notation format, with support for circular references and complex object g
 
 :func:`encode` writes the readable, indented format by default; :func:`decode`
 reads both that and the compact (base64) format written by earlier versions.
+:func:`encode_line` writes the same readable document on one line, so an
+append-only log holds one record per line.
 """
 
 from importlib.metadata import PackageNotFoundError
@@ -15,8 +17,10 @@ from .codec import (
     ObjectCodec,
     decode,
     decode_compact,
+    decode_line,
     encode,
     encode_compact,
+    encode_line,
     encode_obfuscated,
     is_compact_notation,
 )
@@ -30,6 +34,7 @@ from .format import (
 from .readable import (
     BASE64_MARKER,
     DEFAULT_INDENT,
+    OBJECT_MARKER,
     CircularReferenceError,
     ReadableFormatError,
 )
@@ -43,9 +48,11 @@ except PackageNotFoundError:  # pragma: no cover - only when run from a source t
 __all__ = [
     "ObjectCodec",
     "encode",
+    "encode_line",
     "encode_compact",
     "encode_obfuscated",
     "decode",
+    "decode_line",
     "decode_compact",
     "is_compact_notation",
     "escape_reference",
@@ -54,6 +61,7 @@ __all__ = [
     "parse_indented",
     "DEFAULT_INDENT",
     "BASE64_MARKER",
+    "OBJECT_MARKER",
     "ReadableFormatError",
     "CircularReferenceError",
     "DEBUG_ENV_VAR",

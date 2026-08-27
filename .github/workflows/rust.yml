@@ -286,9 +286,11 @@ jobs:
         working-directory: ./rust
         run: cargo test --doc --verbose
 
-      - name: Run example
+      - name: Run examples
         working-directory: ./rust
-        run: cargo run --example basic_usage
+        run: |
+          cargo run --example basic_usage
+          cargo run --example append_only_log
 
   # === BUILD ===
   # Build package - only runs if lint and test pass

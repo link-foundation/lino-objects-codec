@@ -1,5 +1,5 @@
 {
-  "description": "Shared conformance fixtures for the readable, indented Links Notation format. Every implementation must encode `value` to exactly `text` and decode `text` back to exactly `value`, so the four languages produce byte-identical documents.",
+  "description": "Shared conformance fixtures for the readable Links Notation format. Every implementation must encode `value` to exactly `text` in the indented form and to exactly `line` in the single-line form, and decode both back to exactly `value`, so the four languages produce byte-identical documents.",
   "valueEncoding": "A value is a single-key object naming its type: {\"null\": true}, {\"bool\": …}, {\"int\": …}, {\"float\": … | \"NaN\" | \"Infinity\" | \"-Infinity\"}, {\"str\": …}, {\"array\": [value, …]} or {\"object\": [[key, value], …]}. Object pairs are a list, not a map, because key order is part of the document.",
   "skip": "`skip` maps a language id (js, python, rust, csharp) to the reason its value model cannot represent the case. A suite skips exactly the cases naming it.",
   "cases": [
@@ -8,49 +8,56 @@
       "value": {
         "null": true
       },
-      "text": "null"
+      "text": "null",
+      "line": "null"
     },
     {
       "name": "bool_true",
       "value": {
         "bool": true
       },
-      "text": "true"
+      "text": "true",
+      "line": "true"
     },
     {
       "name": "bool_false",
       "value": {
         "bool": false
       },
-      "text": "false"
+      "text": "false",
+      "line": "false"
     },
     {
       "name": "int_positive",
       "value": {
         "int": 42
       },
-      "text": "42"
+      "text": "42",
+      "line": "42"
     },
     {
       "name": "int_negative",
       "value": {
         "int": -7
       },
-      "text": "-7"
+      "text": "-7",
+      "line": "-7"
     },
     {
       "name": "int_zero",
       "value": {
         "int": 0
       },
-      "text": "0"
+      "text": "0",
+      "line": "0"
     },
     {
       "name": "float_fraction",
       "value": {
         "float": 3.5
       },
-      "text": "3.5"
+      "text": "3.5",
+      "line": "3.5"
     },
     {
       "name": "float_whole",
@@ -60,133 +67,152 @@
       "text": "2.0",
       "skip": {
         "js": "JavaScript has one number type, so 2.0 and 2 are the same value and the trailing '.0' cannot be recovered when encoding"
-      }
+      },
+      "line": "2.0"
     },
     {
       "name": "float_negative",
       "value": {
         "float": -0.5
       },
-      "text": "-0.5"
+      "text": "-0.5",
+      "line": "-0.5"
     },
     {
       "name": "float_nan",
       "value": {
         "float": "NaN"
       },
-      "text": "NaN"
+      "text": "NaN",
+      "line": "NaN"
     },
     {
       "name": "float_infinity",
       "value": {
         "float": "Infinity"
       },
-      "text": "Infinity"
+      "text": "Infinity",
+      "line": "Infinity"
     },
     {
       "name": "float_negative_infinity",
       "value": {
         "float": "-Infinity"
       },
-      "text": "-Infinity"
+      "text": "-Infinity",
+      "line": "-Infinity"
     },
     {
       "name": "string_plain",
       "value": {
         "str": "root"
       },
-      "text": "\"root\""
+      "text": "\"root\"",
+      "line": "\"root\""
     },
     {
       "name": "string_empty",
       "value": {
         "str": ""
       },
-      "text": "\"\""
+      "text": "\"\"",
+      "line": "\"\""
     },
     {
       "name": "string_with_spaces",
       "value": {
         "str": "with spaces"
       },
-      "text": "\"with spaces\""
+      "text": "\"with spaces\"",
+      "line": "\"with spaces\""
     },
     {
       "name": "string_apostrophe",
       "value": {
         "str": "it's"
       },
-      "text": "\"it's\""
+      "text": "\"it's\"",
+      "line": "\"it's\""
     },
     {
       "name": "string_double_quote",
       "value": {
         "str": "he said \"hello\""
       },
-      "text": "'he said \"hello\"'"
+      "text": "'he said \"hello\"'",
+      "line": "'he said \"hello\"'"
     },
     {
       "name": "string_both_quote_kinds",
       "value": {
         "str": "both \"kinds\" of 'quotes'"
       },
-      "text": "\"both \"\"kinds\"\" of 'quotes'\""
+      "text": "\"both \"\"kinds\"\" of 'quotes'\"",
+      "line": "\"both \"\"kinds\"\" of 'quotes'\""
     },
     {
       "name": "string_unicode",
       "value": {
         "str": "unicode: 你好世界 🌍"
       },
-      "text": "\"unicode: 你好世界 🌍\""
+      "text": "\"unicode: 你好世界 🌍\"",
+      "line": "\"unicode: 你好世界 🌍\""
     },
     {
       "name": "string_parens_and_colon",
       "value": {
         "str": "parens (and) colons: yes"
       },
-      "text": "\"parens (and) colons: yes\""
+      "text": "\"parens (and) colons: yes\"",
+      "line": "\"parens (and) colons: yes\""
     },
     {
       "name": "string_numeric",
       "value": {
         "str": "18878"
       },
-      "text": "\"18878\""
+      "text": "\"18878\"",
+      "line": "\"18878\""
     },
     {
       "name": "string_boolean",
       "value": {
         "str": "true"
       },
-      "text": "\"true\""
+      "text": "\"true\"",
+      "line": "\"true\""
     },
     {
       "name": "string_with_newline",
       "value": {
         "str": "line1\nline2"
       },
-      "text": "(base64 \"bGluZTEKbGluZTI=\")"
+      "text": "(base64 \"bGluZTEKbGluZTI=\")",
+      "line": "(base64 \"bGluZTEKbGluZTI=\")"
     },
     {
       "name": "string_with_tab",
       "value": {
         "str": "a\tb"
       },
-      "text": "(base64 \"YQli\")"
+      "text": "(base64 \"YQli\")",
+      "line": "(base64 \"YQli\")"
     },
     {
       "name": "empty_array",
       "value": {
         "array": []
       },
-      "text": "()"
+      "text": "()",
+      "line": "()"
     },
     {
       "name": "empty_object",
       "value": {
         "object": []
       },
-      "text": "(\n)"
+      "text": "(\n)",
+      "line": "(o:)"
     },
     {
       "name": "array_of_scalars",
@@ -206,7 +232,8 @@
           }
         ]
       },
-      "text": "(\n  1\n  \"two\"\n  true\n  null\n)"
+      "text": "(\n  1\n  \"two\"\n  true\n  null\n)",
+      "line": "(1 \"two\" true null)"
     },
     {
       "name": "object_of_scalars",
@@ -226,7 +253,8 @@
           ]
         ]
       },
-      "text": "(\n  name \"Alice\"\n  age 30\n)"
+      "text": "(\n  name \"Alice\"\n  age 30\n)",
+      "line": "(o: (name \"Alice\") (age 30))"
     },
     {
       "name": "nested_empty_containers",
@@ -246,7 +274,8 @@
           ]
         ]
       },
-      "text": "(\n  empty_array ()\n  empty_object (\n  )\n)"
+      "text": "(\n  empty_array ()\n  empty_object (\n  )\n)",
+      "line": "(o: (empty_array ()) (empty_object (o:)))"
     },
     {
       "name": "array_of_objects_keeps_record_boundaries",
@@ -286,7 +315,8 @@
           }
         ]
       },
-      "text": "(\n  (\n    id \"1\"\n    label \"one\"\n  )\n  (\n    id \"2\"\n    label \"two\"\n  )\n)"
+      "text": "(\n  (\n    id \"1\"\n    label \"one\"\n  )\n  (\n    id \"2\"\n    label \"two\"\n  )\n)",
+      "line": "((o: (id \"1\") (label \"one\")) (o: (id \"2\") (label \"two\")))"
     },
     {
       "name": "array_of_arrays",
@@ -311,7 +341,95 @@
           }
         ]
       },
-      "text": "(\n  (\n    1\n    2\n  )\n  (\n    3\n  )\n)"
+      "text": "(\n  (\n    1\n    2\n  )\n  (\n    3\n  )\n)",
+      "line": "((1 2) (3))"
+    },
+    {
+      "name": "array_of_pairs_is_not_an_object",
+      "value": {
+        "array": [
+          {
+            "array": [
+              {
+                "str": "a"
+              },
+              {
+                "int": 1
+              }
+            ]
+          },
+          {
+            "array": [
+              {
+                "str": "b"
+              },
+              {
+                "int": 2
+              }
+            ]
+          }
+        ]
+      },
+      "text": "(\n  (\n    \"a\"\n    1\n  )\n  (\n    \"b\"\n    2\n  )\n)",
+      "line": "((\"a\" 1) (\"b\" 2))"
+    },
+    {
+      "name": "array_holding_one_object",
+      "value": {
+        "array": [
+          {
+            "object": [
+              [
+                "a",
+                {
+                  "int": 1
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      "text": "(\n  (\n    a 1\n  )\n)",
+      "line": "((o: (a 1)))"
+    },
+    {
+      "name": "array_holding_an_empty_object",
+      "value": {
+        "array": [
+          {
+            "object": []
+          }
+        ]
+      },
+      "text": "(\n  (\n  )\n)",
+      "line": "((o:))"
+    },
+    {
+      "name": "log_record_of_one_line",
+      "value": {
+        "object": [
+          [
+            "bytes",
+            {
+              "int": 2827
+            }
+          ],
+          [
+            "complete",
+            {
+              "bool": true
+            }
+          ],
+          [
+            "phase",
+            {
+              "str": "stream_end"
+            }
+          ]
+        ]
+      },
+      "text": "(\n  bytes 2827\n  complete true\n  phase \"stream_end\"\n)",
+      "line": "(o: (bytes 2827) (complete true) (phase \"stream_end\"))"
     },
     {
       "name": "single_pair_object_is_not_a_two_element_array",
@@ -325,7 +443,8 @@
           ]
         ]
       },
-      "text": "(\n  key \"value\"\n)"
+      "text": "(\n  key \"value\"\n)",
+      "line": "(o: (key \"value\"))"
     },
     {
       "name": "two_element_array_is_not_a_single_pair_object",
@@ -339,7 +458,8 @@
           }
         ]
       },
-      "text": "(\n  \"key\"\n  \"value\"\n)"
+      "text": "(\n  \"key\"\n  \"value\"\n)",
+      "line": "(\"key\" \"value\")"
     },
     {
       "name": "keys_that_need_quoting",
@@ -377,7 +497,8 @@
           ]
         ]
       },
-      "text": "(\n  \"two words\" 1\n  \"\" 2\n  \"base64\" 3\n  \"with:colon\" 4\n  'with\"quote' 5\n)"
+      "text": "(\n  \"two words\" 1\n  \"\" 2\n  \"base64\" 3\n  \"with:colon\" 4\n  'with\"quote' 5\n)",
+      "line": "(o: (\"two words\" 1) (\"\" 2) (\"base64\" 3) (\"with:colon\" 4) ('with\"quote' 5))"
     },
     {
       "name": "base64_key_with_plain_value_is_not_a_marker",
@@ -391,7 +512,8 @@
           ]
         ]
       },
-      "text": "(\n  \"base64\" \"plain text\"\n)"
+      "text": "(\n  \"base64\" \"plain text\"\n)",
+      "line": "(o: (\"base64\" \"plain text\"))"
     },
     {
       "name": "documented_router_state",
@@ -437,7 +559,8 @@
           ]
         ]
       },
-      "text": "(\n  type \"RouterState\"\n  server (\n    host \"127.0.0.1\"\n    port 18878\n  )\n  models (\n    \"claude-haiku\"\n    \"claude-opus\"\n  )\n)"
+      "text": "(\n  type \"RouterState\"\n  server (\n    host \"127.0.0.1\"\n    port 18878\n  )\n  models (\n    \"claude-haiku\"\n    \"claude-opus\"\n  )\n)",
+      "line": "(o: (type \"RouterState\") (server (o: (host \"127.0.0.1\") (port 18878))) (models (\"claude-haiku\" \"claude-opus\")))"
     },
     {
       "name": "mixed_types_in_one_object",
@@ -496,7 +619,8 @@
       "text": "(\n  int -7\n  float 3.5\n  whole_float 2.0\n  yes true\n  no false\n  nothing null\n  numeric_string \"18878\"\n  boolean_string \"true\"\n)",
       "skip": {
         "js": "JavaScript has one number type, so 2.0 and 2 are the same value and the trailing '.0' cannot be recovered when encoding"
-      }
+      },
+      "line": "(o: (int -7) (float 3.5) (whole_float 2.0) (yes true) (no false) (nothing null) (numeric_string \"18878\") (boolean_string \"true\"))"
     },
     {
       "name": "only_unwritable_values_are_marked",
@@ -522,7 +646,8 @@
           ]
         ]
       },
-      "text": "(\n  readable \"still visible\"\n  multiline (base64 \"bGluZTEKbGluZTI=\")\n  tabbed (base64 \"YQli\")\n)"
+      "text": "(\n  readable \"still visible\"\n  multiline (base64 \"bGluZTEKbGluZTI=\")\n  tabbed (base64 \"YQli\")\n)",
+      "line": "(o: (readable \"still visible\") (multiline (base64 \"bGluZTEKbGluZTI=\")) (tabbed (base64 \"YQli\")))"
     },
     {
       "name": "deeply_nested_objects",
@@ -554,7 +679,9 @@
           ]
         ]
       },
-      "text": "(\n  a (\n    b (\n      c (\n        1\n      )\n    )\n  )\n)"
+      "text": "(\n  a (\n    b (\n      c (\n        1\n      )\n    )\n  )\n)",
+      "line": "(o: (a (o: (b (o: (c (1)))))))"
     }
-  ]
+  ],
+  "lineEncoding": "`line` is the single-line form: the same document written without any line break, one record per line. Line breaks no longer separate rows there, so an object names itself with the `o` link id (`(o: (key value) ...)`, `(o:)` when empty) and a bare link is always an array."
 }

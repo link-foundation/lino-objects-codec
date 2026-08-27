@@ -128,6 +128,26 @@ public class ObjectCodec
     public string Encode(object? obj, string indent) => Readable.Encode(obj, indent);
 
     /// <summary>
+    /// Encode a C# object into the readable format on one line.
+    /// </summary>
+    /// <remarks>
+    /// The result holds no newline, so an append-only log keeps one record per
+    /// line and stays greppable, tailable and countable by <c>wc -l</c>. See
+    /// <see cref="Readable"/> for the shape.
+    /// </remarks>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in readable Links Notation format, on one line</returns>
+    public string EncodeLine(object? obj) => Readable.EncodeLine(obj);
+
+    /// <summary>
+    /// Decode one line of a readable Links Notation log back into a C# object.
+    /// </summary>
+    /// <remarks>The exact inverse of <see cref="EncodeLine"/>.</remarks>
+    /// <param name="notation">One line written by <see cref="EncodeLine"/></param>
+    /// <returns>Reconstructed C# object</returns>
+    public object? DecodeLine(string notation) => Readable.DecodeLine(notation);
+
+    /// <summary>
     /// Encode a C# object to the compact Links Notation format.
     /// </summary>
     /// <remarks>
@@ -655,6 +675,18 @@ public class ObjectCodec
     };
 
     /// <summary>
+    /// Markers a compact document writes without a payload.
+    /// </summary>
+    /// <remarks>
+    /// <c>(null)</c> is a compact null, while <c>(null 1)</c> is a readable line
+    /// holding two values, so the marker alone does not decide the format.
+    /// </remarks>
+    private static readonly HashSet<string> EmptyBodyMarkers = new(StringComparer.Ordinal)
+    {
+        TypeNull, "None",
+    };
+
+    /// <summary>
     /// Whether a document is in the compact format.
     /// </summary>
     /// <remarks>
@@ -677,27 +709,41 @@ public class ObjectCodec
             return false;
         }
 
-        var tokens = firstLine[1..]
-            .Split(new[] { ' ', '\t', '\r', '(', ')' }, StringSplitOptions.RemoveEmptyEntries);
-
-        if (tokens.Length == 0)
-        {
-            return false;
-        }
-
-        var marker = tokens[0];
+        var (marker, rest) = SplitToken(firstLine[1..].TrimStart());
 
         // Skip the `obj_N:` definition id, if present.
         if (marker.EndsWith(':'))
         {
-            if (!marker[..^1].StartsWith("obj_", StringComparison.Ordinal) || tokens.Length < 2)
+            if (!marker.StartsWith("obj_", StringComparison.Ordinal))
             {
                 return false;
             }
-            marker = tokens[1];
+            (marker, rest) = SplitToken(rest.TrimStart());
         }
 
-        return CompactTypeMarkers.Contains(marker);
+        if (!CompactTypeMarkers.Contains(marker))
+        {
+            return false;
+        }
+
+        // A compact `null` carries no payload, so `(null)` is a compact document
+        // while `(null 1)` is a readable line holding two values.
+        if (EmptyBodyMarkers.Contains(marker))
+        {
+            return rest.TrimStart().StartsWith(')');
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Split off the first token of a line: everything up to the next whitespace
+    /// or parenthesis, plus what follows it.
+    /// </summary>
+    private static (string Token, string Remainder) SplitToken(string input)
+    {
+        var end = input.IndexOfAny(new[] { ' ', '\t', '\r', '\n', '(', ')' });
+        return end < 0 ? (input, string.Empty) : (input[..end], input[end..]);
     }
 }
 
@@ -753,6 +799,20 @@ public static class Codec
     /// <param name="notation">String in Links Notation format</param>
     /// <returns>Reconstructed C# object</returns>
     public static object? Decode(string notation) => new ObjectCodec().Decode(notation);
+
+    /// <summary>
+    /// Encode an object into the readable format on one line.
+    /// </summary>
+    /// <param name="obj">The C# object to encode</param>
+    /// <returns>String representation in readable Links Notation format, on one line</returns>
+    public static string EncodeLine(object? obj) => new ObjectCodec().EncodeLine(obj);
+
+    /// <summary>
+    /// Decode one line of a readable Links Notation log.
+    /// </summary>
+    /// <param name="notation">One line written by <see cref="EncodeLine"/></param>
+    /// <returns>Reconstructed C# object</returns>
+    public static object? DecodeLine(string notation) => new ObjectCodec().DecodeLine(notation);
 
     /// <summary>
     /// Decode the compact Links Notation format to a C# object.

@@ -42,6 +42,35 @@ Only values that cannot be written as plain text are encoded: strings holding
 control characters (including newlines and tabs, which line-based tooling and
 CRLF normalisation would corrupt) are marked individually as ``(base64 "...")``
 instead of encoding the whole document.
+
+Single-line form
+----------------
+
+:func:`encode_line` writes the same document on one line, so one record is one
+line and an append-only log stays greppable, tailable and countable by ``wc -l``.
+Rows can no longer be told apart by line breaks there, so a dict names itself
+with the ``o`` link id the notation already has, and its pairs are written as
+their own links::
+
+    (o: (type "RouterState") (server (o: (host "127.0.0.1") (port 18878))))
+
+================== ===============================
+Value              Single-line form
+================== ===============================
+``dict``           ``(o: (key value) ...)``
+empty ``dict``     ``(o:)``
+``list``           ``(value ...)``
+empty ``list``     ``()``
+scalars            exactly as in the indented form
+================== ===============================
+
+The marker is what answers the ambiguity a flat layout otherwise has: without it
+``((key value))`` reads both as the one-pair dict and as the list holding the
+two-element list, and an empty key makes it worse. With it, a bare ``( )`` is
+always a list and a marked one is always a dict, so every value -- empty key
+included -- survives the round trip. Consequently a *hand-written* one-line link
+such as ``(a 1)`` is the two-element list, not the one-pair dict: on one line,
+dicts say so.
 """
 
 import base64
@@ -59,6 +88,9 @@ DEFAULT_INDENT = "  "
 
 #: Marker used for values that cannot be represented as plain text.
 BASE64_MARKER = "base64"
+
+#: Link id naming a dict in the single-line form, written as ``(o: ...)``.
+OBJECT_MARKER = "o"
 
 #: Quote characters that open a quoted reference.
 _QUOTE_CHARS = ("'", '"', "`")
@@ -102,6 +134,49 @@ def encode(value: Any, indent: str = DEFAULT_INDENT) -> str:
     return "".join(out)
 
 
+def encode_line(value: Any) -> str:
+    """Encode a value into the readable, single-line Links Notation form.
+
+    The result never contains a newline, so one value is one line of an
+    append-only log. See the module documentation for the shape.
+
+    Args:
+        value: The value to encode.
+
+    Returns:
+        The readable Links Notation document, on one line.
+
+    Raises:
+        CircularReferenceError: If the value refers back to itself.
+        TypeError: If the value holds a type this format cannot write.
+    """
+    out: list[str] = []
+    _write_line_value(value, out, set())
+    return "".join(out)
+
+
+def decode_line(text: str) -> Any:
+    """Decode the readable, single-line Links Notation form back into a value.
+
+    This is the exact inverse of :func:`encode_line`. Input spanning more than
+    one line is rejected: a line-based reader hands over one record at a time,
+    and silently accepting several would merge two records into one value.
+
+    Args:
+        text: One line of a readable Links Notation document.
+
+    Returns:
+        The reconstructed value.
+
+    Raises:
+        ReadableFormatError: If the input holds more than one line.
+    """
+    line = text.strip("\n\r")
+    if "\n" in line or "\r" in line:
+        raise ReadableFormatError("a single-line document cannot contain a line break")
+    return decode(line)
+
+
 def decode(text: str) -> Any:
     """Decode the readable, indented Links Notation form back into a value.
 
@@ -126,7 +201,7 @@ def decode(text: str) -> Any:
     if len(rows) == 1 and len(rows[0]) == 1:
         return _node_to_value(rows[0][0])
 
-    return _rows_to_value(rows, multiline=True)
+    return _rows_to_value(rows, multiline=True, object_marker=False)
 
 
 # === Encoding ===
@@ -160,6 +235,41 @@ def _write_value(value: Any, indent: str, level: int, out: list[str], path: set[
                 _write_value(item, indent, level + 1, out, path)
 
             _write_rows(items_seq, indent, level, out, write_item)
+        return
+
+    out.append(_format_scalar(value))
+
+
+def _write_line_value(value: Any, out: list[str], path: set[int]) -> None:
+    """Write a value on one line.
+
+    Dicts name themselves with the ``o`` link id and write each pair as its own
+    link, so nothing depends on where lines break.
+    """
+    if isinstance(value, dict):
+        with _on_path(value, path):
+            items = list(value.items())
+            if not items:
+                # ``()`` is the empty list, so the empty dict keeps its marker.
+                out.append(f"({OBJECT_MARKER}:)")
+                return
+
+            out.append(f"({OBJECT_MARKER}:")
+            for key, child in items:
+                out.append(f" ({_format_key(key)} ")
+                _write_line_value(child, out, path)
+                out.append(")")
+            out.append(")")
+        return
+
+    if isinstance(value, (list, tuple, set, frozenset)):
+        with _on_path(value, path):
+            out.append("(")
+            for index, item in enumerate(value):
+                if index:
+                    out.append(" ")
+                _write_line_value(item, out, path)
+            out.append(")")
         return
 
     out.append(_format_scalar(value))
@@ -313,7 +423,7 @@ class _Node:
     """A parsed element: a reference (remembering whether it was quoted, which is
     what distinguishes a string from a number) or a link."""
 
-    __slots__ = ("is_ref", "value", "quoted", "rows", "multiline")
+    __slots__ = ("is_ref", "value", "quoted", "rows", "multiline", "is_object")
 
     def __init__(
         self,
@@ -322,12 +432,14 @@ class _Node:
         quoted: bool = False,
         rows: list[list["_Node"]] | None = None,
         multiline: bool = False,
+        is_object: bool = False,
     ) -> None:
         self.is_ref = is_ref
         self.value = value
         self.quoted = quoted
         self.rows = rows if rows is not None else []
         self.multiline = multiline
+        self.is_object = is_object
 
 
 def _tokenize(text: str) -> list[_Token]:
@@ -438,11 +550,25 @@ class _Cursor:
 
         if token.kind == _TOKEN_OPEN:
             self.pos += 1
+            is_object = self._take_object_marker()
             multiline = self._link_is_multiline()
             rows = self.parse_rows(top_level=False)
-            return _Node(False, rows=rows, multiline=multiline)
+            return _Node(False, rows=rows, multiline=multiline, is_object=is_object)
 
         raise ReadableFormatError("unexpected token in readable notation")
+
+    def _take_object_marker(self) -> bool:
+        """Consume the ``o:`` marker if the link that just opened carries one,
+        which is how the single-line form says "this link is a dict, not a list"."""
+        if self.pos >= len(self.tokens):
+            return False
+        token = self.tokens[self.pos]
+        is_marker = (
+            token.kind == _TOKEN_REF and not token.quoted and token.value == f"{OBJECT_MARKER}:"
+        )
+        if is_marker:
+            self.pos += 1
+        return is_marker
 
     def _link_is_multiline(self) -> bool:
         """Whether the link that just opened spans more than one line, which is
@@ -458,16 +584,24 @@ class _Cursor:
 def _node_to_value(node: _Node) -> Any:
     if node.is_ref:
         return _ref_to_value(node.value, node.quoted)
-    return _rows_to_value(node.rows, node.multiline)
+    return _rows_to_value(node.rows, node.multiline, node.is_object)
 
 
-def _rows_to_value(rows: list[list[_Node]], multiline: bool) -> Any:
+def _rows_to_value(rows: list[list[_Node]], multiline: bool, object_marker: bool) -> Any:
+    if object_marker:
+        return _marked_object_to_value(rows)
+
     if not rows:
         return {} if multiline else []
 
     marked = _decode_marked_value(rows)
     if marked is not None:
         return marked[0]
+
+    # Written on one line, a link is a list of values: a dict on one line says so
+    # with the ``o:`` marker, which is what keeps ``(key value)`` unambiguous.
+    if not multiline:
+        return [_node_to_value(node) for row in rows for node in row]
 
     # ``key value`` on every line makes a dict; anything else is a list of values.
     is_dict = all(len(row) == 2 and row[0].is_ref for row in rows)
@@ -483,6 +617,36 @@ def _rows_to_value(rows: list[list[_Node]], multiline: bool) -> Any:
         for node in row:
             items.append(_node_to_value(node))
     return items
+
+
+def _marked_object_to_value(rows: list[list[_Node]]) -> dict[str, Any]:
+    """Build the dict a ``(o: (key value) ...)`` link describes.
+
+    Every value in it is a pair, so anything else is a malformed document rather
+    than a silent list.
+    """
+    result: dict[str, Any] = {}
+
+    for node in (node for row in rows for node in row):
+        if node.is_ref or node.is_object:
+            raise ReadableFormatError(
+                f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
+                "found a value that is not a pair"
+            )
+        if len(node.rows) != 1:
+            raise ReadableFormatError(
+                f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
+                f"found a link of {len(node.rows)} lines"
+            )
+        row = node.rows[0]
+        if len(row) != 2 or not row[0].is_ref:
+            raise ReadableFormatError(
+                f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
+                f"found a link of {len(row)} values"
+            )
+        result[row[0].value] = _node_to_value(row[1])
+
+    return result
 
 
 def _decode_marked_value(rows: list[list[_Node]]) -> tuple[str] | None:

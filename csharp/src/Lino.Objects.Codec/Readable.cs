@@ -75,6 +75,30 @@ public class CircularReferenceException : InvalidOperationException
 /// CRLF normalisation would corrupt) are marked individually as
 /// <c>(base64 "…")</c> instead of encoding the whole document.
 /// </para>
+/// <para>
+/// <see cref="EncodeLine"/> writes the same document on one line, so one record
+/// is one line and an append-only log stays greppable, tailable and countable by
+/// <c>wc -l</c>. Rows can no longer be told apart by line breaks there, so an
+/// object names itself with the <c>o</c> link id the notation already has, and
+/// its pairs are written as their own links:
+/// </para>
+/// <code>
+/// (o: (type "RouterState") (server (o: (host "127.0.0.1") (port 18878))) (models ("claude-haiku" "claude-opus")))
+/// </code>
+/// <para>
+/// An object is <c>(o: (key value) …)</c> and an empty one is <c>(o:)</c>; an
+/// array is <c>(value …)</c> and an empty one is <c>()</c>; scalars are written
+/// exactly as in the indented form.
+/// </para>
+/// <para>
+/// The marker is what answers the ambiguity a flat layout otherwise has: without
+/// it <c>((key value))</c> reads both as the one-pair object and as the array
+/// holding the two-element array, and an empty key makes it worse. With it, a
+/// bare <c>( )</c> is always an array and a marked one is always an object, so
+/// every value — empty key included — survives the round trip. Consequently a
+/// <em>hand-written</em> one-line link such as <c>(a 1)</c> is the two-element
+/// array, not the one-pair object: on one line, objects say so.
+/// </para>
 /// </remarks>
 public static class Readable
 {
@@ -83,6 +107,9 @@ public static class Readable
 
     /// <summary>Marker used for values that cannot be represented as plain text.</summary>
     public const string Base64Marker = "base64";
+
+    /// <summary>Link id naming an object in the single-line form, written as <c>(o: …)</c>.</summary>
+    public const string ObjectMarker = "o";
 
     /// <summary>Characters that cannot appear in a bare (unquoted) reference.</summary>
     private static readonly char[] QuoteChars = { '"', '\'', '`' };
@@ -113,6 +140,44 @@ public static class Readable
     public static string Encode(object? value) => Encode(value, DefaultIndent);
 
     /// <summary>
+    /// Encode a value into the readable, single-line Links Notation form.
+    /// </summary>
+    /// <remarks>
+    /// The result never contains a newline, so one value is one line of an
+    /// append-only log. See the class documentation for the shape.
+    /// </remarks>
+    /// <param name="value">The value to encode</param>
+    /// <returns>The readable Links Notation document, on one line</returns>
+    /// <exception cref="CircularReferenceException">If the value refers back to itself</exception>
+    public static string EncodeLine(object? value)
+    {
+        var output = new StringBuilder();
+        WriteLineValue(value, output, new HashSet<object>(ReferenceEqualityComparer.Instance));
+        return output.ToString();
+    }
+
+    /// <summary>
+    /// Decode the readable, single-line Links Notation form back into a value.
+    /// </summary>
+    /// <remarks>
+    /// This is the exact inverse of <see cref="EncodeLine"/>. Input spanning more
+    /// than one line is rejected: a line-based reader hands over one record at a
+    /// time, and silently accepting several would merge two records into one value.
+    /// </remarks>
+    /// <param name="text">One line of a readable Links Notation log</param>
+    /// <returns>The reconstructed value</returns>
+    /// <exception cref="FormatException">If the document is not well formed or holds a line break</exception>
+    public static object? DecodeLine(string text)
+    {
+        var line = text.Trim('\n', '\r');
+        if (line.Contains('\n') || line.Contains('\r'))
+        {
+            throw new FormatException("a single-line document cannot contain a line break");
+        }
+        return Decode(line);
+    }
+
+    /// <summary>
     /// Decode the readable, indented Links Notation form back into a value.
     /// </summary>
     /// <param name="text">The readable Links Notation document</param>
@@ -136,7 +201,7 @@ public static class Readable
             return NodeToValue(rows[0][0]);
         }
 
-        return RowsToValue(rows, true);
+        return RowsToValue(rows, true, false);
     }
 
     // === Encoding ===
@@ -193,6 +258,58 @@ public static class Readable
                 PushIndent(indent, level, output);
                 output.Append(')');
             }
+            path.Remove(items);
+            return;
+        }
+
+        output.Append(FormatScalar(value));
+    }
+
+    /// <summary>
+    /// Write a value on one line. Objects name themselves with the <c>o</c> link
+    /// id and write each pair as its own link, so nothing depends on where lines
+    /// break.
+    /// </summary>
+    private static void WriteLineValue(object? value, StringBuilder output, HashSet<object> path)
+    {
+        if (value is IDictionary<string, object?> dict)
+        {
+            EnterPath(dict, path);
+            if (dict.Count == 0)
+            {
+                // `()` is the empty array, so the empty object keeps its marker.
+                output.Append('(').Append(ObjectMarker).Append(":)");
+            }
+            else
+            {
+                output.Append('(').Append(ObjectMarker).Append(':');
+                foreach (var pair in dict)
+                {
+                    output.Append(" (").Append(FormatKey(pair.Key)).Append(' ');
+                    WriteLineValue(pair.Value, output, path);
+                    output.Append(')');
+                }
+                output.Append(')');
+            }
+            path.Remove(dict);
+            return;
+        }
+
+        if (value is System.Collections.IEnumerable items and not string)
+        {
+            EnterPath(items, path);
+            output.Append('(');
+            var first = true;
+            foreach (var item in items)
+            {
+                if (!first)
+                {
+                    output.Append(' ');
+                }
+                first = false;
+                WriteLineValue(item, output, path);
+            }
+            output.Append(')');
             path.Remove(items);
             return;
         }
@@ -349,6 +466,9 @@ public static class Readable
         public bool Quoted { get; init; }
         public List<List<Node>> Rows { get; init; } = new();
         public bool Multiline { get; init; }
+
+        /// <summary>Whether the link named itself an object with the <c>o:</c> marker.</summary>
+        public bool IsObject { get; init; }
     }
 
     /// <summary>
@@ -511,12 +631,33 @@ public static class Readable
             if (token.Kind == TokenKind.Open)
             {
                 Pos++;
+                var isObject = TakeObjectMarker();
                 var multiline = LinkIsMultiline();
                 var rows = ParseRows(false);
-                return new Node { IsRef = false, Rows = rows, Multiline = multiline };
+                return new Node { IsRef = false, Rows = rows, Multiline = multiline, IsObject = isObject };
             }
 
             throw new FormatException("unexpected token in readable notation");
+        }
+
+        /// <summary>
+        /// Consume the <c>o:</c> marker if the link that just opened carries one,
+        /// which is how the single-line form says "this link is an object, not an
+        /// array".
+        /// </summary>
+        private bool TakeObjectMarker()
+        {
+            if (Pos >= _tokens.Count)
+            {
+                return false;
+            }
+            var token = _tokens[Pos];
+            if (token.Kind != TokenKind.Ref || token.Quoted || token.Value != ObjectMarker + ":")
+            {
+                return false;
+            }
+            Pos++;
+            return true;
         }
 
         /// <summary>
@@ -541,10 +682,17 @@ public static class Readable
     }
 
     private static object? NodeToValue(Node node) =>
-        node.IsRef ? RefToValue(node.Value, node.Quoted) : RowsToValue(node.Rows, node.Multiline);
+        node.IsRef
+            ? RefToValue(node.Value, node.Quoted)
+            : RowsToValue(node.Rows, node.Multiline, node.IsObject);
 
-    private static object? RowsToValue(List<List<Node>> rows, bool multiline)
+    private static object? RowsToValue(List<List<Node>> rows, bool multiline, bool objectMarker)
     {
+        if (objectMarker)
+        {
+            return MarkedObjectToValue(rows);
+        }
+
         if (rows.Count == 0)
         {
             return multiline ? new Dictionary<string, object?>() : new List<object?>();
@@ -554,6 +702,22 @@ public static class Readable
         if (marked is not null)
         {
             return marked;
+        }
+
+        // Written on one line, a link is a list of values: an object on one line
+        // says so with the `o:` marker, which is what keeps `(key value)`
+        // unambiguous.
+        if (!multiline)
+        {
+            var line = new List<object?>();
+            foreach (var row in rows)
+            {
+                foreach (var node in row)
+                {
+                    line.Add(NodeToValue(node));
+                }
+            }
+            return line;
         }
 
         // `key value` on every line makes an object; anything else is a list of values.
@@ -578,6 +742,42 @@ public static class Readable
             }
         }
         return items;
+    }
+
+    /// <summary>
+    /// Build the object a <c>(o: (key value) …)</c> link describes. Every value in
+    /// it is a pair, so anything else is a malformed document rather than a
+    /// silent array.
+    /// </summary>
+    private static object? MarkedObjectToValue(List<List<Node>> rows)
+    {
+        var result = new Dictionary<string, object?>();
+
+        foreach (var node in rows.SelectMany(row => row))
+        {
+            if (node.IsRef || node.IsObject)
+            {
+                throw new FormatException(
+                    $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
+                    + "found a value that is not a pair");
+            }
+            if (node.Rows.Count != 1)
+            {
+                throw new FormatException(
+                    $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
+                    + $"found a link of {node.Rows.Count.ToString(CultureInfo.InvariantCulture)} lines");
+            }
+            var pair = node.Rows[0];
+            if (pair.Count != 2 || !pair[0].IsRef)
+            {
+                throw new FormatException(
+                    $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
+                    + $"found a link of {pair.Count.ToString(CultureInfo.InvariantCulture)} values");
+            }
+            result[pair[0].Value] = NodeToValue(pair[1]);
+        }
+
+        return result;
     }
 
     /// <summary>

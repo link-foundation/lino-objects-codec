@@ -42,6 +42,34 @@
  * CRLF normalisation would corrupt) are marked individually as
  * `(base64 "…")` instead of encoding the whole document.
  *
+ * # Single-line form
+ *
+ * {@link encodeLine} writes the same document on one line, so one record is one
+ * line and an append-only log stays greppable, tailable and countable by
+ * `wc -l`. Rows can no longer be told apart by line breaks there, so an object
+ * names itself with the `o` link id the notation already has, and its pairs are
+ * written as their own links:
+ *
+ * ```text
+ * (o: (type "RouterState") (server (o: (host "127.0.0.1") (port 18878))) (models ("claude-haiku" "claude-opus")))
+ * ```
+ *
+ * | Value            | Single-line form                |
+ * | ---------------- | ------------------------------- |
+ * | plain object     | `(o: (key value) …)`            |
+ * | empty object     | `(o:)`                          |
+ * | `Array`          | `(value …)`                     |
+ * | empty `Array`    | `()`                            |
+ * | scalars          | exactly as in the indented form |
+ *
+ * The marker is what answers the ambiguity a flat layout otherwise has: without
+ * it `((key value))` reads both as the one-pair object and as the array holding
+ * the two-element array, and an empty key makes it worse. With it, a bare `( )`
+ * is always an array and a marked one is always an object, so every value —
+ * empty key included — survives the round trip. Consequently a *hand-written*
+ * one-line link such as `(a 1)` is the two-element array, not the one-pair
+ * object: on one line, objects say so.
+ *
  * @module readable
  */
 
@@ -52,6 +80,9 @@ export const DEFAULT_INDENT = '  ';
 
 /** Marker used for values that cannot be represented as plain text. */
 export const BASE64_MARKER = 'base64';
+
+/** Link id naming an object in the single-line form, written as `(o: …)`. */
+export const OBJECT_MARKER = 'o';
 
 /** Literals that a bare reference decodes to instead of a string. */
 const BARE_LITERALS = new Map([
@@ -100,6 +131,61 @@ export function encode(value, indent = DEFAULT_INDENT) {
 }
 
 /**
+ * Encode a value into the readable, single-line Links Notation form.
+ *
+ * The result never contains a newline, so one value is one line of an
+ * append-only log. See the module documentation for the shape.
+ * @param {*} value - The value to encode
+ * @returns {string} The readable Links Notation document, on one line
+ * @throws {CircularReferenceError} If the value refers back to itself
+ * @throws {TypeError} If the value holds a type this format cannot write
+ */
+export function encodeLine(value) {
+  const out = [];
+  writeLineValue(value, out, new Set());
+  return out.join('');
+}
+
+/**
+ * Strip the line breaks framing a record, without a regular expression.
+ *
+ * A regular expression anchored at the end backtracks over a run of newlines,
+ * so a long run of them costs more than linear time. Scanning from both ends
+ * costs one pass over the framing characters.
+ * @param {string} text - The text to trim
+ * @returns {string} The text without leading or trailing newlines
+ */
+function trimLineBreaks(text) {
+  let start = 0;
+  let end = text.length;
+  while (start < end && (text[start] === '\n' || text[start] === '\r')) {
+    start += 1;
+  }
+  while (end > start && (text[end - 1] === '\n' || text[end - 1] === '\r')) {
+    end -= 1;
+  }
+  return text.slice(start, end);
+}
+
+/**
+ * Decode the readable, single-line Links Notation form back into a value.
+ *
+ * This is the exact inverse of {@link encodeLine}. Input spanning more than one
+ * line is rejected: a line-based reader hands over one record at a time, and
+ * silently accepting several would merge two records into one value.
+ * @param {string} text - One line of a readable Links Notation document
+ * @returns {*} The reconstructed value
+ * @throws {SyntaxError} If the input holds more than one line
+ */
+export function decodeLine(text) {
+  const line = trimLineBreaks(text);
+  if (line.includes('\n') || line.includes('\r')) {
+    throw new SyntaxError('a single-line document cannot contain a line break');
+  }
+  return decode(line);
+}
+
+/**
  * Decode the readable, indented Links Notation form back into a value.
  * @param {string} text - The readable Links Notation document
  * @returns {*} The reconstructed value
@@ -119,7 +205,7 @@ export function decode(text) {
     return nodeToValue(rows[0][0]);
   }
 
-  return rowsToValue(rows, true);
+  return rowsToValue(rows, true, false);
 }
 
 // === Encoding ===
@@ -150,6 +236,51 @@ function writeValue(value, indent, level, out, path) {
       out.push(' ');
       writeValue(child, indent, level + 1, out, path);
     });
+    path.delete(value);
+    return;
+  }
+
+  out.push(formatScalar(value));
+}
+
+/**
+ * Write a value on one line. Objects name themselves with the `o` link id and
+ * write each pair as its own link, so nothing depends on where lines break.
+ * @param {*} value - The value to write
+ * @param {string[]} out - Output chunks, appended in place
+ * @param {Set<object>} path - Containers currently being written
+ */
+function writeLineValue(value, out, path) {
+  if (Array.isArray(value)) {
+    enterPath(value, path);
+    out.push('(');
+    value.forEach((item, index) => {
+      if (index > 0) {
+        out.push(' ');
+      }
+      writeLineValue(item, out, path);
+    });
+    out.push(')');
+    path.delete(value);
+    return;
+  }
+
+  if (isPlainContainer(value)) {
+    enterPath(value, path);
+    const entries = Object.entries(value);
+    if (entries.length === 0) {
+      // `()` is the empty array, so the empty object keeps its marker.
+      out.push(`(${OBJECT_MARKER}:)`);
+      path.delete(value);
+      return;
+    }
+    out.push(`(${OBJECT_MARKER}:`);
+    for (const [key, child] of entries) {
+      out.push(` (${formatKey(key)} `);
+      writeLineValue(child, out, path);
+      out.push(')');
+    }
+    out.push(')');
     path.delete(value);
     return;
   }
@@ -471,12 +602,31 @@ class Cursor {
 
     if (token.kind === TOKEN_OPEN) {
       this.pos += 1;
+      const object = this.takeObjectMarker();
       const multiline = this.linkIsMultiline();
       const rows = this.parseRows(false);
-      return { ref: false, rows, multiline };
+      return { ref: false, rows, multiline, object };
     }
 
     throw new SyntaxError('unexpected token in readable notation');
+  }
+
+  /**
+   * Consume the `o:` marker if the link that just opened carries one, which is
+   * how the single-line form says "this link is an object, not an array".
+   * @returns {boolean} True when the marker was there and was consumed
+   */
+  takeObjectMarker() {
+    const token = this.tokens[this.pos];
+    const isMarker =
+      token !== undefined &&
+      token.kind === TOKEN_REF &&
+      !token.quoted &&
+      token.value === `${OBJECT_MARKER}:`;
+    if (isMarker) {
+      this.pos += 1;
+    }
+    return isMarker;
   }
 
   /**
@@ -500,10 +650,14 @@ class Cursor {
 function nodeToValue(node) {
   return node.ref
     ? refToValue(node.value, node.quoted)
-    : rowsToValue(node.rows, node.multiline);
+    : rowsToValue(node.rows, node.multiline, node.object);
 }
 
-function rowsToValue(rows, multiline) {
+function rowsToValue(rows, multiline, objectMarker) {
+  if (objectMarker) {
+    return markedObjectToValue(rows);
+  }
+
   if (rows.length === 0) {
     return multiline ? {} : [];
   }
@@ -511,6 +665,12 @@ function rowsToValue(rows, multiline) {
   const marked = decodeMarkedValue(rows);
   if (marked !== undefined) {
     return marked.value;
+  }
+
+  // Written on one line, a link is a list of values: an object on one line says
+  // so with the `o:` marker, which is what keeps `(key value)` unambiguous.
+  if (!multiline) {
+    return rows.flatMap((row) => row.map(nodeToValue));
   }
 
   // `key value` on every line makes an object; anything else is a list of values.
@@ -531,6 +691,42 @@ function rowsToValue(rows, multiline) {
     }
   }
   return items;
+}
+
+/**
+ * Build the object a `(o: (key value) …)` link describes. Every value in it is
+ * a pair, so anything else is a malformed document rather than a silent array.
+ * @param {Array<Array<object>>} rows - The rows of the marked link
+ * @returns {object} The reconstructed object
+ * @throws {SyntaxError} If the link holds anything that is not a pair
+ */
+function markedObjectToValue(rows) {
+  const result = {};
+
+  for (const node of rows.flat()) {
+    if (node.ref || node.object) {
+      throw new SyntaxError(
+        `an object marked '${OBJECT_MARKER}:' holds (key value) pairs, ` +
+          'found a value that is not a pair'
+      );
+    }
+    if (node.rows.length !== 1) {
+      throw new SyntaxError(
+        `an object marked '${OBJECT_MARKER}:' holds (key value) pairs, ` +
+          `found a link of ${node.rows.length} lines`
+      );
+    }
+    const [row] = node.rows;
+    if (row.length !== 2 || !row[0].ref) {
+      throw new SyntaxError(
+        `an object marked '${OBJECT_MARKER}:' holds (key value) pairs, ` +
+          `found a link of ${row.length} values`
+      );
+    }
+    result[row[0].value] = nodeToValue(row[1]);
+  }
+
+  return result;
 }
 
 /**
