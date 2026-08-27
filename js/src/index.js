@@ -34,6 +34,7 @@ export {
 export {
   DEFAULT_INDENT,
   BASE64_MARKER,
+  ESCAPED_MARKER,
   OBJECT_MARKER,
   CircularReferenceError,
 } from './readable.js';

@@ -17,7 +17,7 @@ A Python library to encode/decode objects to/from Links Notation format. This li
   - Collections: `list`, `dict`
   - Special float values: `NaN`, `Infinity`, `-Infinity`
 - **Object Identity**: Shared references and circular references are preserved by the compact format via object ids
-- **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
+- **Full Unicode**: Strings are always written as text — a newline stays a newline and a tab stays a tab, so every word stays greppable; only the characters a form cannot carry are percent-escaped, in a value marked individually as `(escaped "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 
@@ -190,9 +190,16 @@ list:
 - Numbers, `true`, `false` and `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
 - An empty list is `()`; an empty dict is `(` + newline + `)`
-- A value that cannot be written as text (one containing control characters) is
-  base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
-  everything around it stays readable
+- A string is written as text whatever it holds: a newline stays a newline and
+  a tab stays a tab, so every word stays greppable
+- A string containing the quote delimiter is written between a run of at least
+  three of them — `"""say "hi""""` — rather than by doubling the quote
+- Only the characters this form cannot carry — a carriage return and the
+  remaining control characters — are percent-escaped, in a value marked on its
+  own as `(escaped "first%0D")`; everything around it stays readable, and
+  `(base64 "…")` written by earlier versions is still decoded
+- A value that occurs more than once is written out every time: a shared
+  reference would make one record depend on another
 
 ### Single-line format (`encode_line`)
 
@@ -219,7 +226,8 @@ The previous single-line form, kept for compatibility and for the object graphs
 the readable tree cannot express (shared and circular references):
 
 - Basic types carry a type marker: `(int 42)`, `(str aGVsbG8=)`, `(bool true)`
-- Strings are base64-encoded to handle special characters and newlines
+- Strings are base64-encoded here, and only here: this is the one form that
+  asks for it by name, and `encode()` never reaches for it
 - Shared / cyclic collections are defined inline with a self-reference id, e.g.
   `(obj_0: list (int 1) (int 2) ...)`; a self-referencing dict `{"self": obj}`
   encodes as `(obj_0: dict ((str c2VsZg==) obj_0))`. See
