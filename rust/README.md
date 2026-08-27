@@ -32,6 +32,7 @@ lino-objects-codec = "0.1"
 - **Object Identity**: Shared references are preserved by the compact format
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Readable by Default**: `encode()` writes indented, plain-text Links Notation; keys and values stay legible and diffable
+- **One Record per Line**: `encode_line()` writes the same document on one line and `decode_line()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **UTF-8 Support**: Full Unicode string support written as text; only values that cannot be written as text (control characters) are base64-encoded, and each is marked individually
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 
@@ -72,6 +73,7 @@ The encoded document reads as:
 | --- | --- |
 | `encode(value)` | Readable, indented Links Notation (the default) |
 | `encode_with_indent(value, "\t")` | Same, with a custom indentation string |
+| `encode_line(value)` | The same readable document on one line, for append-only logs |
 | `encode_compact(value)` | The previous single-line base64 form |
 | `encode_obfuscated(value)` | Alias of `encode_compact` |
 
@@ -133,6 +135,27 @@ assert_eq!(encoded, "42");
 
 Same as `encode()`, but with a custom indentation string (the default is two spaces).
 
+#### `encode_line(value: &LinoValue) -> String`
+
+Encode a value to the readable form on one line, so one record is one line of an
+append-only log. An object names itself with the `o` marker, which is what keeps
+`(key value)` unambiguous; a bare link on one line is always an array.
+
+```rust
+let value = LinoValue::object([("age", LinoValue::Int(30))]);
+assert_eq!(encode_line(&value), "(o: (age 30))");
+```
+
+#### `decode_line(notation: &str) -> Result<LinoValue, CodecError>`
+
+The exact inverse of `encode_line()`. Input spanning more than one line is
+rejected, so two log records can never be merged into one value.
+
+```rust
+let decoded = decode_line("(o: (age 30))").unwrap();
+assert_eq!(decoded, LinoValue::object([("age", LinoValue::Int(30))]));
+```
+
 #### `encode_compact(value: &LinoValue) -> String`
 
 Encode a value to the single-line, base64 form used before version 0.3.
@@ -148,8 +171,8 @@ Alias of `encode_compact()`, named after what the base64 form actually does to t
 
 #### `decode(notation: &str) -> Result<LinoValue, CodecError>`
 
-Decode Links Notation format to a value. Both the readable and the compact form
-are accepted.
+Decode Links Notation format to a value. The readable form, the single-line form
+and the compact form are all accepted.
 
 ```rust
 let decoded = decode("42").unwrap();

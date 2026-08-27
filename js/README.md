@@ -27,6 +27,7 @@ These tools enable easy implementation of higher-level features like:
   - Collections: `Array`, `Object`
   - Special number values: `NaN`, `Infinity`, `-Infinity`
 - **Readable by Default**: `encode({ obj })` writes plain, indented text that can be read and reviewed
+- **One Record per Line**: `encodeLine({ obj })` writes the same document on one line and `decodeLine({ notation })` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Object Identity**: Shared references and circular references are preserved by the compact format (`encodeCompact`) via object ids
 - **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
@@ -112,6 +113,7 @@ console.log(decoded.self === decoded);
 | ------------------------------- | ----------------------------------------------- |
 | `encode({ obj })`               | Readable, indented Links Notation (the default) |
 | `encode({ obj, indent: '\t' })` | Same, with a custom indentation string          |
+| `encodeLine({ obj })`           | The same document on one line, for append-only logs |
 | `encodeCompact({ obj })`        | The previous single-line, base64 form           |
 | `encodeObfuscated({ obj })`     | Alias of `encodeCompact`                        |
 
@@ -334,6 +336,25 @@ bare-value lines make an array:
   base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
   everything around it stays readable
 
+### Single-line format (`encodeLine`)
+
+The same readable document on one line, so an append-only log holds one record
+per line — appending is one write, compaction cuts at a newline, and `grep`,
+`tail -f` and `wc -l` all treat a line as one event:
+
+```lino
+(o: (bytes 2827) (complete true) (server (o: (host "127.0.0.1") (port 18878))))
+```
+
+- An object is `(o: (key value) …)` and an empty object is `(o:)`
+- An array is `(value …)` and an empty array is `()`
+- Scalars and strings are written exactly as in the indented form
+- The `o` marker removes the ambiguity a flat layout otherwise has: a bare `( )`
+  on one line is always an array, so a _hand-written_ `(a 1)` is the two-element
+  array, not the one-pair object
+- `decode({ notation })` reads this form too; `decodeLine({ notation })` is its
+  exact inverse and rejects input spanning more than one line
+
 ### Compact format (`encodeCompact`)
 
 The previous single-line form, kept for compatibility and for the object graphs
@@ -440,6 +461,38 @@ Decode Links Notation format to a JavaScript object.
 **Returns:**
 
 - Reconstructed JavaScript object
+
+#### `encodeLine({ obj: obj })`
+
+Encode a JavaScript object into the readable format on one line.
+
+**Parameters:**
+
+- `options.obj` - The JavaScript object to encode
+
+**Returns:**
+
+- String representation in readable Links Notation format, holding no newline
+
+```javascript
+encodeLine({ obj: { age: 30 } }); // '(o: (age 30))'
+```
+
+#### `decodeLine({ notation: notation })`
+
+Decode one line of a readable Links Notation log. The exact inverse of `encodeLine`.
+
+**Parameters:**
+
+- `options.notation` - One line written by `encodeLine`
+
+**Returns:**
+
+- Reconstructed JavaScript object
+
+**Throws:**
+
+- `SyntaxError` - If the input spans more than one line or is malformed
 
 #### `ObjectCodec`
 

@@ -15,6 +15,7 @@ A C# library for working with Links Notation format. This library provides unive
   - Collections: `List<object?>`, `Dictionary<string, object?>`
   - Special float values: `NaN`, `Infinity`, `-Infinity`
 - **Readable by Default**: `Codec.Encode()` writes plain, indented text that can be read and reviewed
+- **One Record per Line**: `Codec.EncodeLine()` writes the same document on one line and `Codec.DecodeLine()` reads it back exactly, so an append-only log stays greppable, tailable and countable by `wc -l`
 - **Object Identity**: Shared references and circular references are preserved by the compact format (`Codec.EncodeCompact`) via object ids
 - **Full Unicode**: Strings are written as text; only a value that cannot be written as text (one holding control characters) is base64-encoded, and it is marked individually as `(base64 "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
@@ -153,6 +154,7 @@ decoded = Codec.Decode(Codec.Encode(complexData));
 | --- | --- |
 | `Codec.Encode(obj)` | Readable, indented Links Notation (the default) |
 | `Codec.Encode(obj, "\t")` | Same, with a custom indentation string |
+| `Codec.EncodeLine(obj)` | The same readable document on one line, for append-only logs |
 | `Codec.EncodeCompact(obj)` | The previous single-line, base64 form |
 | `Codec.EncodeObfuscated(obj)` | Alias of `Codec.EncodeCompact` |
 
@@ -216,6 +218,25 @@ bare-value lines make a list:
 - A value that cannot be written as text (one containing control characters) is
   base64-encoded on its own and marked as `(base64 "bGluZTEKbGluZTI=")`;
   everything around it stays readable
+
+### Single-line format (`Codec.EncodeLine`)
+
+The same readable document on one line, so an append-only log holds one record
+per line -- appending is one write, compaction cuts at a newline, and `grep`,
+`tail -f` and `wc -l` all treat a line as one event:
+
+```lino
+(o: (bytes 2827) (complete true) (server (o: (host "127.0.0.1") (port 18878))))
+```
+
+- A dictionary is `(o: (key value) …)` and an empty dictionary is `(o:)`
+- A list is `(value …)` and an empty list is `()`
+- Scalars and strings are written exactly as in the indented form
+- The `o` marker removes the ambiguity a flat layout otherwise has: a bare `( )`
+  on one line is always a list, so a *hand-written* `(a 1)` is the two-element
+  list, not the one-pair dictionary
+- `Codec.Decode` reads this form too; `Codec.DecodeLine` is its exact inverse and
+  rejects input spanning more than one line
 
 ### Compact format (`Codec.EncodeCompact`)
 
@@ -281,6 +302,34 @@ Decode Links Notation format to a C# object.
 
 **Throws:**
 - `InvalidOperationException` - If the type marker is unknown
+
+#### `Codec.EncodeLine(object? obj)`
+
+Encode a C# object into the readable format on one line.
+
+**Parameters:**
+- `obj` - The C# object to encode (can be null)
+
+**Returns:**
+- String representation in readable Links Notation format, holding no newline
+
+```csharp
+Codec.EncodeLine(new Dictionary<string, object?> { ["age"] = 30 }); // (o: (age 30))
+```
+
+#### `Codec.DecodeLine(string notation)`
+
+Decode one line of a readable Links Notation log. The exact inverse of
+`Codec.EncodeLine`.
+
+**Parameters:**
+- `notation` - One line written by `Codec.EncodeLine`
+
+**Returns:**
+- Reconstructed C# object (or null)
+
+**Throws:**
+- `FormatException` - If the input spans more than one line or is malformed
 
 ### ObjectCodec Class
 
