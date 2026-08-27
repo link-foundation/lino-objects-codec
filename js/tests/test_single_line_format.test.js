@@ -76,8 +76,11 @@ test('a string holding a newline still fits on one line', () => {
   const line = encodeLine({ obj: value });
   assert.equal(
     line,
-    '(o: (readable "still visible") (multiline (base64 "bGluZTEKbGluZTI=")))'
+    '(o: (readable "still visible") (multiline (escaped "line1%0Aline2")))'
   );
+  // The escape covers the newline, not the string: the words around it stay
+  // greppable, and so does the rest of the record.
+  assert.ok(line.includes('line1') && line.includes('line2'), line);
   assert.ok(!/[\n\r]/.test(line), line);
   assert.deepEqual(decodeLine({ notation: line }), value);
 });

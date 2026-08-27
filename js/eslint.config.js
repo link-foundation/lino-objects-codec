@@ -22,6 +22,8 @@ export default [
         __filename: 'readonly',
         // Node.js 18+ globals
         fetch: 'readonly',
+        TextEncoder: 'readonly',
+        TextDecoder: 'readonly',
         // Runtime-specific globals
         Bun: 'readonly',
         Deno: 'readonly',

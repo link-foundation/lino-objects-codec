@@ -31,16 +31,21 @@
  * | ------------------------------ | ---------------------------------------- |
  * | plain object                    | `( )` with one `key value` pair per line |
  * | `Array`                         | `( )` with one value per line            |
- * | `string`                        | quoted, never encoded                    |
+ * | `string`                        | quoted text, never base64                |
  * | `number` / `boolean` / `null` / `undefined` | bare, so the type survives the round trip |
  *
  * Empty containers keep their type: an empty array is `()` on one line, while an
  * empty object is written as `(` and `)` on two lines.
  *
- * Only values that cannot be written as plain text are encoded: strings holding
- * control characters (including newlines and tabs, which line-based tooling and
- * CRLF normalisation would corrupt) are marked individually as
- * `(base64 "…")` instead of encoding the whole document.
+ * Text is written as text. A string keeps every character a reader would grep
+ * for, including newlines and tabs, and is quoted with a run of delimiters —
+ * `"""say "hi""""` — when it holds the delimiter itself. Only the characters a
+ * form cannot carry are escaped, and only they: the value is then written as
+ * `(escaped "…")`, where `%XX` stands for one escaped byte. The indented form
+ * escapes the carriage return, which CRLF normalisation would otherwise rewrite,
+ * and the other control characters; the single-line form escapes the newline as
+ * well, because there a record ends at the end of the line. Nothing else is
+ * encoded: base64 lives in `encodeCompact`, which a caller asks for by name.
  *
  * # Single-line form
  *
@@ -78,8 +83,26 @@ import { trace } from './debug.js';
 /** Default indentation used by {@link encode}. */
 export const DEFAULT_INDENT = '  ';
 
-/** Marker used for values that cannot be represented as plain text. */
+/**
+ * Marker of a base64 payload. Written by `encodeCompact` and by versions up to
+ * 0.6.0 of the readable form, which is why it is still read.
+ */
 export const BASE64_MARKER = 'base64';
+
+/**
+ * Marker of a string whose unwritable characters are percent-escaped.
+ *
+ * It reads as `(escaped "line one%0Aline two")`. Only those characters change;
+ * the rest of the text is written as it is, so the value stays readable and
+ * greppable.
+ */
+export const ESCAPED_MARKER = 'escaped';
+
+/** The indented form, where a value may hold a line break of its own. */
+const FORM_INDENTED = 'indented';
+
+/** The single-line form, where a record ends at the end of the line. */
+const FORM_LINE = 'line';
 
 /** Link id naming an object in the single-line form, written as `(o: …)`. */
 export const OBJECT_MARKER = 'o';
@@ -99,7 +122,14 @@ const BARE_LITERALS = new Map([
 const QUOTE_CHARS = ['"', "'", '`'];
 
 /** Characters that force an object key to be quoted. */
-const KEY_NEEDS_QUOTES = /[\s()':`"]/;
+// eslint-disable-next-line no-control-regex
+const KEY_NEEDS_QUOTES = /[\s()':`"\u0000-\u001f\u007f-\u009f]/;
+
+/** Encoder used to write one character as the bytes its escapes stand for. */
+const UTF8_ENCODER = new TextEncoder();
+
+/** Decoder used to read an escaped payload back, rejecting invalid UTF-8. */
+const UTF8_DECODER = new TextDecoder('utf-8', { fatal: true });
 
 /**
  * Raised when a value cannot be written because it refers back to itself.
@@ -232,7 +262,7 @@ function writeValue(value, indent, level, out, path) {
       return;
     }
     writeRows(entries, indent, level, out, ([key, child]) => {
-      out.push(formatKey(key));
+      out.push(formatKey(key, FORM_INDENTED));
       out.push(' ');
       writeValue(child, indent, level + 1, out, path);
     });
@@ -240,7 +270,7 @@ function writeValue(value, indent, level, out, path) {
     return;
   }
 
-  out.push(formatScalar(value));
+  out.push(formatScalar(value, FORM_INDENTED));
 }
 
 /**
@@ -276,7 +306,7 @@ function writeLineValue(value, out, path) {
     }
     out.push(`(${OBJECT_MARKER}:`);
     for (const [key, child] of entries) {
-      out.push(` (${formatKey(key)} `);
+      out.push(` (${formatKey(key, FORM_LINE)} `);
       writeLineValue(child, out, path);
       out.push(')');
     }
@@ -285,7 +315,7 @@ function writeLineValue(value, out, path) {
     return;
   }
 
-  out.push(formatScalar(value));
+  out.push(formatScalar(value, FORM_LINE));
 }
 
 /**
@@ -353,9 +383,10 @@ function isPlainContainer(value) {
  * Format a scalar value. Strings are quoted, everything else stays bare so that
  * its type is recoverable when reading the document back.
  * @param {*} value - The scalar to format
+ * @param {string} form - The form being written, indented or single-line
  * @returns {string} The formatted scalar
  */
-function formatScalar(value) {
+function formatScalar(value, form) {
   if (value === null) {
     return 'null';
   }
@@ -369,7 +400,7 @@ function formatScalar(value) {
     return formatNumber(value);
   }
   if (typeof value === 'string') {
-    return formatString(value);
+    return formatString(value, form);
   }
   if (typeof value === 'bigint') {
     return value.toString();
@@ -391,36 +422,88 @@ function formatNumber(value) {
 }
 
 /**
- * Format a string value: quoted plain text, or an individually marked base64
- * payload when the text cannot be written literally.
+ * Format a string value. The text is written as text; when it holds characters
+ * this form cannot carry, those characters — and only those — are
+ * percent-escaped and the value is marked, so the rest of it stays readable and
+ * greppable.
  * @param {string} value - The string to format
+ * @param {string} form - The form being written, indented or single-line
  * @returns {string} The formatted string
  */
-function formatString(value) {
-  if (needsEncoding(value)) {
-    const payload = Buffer.from(value, 'utf-8').toString('base64');
-    return `(${BASE64_MARKER} ${quote(payload)})`;
+function formatString(value, form) {
+  const escaped = escapeUnwritable(value, form);
+  if (escaped === undefined) {
+    return quote(value);
   }
-  return quote(value);
+  return `(${ESCAPED_MARKER} ${quote(escaped)})`;
 }
 
 /**
- * A value can be written as text unless it contains control characters:
- * newlines break the line structure and CRLF normalisation would rewrite them.
- * @param {string} value - The string to check
- * @returns {boolean} True when the string has to be encoded
+ * Percent-escape the characters this form cannot carry, or `undefined` when the
+ * text can be written as it is. `%` is escaped too, so escaping is reversible.
+ * @param {string} value - The string to escape
+ * @param {string} form - The form being written, indented or single-line
+ * @returns {string|undefined} The escaped text, or undefined when none is needed
  */
-function needsEncoding(value) {
+function escapeUnwritable(value, form) {
+  let unwritable = false;
   for (const char of value) {
-    const code = char.codePointAt(0);
-    // Unicode category Cc: the C0 and C1 control ranges.
-    if (code <= 0x1f || (code >= 0x7f && code <= 0x9f)) {
-      return true;
+    if (isUnwritable(char, form)) {
+      unwritable = true;
+      break;
     }
   }
-  return false;
+  if (!unwritable) {
+    return undefined;
+  }
+
+  let out = '';
+  for (const char of value) {
+    if (char !== '%' && !isUnwritable(char, form)) {
+      out += char;
+      continue;
+    }
+    for (const byte of UTF8_ENCODER.encode(char)) {
+      out += `%${byte.toString(16).toUpperCase().padStart(2, '0')}`;
+    }
+  }
+  return out;
 }
 
+/**
+ * Whether a character has to be escaped in this form. A tab is text a reader can
+ * see, and so is a newline in the indented form, where a value may span lines.
+ * A carriage return is escaped because CRLF normalisation rewrites it, and the
+ * remaining control characters because they are not text at all.
+ * @param {string} char - The character to classify
+ * @param {string} form - The form being written, indented or single-line
+ * @returns {boolean} True when the character cannot be written as it is
+ */
+function isUnwritable(char, form) {
+  const code = char.codePointAt(0);
+  // Unicode category Cc: the C0 and C1 control ranges.
+  if (!(code <= 0x1f || (code >= 0x7f && code <= 0x9f))) {
+    return false;
+  }
+  if (char === '\t') {
+    return false;
+  }
+  if (char === '\n') {
+    return form === FORM_LINE;
+  }
+  return true;
+}
+
+/**
+ * Quote a value so that both this reader and the notation's own parser read it
+ * back unchanged. One delimiter is enough while the text holds none of that
+ * kind; when it holds both kinds, a run of at least three opens the notation's
+ * n-quote form, where the text is literal and only a run at least as long closes
+ * it. A value starting with the delimiter would lengthen the opening run, so the
+ * other delimiter is used for it.
+ * @param {string} value - The text to quote
+ * @returns {string} The quoted text
+ */
 function quote(value) {
   if (!value.includes('"')) {
     return `"${value}"`;
@@ -428,23 +511,45 @@ function quote(value) {
   if (!value.includes("'")) {
     return `'${value}'`;
   }
-  // Both quote styles are present: double the double quotes, as the parser expects.
-  return `"${value.replaceAll('"', '""')}"`;
+
+  const delimiter = value.startsWith('"') ? "'" : '"';
+  // A run of two delimiters is the empty value, so the n-quote form starts at
+  // three; beyond that the run only has to outrun the longest one inside.
+  const count = Math.max(longestRun(value, delimiter) + 1, 3);
+  const run = delimiter.repeat(count);
+  return `${run}${value}${run}`;
+}
+
+/**
+ * The length of the longest run of a character in a text.
+ * @param {string} value - The text to scan
+ * @param {string} char - The character to count
+ * @returns {number} The length of the longest run
+ */
+function longestRun(value, char) {
+  let longest = 0;
+  let current = 0;
+  for (const candidate of value) {
+    current = candidate === char ? current + 1 : 0;
+    longest = Math.max(longest, current);
+  }
+  return longest;
 }
 
 /**
  * Format an object key. Keys are bare when they read as plain identifiers.
  * @param {string} key - The key to format
+ * @param {string} form - The form being written, indented or single-line
  * @returns {string} The formatted key
  */
-function formatKey(key) {
+function formatKey(key, form) {
   const plain =
     key.length > 0 &&
     key !== BASE64_MARKER &&
-    !needsEncoding(key) &&
+    key !== ESCAPED_MARKER &&
     !KEY_NEEDS_QUOTES.test(key);
 
-  return plain ? key : formatString(key);
+  return plain ? key : formatString(key, form);
 }
 
 // === Decoding ===
@@ -507,30 +612,87 @@ function tokenize(text) {
 }
 
 /**
- * Read a quoted reference, where a doubled quote character means a literal one.
+ * Read a quoted reference. The opening run of delimiters says how it is read,
+ * which is what the notation's own parser does:
+ *
+ * * one delimiter — the text is literal and a doubled delimiter is one literal
+ *   delimiter, which is how versions up to 0.6.0 wrote such values;
+ * * two — the empty value;
+ * * three or more — the n-quote form: the text is literal, and the value ends at
+ *   the first run at least as long, whose last delimiters close it. A longer run
+ *   therefore belongs to the text, so a value may end with a delimiter.
  * @param {string[]} chars - The document characters
  * @param {number} start - Index of the opening quote
  * @param {string} quoteChar - The quote character used
  * @returns {[string, number]} The value and the index after the closing quote
  */
 function readQuoted(chars, start, quoteChar) {
-  let value = '';
-  let i = start + 1;
+  const opening = runLength(chars, start, quoteChar);
 
-  while (i < chars.length) {
-    if (chars[i] === quoteChar) {
-      if (chars[i + 1] === quoteChar) {
-        value += quoteChar;
-        i += 2;
-        continue;
-      }
-      return [value, i + 1];
-    }
-    value += chars[i];
-    i += 1;
+  if (opening === 2) {
+    return ['', start + 2];
   }
 
-  throw new SyntaxError(
+  if (opening === 1) {
+    let value = '';
+    let i = start + 1;
+
+    while (i < chars.length) {
+      if (chars[i] === quoteChar) {
+        if (chars[i + 1] === quoteChar) {
+          value += quoteChar;
+          i += 2;
+          continue;
+        }
+        return [value, i + 1];
+      }
+      value += chars[i];
+      i += 1;
+    }
+
+    throw unterminatedQuote(start);
+  }
+
+  let i = start + opening;
+  while (i < chars.length) {
+    if (chars[i] !== quoteChar) {
+      i += 1;
+      continue;
+    }
+
+    const run = runLength(chars, i, quoteChar);
+    if (run >= opening) {
+      const value = chars.slice(start + opening, i + run - opening).join('');
+      return [value, i + run];
+    }
+    i += run;
+  }
+
+  throw unterminatedQuote(start);
+}
+
+/**
+ * The length of the run of a character that starts at an index.
+ * @param {string[]} chars - The document characters
+ * @param {number} start - Index the run starts at
+ * @param {string} char - The character to count
+ * @returns {number} The length of the run
+ */
+function runLength(chars, start, char) {
+  let i = start;
+  while (i < chars.length && chars[i] === char) {
+    i += 1;
+  }
+  return i - start;
+}
+
+/**
+ * The error a quoted value that never closes raises.
+ * @param {number} start - Index of the opening quote
+ * @returns {SyntaxError} The error to throw
+ */
+function unterminatedQuote(start) {
+  return new SyntaxError(
     `unterminated quoted value starting at character ${start}`
   );
 }
@@ -674,12 +836,14 @@ function rowsToValue(rows, multiline, objectMarker) {
   }
 
   // `key value` on every line makes an object; anything else is a list of values.
-  const isObject = rows.every((row) => row.length === 2 && row[0].ref);
+  const isObject = rows.every(
+    (row) => row.length === 2 && nodeToKey(row[0]) !== undefined
+  );
 
   if (isObject) {
     const result = {};
     for (const row of rows) {
-      result[row[0].value] = nodeToValue(row[1]);
+      result[nodeToKey(row[0])] = nodeToValue(row[1]);
     }
     return result;
   }
@@ -717,21 +881,53 @@ function markedObjectToValue(rows) {
       );
     }
     const [row] = node.rows;
-    if (row.length !== 2 || !row[0].ref) {
+    if (row.length !== 2) {
       throw new SyntaxError(
         `an object marked '${OBJECT_MARKER}:' holds (key value) pairs, ` +
           `found a link of ${row.length} values`
       );
     }
-    result[row[0].value] = nodeToValue(row[1]);
+    const key = nodeToKey(row[0]);
+    if (key === undefined) {
+      throw new SyntaxError(
+        `an object marked '${OBJECT_MARKER}:' holds (key value) pairs, ` +
+          'found a pair whose key is not text'
+      );
+    }
+    result[key] = nodeToValue(row[1]);
   }
 
   return result;
 }
 
 /**
- * Recognise `(base64 "…")`, the individual marker for values that could not be
- * written as text. A quoted `base64` key is an ordinary object key, not a marker.
+ * The key a node in key position spells: a reference is the key itself, and a
+ * marked link is the text its marker escapes, which is how a key holding a
+ * character the form cannot carry stays a key instead of turning its object into
+ * an array.
+ * @param {object} node - The node standing in key position
+ * @returns {string|undefined} The key, or undefined when the node is not one
+ */
+function nodeToKey(node) {
+  if (node.ref) {
+    return node.value;
+  }
+  if (node.object) {
+    return undefined;
+  }
+  try {
+    const marked = decodeMarkedValue(node.rows);
+    return marked === undefined ? undefined : marked.value;
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * Recognise a marked value: `(escaped "…")`, whose text is written as it is
+ * except for the percent-escaped characters this form cannot carry, and
+ * `(base64 "…")`, which versions up to 0.6.0 wrote and which is still read. A
+ * quoted marker is an ordinary object key, not a marker.
  * @param {Array<Array<object>>} rows - The rows of the link being decoded
  * @returns {{value: string}|undefined} The decoded string, wrapped so that an
  *   empty result is still distinguishable from "not a marker"
@@ -742,15 +938,64 @@ function decodeMarkedValue(rows) {
   }
 
   const [marker, payload] = rows[0];
-  if (!marker.ref || marker.quoted || marker.value !== BASE64_MARKER) {
+  if (!marker.ref || marker.quoted) {
     return undefined;
   }
   if (!payload.ref || !payload.quoted) {
     return undefined;
   }
 
-  const decoded = Buffer.from(payload.value, 'base64').toString('utf-8');
-  return { value: decoded };
+  if (marker.value === ESCAPED_MARKER) {
+    return { value: unescape(payload.value) };
+  }
+
+  if (marker.value === BASE64_MARKER) {
+    return { value: Buffer.from(payload.value, 'base64').toString('utf-8') };
+  }
+
+  return undefined;
+}
+
+/**
+ * Undo the percent-escaping of an `(escaped "…")` payload. Escapes stand for
+ * bytes, so a character outside ASCII is written as its UTF-8 bytes and read
+ * back from them.
+ * @param {string} payload - The escaped text
+ * @returns {string} The text the payload stands for
+ * @throws {SyntaxError} If an escape is truncated, malformed or not UTF-8
+ */
+function unescape(payload) {
+  const chars = Array.from(payload);
+  const bytes = [];
+  let i = 0;
+
+  while (i < chars.length) {
+    if (chars[i] !== '%') {
+      for (const byte of UTF8_ENCODER.encode(chars[i])) {
+        bytes.push(byte);
+      }
+      i += 1;
+      continue;
+    }
+
+    const escape = chars.slice(i + 1, i + 3).join('');
+    if (escape.length !== 2) {
+      throw new SyntaxError(
+        `truncated escape at character ${i} of an escaped value`
+      );
+    }
+    if (!/^[0-9a-fA-F]{2}$/.test(escape)) {
+      throw new SyntaxError(`invalid escape '%${escape}' in an escaped value`);
+    }
+    bytes.push(Number.parseInt(escape, 16));
+    i += 3;
+  }
+
+  try {
+    return UTF8_DECODER.decode(Uint8Array.from(bytes));
+  } catch {
+    throw new SyntaxError('invalid UTF-8 escaped value');
+  }
 }
 
 /**
