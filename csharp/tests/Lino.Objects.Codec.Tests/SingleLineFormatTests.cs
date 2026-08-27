@@ -194,6 +194,21 @@ public class SingleLineFormatTests
         Assert.Null(Codec.Decode("(null)"));
     }
 
+    /// <summary>
+    /// The JavaScript sibling trimmed the framing newlines with a regular
+    /// expression that backtracked once per newline (CodeQL js/polynomial-redos).
+    /// Every language strips them with a linear scan instead, and still refuses
+    /// input holding more than one line.
+    /// </summary>
+    [Fact]
+    public void ALongRunOfLineBreaksIsRejectedWithoutASlowdown()
+    {
+        var notation = Codec.EncodeLine(LogRecord()) + new string('\n', 200_000) + "x";
+        var started = System.Diagnostics.Stopwatch.StartNew();
+        Assert.Throws<FormatException>(() => Codec.DecodeLine(notation));
+        Assert.True(started.Elapsed < TimeSpan.FromSeconds(2), $"took {started.Elapsed}");
+    }
+
     /// <summary>Structural comparison, since dictionaries and lists compare by reference.</summary>
     private static bool Equivalent(object? left, object? right)
     {

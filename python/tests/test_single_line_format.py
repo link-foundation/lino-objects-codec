@@ -7,6 +7,7 @@ event. ``encode()`` spreads a record over many lines and ``encode_compact()``
 hides it in base64, so neither serves that reader.
 """
 
+import time
 from typing import Any
 
 import pytest
@@ -122,3 +123,15 @@ def test_a_line_starting_with_none_is_still_read_as_a_line() -> None:
     # language writes, and stays read that way, so documents written before this
     # format keep decoding.
     assert decode("(None)") is None
+
+
+def test_a_long_run_of_line_breaks_is_rejected_without_a_slowdown() -> None:
+    # The JavaScript sibling trimmed the framing newlines with a regular
+    # expression that backtracked once per newline (CodeQL js/polynomial-redos).
+    # Every language strips them with a linear scan instead, and still refuses
+    # input holding more than one line.
+    notation = LOG_RECORD_LINE + "\n" * 200_000 + "x"
+    started = time.perf_counter()
+    with pytest.raises(ReadableFormatError):
+        decode_line(notation)
+    assert time.perf_counter() - started < 2.0

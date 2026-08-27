@@ -114,3 +114,15 @@ test('a line starting with null is still read as a line', () => {
   // read that way, so documents written before this format keep decoding.
   assert.equal(decode({ notation: '(null)' }), null);
 });
+
+test('a long run of line breaks is rejected without a slowdown', () => {
+  // CodeQL alert js/polynomial-redos: trimming the framing newlines with
+  // `/[\n\r]+$/` backtracked once per newline, so a record followed by a long
+  // run of them cost quadratic time. The scan that replaced it is linear, and
+  // the input is still refused for holding more than one line.
+  const notation = `${LOG_RECORD_LINE}${'\n'.repeat(200000)}x`;
+  const started = process.hrtime.bigint();
+  assert.throws(() => decodeLine({ notation }), SyntaxError);
+  const elapsedMs = Number(process.hrtime.bigint() - started) / 1e6;
+  assert.ok(elapsedMs < 2000, `took ${elapsedMs}ms`);
+});

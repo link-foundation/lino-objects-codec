@@ -176,3 +176,15 @@ fn a_line_starting_with_null_is_still_read_as_a_line() {
     // read that way, so documents written before this format keep decoding.
     assert_eq!(decode("(null)"), Ok(LinoValue::Null));
 }
+
+/// The JavaScript sibling trimmed the framing newlines with a regular
+/// expression that backtracked once per newline (CodeQL js/polynomial-redos).
+/// Every language strips them with a linear scan instead, and still refuses
+/// input holding more than one line.
+#[test]
+fn a_long_run_of_line_breaks_is_rejected_without_a_slowdown() {
+    let notation = format!("{}{}x", encode_line(&log_record()), "\n".repeat(200_000));
+    let started = std::time::Instant::now();
+    assert!(decode_line(&notation).is_err());
+    assert!(started.elapsed() < std::time::Duration::from_secs(2));
+}

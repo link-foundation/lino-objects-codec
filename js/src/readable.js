@@ -147,6 +147,27 @@ export function encodeLine(value) {
 }
 
 /**
+ * Strip the line breaks framing a record, without a regular expression.
+ *
+ * A regular expression anchored at the end backtracks over a run of newlines,
+ * so a long run of them costs more than linear time. Scanning from both ends
+ * costs one pass over the framing characters.
+ * @param {string} text - The text to trim
+ * @returns {string} The text without leading or trailing newlines
+ */
+function trimLineBreaks(text) {
+  let start = 0;
+  let end = text.length;
+  while (start < end && (text[start] === '\n' || text[start] === '\r')) {
+    start += 1;
+  }
+  while (end > start && (text[end - 1] === '\n' || text[end - 1] === '\r')) {
+    end -= 1;
+  }
+  return text.slice(start, end);
+}
+
+/**
  * Decode the readable, single-line Links Notation form back into a value.
  *
  * This is the exact inverse of {@link encodeLine}. Input spanning more than one
@@ -157,7 +178,7 @@ export function encodeLine(value) {
  * @throws {SyntaxError} If the input holds more than one line
  */
 export function decodeLine(text) {
-  const line = text.replace(/^[\n\r]+/, '').replace(/[\n\r]+$/, '');
+  const line = trimLineBreaks(text);
   if (line.includes('\n') || line.includes('\r')) {
     throw new SyntaxError('a single-line document cannot contain a line break');
   }
