@@ -23,9 +23,9 @@ FIXTURES = Path(__file__).resolve().parents[2] / "fixtures" / "readable-format" 
 _SPECIAL_FLOATS = {"NaN": math.nan, "Infinity": math.inf, "-Infinity": -math.inf}
 
 
-def _load_cases() -> list[dict[str, Any]]:
+def _section(key: str) -> list[dict[str, Any]]:
     document = json.loads(FIXTURES.read_text(encoding="utf-8"))
-    return document["cases"]
+    return document[key]
 
 
 def _build(spec: dict[str, Any]) -> Any:
@@ -63,8 +63,9 @@ def _same(left: Any, right: Any) -> bool:
     return type(left) is type(right) and left == right
 
 
-CASES = _load_cases()
+CASES = _section("cases")
 ACTIVE = [case for case in CASES if LANGUAGE not in case.get("skip", {})]
+LEGACY = _section("legacy")
 
 
 def test_every_case_is_either_active_or_skipped_with_a_reason() -> None:
@@ -108,3 +109,20 @@ def test_decode_reads_the_shared_line_too(case: dict[str, Any]) -> None:
     expected = _build(case["value"])
     decoded = decode(case["line"])
     assert _same(decoded, expected), f"{decoded!r} != {expected!r}"
+
+
+@pytest.mark.parametrize("case", LEGACY, ids=lambda case: case["name"])
+def test_decode_reads_the_document_an_earlier_version_wrote(case: dict[str, Any]) -> None:
+    """Documents written before this format wrote text as text keep decoding, so
+    upgrading a reader never loses a stored record."""
+    expected = _build(case["value"])
+    decoded = decode(case["text"])
+    assert _same(decoded, expected), f"{decoded!r} != {expected!r}"
+
+
+def test_no_shared_document_hides_its_text_in_base64() -> None:
+    """The point of the change: an implementation may not reach for base64 while
+    writing a readable document, whatever the text holds."""
+    for case in CASES:
+        assert 'base64 "' not in case["text"], case["name"]
+        assert 'base64 "' not in case["line"], case["name"]

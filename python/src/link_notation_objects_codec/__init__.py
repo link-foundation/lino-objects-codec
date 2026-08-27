@@ -34,6 +34,7 @@ from .format import (
 from .readable import (
     BASE64_MARKER,
     DEFAULT_INDENT,
+    ESCAPED_MARKER,
     OBJECT_MARKER,
     CircularReferenceError,
     ReadableFormatError,
@@ -61,6 +62,7 @@ __all__ = [
     "parse_indented",
     "DEFAULT_INDENT",
     "BASE64_MARKER",
+    "ESCAPED_MARKER",
     "OBJECT_MARKER",
     "ReadableFormatError",
     "CircularReferenceError",

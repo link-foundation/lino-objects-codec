@@ -82,9 +82,13 @@ def test_a_string_keeps_its_own_characters_on_one_line() -> None:
 
 
 def test_a_string_holding_a_newline_still_fits_on_one_line() -> None:
+    """A newline inside a string would end the record, so on one line -- and only
+    there -- it is escaped. The escape covers the newline, not the string: the
+    words around it stay greppable, and so does the rest of the record."""
     value = {"readable": "still visible", "multiline": "line1\nline2"}
     line = encode_line(value)
-    assert line == '(o: (readable "still visible") (multiline (base64 "bGluZTEKbGluZTI=")))'
+    assert line == '(o: (readable "still visible") (multiline (escaped "line1%0Aline2")))'
+    assert "line1" in line and "line2" in line, line
     assert "\n" not in line, line
     assert decode_line(line) == value
 
