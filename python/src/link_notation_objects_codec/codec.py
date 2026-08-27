@@ -44,6 +44,11 @@ _COMPACT_TYPE_MARKERS: frozenset[str] = frozenset(
 )
 
 
+#: Markers a compact document writes without a payload, so ``(null)`` is a
+#: compact null while ``(null 1)`` is a readable line holding two values.
+_EMPTY_BODY_MARKERS: frozenset[str] = frozenset({"null", "None", "undefined"})
+
+
 def is_compact_notation(notation: str) -> bool:
     """Whether a document is in the compact (type-tagged, base64) format.
 
@@ -62,21 +67,35 @@ def is_compact_notation(notation: str) -> bool:
     if first_line is None or not first_line.startswith("("):
         return False
 
-    tokens = [token for token in re.split(r"[\s()]+", first_line[1:]) if token]
-    if not tokens:
-        return False
-
-    marker = tokens[0]
+    # A compact document names the type of its value first, so a link that opens
+    # another link straight away is the readable form, whose links nest.
+    marker, rest = _split_token(first_line[1:].lstrip())
 
     # Skip the ``obj_N:`` definition id, if present.
     if marker.endswith(":"):
         if not marker[:-1].startswith("obj_"):
             return False
-        if len(tokens) < 2:
-            return False
-        marker = tokens[1]
+        marker, rest = _split_token(rest.lstrip())
 
-    return marker in _COMPACT_TYPE_MARKERS
+    if marker not in _COMPACT_TYPE_MARKERS:
+        return False
+
+    # A compact null is the whole link: ``(null)``. A link that holds more than
+    # the marker is a readable line whose first value happens to be null.
+    if marker in _EMPTY_BODY_MARKERS:
+        return rest.lstrip().startswith(")")
+
+    return True
+
+
+def _split_token(text: str) -> tuple[str, str]:
+    """Split off the first token of a link body.
+
+    The token is the text up to the next whitespace or parenthesis; a body that
+    opens with a parenthesis has no token of its own.
+    """
+    match = re.search(r"[\s()]", text)
+    return (text, "") if match is None else (text[: match.start()], text[match.start() :])
 
 
 class ObjectCodec:
@@ -182,6 +201,37 @@ class ObjectCodec:
             Readable Links Notation document
         """
         return readable.encode(obj, indent)
+
+    def encode_line(self, obj: Any) -> str:
+        """
+        Encode a Python object to the readable, single-line Links Notation format.
+
+        The result never contains a newline, so one value is one line: an
+        append-only log written this way stays greppable, tailable and countable
+        by ``wc -l``. See :mod:`link_notation_objects_codec.readable` for the shape.
+
+        Args:
+            obj: The Python object to encode
+
+        Returns:
+            One line of readable Links Notation
+        """
+        return readable.encode_line(obj)
+
+    def decode_line(self, notation: str) -> Any:
+        """
+        Decode one line of the readable, single-line Links Notation format.
+
+        This is the exact inverse of :meth:`encode_line`. Input spanning more
+        than one line is rejected, so two log records never merge into one value.
+
+        Args:
+            notation: One line of readable Links Notation
+
+        Returns:
+            Reconstructed Python object
+        """
+        return readable.decode_line(notation)
 
     def encode_compact(self, obj: Any) -> str:
         """
@@ -587,6 +637,45 @@ def encode(obj: Any, indent: str = readable.DEFAULT_INDENT) -> str:
         '(\n  age 30\n)'
     """
     return _default_codec.encode(obj, indent)
+
+
+def encode_line(obj: Any) -> str:
+    """
+    Encode a Python object to the readable, single-line Links Notation format.
+
+    The result never contains a newline, so one value is one line of an
+    append-only log.
+
+    Args:
+        obj: The Python object to encode
+
+    Returns:
+        One line of readable Links Notation
+
+    Example:
+        >>> encode_line({"age": 30})
+        '(o: (age 30))'
+    """
+    return _default_codec.encode_line(obj)
+
+
+def decode_line(notation: str) -> Any:
+    """
+    Decode one line of the readable, single-line Links Notation format.
+
+    The exact inverse of :func:`encode_line`.
+
+    Args:
+        notation: One line of readable Links Notation
+
+    Returns:
+        Reconstructed Python object
+
+    Example:
+        >>> decode_line('(o: (age 30))')
+        {'age': 30}
+    """
+    return _default_codec.decode_line(notation)
 
 
 def encode_compact(obj: Any) -> str:
