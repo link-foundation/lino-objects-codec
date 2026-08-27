@@ -172,3 +172,6 @@ htmlcov/
 .dmypy.json
 dmypy.json
 .ruff_cache/
+
+# Cargo build output of the scratch crates under experiments/
+experiments/**/target/
