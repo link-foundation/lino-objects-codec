@@ -109,13 +109,13 @@ console.log(decoded.self === decoded);
 
 ## Output Formats
 
-| Function                        | Output                                          |
-| ------------------------------- | ----------------------------------------------- |
-| `encode({ obj })`               | Readable, indented Links Notation (the default) |
-| `encode({ obj, indent: '\t' })` | Same, with a custom indentation string          |
+| Function                        | Output                                              |
+| ------------------------------- | --------------------------------------------------- |
+| `encode({ obj })`               | Readable, indented Links Notation (the default)     |
+| `encode({ obj, indent: '\t' })` | Same, with a custom indentation string              |
 | `encodeLine({ obj })`           | The same document on one line, for append-only logs |
-| `encodeCompact({ obj })`        | The previous single-line, base64 form           |
-| `encodeObfuscated({ obj })`     | Alias of `encodeCompact`                        |
+| `encodeCompact({ obj })`        | The previous single-line, base64 form               |
+| `encodeObfuscated({ obj })`     | Alias of `encodeCompact`                            |
 
 `decode({ notation })` accepts every one of them, so files written by older
 versions keep working and are rewritten in the readable form the next time they

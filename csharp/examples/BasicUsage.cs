@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lino.Objects.Codec;
 
 Console.WriteLine("=== lino-objects-codec C# Basic Usage Example ===\n");
@@ -143,6 +144,40 @@ catch (CircularReferenceException e)
 {
     Console.WriteLine($"   Readable format rejects a cycle: {e.GetType().Name}");
 }
+
+Console.WriteLine();
+
+// An append-only log wants one record per line: appending is one write, a
+// compactor can cut the file at any newline, and `grep`, `tail -f` and `wc -l`
+// all treat one line as one event.
+Console.WriteLine("Append-only log, one record per line:");
+
+Dictionary<string, object?> Record(string phase, int bytes, bool complete) => new()
+{
+    { "phase", phase },
+    { "bytes", bytes },
+    { "complete", complete }
+};
+
+var entries = new[]
+{
+    Record("stream_start", 0, false),
+    Record("stream_chunk", 1024, false),
+    Record("stream_end", 2827, true)
+};
+var log = string.Concat(entries.Select(entry => Codec.EncodeLine(entry) + "\n"));
+Console.Write(log);
+
+var lines = log.TrimEnd('\n').Split('\n');
+Console.WriteLine($"   records: {lines.Length}");
+
+// Reading: a line reader hands over one record at a time.
+var lastRecord = Codec.DecodeLine(lines[^1]) as Dictionary<string, object?>;
+Console.WriteLine($"   last record phase: {lastRecord?["phase"]}");
+
+// Filtering: the text stays readable, so plain string tools still work.
+var finished = lines.Count(line => line.Contains("(complete true)", StringComparison.Ordinal));
+Console.WriteLine($"   finished records: {finished}");
 
 Console.WriteLine();
 
