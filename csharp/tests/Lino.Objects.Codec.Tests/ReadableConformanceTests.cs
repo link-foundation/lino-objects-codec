@@ -39,11 +39,13 @@ public class ReadableConformanceTests
         throw new FileNotFoundException("cannot locate fixtures/readable-format/cases.json");
     }
 
-    private static JsonElement Cases()
+    private static JsonElement Section(string key)
     {
         using var document = JsonDocument.Parse(File.ReadAllText(FixturesPath));
-        return document.RootElement.GetProperty("cases").Clone();
+        return document.RootElement.GetProperty(key).Clone();
     }
+
+    private static JsonElement Cases() => Section("cases");
 
     /// <summary>
     /// Build a C# value from the fixtures' tagged encoding. A value is a
@@ -127,6 +129,15 @@ public class ReadableConformanceTests
     public static IEnumerable<object[]> AllCases()
     {
         foreach (var @case in Cases().EnumerateArray())
+        {
+            yield return new object[] { @case.GetProperty("name").GetString()!, @case.Clone() };
+        }
+    }
+
+    /// <summary>The documents an earlier version of this format wrote.</summary>
+    public static IEnumerable<object[]> LegacyCases()
+    {
+        foreach (var @case in Section("legacy").EnumerateArray())
         {
             yield return new object[] { @case.GetProperty("name").GetString()!, @case.Clone() };
         }
@@ -232,5 +243,33 @@ public class ReadableConformanceTests
         var expected = Build(@case.GetProperty("value"));
         var decoded = Codec.Decode(@case.GetProperty("line").GetString()!);
         Assert.True(Same(expected, decoded), $"case {name} decoded to a different value");
+    }
+
+    /// <summary>
+    /// Documents written before this format wrote text as text keep decoding, so
+    /// upgrading a reader never loses a stored record.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(LegacyCases))]
+    public void DecodesTheDocumentsAnEarlierVersionWrote(string name, JsonElement @case)
+    {
+        var expected = Build(@case.GetProperty("value"));
+        var decoded = Codec.Decode(@case.GetProperty("text").GetString()!);
+        Assert.True(Same(expected, decoded), $"legacy case {name} decoded to a different value");
+    }
+
+    /// <summary>
+    /// The point of the change: an implementation may not reach for base64 while
+    /// writing a readable document, whatever the text holds.
+    /// </summary>
+    [Theory]
+    [MemberData(nameof(AllCases))]
+    public void NoSharedDocumentHidesItsTextInBase64(string name, JsonElement @case)
+    {
+        Assert.DoesNotContain(
+            "base64 \"", @case.GetProperty("text").GetString()!, StringComparison.Ordinal);
+        Assert.DoesNotContain(
+            "base64 \"", @case.GetProperty("line").GetString()!, StringComparison.Ordinal);
+        Assert.NotEqual(string.Empty, name);
     }
 }

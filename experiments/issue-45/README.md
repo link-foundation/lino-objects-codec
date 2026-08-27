@@ -22,12 +22,15 @@ Its output is the evidence behind `quote()` in the four readable encoders:
 The four packages pin different `links-notation` releases, and the quoting rule
 changed between them, so the same document is read differently:
 
-| package | version | `"""say "hi""""` | `"say ""hi"""` |
+| package | version | reads `"""say "hi""""` as | reads `"say ""hi"""` as |
 | --- | --- | --- | --- |
-| `links-notation` (Rust) | 0.14.0 | `say "hi"` | desynchronises |
-| `Link.Foundation.Links.Notation` (C#) | 0.13.0 | desynchronises | `say "hi"` |
-| `links-notation` (npm) | 0.11.2 | desynchronises | desynchronises |
-| `links-notation` (PyPI) | 0.11.x | as npm | as npm |
+| `links-notation` (Rust) | 0.14.0 | `say "hi"` | `say ` -- desynchronises |
+| `Link.Foundation.Links.Notation` (C#) | 0.13.0 | `"say ` then `hi""""` | `say "hi"` |
+| `links-notation` (npm) | 0.11.2 | `"""say` then `hi` then `"""` | `say ""hi""` |
+| `links-notation` (PyPI) | 0.11.2 | `""say "hi"""` | `say ""hi""` |
+
+Every row was measured, not assumed: the Rust one by `quote-probe`, the other
+three by parsing those four documents with each package directly.
 
 The readable format is read by this repository's own tokenizer in every
 language, so a value reads back unchanged everywhere regardless. The n-quote

@@ -70,10 +70,16 @@ public class CircularReferenceException : InvalidOperationException
 /// while an empty object is written as <c>(</c> and <c>)</c> on two lines.
 /// </para>
 /// <para>
-/// Only values that cannot be written as plain text are encoded: strings holding
-/// control characters (including newlines and tabs, which line-based tooling and
-/// CRLF normalisation would corrupt) are marked individually as
-/// <c>(base64 "…")</c> instead of encoding the whole document.
+/// Text is written as text. A string keeps every character a reader would grep
+/// for, including newlines and tabs, and is quoted with a run of delimiters —
+/// <c>"""say "hi""""</c> — when it holds the delimiter itself. Only the
+/// characters a form cannot carry are escaped, and only they: the value is then
+/// written as <c>(escaped "…")</c>, where <c>%XX</c> stands for one escaped
+/// byte. The indented form escapes the carriage return, which CRLF normalisation
+/// would otherwise rewrite, and the other control characters; the single-line
+/// form escapes the newline as well, because there a record ends at the end of
+/// the line. Nothing else is encoded: base64 lives in
+/// <see cref="ObjectCodec.EncodeCompact"/>, which a caller asks for by name.
 /// </para>
 /// <para>
 /// <see cref="EncodeLine"/> writes the same document on one line, so one record
@@ -105,8 +111,18 @@ public static class Readable
     /// <summary>Default indentation used by <see cref="Encode(object?, string)"/>.</summary>
     public const string DefaultIndent = "  ";
 
-    /// <summary>Marker used for values that cannot be represented as plain text.</summary>
+    /// <summary>Marker of a string written as base64 by versions up to 0.6.0, still read.</summary>
     public const string Base64Marker = "base64";
+
+    /// <summary>
+    /// Marker of a string whose unwritable characters are percent-escaped.
+    /// </summary>
+    /// <remarks>
+    /// It reads as <c>(escaped "line one%0Aline two")</c>. Only those characters
+    /// change; the rest of the text is written as it is, so the value stays
+    /// readable and greppable.
+    /// </remarks>
+    public const string EscapedMarker = "escaped";
 
     /// <summary>Link id naming an object in the single-line form, written as <c>(o: …)</c>.</summary>
     public const string ObjectMarker = "o";
@@ -116,6 +132,19 @@ public static class Readable
 
     /// <summary>Characters that force an object key to be quoted.</summary>
     private static readonly char[] KeyNeedsQuotes = { '(', ')', '\'', '"', ':', '`' };
+
+    /// <summary>Reads an escaped payload back, rejecting invalid UTF-8.</summary>
+    private static readonly UTF8Encoding StrictUtf8 = new(false, true);
+
+    /// <summary>Which readable form is being written, which is what says how much has to be escaped.</summary>
+    private enum Form
+    {
+        /// <summary>The indented form, where a value may hold a line break of its own.</summary>
+        Indented,
+
+        /// <summary>The single-line form, where a record ends at the end of the line.</summary>
+        Line,
+    }
 
     /// <summary>
     /// Encode a value into the readable, indented Links Notation form.
@@ -225,7 +254,7 @@ public static class Readable
                 {
                     output.Append('\n');
                     PushIndent(indent, level + 1, output);
-                    output.Append(FormatKey(pair.Key));
+                    output.Append(FormatKey(pair.Key, Form.Indented));
                     output.Append(' ');
                     WriteValue(pair.Value, indent, level + 1, output, path);
                 }
@@ -262,7 +291,7 @@ public static class Readable
             return;
         }
 
-        output.Append(FormatScalar(value));
+        output.Append(FormatScalar(value, Form.Indented));
     }
 
     /// <summary>
@@ -285,7 +314,7 @@ public static class Readable
                 output.Append('(').Append(ObjectMarker).Append(':');
                 foreach (var pair in dict)
                 {
-                    output.Append(" (").Append(FormatKey(pair.Key)).Append(' ');
+                    output.Append(" (").Append(FormatKey(pair.Key, Form.Line)).Append(' ');
                     WriteLineValue(pair.Value, output, path);
                     output.Append(')');
                 }
@@ -314,7 +343,7 @@ public static class Readable
             return;
         }
 
-        output.Append(FormatScalar(value));
+        output.Append(FormatScalar(value, Form.Line));
     }
 
     /// <summary>
@@ -344,14 +373,14 @@ public static class Readable
     /// Format a scalar value. Strings are quoted, everything else stays bare so
     /// that its type is recoverable when reading the document back.
     /// </summary>
-    private static string FormatScalar(object? value)
+    private static string FormatScalar(object? value, Form form)
     {
         return value switch
         {
             null => "null",
             // Written in lower case in every language, so the output is identical.
             bool b => b ? "true" : "false",
-            string s => FormatString(s),
+            string s => FormatString(s, form),
             sbyte or byte or short or ushort or int or uint or long or ulong =>
                 Convert.ToString(value, CultureInfo.InvariantCulture) ?? "null",
             float f => FormatFloat(f),
@@ -387,36 +416,95 @@ public static class Readable
     }
 
     /// <summary>
-    /// Format a string value: quoted plain text, or an individually marked
-    /// base64 payload when the text cannot be written literally.
+    /// Format a string value. The text is written as text; when it holds
+    /// characters this form cannot carry, those characters — and only those —
+    /// are percent-escaped and the value is marked, so the rest of it stays
+    /// readable and greppable.
     /// </summary>
-    private static string FormatString(string value)
+    private static string FormatString(string value, Form form)
     {
-        if (NeedsEncoding(value))
-        {
-            var payload = Convert.ToBase64String(Encoding.UTF8.GetBytes(value));
-            return $"({Base64Marker} {Quote(payload)})";
-        }
-        return Quote(value);
+        var escaped = EscapeUnwritable(value, form);
+        return escaped is null ? Quote(value) : $"({EscapedMarker} {Quote(escaped)})";
     }
 
     /// <summary>
-    /// A value can be written as text unless it contains control characters:
-    /// newlines break the line structure and CRLF normalisation would rewrite them.
+    /// Percent-escape the characters this form cannot carry, or <c>null</c> when
+    /// the text can be written as it is. <c>%</c> is escaped too, so escaping is
+    /// reversible.
     /// </summary>
-    private static bool NeedsEncoding(string value)
+    private static string? EscapeUnwritable(string value, Form form)
     {
-        foreach (var c in value)
+        if (!value.Any(c => IsUnwritable(c, form)))
         {
-            // Unicode category Cc: the C0 and C1 control ranges.
-            if (c <= 0x1f || (c >= 0x7f && c <= 0x9f))
+            return null;
+        }
+
+        var output = new StringBuilder(value.Length);
+        var plain = new StringBuilder();
+
+        void FlushPlain()
+        {
+            if (plain.Length > 0)
             {
-                return true;
+                output.Append(plain);
+                plain.Clear();
             }
         }
-        return false;
+
+        foreach (var c in value)
+        {
+            if (c != '%' && !IsUnwritable(c, form))
+            {
+                // Kept as it is, surrogate pairs included: only the characters
+                // this form cannot carry turn into escapes.
+                plain.Append(c);
+                continue;
+            }
+            FlushPlain();
+            foreach (var b in Encoding.UTF8.GetBytes(c.ToString()))
+            {
+                output.Append('%').Append(b.ToString("X2", CultureInfo.InvariantCulture));
+            }
+        }
+        FlushPlain();
+
+        return output.ToString();
     }
 
+    /// <summary>
+    /// Whether a character has to be escaped in this form. A tab is text a reader
+    /// can see, and so is a newline in the indented form, where a value may span
+    /// lines. A carriage return is escaped because CRLF normalisation rewrites
+    /// it, and the remaining control characters because they are not text at all.
+    /// </summary>
+    private static bool IsUnwritable(char c, Form form)
+    {
+        if (!IsControl(c))
+        {
+            return false;
+        }
+        if (c == '\t')
+        {
+            return false;
+        }
+        if (c == '\n')
+        {
+            return form == Form.Line;
+        }
+        return true;
+    }
+
+    /// <summary>Unicode category Cc: the C0 and C1 control ranges.</summary>
+    private static bool IsControl(char c) => c <= 0x1f || (c >= 0x7f && c <= 0x9f);
+
+    /// <summary>
+    /// Quote a value so that both this reader and the notation's own parser read
+    /// it back unchanged. One delimiter is enough while the text holds none of
+    /// that kind; when it holds both kinds, a run of at least three opens the
+    /// notation's n-quote form, where the text is literal and only a run at least
+    /// as long closes it. A value starting with the delimiter would lengthen the
+    /// opening run, so the other delimiter is used for it.
+    /// </summary>
     private static string Quote(string value)
     {
         if (!value.Contains('"'))
@@ -427,19 +515,37 @@ public static class Readable
         {
             return $"'{value}'";
         }
-        // Both quote styles are present: double the double quotes, as the parser expects.
-        return $"\"{value.Replace("\"", "\"\"", StringComparison.Ordinal)}\"";
+
+        var delimiter = value.StartsWith('"') ? '\'' : '"';
+        // A run of two delimiters is the empty value, so the n-quote form starts
+        // at three; beyond that the run only has to outrun the longest one inside.
+        var count = Math.Max(LongestRun(value, delimiter) + 1, 3);
+        var run = new string(delimiter, count);
+        return $"{run}{value}{run}";
+    }
+
+    /// <summary>The length of the longest run of a character in a text.</summary>
+    private static int LongestRun(string value, char c)
+    {
+        var longest = 0;
+        var current = 0;
+        foreach (var candidate in value)
+        {
+            current = candidate == c ? current + 1 : 0;
+            longest = Math.Max(longest, current);
+        }
+        return longest;
     }
 
     /// <summary>Format an object key. Keys are bare when they read as plain identifiers.</summary>
-    private static string FormatKey(string key)
+    private static string FormatKey(string key, Form form)
     {
         var plain = key.Length > 0
             && key != Base64Marker
-            && !NeedsEncoding(key)
-            && !key.Any(c => char.IsWhiteSpace(c) || KeyNeedsQuotes.Contains(c));
+            && key != EscapedMarker
+            && !key.Any(c => char.IsWhiteSpace(c) || IsControl(c) || KeyNeedsQuotes.Contains(c));
 
-        return plain ? key : FormatString(key);
+        return plain ? key : FormatString(key, form);
     }
 
     // === Decoding ===
@@ -527,8 +633,63 @@ public static class Readable
         return tokens;
     }
 
-    /// <summary>Read a quoted reference, where a doubled quote character means a literal one.</summary>
+    /// <summary>
+    /// Read a quoted reference. The opening run of delimiters says how it is
+    /// read, which is what the notation's own parser does:
+    /// </summary>
+    /// <remarks>
+    /// <list type="bullet">
+    /// <item>one delimiter — the text is literal and a doubled delimiter is one
+    /// literal delimiter, which is how versions up to 0.6.0 wrote such values;</item>
+    /// <item>two — the empty value;</item>
+    /// <item>three or more — the n-quote form: the text is literal, and the value
+    /// ends at the first run at least as long, whose last delimiters close it. A
+    /// longer run therefore belongs to the text, so a value may end with a
+    /// delimiter.</item>
+    /// </list>
+    /// </remarks>
     private static (string Value, int Next) ReadQuoted(char[] chars, int start, char quoteChar)
+    {
+        var opening = RunLength(chars, start, quoteChar);
+
+        if (opening == 2)
+        {
+            return (string.Empty, start + 2);
+        }
+
+        if (opening == 1)
+        {
+            return ReadDoubledQuoted(chars, start, quoteChar);
+        }
+
+        int i = start + opening;
+        while (i < chars.Length)
+        {
+            if (chars[i] != quoteChar)
+            {
+                i++;
+                continue;
+            }
+
+            var run = RunLength(chars, i, quoteChar);
+            if (run >= opening)
+            {
+                var length = i + run - opening - (start + opening);
+                var value = new string(chars, start + opening, length);
+                return (value, i + run);
+            }
+            i += run;
+        }
+
+        throw UnterminatedQuote(start);
+    }
+
+    /// <summary>
+    /// Read the single-delimiter form, where a doubled delimiter is one literal
+    /// delimiter. This is how versions up to 0.6.0 wrote a value holding both
+    /// quote kinds, so their documents keep decoding.
+    /// </summary>
+    private static (string Value, int Next) ReadDoubledQuoted(char[] chars, int start, char quoteChar)
     {
         var value = new StringBuilder();
         int i = start + 1;
@@ -549,9 +710,23 @@ public static class Readable
             i++;
         }
 
-        throw new FormatException(
-            $"unterminated quoted value starting at character {start.ToString(CultureInfo.InvariantCulture)}");
+        throw UnterminatedQuote(start);
     }
+
+    /// <summary>The length of the run of a character that starts at an index.</summary>
+    private static int RunLength(char[] chars, int start, char c)
+    {
+        int i = start;
+        while (i < chars.Length && chars[i] == c)
+        {
+            i++;
+        }
+        return i - start;
+    }
+
+    /// <summary>The error a quoted value that never closes raises.</summary>
+    private static FormatException UnterminatedQuote(int start) =>
+        new($"unterminated quoted value starting at character {start.ToString(CultureInfo.InvariantCulture)}");
 
     /// <summary>Cursor over the token stream, turning tokens into nodes and rows.</summary>
     private sealed class Cursor
@@ -721,14 +896,14 @@ public static class Readable
         }
 
         // `key value` on every line makes an object; anything else is a list of values.
-        var isObject = rows.All(row => row.Count == 2 && row[0].IsRef);
+        var isObject = rows.All(row => row.Count == 2 && NodeToKey(row[0]) is not null);
 
         if (isObject)
         {
             var result = new Dictionary<string, object?>();
             foreach (var row in rows)
             {
-                result[row[0].Value] = NodeToValue(row[1]);
+                result[NodeToKey(row[0])!] = NodeToValue(row[1]);
             }
             return result;
         }
@@ -768,23 +943,59 @@ public static class Readable
                     + $"found a link of {node.Rows.Count.ToString(CultureInfo.InvariantCulture)} lines");
             }
             var pair = node.Rows[0];
-            if (pair.Count != 2 || !pair[0].IsRef)
+            if (pair.Count != 2)
             {
                 throw new FormatException(
                     $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
                     + $"found a link of {pair.Count.ToString(CultureInfo.InvariantCulture)} values");
             }
-            result[pair[0].Value] = NodeToValue(pair[1]);
+            var key = NodeToKey(pair[0]);
+            if (key is null)
+            {
+                throw new FormatException(
+                    $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
+                    + "found a pair whose key is not text");
+            }
+            result[key] = NodeToValue(pair[1]);
         }
 
         return result;
     }
 
     /// <summary>
-    /// Recognise <c>(base64 "…")</c>, the individual marker for values that could
-    /// not be written as text. A quoted <c>base64</c> key is an ordinary object
-    /// key, not a marker.
+    /// The key a node in key position spells: a reference is the key itself, and
+    /// a marked link is the text its marker escapes, which is how a key holding a
+    /// character the form cannot carry stays a key instead of turning its object
+    /// into an array.
     /// </summary>
+    /// <returns>The key, or <c>null</c> when the node is not one</returns>
+    private static string? NodeToKey(Node node)
+    {
+        if (node.IsRef)
+        {
+            return node.Value;
+        }
+        if (node.IsObject)
+        {
+            return null;
+        }
+        try
+        {
+            return DecodeMarkedValue(node.Rows);
+        }
+        catch (FormatException)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// Recognise a marked value: <c>(escaped "…")</c>, whose text is written as it
+    /// is except for the percent-escaped characters this form cannot carry, and
+    /// <c>(base64 "…")</c>, which versions up to 0.6.0 wrote and which is still
+    /// read. A quoted marker is an ordinary object key, not a marker.
+    /// </summary>
+    /// <returns>The decoded string, or <c>null</c> when the link is not a marked value</returns>
     private static string? DecodeMarkedValue(List<List<Node>> rows)
     {
         if (rows.Count != 1 || rows[0].Count != 2)
@@ -795,11 +1006,21 @@ public static class Readable
         var marker = rows[0][0];
         var payload = rows[0][1];
 
-        if (!marker.IsRef || marker.Quoted || marker.Value != Base64Marker)
+        if (!marker.IsRef || marker.Quoted)
         {
             return null;
         }
         if (!payload.IsRef || !payload.Quoted)
+        {
+            return null;
+        }
+
+        if (marker.Value == EscapedMarker)
+        {
+            return Unescape(payload.Value);
+        }
+
+        if (marker.Value != Base64Marker)
         {
             return null;
         }
@@ -811,6 +1032,59 @@ public static class Readable
         catch (FormatException e)
         {
             throw new FormatException($"invalid base64 value: {payload.Value}", e);
+        }
+    }
+
+    /// <summary>
+    /// Undo the percent-escaping of an <c>(escaped "…")</c> payload. Escapes stand
+    /// for bytes, so a character outside ASCII is written as its UTF-8 bytes and
+    /// read back from them.
+    /// </summary>
+    /// <exception cref="FormatException">If an escape is truncated, malformed or not UTF-8</exception>
+    private static string Unescape(string payload)
+    {
+        var bytes = new List<byte>(payload.Length);
+        int i = 0;
+        int position = 0;
+
+        while (i < payload.Length)
+        {
+            if (payload[i] != '%')
+            {
+                // Copied over as it is, one whole character at a time, so that a
+                // surrogate pair keeps standing for the character it spells.
+                var width = char.IsHighSurrogate(payload[i]) && i + 1 < payload.Length ? 2 : 1;
+                bytes.AddRange(Encoding.UTF8.GetBytes(payload.Substring(i, width)));
+                i += width;
+                position++;
+                continue;
+            }
+
+            if (i + 2 >= payload.Length)
+            {
+                throw new FormatException(
+                    "truncated escape at character "
+                    + position.ToString(CultureInfo.InvariantCulture)
+                    + " of an escaped value");
+            }
+
+            var escape = payload.Substring(i + 1, 2);
+            if (!byte.TryParse(escape, NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out var value))
+            {
+                throw new FormatException($"invalid escape '%{escape}' in an escaped value");
+            }
+            bytes.Add(value);
+            i += 3;
+            position += 3;
+        }
+
+        try
+        {
+            return StrictUtf8.GetString(bytes.ToArray());
+        }
+        catch (DecoderFallbackException e)
+        {
+            throw new FormatException("invalid UTF-8 escaped value", e);
         }
     }
 
