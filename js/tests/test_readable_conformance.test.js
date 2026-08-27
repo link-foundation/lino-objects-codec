@@ -3,8 +3,9 @@
  *
  * The cases live in `fixtures/readable-format/cases.json` at the repository root
  * and are shared by the JavaScript, Python, Rust and C# suites: every
- * implementation has to encode the same value to exactly the same text, which is
- * what keeps the four outputs byte-identical.
+ * implementation has to encode the same value to exactly the same text and to
+ * exactly the same single line, which is what keeps the four outputs
+ * byte-identical.
  */
 
 import { test } from 'node:test';
@@ -12,7 +13,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { encode, decode } from '../src/index.js';
+import { encode, encodeLine, decode, decodeLine } from '../src/index.js';
 
 const LANGUAGE = 'js';
 const LANGUAGES = new Set(['js', 'python', 'rust', 'csharp']);
@@ -118,6 +119,28 @@ for (const testCase of cases) {
     assert.ok(
       same(decode({ notation: testCase.text }), build(testCase.value)),
       `${JSON.stringify(decode({ notation: testCase.text }))} != ${JSON.stringify(build(testCase.value))}`
+    );
+  });
+
+  test(`encodeLine matches the shared line: ${testCase.name}`, () => {
+    assert.equal(encodeLine({ obj: build(testCase.value) }), testCase.line);
+  });
+
+  test(`the shared line holds no line break: ${testCase.name}`, () => {
+    assert.ok(!/[\n\r]/.test(testCase.line), testCase.line);
+  });
+
+  test(`decodeLine matches the shared value: ${testCase.name}`, () => {
+    assert.ok(
+      same(decodeLine({ notation: testCase.line }), build(testCase.value)),
+      `${JSON.stringify(decodeLine({ notation: testCase.line }))} != ${JSON.stringify(build(testCase.value))}`
+    );
+  });
+
+  test(`decode reads the shared line too: ${testCase.name}`, () => {
+    assert.ok(
+      same(decode({ notation: testCase.line }), build(testCase.value)),
+      `${JSON.stringify(decode({ notation: testCase.line }))} != ${JSON.stringify(build(testCase.value))}`
     );
   });
 }

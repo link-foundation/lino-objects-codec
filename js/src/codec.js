@@ -100,6 +100,39 @@ export class ObjectCodec {
   }
 
   /**
+   * Encode a JavaScript object to the readable, single-line Links Notation
+   * format.
+   *
+   * The result never contains a newline, so one value is one line: an
+   * append-only log written this way stays greppable, tailable and countable by
+   * `wc -l`. See `readable.js` for the exact shape.
+   *
+   * @param {Object} options - Options
+   * @param {*} options.obj - The JavaScript object to encode
+   * @returns {string} One line of readable Links Notation
+   */
+  encodeLine(options = {}) {
+    const { obj } = options;
+    return readable.encodeLine(obj);
+  }
+
+  /**
+   * Decode one line of the readable, single-line Links Notation format.
+   *
+   * This is the exact inverse of {@link ObjectCodec#encodeLine}. Input spanning
+   * more than one line is rejected, so two log records never merge into one
+   * value.
+   *
+   * @param {Object} options - Options
+   * @param {string} options.notation - One line of readable Links Notation
+   * @returns {*} Reconstructed JavaScript object
+   */
+  decodeLine(options = {}) {
+    const { notation } = options;
+    return readable.decodeLine(notation);
+  }
+
+  /**
    * Encode a JavaScript object to the compact, single-line Links Notation format.
    *
    * Every value is tagged with its type and every string is base64-encoded, so
@@ -606,6 +639,16 @@ const COMPACT_TYPE_MARKERS = new Set([
 ]);
 
 /**
+ * Markers a compact document writes without a payload, so `(null)` is a compact
+ * null while `(null 1)` is a readable line holding two values.
+ */
+const EMPTY_BODY_MARKERS = new Set([
+  ObjectCodec.TYPE_NULL,
+  ObjectCodec.TYPE_UNDEFINED,
+  'None',
+]);
+
+/**
  * Whether a document is in the compact (base64) format rather than the readable
  * one. The compact format always opens with `(` followed by a type marker,
  * optionally preceded by an `obj_N:` definition id.
@@ -623,28 +666,40 @@ export function isCompactNotation(notation) {
     return false;
   }
 
-  const tokens = firstLine
-    .slice(1)
-    .split(/[\s()]+/)
-    .filter((token) => token.length > 0);
-
-  let marker = tokens[0];
-  if (marker === undefined) {
-    return false;
-  }
+  // A compact document names the type of its value first, so a link that opens
+  // another link straight away is the readable form, whose links nest.
+  let [marker, rest] = splitToken(firstLine.slice(1).trimStart());
 
   // Skip the `obj_N:` definition id, if present.
   if (marker.endsWith(':')) {
     if (!marker.startsWith('obj_')) {
       return false;
     }
-    marker = tokens[1];
-    if (marker === undefined) {
-      return false;
-    }
+    [marker, rest] = splitToken(rest.trimStart());
   }
 
-  return COMPACT_TYPE_MARKERS.has(marker);
+  if (!COMPACT_TYPE_MARKERS.has(marker)) {
+    return false;
+  }
+
+  // A compact null is the whole link: `(null)`. A link that holds more than the
+  // marker is a readable line whose first value happens to be null.
+  if (EMPTY_BODY_MARKERS.has(marker)) {
+    return rest.trimStart().startsWith(')');
+  }
+
+  return true;
+}
+
+/**
+ * Split off the first token of a link body: the text up to the next whitespace
+ * or parenthesis. A body that opens with a parenthesis has no token of its own.
+ * @param {string} input - The link body
+ * @returns {[string, string]} The token and the text after it
+ */
+function splitToken(input) {
+  const end = input.search(/[\s()]/);
+  return end === -1 ? [input, ''] : [input.slice(0, end), input.slice(end)];
 }
 
 // Convenience functions
@@ -659,6 +714,33 @@ const _defaultCodec = new ObjectCodec();
  */
 export function encode(options = {}) {
   return _defaultCodec.encode(options);
+}
+
+/**
+ * Encode a JavaScript object to the readable, single-line Links Notation format.
+ *
+ * The result never contains a newline, so one value is one line of an
+ * append-only log.
+ *
+ * @param {Object} options - Options
+ * @param {*} options.obj - The JavaScript object to encode
+ * @returns {string} One line of readable Links Notation
+ */
+export function encodeLine(options = {}) {
+  return _defaultCodec.encodeLine(options);
+}
+
+/**
+ * Decode one line of the readable, single-line Links Notation format.
+ *
+ * The exact inverse of {@link encodeLine}.
+ *
+ * @param {Object} options - Options
+ * @param {string} options.notation - One line of readable Links Notation
+ * @returns {*} Reconstructed JavaScript object
+ */
+export function decodeLine(options = {}) {
+  return _defaultCodec.decodeLine(options);
 }
 
 /**
