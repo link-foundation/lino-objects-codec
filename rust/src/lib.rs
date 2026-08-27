@@ -982,6 +982,10 @@ const COMPACT_TYPE_MARKERS: [&str; 10] = [
     "dict",
 ];
 
+/// Markers a compact document writes without a payload, so `(null)` is a compact
+/// null while `(null 1)` is a readable line holding two values.
+const EMPTY_BODY_MARKERS: [&str; 2] = [type_ids::NULL, "None"];
+
 fn is_compact_notation(notation: &str) -> bool {
     let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
         return false;
@@ -1007,9 +1011,9 @@ fn is_compact_notation(notation: &str) -> bool {
         return false;
     }
 
-    // The compact null is the whole link: `(null)`. A link that holds more than
-    // the marker is a readable line whose first value happens to be null.
-    if marker == type_ids::NULL {
+    // A compact null is the whole link: `(null)`. A link that holds more than the
+    // marker is a readable line whose first value happens to be null.
+    if EMPTY_BODY_MARKERS.contains(&marker) {
         return rest.trim_start().starts_with(')');
     }
 

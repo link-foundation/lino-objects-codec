@@ -768,7 +768,11 @@ mod tests {
 
     fn line_roundtrip(value: &LinoValue) -> LinoValue {
         let text = encode_line(value);
-        assert!(!text.contains('\n'), "line form must hold no newline: {:?}", text);
+        assert!(
+            !text.contains('\n'),
+            "line form must hold no newline: {:?}",
+            text
+        );
         decode_line(&text).unwrap_or_else(|e| panic!("failed to decode {:?}: {}", text, e))
     }
 
@@ -831,7 +835,10 @@ mod tests {
     #[test]
     fn line_form_keeps_strings_on_one_line() {
         let value = LinoValue::object([
-            ("quotes", LinoValue::String("both \"kinds\" of 'quotes'".into())),
+            (
+                "quotes",
+                LinoValue::String("both \"kinds\" of 'quotes'".into()),
+            ),
             ("unicode", LinoValue::String("héllo 世界 🌍".into())),
             ("multiline", LinoValue::String("line1\nline2".into())),
         ]);
