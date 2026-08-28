@@ -1,7 +1,7 @@
 //! Tests for the readable, indented format produced by `encode()` (issue #37).
 
-use links_notation::{parse_lino_to_links, LiNo};
-use lino_objects_codec::{decode, encode, encode_compact, encode_obfuscated, LinoValue};
+use links_notation::{LiNo, parse_lino_to_links};
+use lino_objects_codec::{LinoValue, decode, encode, encode_compact, encode_obfuscated};
 
 /// The document from the issue, as a `LinoValue`.
 fn router_state() -> LinoValue {

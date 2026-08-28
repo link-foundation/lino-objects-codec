@@ -1,6 +1,6 @@
 //! Checks that the snippets shown in `README.md` and the crate docs stay true.
 
-use lino_objects_codec::{decode, encode, encode_compact, encode_line, LinoValue};
+use lino_objects_codec::{LinoValue, decode, encode, encode_compact, encode_line};
 
 #[test]
 fn scalars_are_written_as_documented() {

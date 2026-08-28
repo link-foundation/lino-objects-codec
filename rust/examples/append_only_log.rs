@@ -4,7 +4,7 @@
 //! compactor can cut the file at any newline, and `grep`, `tail -f` and `wc -l`
 //! all treat one line as one event. `decode_line` reads a line back exactly.
 
-use lino_objects_codec::{decode_line, encode_line, LinoValue};
+use lino_objects_codec::{LinoValue, decode_line, encode_line};
 use std::fmt::Write as _;
 
 fn record(phase: &str, bytes: i64, complete: bool) -> LinoValue {

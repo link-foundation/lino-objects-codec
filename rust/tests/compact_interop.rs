@@ -6,7 +6,7 @@
 //! decoded to the wrong value in another. Every language now writes the
 //! lowercase form and reads either spelling.
 
-use lino_objects_codec::{decode, encode_compact, LinoValue};
+use lino_objects_codec::{LinoValue, decode, encode_compact};
 
 #[test]
 fn booleans_are_written_lowercase() {

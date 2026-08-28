@@ -1,6 +1,6 @@
 //! Basic usage example for the lino-objects-codec library.
 
-use lino_objects_codec::{decode, encode, encode_compact, LinoValue};
+use lino_objects_codec::{LinoValue, decode, encode, encode_compact};
 
 fn main() {
     println!("=== Links Notation Objects Codec - Rust Example ===\n");

@@ -5,7 +5,7 @@
 //! every word a reader would grep for. The readable forms now write the text as
 //! it is, and escape only the characters the form itself cannot carry.
 
-use lino_objects_codec::{decode, decode_line, encode, encode_line, LinoValue};
+use lino_objects_codec::{LinoValue, decode, decode_line, encode, encode_line};
 
 fn message(text: &str) -> LinoValue {
     LinoValue::object([("message", LinoValue::String(text.to_string()))])

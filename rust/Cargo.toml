@@ -1,8 +1,8 @@
 [package]
 name = "lino-objects-codec"
 version = "0.6.0"
-edition = "2021"
-rust-version = "1.70"
+edition = "2024"
+rust-version = "1.85"
 description = "A library to encode/decode objects to/from links notation"
 license = "Unlicense"
 repository = "https://github.com/link-foundation/lino-objects-codec"
@@ -13,10 +13,10 @@ categories = ["encoding", "parser-implementations"]
 
 [dependencies]
 links-notation = "0.16.1"
-base64 = "0.22"
+base64 = "0.23.1"
 
 [dev-dependencies]
-serde_json = "1.0.149"
+serde_json = "1.0.151"
 
 # Clippy lints configuration
 [lints.clippy]
