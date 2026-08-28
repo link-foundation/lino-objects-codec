@@ -1,0 +1,10 @@
+[package]
+name = "issue-47-interop"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# A throwaway driver that path-references the real crate, so the shipped
+# package gains no example and no dependency from this experiment.
+[dependencies]
+lino-objects-codec = { path = "../../../rust" }
