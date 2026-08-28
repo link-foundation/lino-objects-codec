@@ -39,7 +39,6 @@ packages/
 *.dll
 *.exe
 *.pdb
-!TestResults/
 
 # User-specific files
 *.rsuser

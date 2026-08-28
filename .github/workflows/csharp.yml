@@ -218,7 +218,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./csharp
-        run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --coverage --coverage-output-format cobertura
 
       - name: Run example
         working-directory: ./csharp/examples
