@@ -77,7 +77,7 @@
 
 use crate::debug::trace;
 use crate::{CodecError, LinoValue};
-use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
+use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
 
 /// Default indentation used by [`encode`].
 pub const DEFAULT_INDENT: &str = "  ";
@@ -354,7 +354,7 @@ fn quote(value: &str) -> String {
     // A run of two delimiters is the empty value, so the n-quote form starts at
     // three; beyond that the run only has to outrun the longest one inside.
     let count = (longest_run(value, delimiter) + 1).max(3);
-    let run: String = std::iter::repeat(delimiter).take(count).collect();
+    let run: String = std::iter::repeat_n(delimiter, count).collect();
     format!("{run}{value}{run}")
 }
 

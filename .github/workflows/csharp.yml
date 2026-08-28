@@ -124,7 +124,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       # Node powers the shared CI helper scripts under csharp/scripts.
       - name: Setup Node.js
@@ -206,7 +206,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         working-directory: ./csharp
@@ -218,7 +218,7 @@ jobs:
 
       - name: Run tests
         working-directory: ./csharp
-        run: dotnet test --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test --configuration Release --no-build --coverage --coverage-output-format cobertura
 
       - name: Run example
         working-directory: ./csharp/examples
@@ -269,7 +269,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         working-directory: ./csharp
@@ -355,7 +355,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -498,7 +498,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Setup Node.js
         uses: actions/setup-node@v7

@@ -7,7 +7,7 @@
 //! `encode_compact()` hides it in base64, so neither serves that reader.
 
 use links_notation::parse_lino;
-use lino_objects_codec::{decode, decode_line, encode, encode_line, LinoValue};
+use lino_objects_codec::{LinoValue, decode, decode_line, encode, encode_line};
 
 /// A record of the shape an append-only log actually holds.
 fn log_record() -> LinoValue {

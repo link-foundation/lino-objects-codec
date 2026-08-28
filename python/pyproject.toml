@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=77.0", "wheel"]
+requires = ["setuptools>=84.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -20,16 +20,19 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "links-notation>=0.11.0,<0.12.0",
+    "links-notation>=0.16.1,<0.17.0",
 ]
 
 [project.optional-dependencies]
+# Floors, not pins: each is the current major, so a fresh `pip install -e
+# ".[dev]"` resolves to what CI runs instead of to a years-old release that
+# lints and type-checks by different rules. See issue #47.
 dev = [
-    "pytest>=7.0",
-    "pytest-cov>=4.0",
-    "ruff>=0.1.0",
-    "mypy>=1.0",
-    "scriv[toml]>=1.7.0",
+    "pytest>=9.1",
+    "pytest-cov>=7.1",
+    "ruff>=0.16.5",
+    "mypy>=2.3",
+    "scriv[toml]>=1.8",
 ]
 
 [project.urls]

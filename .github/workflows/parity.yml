@@ -47,3 +47,25 @@ jobs:
                  contains(github.event.pull_request.body, '[skip-parity]'))
                 && 'opted out with [skip-parity] in the pull request' || '' }}
         run: node scripts/check-language-parity.mjs
+
+  # Separate job on purpose: `[skip-parity]` opts out of the source-parity gate
+  # above, which a legitimate single-language change sometimes needs. It must
+  # not also switch off the version check -- four implementations parsing with
+  # four different grammars is never intentional (issue #47).
+  links-notation-version:
+    name: Implementations Pin One Parser Version
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Check version-gate helper's own tests
+        run: node --test scripts/check-links-notation-parity.test.mjs
+
+      - name: Enforce one links-notation version across implementations
+        run: node scripts/check-links-notation-parity.mjs

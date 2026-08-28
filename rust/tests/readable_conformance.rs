@@ -7,7 +7,7 @@
 //! agreeing on a shared mistake: every language must encode `value` to exactly
 //! `text` and to exactly `line`, and decode both back to exactly `value`.
 
-use lino_objects_codec::{decode, decode_line, encode, encode_line, LinoValue};
+use lino_objects_codec::{LinoValue, decode, decode_line, encode, encode_line};
 use serde_json::Value as Json;
 
 /// The language id this suite answers to in a case's `skip` map.

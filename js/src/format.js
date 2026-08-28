@@ -239,13 +239,11 @@ function convertParsedToJson(element) {
       }
       // First element (key) must be a primitive
       const keyElement = child.values[0];
-      if (
-        !(
-          keyElement.id !== undefined &&
-          keyElement.values &&
-          keyElement.values.length === 0
-        )
-      ) {
+      if (!(
+        keyElement.id !== undefined &&
+        keyElement.values &&
+        keyElement.values.length === 0
+      )) {
         return false;
       }
       // Key should be string-like (not a pure number)

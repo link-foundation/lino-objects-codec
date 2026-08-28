@@ -36,20 +36,21 @@
     "url": "https://github.com/link-foundation/lino-objects-codec.git"
   },
   "dependencies": {
-    "links-notation": "^0.11.0"
+    "links-notation": "^0.16.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22.11.0"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.7",
-    "eslint": "^9.38.0",
+    "@changesets/cli": "^3.0.1",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.6",
     "husky": "^9.1.7",
-    "jscpd": "^4.0.5",
-    "lint-staged": "^16.2.6",
-    "prettier": "^3.6.2"
+    "jscpd": "^5.0.16",
+    "lint-staged": "^17.4.1",
+    "prettier": "^3.9.6"
   },
   "lint-staged": {
     "*.{js,mjs,cjs}": [

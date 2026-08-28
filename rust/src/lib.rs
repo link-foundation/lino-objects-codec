@@ -48,8 +48,8 @@
 //! and migrate to the readable form on the next write. [`decode_line`] is the exact
 //! inverse of [`encode_line`] and reads one record at a time.
 
-use base64::{engine::general_purpose::STANDARD as BASE64, Engine};
-use links_notation::{parse_lino_to_links, LiNo};
+use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
+use links_notation::{LiNo, parse_lino_to_links};
 use std::collections::{HashMap, HashSet};
 use std::fmt;
 
@@ -1219,7 +1219,7 @@ pub fn decode(notation: &str) -> Result<LinoValue, CodecError> {
 
 /// Formatting utilities for indented Links Notation format.
 pub mod format {
-    use super::{parse_lino_to_links, LiNo};
+    use super::{LiNo, parse_lino_to_links};
     use std::collections::HashMap;
 
     /// Error types for format operations
