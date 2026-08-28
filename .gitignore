@@ -175,3 +175,6 @@ dmypy.json
 
 # Cargo build output of the scratch crates under experiments/
 experiments/**/target/
+
+# jscpd duplication reports
+reports/
