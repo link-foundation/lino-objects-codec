@@ -45,24 +45,29 @@ def test_a_line_is_valid_links_notation() -> None:
     Parser().parse(encode_line(LOG_RECORD))
 
 
-def _ids(links: Any) -> list[str]:
-    """Every id in a parse tree, so a mangled parse can be recognised."""
-    found: list[str] = []
-    for link in links:
-        found.append(link.id or "")
-        found.extend(_ids(link.values))
-    return found
+#: The dialect a downstream project invented for the same need.
+HAND_ROLLED_DIALECT = '((:"bytes" 2827) (:"complete" true))'
 
 
 def test_the_hand_rolled_dialect_is_not_read_as_a_record() -> None:
-    """The dialect a downstream project invented for the same need, which the
-    notation does not read back -- the reason this format exists.
+    """The dialect a downstream project invented for the same need is what this
+    format replaces: it does not read back as the record it was written from.
 
-    This parser does not raise on it; it swallows the parentheses into the data,
-    which loses the record just as surely.
+    How it fails is the parser's business and has changed between
+    ``links-notation`` releases -- 0.11 swallowed the parentheses into the ids,
+    0.16 reads them as anonymous links, and the Rust and JavaScript parsers
+    reject the string outright. The assertion is therefore about the outcome
+    that matters and is stable across all of them, matching the C# test: the
+    record does not come back. See issue #47.
     """
-    ids = _ids(Parser().parse('((:"bytes" 2827) (:"complete" true))'))
-    assert any("(" in name or ")" in name for name in ids), ids
+    try:
+        decoded = decode(HAND_ROLLED_DIALECT)
+    except ReadableFormatError:
+        return  # Rejected outright, which loses the record just as surely.
+    read_back_as_a_record = (
+        isinstance(decoded, dict) and "bytes" in decoded and "complete" in decoded
+    )
+    assert not read_back_as_a_record, decoded
 
 
 @pytest.mark.parametrize(

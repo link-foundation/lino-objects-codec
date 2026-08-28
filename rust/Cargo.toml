@@ -12,7 +12,7 @@ keywords = ["links-notation", "serialization", "codec", "object-graph", "circula
 categories = ["encoding", "parser-implementations"]
 
 [dependencies]
-links-notation = "0.14.0"
+links-notation = "0.16.1"
 base64 = "0.22"
 
 [dev-dependencies]

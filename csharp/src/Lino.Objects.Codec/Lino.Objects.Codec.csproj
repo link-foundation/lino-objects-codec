@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>Lino.Objects.Codec</PackageId>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Link.Foundation.Links.Notation" Version="0.13.0" />
+    <PackageReference Include="Link.Foundation.Links.Notation" Version="0.16.1" />
   </ItemGroup>
 
 </Project>
