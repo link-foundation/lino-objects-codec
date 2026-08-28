@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-08-28
+
+### Changed
+- Updated `links-notation` from 0.14.0 to 0.16.1. All four implementations now pin `links-notation` 0.16.1, so the conformance suites run against one grammar instead of four (issue #47).
+
+### Changed
+- Updated `base64` from 0.22 to 0.23.1 and the `serde_json` dev-dependency from 1.0.149 to 1.0.151.
+- Moved the crate to edition 2024 and raised `rust-version` from 1.70 to 1.85. The declared 1.70 was already unreachable: `base64` 0.23 and `serde_json` 1.0.151 both require 1.71 or newer, so the floor had to move regardless (issue #47).
+
 ## [0.6.0] - 2026-08-27
 
 ### Changed
