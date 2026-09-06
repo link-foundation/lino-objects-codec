@@ -19,7 +19,7 @@
          longer supports the VSTest target that coverlet.collector plugs into.
          This is the coverage collector for the new platform; it is what
          the coverage run in CI uses. -->
-    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.11.0" />
   </ItemGroup>
 
   <ItemGroup>
