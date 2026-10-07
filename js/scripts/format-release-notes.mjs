@@ -35,34 +35,19 @@ import {
 // real npm registry entry. Hardcoding this caused issue #29's false-positive.
 const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import { loadReleaseTools, releaseArguments } from './release-tools.mjs';
 
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+const { $, makeConfig } = await loadReleaseTools();
 
 // Parse CLI arguments using lino-arguments
 // Note: Using --release-version instead of --version to avoid conflict with yargs' built-in --version flag
 const config = makeConfig({
   yargs: ({ yargs, getenv }) =>
-    yargs
-      .option('release-version', {
-        type: 'string',
-        default: getenv('VERSION', ''),
-        describe: 'Version number (e.g., v0.8.36)',
-      })
+    releaseArguments({ yargs, getenv })
       .option('release-id', {
         type: 'string',
         default: getenv('RELEASE_ID', ''),
         describe: 'GitHub release ID',
-      })
-      .option('repository', {
-        type: 'string',
-        default: getenv('REPOSITORY', ''),
-        describe: 'GitHub repository (e.g., owner/repo)',
       })
       .option('commit-sha', {
         type: 'string',

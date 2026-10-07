@@ -19,13 +19,9 @@ import {
   selectLatestSatisfyingMajor,
 } from './npm-version-helpers.mjs';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import { loadReleaseTools } from './release-tools.mjs';
 
-// Import command-stream for shell command execution
-const { $ } = await use('command-stream');
+const { $ } = await loadReleaseTools({ configuration: false });
 
 async function runChecked(command, label) {
   const result = await command.run({ capture: true });

@@ -46,6 +46,18 @@ test("shared-only changes are balanced (nothing to enforce)", () => {
   assert.equal(result.balanced, true);
 });
 
+test("dependency-only updates do not count as library source", () => {
+  const result = analyzeParity([
+    "js/package.json",
+    "python/pyproject.toml",
+    "rust/Cargo.toml",
+    "csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj",
+  ]);
+  assert.deepEqual(result.changed, []);
+  assert.equal(result.balanced, true);
+  assert.equal(analyzeParity(["csharp/src/Lino.Objects.Codec/Readable.cs"]).balanced, false);
+});
+
 test("tests and examples do not count as library source", () => {
   const result = analyzeParity([
     "rust/tests/readable_format.rs",

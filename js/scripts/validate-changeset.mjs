@@ -66,20 +66,8 @@ try {
 
   // Extract description (everything after the closing ---) and check it's not empty
   const parts = content.split('---');
-  if (parts.length < 3) {
-    console.error(
-      '::error::Changeset must include a description of the changes'
-    );
-    console.error(
-      "::error::The description should appear after the closing '---' in the changeset file"
-    );
-    console.error(`::error::Current content of ${changesetFile}:`);
-    console.error(content);
-    process.exit(1);
-  }
-
   const description = parts.slice(2).join('---').trim();
-  if (!description) {
+  if (parts.length < 3 || !description) {
     console.error(
       '::error::Changeset must include a description of the changes'
     );

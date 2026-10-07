@@ -32,36 +32,36 @@ export function encodeShieldsStaticBadgeSegment(value) {
   return encodeURIComponent(value).replace(/-/g, '--').replace(/_/g, '__');
 }
 
-export function buildNpmVersionBadge(packageName, releaseVersion) {
-  const versionWithoutV = normalizeReleaseVersionForBadge(releaseVersion);
-  const badgeVersion = encodeShieldsStaticBadgeSegment(versionWithoutV);
-  const packageVersionPath = encodeURIComponent(versionWithoutV);
+function badgeParts(releaseVersion) {
+  const version = normalizeReleaseVersionForBadge(releaseVersion);
+  return {
+    badgeVersion: encodeShieldsStaticBadgeSegment(version),
+    versionPath: encodeURIComponent(version),
+  };
+}
 
-  return `[![npm version](https://img.shields.io/badge/npm-${badgeVersion}-blue.svg)](https://www.npmjs.com/package/${packageName}/v/${packageVersionPath})`;
+export function buildNpmVersionBadge(packageName, releaseVersion) {
+  const { badgeVersion, versionPath } = badgeParts(releaseVersion);
+
+  return `[![npm version](https://img.shields.io/badge/npm-${badgeVersion}-blue.svg)](https://www.npmjs.com/package/${packageName}/v/${versionPath})`;
 }
 
 export function buildCratesIoVersionBadge(crateName, releaseVersion) {
-  const versionWithoutV = normalizeReleaseVersionForBadge(releaseVersion);
-  const badgeVersion = encodeShieldsStaticBadgeSegment(versionWithoutV);
-  const crateVersionPath = encodeURIComponent(versionWithoutV);
+  const { badgeVersion, versionPath } = badgeParts(releaseVersion);
 
-  return `[![crates.io](https://img.shields.io/badge/crates.io-${badgeVersion}-orange.svg)](https://crates.io/crates/${crateName}/${crateVersionPath})`;
+  return `[![crates.io](https://img.shields.io/badge/crates.io-${badgeVersion}-orange.svg)](https://crates.io/crates/${crateName}/${versionPath})`;
 }
 
 export function buildNuGetVersionBadge(packageName, releaseVersion) {
-  const versionWithoutV = normalizeReleaseVersionForBadge(releaseVersion);
-  const badgeVersion = encodeShieldsStaticBadgeSegment(versionWithoutV);
-  const packageVersionPath = encodeURIComponent(versionWithoutV);
+  const { badgeVersion, versionPath } = badgeParts(releaseVersion);
 
-  return `[![NuGet](https://img.shields.io/badge/nuget-${badgeVersion}-blue.svg)](https://www.nuget.org/packages/${packageName}/${packageVersionPath})`;
+  return `[![NuGet](https://img.shields.io/badge/nuget-${badgeVersion}-blue.svg)](https://www.nuget.org/packages/${packageName}/${versionPath})`;
 }
 
 export function buildPyPiVersionBadge(packageName, releaseVersion) {
-  const versionWithoutV = normalizeReleaseVersionForBadge(releaseVersion);
-  const badgeVersion = encodeShieldsStaticBadgeSegment(versionWithoutV);
-  const packageVersionPath = encodeURIComponent(versionWithoutV);
+  const { badgeVersion, versionPath } = badgeParts(releaseVersion);
 
-  return `[![PyPI](https://img.shields.io/badge/pypi-${badgeVersion}-blue.svg)](https://pypi.org/project/${packageName}/${packageVersionPath}/)`;
+  return `[![PyPI](https://img.shields.io/badge/pypi-${badgeVersion}-blue.svg)](https://pypi.org/project/${packageName}/${versionPath}/)`;
 }
 
 /**

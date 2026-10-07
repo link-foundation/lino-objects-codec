@@ -18,14 +18,9 @@ import { randomBytes } from 'crypto';
 
 const PACKAGE_NAME = JSON.parse(readFileSync('./package.json', 'utf8')).name;
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import { loadReleaseTools } from './release-tools.mjs';
 
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+const { $, makeConfig } = await loadReleaseTools();
 
 // Parse CLI arguments using lino-arguments
 const config = makeConfig({
