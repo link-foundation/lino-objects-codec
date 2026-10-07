@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-10-07
+
+### Added
+
+- Public single-line and verbatim value formatting helpers, and an optional lossless `serde_json::Value` bridge preserving key order, number text and empty values.
+
+### Changed
+
+- Update links-notation to 0.23.0 and refresh the Cargo lockfile. CI tests the JSON feature and rejects stale dependencies.
+
+### Fixed
+
+- Disambiguate a readable array containing only null from the compact null document.
+
 ## [0.7.0] - 2026-08-28
 
 ### Changed
