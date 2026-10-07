@@ -834,6 +834,16 @@ public static class Codec
 /// </summary>
 public static class Format
 {
+    /// <summary>Quote and escape a value for one physical line. Decode with Codec.DecodeLine.</summary>
+    /// <param name="value">The text to format.</param>
+    /// <returns>One readable Links Notation value without line breaks.</returns>
+    public static string FormatValueSingleLine(string value) => Readable.FormatValueSingleLine(value);
+
+    /// <summary>Quote a value retaining literal newlines and tabs. Decode with Codec.Decode.</summary>
+    /// <param name="value">The text to format.</param>
+    /// <returns>A readable Links Notation value.</returns>
+    public static string FormatValueVerbatim(string value) => Readable.FormatValueVerbatim(value);
+
     /// <summary>
     /// Escape a reference for Links Notation.
     /// References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.

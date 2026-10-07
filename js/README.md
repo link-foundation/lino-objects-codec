@@ -123,6 +123,21 @@ are saved.
 
 ## Usage Examples
 
+### Public value formatting
+
+`formatValueSingleLine(text)` returns a readable string value with no CR/LF.
+`formatValueVerbatim(text)` retains real newlines and tabs. Both use the same
+quoting and escaping as `encode`, and `decode` recovers the original text:
+
+```javascript
+import { decode, formatValueSingleLine } from 'lino-objects-codec';
+
+const text = 'quoted "value"\nnext line';
+const value = formatValueSingleLine(text);
+console.assert(!value.includes('\n'));
+console.assert(decode(value) === text);
+```
+
 ### Readable Indented Data
 
 ```javascript

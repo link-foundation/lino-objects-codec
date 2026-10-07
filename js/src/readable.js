@@ -283,7 +283,8 @@ function writeValue(value, indent, level, out, path) {
 function writeLineValue(value, out, path) {
   if (Array.isArray(value)) {
     enterPath(value, path);
-    out.push('(');
+    // `(null)` is a compact null; this array needs an explicit marker.
+    out.push(value.length === 1 && value[0] === null ? '(a: ' : '(');
     value.forEach((item, index) => {
       if (index > 0) {
         out.push(' ');
@@ -421,6 +422,16 @@ function formatNumber(value) {
   return String(value);
 }
 
+/** Quote a value for one physical line; decode with decodeLine. */
+export function formatValueSingleLine(value) {
+  return formatString(value, FORM_LINE);
+}
+
+/** Quote a value keeping literal newlines and tabs; decode with decode. */
+export function formatValueVerbatim(value) {
+  return formatString(value, FORM_INDENTED);
+}
+
 /**
  * Format a string value. The text is written as text; when it holds characters
  * this form cannot carry, those characters — and only those — are
@@ -547,6 +558,7 @@ function formatKey(key, form) {
     key.length > 0 &&
     key !== BASE64_MARKER &&
     key !== ESCAPED_MARKER &&
+    key !== 'json-number' &&
     !KEY_NEEDS_QUOTES.test(key);
 
   return plain ? key : formatString(key, form);
@@ -785,7 +797,10 @@ class Cursor {
       token.kind === TOKEN_REF &&
       !token.quoted &&
       token.value === `${OBJECT_MARKER}:`;
-    if (isMarker) {
+    if (
+      isMarker ||
+      (token?.kind === TOKEN_REF && !token.quoted && token.value === 'a:')
+    ) {
       this.pos += 1;
     }
     return isMarker;

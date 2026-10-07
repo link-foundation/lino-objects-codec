@@ -13,7 +13,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-lino-objects-codec = "0.1"
+lino-objects-codec = "0.8"
 ```
 
 ## Features
@@ -81,6 +81,48 @@ The encoded document reads as:
 working and are rewritten in the readable form the next time they are saved.
 
 ## API Reference
+
+### Public value formatting
+
+`format::format_value_single_line(&str)` returns one quoted or escaped readable
+value with no CR/LF. `format::format_value_verbatim(&str)` keeps real newlines and
+tabs, escaping only controls that the readable format cannot carry. Both can be
+passed directly to `decode()` and recover the original string. Use these helpers
+when composing records without encoding a temporary object first. The lower
+level `format::quote` and `format::unescape` are public too; `quote` only selects
+delimiters, so use the full formatter for arbitrary control characters.
+
+```rust
+use lino_objects_codec::{decode, format, LinoValue};
+
+let text = "quoted \"value\"\nnext line";
+let value = format::format_value_single_line(text);
+assert!(!value.contains('\n'));
+assert_eq!(decode(&value).unwrap(), LinoValue::from(text));
+```
+
+### Optional JSON bridge
+
+The JSON bridge and public value helpers are introduced in 0.8.0. Enable
+`features = ["serde_json"]` on the dependency. `LinoValue::from(Value)`
+and `Value::try_from(LinoValue)` also accept borrowed inputs. Object insertion
+order and the numeric text exposed by `serde_json::Number` survive conversion
+and all three wire formats through a feature-gated `JsonNumber` variant. The
+feature enables serde_json's `preserve_order` and `arbitrary_precision` settings.
+The guarantee starts with the supplied `Value`; parsing can already normalize
+original JSON spelling or discard duplicate keys.
+
+`json::json_to_lino` and `json::lino_to_json` provide text conversions. Nulls and
+empty containers are retained by default. Pass `JsonOptions { strip_empty: true }`
+to `json_to_lino_with_options` or `from_json_with_options` to recursively remove
+nulls and empty arrays/objects, while retaining empty strings, false and zero.
+An entirely stripped root becomes null. Non-finite floats and duplicate LiNo
+object keys return conversion errors. Run the complete example with
+`cargo run --features serde_json --example json_bridge`.
+
+The JSON number markers `(json-number "1.200")` and `(json_number 1.200)` are
+Rust feature extensions; arbitrary-precision JSON numbers are not promised by
+the other language implementations.
 
 ### Types
 

@@ -41,7 +41,7 @@ export function analyzeParity(changedFiles) {
   );
   const changed = LANGUAGES.filter((language) =>
     language.sources.some((source) =>
-      normalized.some((file) => file.startsWith(source)),
+      normalized.some((file) => file.startsWith(source) && !file.endsWith(".csproj")),
     ),
   ).map((language) => language.id);
   const missing = LANGUAGES.filter(

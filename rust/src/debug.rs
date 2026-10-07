@@ -61,9 +61,15 @@ pub fn trace<F: FnOnce() -> String>(scope: &str, message: F) {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::sync::Mutex;
+
+    // Both tests mutate one process-wide override. Keep their assertions inside
+    // the same lock so the parallel test harness cannot reset another test's flag.
+    static DEBUG_TEST_LOCK: Mutex<()> = Mutex::new(());
 
     #[test]
     fn override_turns_tracing_on_and_off() {
+        let _guard = DEBUG_TEST_LOCK.lock().unwrap();
         set_debug_enabled(Some(true));
         assert!(is_debug_enabled());
         set_debug_enabled(Some(false));
@@ -73,6 +79,7 @@ mod tests {
 
     #[test]
     fn trace_builds_nothing_while_off() {
+        let _guard = DEBUG_TEST_LOCK.lock().unwrap();
         set_debug_enabled(Some(false));
         trace("test", || panic!("must not be called while tracing is off"));
         set_debug_enabled(None);

@@ -53,6 +53,21 @@ assert decoded == {"name": "Alice", "age": 30, "active": True}
 
 ## Usage Examples
 
+### Public value formatting
+
+`format_value_single_line(text)` returns a readable string value with no CR/LF.
+`format_value_verbatim(text)` retains real newlines and tabs. Both use the same
+quoting and escaping as `encode`, and `decode` recovers the original text:
+
+```python
+from link_notation_objects_codec import decode, format_value_single_line
+
+text = 'quoted "value"\nnext line'
+value = format_value_single_line(text)
+assert "\n" not in value
+assert decode(value) == text
+```
+
 ### Basic Types
 
 ```python

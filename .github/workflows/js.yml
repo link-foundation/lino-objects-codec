@@ -131,7 +131,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Check for changesets
         working-directory: ./js
@@ -200,7 +200,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Run ESLint
         working-directory: ./js
@@ -262,7 +262,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Run tests
         working-directory: ./js
@@ -306,7 +306,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Update npm for OIDC trusted publishing
         working-directory: ./js
@@ -391,7 +391,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Update npm for OIDC trusted publishing
         working-directory: ./js
@@ -451,7 +451,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./js
-        run: npm install
+        run: npm ci
 
       - name: Create changeset file
         working-directory: ./js

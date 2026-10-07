@@ -12,16 +12,11 @@
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
 
-import { readFileSync, appendFileSync, readdirSync } from 'fs';
+import { readFileSync, readdirSync } from 'fs';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import { loadReleaseTools, setOutput } from './release-tools.mjs';
 
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+const { $, makeConfig } = await loadReleaseTools();
 
 // Parse CLI arguments using lino-arguments
 const config = makeConfig({
@@ -93,18 +88,6 @@ if (mode === 'instant' && !bumpType) {
     'Usage: node scripts/version-and-commit.mjs --mode instant --bump-type <major|minor|patch> [--description <desc>]'
   );
   process.exit(1);
-}
-
-/**
- * Append to GitHub Actions output file
- * @param {string} key
- * @param {string} value
- */
-function setOutput(key, value) {
-  const outputFile = process.env.GITHUB_OUTPUT;
-  if (outputFile) {
-    appendFileSync(outputFile, `${key}=${value}\n`);
-  }
 }
 
 /**

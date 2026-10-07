@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools>=84.0", "wheel"]
+requires = ["setuptools>=84.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "lino-objects-codec"
-version = "0.2.0"
+version = "0.3.0"
 description = "A library to encode/decode objects to/from links notation"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "links-notation>=0.16.1,<0.23.0",
+    "links-notation>=0.23.0,<0.24.0",
 ]
 
 [project.optional-dependencies]
@@ -28,10 +28,10 @@ dependencies = [
 # ".[dev]"` resolves to what CI runs instead of to a years-old release that
 # lints and type-checks by different rules. See issue #47.
 dev = [
-    "pytest>=9.1",
-    "pytest-cov>=7.1",
-    "ruff>=0.16.5",
-    "mypy>=2.3",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "ruff>=0.16.10",
+    "mypy>=2.4.0",
     "scriv[toml]>=1.8",
 ]
 

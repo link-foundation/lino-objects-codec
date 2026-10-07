@@ -1,0 +1,58 @@
+name: Dependency Freshness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  direct:
+    name: Direct dependencies are current
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Test freshness gate, including blocker policy
+        run: python -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v
+      - name: Check latest releases across all four ecosystems
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/check_dependency_freshness.py
+
+  locks:
+    name: Lockfiles have no pending compatible updates
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Check npm resolved versions
+        working-directory: js
+        run: |
+          npm ci
+          npm outdated
+      - name: Check Cargo lockfile
+        working-directory: rust
+        run: |
+          cargo update --dry-run 2>&1 | tee cargo-update.log
+          if grep -E '^[[:space:]]*(Updating .+ ->|Adding |Removing |Locking [1-9])' cargo-update.log; then
+            echo '::error::Cargo.lock has pending updates; run cargo update.'
+            exit 1
+          fi

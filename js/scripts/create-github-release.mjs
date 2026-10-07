@@ -25,30 +25,15 @@ import {
   normalizeReleaseVersionForBadge,
 } from './release-format-helpers.mjs';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import { loadReleaseTools, releaseArguments } from './release-tools.mjs';
 
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+const { $, makeConfig } = await loadReleaseTools();
 
 // Parse CLI arguments using lino-arguments
 // Note: Using --release-version instead of --version to avoid conflict with yargs' built-in --version flag
 const config = makeConfig({
   yargs: ({ yargs, getenv }) =>
-    yargs
-      .option('release-version', {
-        type: 'string',
-        default: getenv('VERSION', ''),
-        describe: 'Version number (e.g., 1.0.0)',
-      })
-      .option('repository', {
-        type: 'string',
-        default: getenv('REPOSITORY', ''),
-        describe: 'GitHub repository (e.g., owner/repo)',
-      })
+    releaseArguments({ yargs, getenv })
       .option('tag-prefix', {
         type: 'string',
         default: getenv('TAG_PREFIX', 'v'),

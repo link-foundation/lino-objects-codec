@@ -327,16 +327,25 @@ public static class Readable
         if (value is System.Collections.IEnumerable items and not string)
         {
             EnterPath(items, path);
+            var start = output.Length;
             output.Append('(');
             var first = true;
+            var count = 0;
+            var nullOnly = true;
             foreach (var item in items)
             {
+                count++;
+                nullOnly &= item is null;
                 if (!first)
                 {
                     output.Append(' ');
                 }
                 first = false;
                 WriteLineValue(item, output, path);
+            }
+            if (count == 1 && nullOnly)
+            {
+                output.Insert(start + 1, "a: ");
             }
             output.Append(')');
             path.Remove(items);
@@ -421,6 +430,13 @@ public static class Readable
     /// are percent-escaped and the value is marked, so the rest of it stays
     /// readable and greppable.
     /// </summary>
+    public static string FormatValueSingleLine(string value) => FormatString(value, Form.Line);
+
+    /// <summary>Quote text retaining literal newlines and tabs.</summary>
+    /// <param name="value">The text to format.</param>
+    /// <returns>A readable Links Notation value.</returns>
+    public static string FormatValueVerbatim(string value) => FormatString(value, Form.Indented);
+
     private static string FormatString(string value, Form form)
     {
         var escaped = EscapeUnwritable(value, form);
@@ -543,6 +559,7 @@ public static class Readable
         var plain = key.Length > 0
             && key != Base64Marker
             && key != EscapedMarker
+            && key != "json-number"
             && !key.Any(c => char.IsWhiteSpace(c) || IsControl(c) || KeyNeedsQuotes.Contains(c));
 
         return plain ? key : FormatString(key, form);
@@ -827,12 +844,12 @@ public static class Readable
                 return false;
             }
             var token = _tokens[Pos];
-            if (token.Kind != TokenKind.Ref || token.Quoted || token.Value != ObjectMarker + ":")
+            if (token.Kind != TokenKind.Ref || token.Quoted || (token.Value != ObjectMarker + ":" && token.Value != "a:"))
             {
                 return false;
             }
             Pos++;
-            return true;
+            return token.Value == ObjectMarker + ":";
         }
 
         /// <summary>

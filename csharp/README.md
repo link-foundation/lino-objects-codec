@@ -70,6 +70,22 @@ Console.WriteLine($"Name: {decoded?["name"]}, Age: {decoded?["age"]}");
 
 ## Usage Examples
 
+### Public value formatting
+
+`Format.FormatValueSingleLine(text)` returns a readable string value with no
+CR/LF. `Format.FormatValueVerbatim(text)` retains real newlines and tabs. Both
+use the same quoting and escaping as `Codec.Encode`, and `Codec.Decode` recovers
+the original text:
+
+```csharp
+using Lino.Objects.Codec;
+
+var text = "quoted \"value\"\nnext line";
+var value = Format.FormatValueSingleLine(text);
+System.Diagnostics.Debug.Assert(!value.Contains('\n'));
+System.Diagnostics.Debug.Assert((string?)Codec.Decode(value) == text);
+```
+
 ### Basic Types
 
 ```csharp
