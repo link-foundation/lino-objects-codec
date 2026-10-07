@@ -44,22 +44,46 @@ def version_key(version: str) -> tuple[int, ...]:
     return parts + (0,) * (4 - len(parts))
 
 
+def declaration_matches(declaration: str, name: str) -> bool:
+    escaped = re.escape(name)
+    return bool(
+        re.match(rf'''\s*["']?{escaped}["']?\s*=''', declaration)
+        or re.search(rf'''["']{escaped}(?:\[|[<=>~!;'"\s])''', declaration)
+        or re.search(rf'''\bInclude=["']{escaped}["']''', declaration)
+        or re.search(rf'''\buses:\s*{escaped}(?:/[^@\s]+)?@''', declaration)
+        or re.match(rf'''\s*{escaped}\s*:''', declaration)
+    )
+
+
 def blocker_on_line(text: str, name: str) -> str | None:
     for line in text.splitlines():
         if name in line:
             # Only a comment can justify an exception, never a dependency URL.
             declaration, _, comment = line.partition("#" if "#" in line else "<!--")
-            escaped = re.escape(name)
-            if not (
-                re.match(rf'''\s*["']?{escaped}["']?\s*=''', declaration)
-                or re.match(rf'''\s*["']{escaped}(?:\[|[<=>~!;'"\s])''', declaration)
-                or re.search(rf'''\bInclude=["']{escaped}["']''', declaration)
-                or re.search(rf'''\buses:\s*{escaped}(?:/[^@\s]+)?@''', declaration)
-            ):
+            if not declaration_matches(declaration, name):
                 continue
             match = ISSUE.search(comment)
             if match:
                 return match.group()
+    return None
+
+
+def manifest_blocker(text: str, name: str, requirement: str, used: set[tuple[int, int, str]]) -> str | None:
+    """Match each parsed dependency to one physical declaration, including repeats.
+
+    Consume even uncommented lines so a dev dependency's comment cannot excuse
+    a runtime dependency with the same name and version. Match the exact quoted
+    requirement, rather than a version substring or a renamed Cargo package.
+    """
+    quoted = re.compile(rf'''(["']){re.escape(requirement)}\1''')
+    for index, line in enumerate(text.splitlines()):
+        declaration = line.partition("#" if "#" in line else "<!--")[0]
+        if declaration_matches(declaration, name):
+            for match in quoted.finditer(declaration):
+                occurrence = (index, match.start(), name)
+                if occurrence not in used:
+                    used.add(occurrence)
+                    return blocker_on_line(line, name)
     return None
 
 
@@ -71,17 +95,19 @@ def declarations(root: Path = ROOT) -> list[Dependency]:
         if "target" in path.parts:
             continue
         text = path.read_text()
+        used: set[tuple[int, int, str]] = set()
         data = tomllib.loads(text)
         tables = [data, *data.get("target", {}).values()]
         for table in tables:
             for section in ["dependencies", "dev-dependencies", "build-dependencies"]:
                 for name, spec in table.get(section, {}).items():
+                    declared_name = name
                     if isinstance(spec, dict):
                         if "path" in spec or "git" in spec:
                             continue
                         name = spec.get("package", name)
                         spec = spec.get("version", "")
-                    result.append(Dependency("cargo", name, floor(spec), str(path.relative_to(root)), blocker_on_line(text, name)))
+                    result.append(Dependency("cargo", name, floor(spec), str(path.relative_to(root)), manifest_blocker(text, declared_name, spec, used)))
     path = root / "js/package.json"
     data = json.loads(path.read_text())
     for section in ["dependencies", "devDependencies", "optionalDependencies"]:
@@ -89,28 +115,32 @@ def declarations(root: Path = ROOT) -> list[Dependency]:
             result.append(Dependency("npm", name, floor(spec), str(path.relative_to(root))))
     path = root / "python/pyproject.toml"
     text = path.read_text()
+    used = set()
     data = tomllib.loads(text)
     specs = [*data["build-system"]["requires"], *data["project"]["dependencies"]]
     for group in data["project"].get("optional-dependencies", {}).values():
         specs.extend(group)
     for spec in specs:
         name = re.match(r"[\w.-]+", spec).group()
-        result.append(Dependency("pypi", name, floor(spec), str(path.relative_to(root)), blocker_on_line(text, name)))
+        result.append(Dependency("pypi", name, floor(spec), str(path.relative_to(root)), manifest_blocker(text, name, spec, used)))
     for path in sorted((root / "csharp").glob("**/*.csproj")):
         if "obj" in path.parts or "bin" in path.parts:
             continue
         text = path.read_text()
+        used = set()
         for ref in ET.fromstring(text).iter("PackageReference"):
-            result.append(Dependency("nuget", ref.attrib["Include"], floor(ref.attrib["Version"]), str(path.relative_to(root)), blocker_on_line(text, ref.attrib["Include"])))
+            result.append(Dependency("nuget", ref.attrib["Include"], floor(ref.attrib["Version"]), str(path.relative_to(root)), manifest_blocker(text, ref.attrib["Include"], ref.attrib["Version"], used)))
     for path in sorted((root / ".github/workflows").glob("*.yml")):
         text = path.read_text()
-        for name, ref in re.findall(r"uses:\s*([\w.-]+/[\w.-]+)(?:/[\w/-]+)?@(v\d+(?:\.\d+)*)", text):
-            result.append(Dependency("github-actions", name, ref[1:], str(path.relative_to(root)), blocker_on_line(text, name)))
+        for line in text.splitlines():
+            for name, ref in re.findall(r"uses:\s*([\w.-]+/[\w.-]+)(?:/[\w/-]+)?@(v\d+(?:\.\d+)*)", line):
+                result.append(Dependency("github-actions", name, ref[1:], str(path.relative_to(root)), blocker_on_line(line, name)))
     for path, variable, name in [
         (root / ".github/workflows/scripts.yml", "ACTIONLINT_VERSION", "rhysd/actionlint"),
         (root / ".github/workflows/security.yml", "GITLEAKS_VERSION", "gitleaks/gitleaks"),
     ]:
-        result.append(Dependency("github-tools", name, re.search(rf"{variable}:\s*(\S+)", path.read_text()).group(1), str(path.relative_to(root))))
+        line = next(line for line in path.read_text().splitlines() if re.match(rf"\s*{variable}:\s*", line))
+        result.append(Dependency("github-tools", name, re.search(rf"{variable}:\s*(\S+)", line).group(1), str(path.relative_to(root)), blocker_on_line(line, variable)))
     return result
 
 

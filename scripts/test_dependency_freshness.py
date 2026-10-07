@@ -1,7 +1,10 @@
 import unittest
 from unittest.mock import patch
+import shutil
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
-from check_dependency_freshness import Dependency, ROOT, blocker_on_line, check, declarations, latest
+from check_dependency_freshness import Dependency, ROOT, blocker_on_line, check, declarations, latest, manifest_blocker
 
 
 class DependencyFreshnessTests(unittest.TestCase):
@@ -26,7 +29,13 @@ class DependencyFreshnessTests(unittest.TestCase):
         self.assertIsNone(blocker_on_line(f'other = "1.0.0" # blocked {url}', "blocked"))
         self.assertIsNone(blocker_on_line(f'blocked = {{ git = "{url}" }}', "blocked"))
         self.assertEqual(blocker_on_line(f'"blocked>=1.0.0", # {url}', "blocked"), url)
+        self.assertEqual(blocker_on_line(f'requires = ["blocked>=1.0.0"] # {url}', "blocked"), url)
         self.assertEqual(blocker_on_line(f'<PackageReference Include="blocked" Version="1.0.0" /> <!-- {url} -->', "blocked"), url)
+        used = set()
+        inline = f'requires = ["blocked>=1.0.0", "other>=1.0.0"] # {url}'
+        self.assertEqual(manifest_blocker(inline, "blocked", "blocked>=1.0.0", used), url)
+        self.assertEqual(manifest_blocker(inline, "other", "other>=1.0.0", used), url)
+        self.assertIsNone(manifest_blocker(f'blocked = "1.0.1" # {url}', "blocked", "1.0", set()))
 
     def test_every_ecosystem_build_and_dev_dependencies_are_read(self):
         deps = declarations(ROOT)
@@ -35,6 +44,26 @@ class DependencyFreshnessTests(unittest.TestCase):
         self.assertTrue(any(d.name == "setuptools" for d in deps))
         self.assertTrue(any(d.name == "xunit.v3" for d in deps))
         self.assertTrue(any(d.name == "eslint" for d in deps))
+
+    def test_blockers_do_not_spread_to_other_declarations_of_the_same_package(self):
+        url = "https://github.com/owner/repo/issues/123"
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            for relative in ["rust/Cargo.toml", "js/package.json", "python/pyproject.toml", ".github/workflows/scripts.yml", ".github/workflows/security.yml"]:
+                target = root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(ROOT / relative, target)
+            (root / "rust/Cargo.toml").write_text(f'[dependencies]\nblocked = "1.0.0"\nrenamed = {{ package = "renamed-crate", version = "1.0.0" }} # {url}\n[dev-dependencies]\nblocked = "1.0.0" # {url}\n')
+            (root / "python/pyproject.toml").write_text(f'[build-system]\nrequires = ["blocked>=1.0.0"]\n[project]\ndependencies = [\n"blocked>=1.0.0", # {url}\n]\n')
+            (root / ".github/workflows/repeated.yml").write_text(f'uses: actions/checkout@v6\nuses: actions/checkout@v6 # {url}\n')
+            project = root / "csharp/tests/Repeated.csproj"
+            project.parent.mkdir(parents=True)
+            project.write_text(f'<Project><ItemGroup>\n<PackageReference Include="blocked" Version="1.0.0" />\n<PackageReference Include="blocked" Version="1.0.0" /> <!-- {url} -->\n</ItemGroup></Project>')
+            deps = declarations(root)
+            self.assertEqual(next(d for d in deps if d.name == "renamed-crate").blocker, url)
+            for ecosystem, name in [("cargo", "blocked"), ("pypi", "blocked"), ("nuget", "blocked"), ("github-actions", "actions/checkout")]:
+                selected = [d for d in deps if d.ecosystem == ecosystem and d.name == name and d.manifest.endswith(("Cargo.toml", "pyproject.toml", "Repeated.csproj", "repeated.yml"))]
+                self.assertEqual([d.blocker for d in selected], [None, url], ecosystem)
 
     def test_moving_major_action_tag_tracks_patches(self):
         self.assertIsNone(check(Dependency("github-actions", "actions/checkout", "7", "workflow.yml"), lambda *_: "7.1.0", lambda *_: "closed"))

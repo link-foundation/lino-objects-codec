@@ -118,6 +118,14 @@ The completed initial security run confirms the same npm vulnerabilities at
 vulnerabilities. The freshness gate handles CodeQL bundle releases separately
 from its action version and has a mocked regression for bundle/prerelease tags.
 
+Final review also reproduced an exception-scope bug: a blocker comment on a dev
+dependency excused an uncommented runtime declaration of the same package.
+`ci-logs/blocker-scope-before.log` records the failing test. Blocker matching now
+consumes each individual declaration, including duplicate requirements, renamed
+Cargo dependencies, Python inline arrays, NuGet references and repeated actions.
+The regression covers all four applicable declaration formats; exceptions cannot
+spread to another line.
+
 Rust and JavaScript retain their manifest versions because their workflows
 forbid manual bumps and consume the included minor-release fragments. Python
 and C# explicitly bump to 0.3.0 because their auto-release jobs publish an
@@ -137,7 +145,7 @@ after merge. No package is claimed as published from this unmerged branch.
   validation pass.
 - C#: 522 tests, coverage collection, dotnet format, build with warnings as errors,
   NuGet packing, example and 27 release-script tests pass.
-- Shared scripts: 35 Node tests and 8 dependency policy tests pass. actionlint
+- Shared scripts: 35 Node tests and 9 dependency policy tests pass. actionlint
   validates every workflow. All 134 direct dependency declarations are current.
 - Existing cross-language experiment: all 16 writer/reader combinations agree.
   The new consumer probe runs successfully; cargo tree -d reports no duplicate
