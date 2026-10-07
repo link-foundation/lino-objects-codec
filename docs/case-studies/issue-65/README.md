@@ -126,6 +126,16 @@ Cargo dependencies, Python inline arrays, NuGet references and repeated actions.
 The regression covers all four applicable declaration formats; exceptions cannot
 spread to another line.
 
+Fresh CI on `d107cf5` (run `37558143818`, 2026-10-07 01:38:56 UTC) exposed a
+pre-existing race between Rust's two tracing tests. The no-feature test run
+failed `is_debug_enabled()` at `rust/src/debug.rs:68`, recorded in
+`ci-logs/rust-windows-112589144862.log:880–891`. Both tests mutated the same
+process-wide override concurrently. The bounded probe
+`experiments/issue-65/debug-test-race.py` reproduced it locally on attempt 259
+with a full backtrace. A test-only mutex isolates these mutations while keeping
+the normal parallel test harness and the production tracing API unchanged.
+After the fix, the probe runs both tests in 1000 fresh processes successfully.
+
 Rust and JavaScript retain their manifest versions because their workflows
 forbid manual bumps and consume the included minor-release fragments. Python
 and C# explicitly bump to 0.3.0 because their auto-release jobs publish an

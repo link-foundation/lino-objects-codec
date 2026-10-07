@@ -286,13 +286,16 @@ jobs:
         working-directory: ./rust
         run: cargo test --all-features --doc --verbose
 
+      - name: Run feature-disabled tests
+        working-directory: ./rust
+        run: cargo test --no-default-features --verbose
+
       - name: Run examples
         working-directory: ./rust
         run: |
           cargo run --example basic_usage
           cargo run --example append_only_log
           cargo run --all-features --example json_bridge
-          cargo test --no-default-features
 
   # === BUILD ===
   # Build package - only runs if lint and test pass
