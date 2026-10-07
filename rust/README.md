@@ -13,7 +13,7 @@ Add to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-lino-objects-codec = "0.7"
+lino-objects-codec = "0.8"
 ```
 
 ## Features
@@ -103,7 +103,8 @@ assert_eq!(decode(&value).unwrap(), LinoValue::from(text));
 
 ### Optional JSON bridge
 
-Enable `features = ["serde_json"]` on the dependency. `LinoValue::from(Value)`
+The JSON bridge and public value helpers are introduced in 0.8.0. Enable
+`features = ["serde_json"]` on the dependency. `LinoValue::from(Value)`
 and `Value::try_from(LinoValue)` also accept borrowed inputs. Object insertion
 order and the numeric text exposed by `serde_json::Number` survive conversion
 and all three wire formats through a feature-gated `JsonNumber` variant. The
