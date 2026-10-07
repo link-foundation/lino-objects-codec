@@ -23,8 +23,8 @@ Universal serialization library to encode/decode objects to/from Links Notation 
 
 This library provides universal serialization and deserialization with built-in support for circular references and complex object graphs in:
 
-- **[Python](python/)** - Full implementation for Python 3.8+
-- **[JavaScript](js/)** - Full implementation for Node.js 18+
+- **[Python](python/)** - Full implementation for Python 3.13+
+- **[JavaScript](js/)** - Full implementation for Node.js 22.11+
 - **[Rust](rust/)** - Full implementation for Rust 1.85+
 - **[C#](csharp/)** - Full implementation for .NET 10.0+
 

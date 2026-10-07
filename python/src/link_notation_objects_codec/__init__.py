@@ -38,6 +38,8 @@ from .readable import (
     OBJECT_MARKER,
     CircularReferenceError,
     ReadableFormatError,
+    format_value_single_line,
+    format_value_verbatim,
 )
 
 try:
@@ -59,6 +61,8 @@ __all__ = [
     "escape_reference",
     "unescape_reference",
     "format_indented",
+    "format_value_single_line",
+    "format_value_verbatim",
     "parse_indented",
     "DEFAULT_INDENT",
     "BASE64_MARKER",

@@ -288,7 +288,8 @@ def _write_line_value(value: Any, out: list[str], path: set[int]) -> None:
 
     if isinstance(value, (list, tuple, set, frozenset)):
         with _on_path(value, path):
-            out.append("(")
+            # `(null)` is a compact null; disambiguate a one-null array.
+            out.append("(a: " if len(value) == 1 and next(iter(value)) is None else "(")
             for index, item in enumerate(value):
                 if index:
                     out.append(" ")
@@ -374,6 +375,16 @@ def _format_float(value: float) -> str:
     # ``repr`` keeps the decimal point for whole floats (``1.0``), which is what
     # tells a float apart from an int when reading the document back.
     return repr(value)
+
+
+def format_value_single_line(value: str) -> str:
+    """Quote a value for one physical line; decode with ``decode_line``."""
+    return _format_string(value, _FORM_LINE)
+
+
+def format_value_verbatim(value: str) -> str:
+    """Quote a value keeping literal newlines and tabs; decode with ``decode``."""
+    return _format_string(value, _FORM_INDENTED)
 
 
 def _format_string(value: str, form: str) -> str:
@@ -476,6 +487,7 @@ def _format_key(key: Any, form: str) -> str:
         bool(text)
         and text != BASE64_MARKER
         and text != ESCAPED_MARKER
+        and text != "json-number"
         and not _KEY_NEEDS_QUOTES.search(text)
     )
     return text if plain else _format_string(text, form)
@@ -696,7 +708,7 @@ class _Cursor:
         is_marker = (
             token.kind == _TOKEN_REF and not token.quoted and token.value == f"{OBJECT_MARKER}:"
         )
-        if is_marker:
+        if is_marker or (token.kind == _TOKEN_REF and not token.quoted and token.value == "a:"):
             self.pos += 1
         return is_marker
 

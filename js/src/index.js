@@ -37,6 +37,8 @@ export {
   ESCAPED_MARKER,
   OBJECT_MARKER,
   CircularReferenceError,
+  formatValueSingleLine,
+  formatValueVerbatim,
 } from './readable.js';
 
 // Opt-in tracing, shared switch across all four language implementations

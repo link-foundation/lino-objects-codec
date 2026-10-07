@@ -149,6 +149,17 @@ pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
     rows_to_value(&rows, true, false)
 }
 
+/// Quote and escape a value for one physical line. Decode with [`decode_line`].
+pub fn format_value_single_line(value: &str) -> String {
+    format_string(value, Form::Line)
+}
+
+/// Quote a value retaining literal newlines and tabs. Characters that text-file
+/// normalization could change are escaped; decode with [`decode`].
+pub fn format_value_verbatim(value: &str) -> String {
+    format_string(value, Form::Indented)
+}
+
 // === Encoding ===
 
 /// The line structure of the text being written, which is what decides whether a
@@ -234,6 +245,10 @@ fn write_line_value(value: &LinoValue, out: &mut String) {
 
         LinoValue::Array(items) => {
             out.push('(');
+            // `(null)` is a compact null; this array needs an explicit marker.
+            if matches!(items.as_slice(), [LinoValue::Null]) {
+                out.push_str("a: ");
+            }
             for (index, item) in items.iter().enumerate() {
                 if index > 0 {
                     out.push(' ');
@@ -261,6 +276,8 @@ fn format_scalar(value: &LinoValue, form: Form) -> String {
         LinoValue::Bool(b) => b.to_string(),
         LinoValue::Int(i) => i.to_string(),
         LinoValue::Float(f) => format_float(*f),
+        #[cfg(feature = "serde_json")]
+        LinoValue::JsonNumber(n) => format!("(json-number {})", quote(&n.to_string())),
         LinoValue::String(s) => format_string(s, form),
         // Containers are handled by write_value.
         LinoValue::Array(_) | LinoValue::Object(_) => String::new(),
@@ -337,12 +354,14 @@ fn is_unwritable(c: char, form: Form) -> bool {
 }
 
 /// Quote a value so that both this reader and the notation's own parser read it
-/// back unchanged. One delimiter is enough while the text holds none of that
+/// back unchanged.
+///
+/// One delimiter is enough while the text holds none of that
 /// kind; when it holds both kinds, a run of at least three opens the notation's
 /// n-quote form, where the text is literal and only a run at least as long closes
 /// it. A value starting with the delimiter would lengthen the opening run, so the
 /// other delimiter is used for it.
-fn quote(value: &str) -> String {
+pub fn quote(value: &str) -> String {
     if !value.contains('"') {
         return format!("\"{}\"", value);
     }
@@ -378,6 +397,7 @@ fn format_key(key: &str, form: Form) -> String {
     let plain = !key.is_empty()
         && key != BASE64_MARKER
         && key != ESCAPED_MARKER
+        && key != "json-number"
         && !key.chars().any(|c| {
             c.is_whitespace() || c.is_control() || matches!(c, '(' | ')' | '\'' | '"' | ':' | '`')
         });
@@ -606,7 +626,9 @@ impl Cursor {
             self.tokens.get(self.pos),
             Some(Token::Ref { value, quoted: false }) if *value == marker
         );
-        if is_marker {
+        let array_marker = matches!(self.tokens.get(self.pos),
+            Some(Token::Ref { value, quoted: false }) if value == "a:");
+        if is_marker || array_marker {
             self.pos += 1;
         }
         is_marker
@@ -782,6 +804,16 @@ fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecErro
         return None;
     };
 
+    #[cfg(feature = "serde_json")]
+    if marker == "json-number" {
+        return Some(
+            payload
+                .parse::<serde_json::Number>()
+                .map(LinoValue::JsonNumber)
+                .map_err(|e| CodecError::DecodeError(format!("invalid JSON number: {e}"))),
+        );
+    }
+
     if marker == ESCAPED_MARKER {
         return Some(unescape(payload).map(LinoValue::String));
     }
@@ -805,7 +837,7 @@ fn decode_marked_value(rows: &[Vec<Node>]) -> Option<Result<LinoValue, CodecErro
 /// Undo the percent-escaping of an `(escaped "…")` payload. Escapes stand for
 /// bytes, so a character outside ASCII is written as its UTF-8 bytes and read
 /// back from them.
-fn unescape(payload: &str) -> Result<String, CodecError> {
+pub fn unescape(payload: &str) -> Result<String, CodecError> {
     let bytes = payload.as_bytes();
     let mut out: Vec<u8> = Vec::with_capacity(bytes.len());
     let mut i = 0;

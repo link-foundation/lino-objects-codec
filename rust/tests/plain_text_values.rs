@@ -201,8 +201,12 @@ fn the_notation_s_own_parser_reads_every_written_value_back() {
             1,
             "links-notation read {encoded:?} as {links:?} instead of one value"
         );
-        let links_notation::LiNo::Ref(read) = &links[0] else {
-            panic!("links-notation read {encoded:?} as a link: {links:?}");
+        // Since 0.22 the document root is always a link, even for one ref.
+        let links_notation::LiNo::Link { id: None, values } = &links[0] else {
+            panic!("links-notation returned an unexpected root: {links:?}");
+        };
+        let [links_notation::LiNo::Ref(read)] = values.as_slice() else {
+            panic!("links-notation returned unexpected values: {values:?}");
         };
         assert_eq!(read, text, "links-notation lost the text of {encoded:?}");
     }
