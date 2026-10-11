@@ -28,6 +28,20 @@ from functools import cache
 
 ROOT = Path(__file__).resolve().parent.parent
 ISSUE = re.compile(r"https://github\.com/([\w.-]+/[\w.-]+)/issues/(\d+)")
+# `owner/repo@vN[.N.N]`, or a hash pin whose trailing comment names the release
+# (`owner/repo@<40 hex> # vN.N.N`). Before issue #71 only the first form was
+# read, so hash-pinning an action silently removed it from this check. A hash
+# pinned to a branch (`# stable branch @ <date>`) has no release to compare.
+ACTION_REF = re.compile(
+    r"uses:\s*([\w.-]+/[\w.-]+)(?:/[\w/-]+)?@(?:v(\d+(?:\.\d+)*)\b|[0-9a-f]{40}\s+#\s*v(\d+(?:\.\d+)*))"
+)
+# Tools installed by version rather than through `uses: owner/repo@vN`:
+# (workflow, pattern whose group 1 is the version, GitHub repository).
+TOOLS = [
+    (".github/workflows/workflows.yml", r"uses:\s*docker://rhysd/actionlint@sha256:[0-9a-f]{64}\s+#\s*v(\d+(?:\.\d+)*)", "rhysd/actionlint"),
+    (".github/workflows/workflows.yml", r"^\s*ZIZMOR_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)", "zizmorcore/zizmor"),
+    (".github/workflows/security.yml", r"^\s*GITLEAKS_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)", "gitleaks/gitleaks"),
+]
 
 
 @dataclass(frozen=True)
@@ -138,14 +152,16 @@ def declarations(root: Path = ROOT) -> list[Dependency]:
     for path in sorted((root / ".github/workflows").glob("*.yml")):
         text = path.read_text()
         for line in text.splitlines():
-            for name, ref in re.findall(r"uses:\s*([\w.-]+/[\w.-]+)(?:/[\w/-]+)?@(v\d+(?:\.\d+)*)", line):
-                result.append(Dependency("github-actions", name, ref[1:], str(path.relative_to(root)), blocker_on_line(line, name)))
-    for path, variable, name in [
-        (root / ".github/workflows/scripts.yml", "ACTIONLINT_VERSION", "rhysd/actionlint"),
-        (root / ".github/workflows/security.yml", "GITLEAKS_VERSION", "gitleaks/gitleaks"),
-    ]:
-        line = next(line for line in path.read_text().splitlines() if re.match(rf"\s*{variable}:\s*", line))
-        result.append(Dependency("github-tools", name, re.search(rf"{variable}:\s*(\S+)", line).group(1), str(path.relative_to(root)), blocker_on_line(line, variable)))
+            for name, tag, pinned in ACTION_REF.findall(line):
+                result.append(Dependency("github-actions", name, tag or pinned, str(path.relative_to(root)), blocker_on_line(line, name)))
+    for relative, pattern, name in TOOLS:
+        path = root / relative
+        line = next((line for line in path.read_text().splitlines() if re.search(pattern, line)), None)
+        if line is None:
+            # A tool that moved without this table following it would
+            # otherwise silently drop out of the check (issue #71).
+            raise ValueError(f"{relative}: no line matches {pattern!r} for {name}")
+        result.append(Dependency("github-tools", name, re.search(pattern, line).group(1), relative, blocker_on_line(line, name)))
     return result
 
 

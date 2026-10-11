@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 import contextlib
 import io
 
-from check_dependency_freshness import Dependency, ROOT, blocker_on_line, check, declarations, latest, manifest_blocker, report
+from check_dependency_freshness import ACTION_REF, TOOLS, Dependency, ROOT, blocker_on_line, check, declarations, latest, manifest_blocker, report
 
 
 class DependencyFreshnessTests(unittest.TestCase):
@@ -52,7 +52,7 @@ class DependencyFreshnessTests(unittest.TestCase):
         url = "https://github.com/owner/repo/issues/123"
         with TemporaryDirectory() as directory:
             root = Path(directory)
-            for relative in ["rust/Cargo.toml", "js/package.json", "python/pyproject.toml", ".github/workflows/scripts.yml", ".github/workflows/security.yml"]:
+            for relative in ["rust/Cargo.toml", "js/package.json", "python/pyproject.toml", ".github/workflows/workflows.yml", ".github/workflows/security.yml"]:
                 target = root / relative
                 target.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copyfile(ROOT / relative, target)
@@ -87,6 +87,24 @@ class DependencyFreshnessTests(unittest.TestCase):
         ]):
             self.assertEqual(latest("github-actions", "github/codeql-action"), "4.35.1")
         latest.cache_clear()
+
+    def test_hash_pinned_actions_are_read_from_the_release_comment(self):
+        # Issue #71: hash pins (zizmor unpinned-uses) used to drop out of the check.
+        sha = "5f6978faf089d4d20b00c7766989d076bb2fc7f1"
+        self.assertEqual(ACTION_REF.findall(f"uses: peter-evans/create-pull-request@{sha} # v8.1.1"), [("peter-evans/create-pull-request", "", "8.1.1")])
+        self.assertEqual(ACTION_REF.findall("- uses: actions/checkout@v7"), [("actions/checkout", "7", "")])
+        self.assertEqual(ACTION_REF.findall(f"uses: dtolnay/rust-toolchain@{sha} # stable branch @ 2026-10-09"), [])
+        self.assertEqual(ACTION_REF.findall("uses: pypa/gh-action-pypi-publish@release/v1"), [])
+        stale = Dependency("github-actions", "codecov/codecov-action", "7.1.1", "workflow.yml")
+        self.assertIn("latest 7.2.0", check(stale, lambda *_: "7.2.0", lambda *_: "closed"))
+
+    def test_every_pinned_action_and_tool_in_the_repository_is_read(self):
+        deps = declarations(ROOT)
+        names = {d.name for d in deps}
+        self.assertTrue({"peter-evans/create-pull-request", "codecov/codecov-action", "pypa/gh-action-pypi-publish"} <= names)
+        tools = {d.name: d.version for d in deps if d.ecosystem == "github-tools"}
+        self.assertEqual(set(tools), {name for _, _, name in TOOLS})
+        self.assertTrue(all(tools.values()))
 
     def test_report_mode_warns_instead_of_failing(self):
         # Issue #71: a newer upstream release made every push to main red.
