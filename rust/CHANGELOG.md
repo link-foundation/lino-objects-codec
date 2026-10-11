@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-10-11
+
+### Changed
+- Raised the `serde_json` floor to 1.0.154 (and refreshed `Cargo.lock`) so the Dependency Freshness gate passes again.
+- CI: Dependabot pull requests are exempt from the changelog fragment check (decided from the PR author, not the branch name), so grouped dependency updates no longer fail it and get merged red.
+
 ## [0.9.0] - 2026-10-11
 
 ### Fixed
