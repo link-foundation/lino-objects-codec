@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-10-11
+
+### Fixed
+
+- Scan large readable documents directly in UTF-8 instead of materializing every character; retain exact Unicode and legacy quote behavior.
+
+### Changed
+
+- Refresh parser and test dependencies required by freshness CI.
+- Require Rust 1.87 for the parser dependency, and 1.88 for development tests.
+
 ## [0.8.0] - 2026-10-07
 
 ### Added
