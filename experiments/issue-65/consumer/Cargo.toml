@@ -2,9 +2,9 @@
 name = "issue-65-consumer"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.87"
 publish = false
 
 [dependencies]
 lino-objects-codec = { path = "../../../rust", features = ["serde_json"] }
-links-notation = "0.23.0"
+links-notation = "0.25.2"

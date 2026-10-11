@@ -436,18 +436,19 @@ enum Node {
 }
 
 fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
-    let chars: Vec<char> = text.chars().collect();
     let mut tokens = Vec::new();
     let mut i = 0;
 
-    while i < chars.len() {
-        let c = chars[i];
+    // Keep byte offsets into the original UTF-8 text. Advance by whole code
+    // points for whitespace/references; ASCII quote boundaries are safe slices.
+    while i < text.len() {
+        let c = text[i..].chars().next().expect("in bounds");
 
         if c == '\n' {
             tokens.push(Token::Newline);
             i += 1;
         } else if c.is_whitespace() {
-            i += 1;
+            i += c.len_utf8();
         } else if c == '(' {
             tokens.push(Token::Open);
             i += 1;
@@ -455,7 +456,7 @@ fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
             tokens.push(Token::Close);
             i += 1;
         } else if matches!(c, '"' | '\'' | '`') {
-            let (value, next) = read_quoted(&chars, i, c)?;
+            let (value, next) = read_quoted(text, i, c)?;
             tokens.push(Token::Ref {
                 value,
                 quoted: true,
@@ -463,14 +464,14 @@ fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
             i = next;
         } else {
             let start = i;
-            while i < chars.len()
-                && !chars[i].is_whitespace()
-                && !matches!(chars[i], '(' | ')' | '"' | '\'' | '`')
-            {
-                i += 1;
+            for c in text[start..].chars() {
+                if c.is_whitespace() || matches!(c, '(' | ')' | '"' | '\'' | '`') {
+                    break;
+                }
+                i += c.len_utf8();
             }
             tokens.push(Token::Ref {
-                value: chars[start..i].iter().collect(),
+                value: text[start..i].to_owned(),
                 quoted: false,
             });
         }
@@ -488,58 +489,53 @@ fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
 /// * three or more — the n-quote form: the text is literal, and the value ends at
 ///   the first run at least as long, whose last delimiters close it. A longer run
 ///   therefore belongs to the text, so a value may end with a delimiter.
-fn read_quoted(
-    chars: &[char],
-    start: usize,
-    quote_char: char,
-) -> Result<(String, usize), CodecError> {
-    let opening = run_length(chars, start, quote_char);
+fn read_quoted(text: &str, start: usize, quote_char: char) -> Result<(String, usize), CodecError> {
+    let quote_byte = text.as_bytes()[start];
+    let opening = run_length(text, start, quote_byte);
 
     if opening == 2 {
         return Ok((String::new(), start + 2));
     }
 
     if opening == 1 {
-        let mut value = String::new();
         let mut i = start + 1;
 
-        while i < chars.len() {
-            if chars[i] == quote_char {
-                if chars.get(i + 1) == Some(&quote_char) {
-                    value.push(quote_char);
-                    i += 2;
-                    continue;
-                }
-                return Ok((value, i + 1));
+        while let Some(next) = text[i..].find(quote_char) {
+            let next = i + next;
+            if text.as_bytes().get(next + 1) == Some(&quote_byte) {
+                i = next + 2;
+                continue;
             }
-            value.push(chars[i]);
-            i += 1;
+            let doubled = format!("{quote_char}{quote_char}");
+            return Ok((
+                text[start + 1..next].replace(&doubled, &quote_char.to_string()),
+                next + 1,
+            ));
         }
 
-        return Err(unterminated_quote(start));
+        return Err(unterminated_quote(text[..start].chars().count()));
     }
 
     let mut i = start + opening;
-    while i < chars.len() {
-        if chars[i] != quote_char {
-            i += 1;
-            continue;
-        }
-
-        let run = run_length(chars, i, quote_char);
+    while let Some(next) = text[i..].find(quote_char) {
+        i += next;
+        let run = run_length(text, i, quote_byte);
         if run >= opening {
-            let value = chars[start + opening..i + run - opening].iter().collect();
+            let value = text[start + opening..i + run - opening].to_owned();
             return Ok((value, i + run));
         }
         i += run;
     }
 
-    Err(unterminated_quote(start))
+    Err(unterminated_quote(text[..start].chars().count()))
 }
 
 /// The length of the run of `c` that starts at `start`.
-fn run_length(chars: &[char], start: usize, c: char) -> usize {
-    chars[start..].iter().take_while(|&&x| x == c).count()
+fn run_length(text: &str, start: usize, c: u8) -> usize {
+    text.as_bytes()[start..]
+        .iter()
+        .take_while(|&&x| x == c)
+        .count()
 }
 
 fn unterminated_quote(start: usize) -> CodecError {

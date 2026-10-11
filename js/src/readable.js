@@ -128,8 +128,8 @@ const KEY_NEEDS_QUOTES = /[\s()':`"\u0000-\u001f\u007f-\u009f]/;
 /** Encoder used to write one character as the bytes its escapes stand for. */
 const UTF8_ENCODER = new TextEncoder();
 
-/** Decoder used to read an escaped payload back, rejecting invalid UTF-8. */
-const UTF8_DECODER = new TextDecoder('utf-8', { fatal: true });
+/** Maximum temporary byte buffer for one escaped value. */
+const UTF8_CHUNK_SIZE = 65536;
 
 /**
  * Raised when a value cannot be written because it refers back to itself.
@@ -579,7 +579,9 @@ const TOKEN_REF = 'ref';
  * @returns {Array<{kind: string, value?: string, quoted?: boolean}>} The tokens
  */
 function tokenize(text) {
-  const chars = Array.from(text);
+  // Delimiters are ASCII. Index UTF-16 directly and slice complete text runs,
+  // so supplementary characters survive without a whole-document array.
+  const chars = text;
   const tokens = [];
   let i = 0;
 
@@ -614,7 +616,7 @@ function tokenize(text) {
       }
       tokens.push({
         kind: TOKEN_REF,
-        value: chars.slice(start, i).join(''),
+        value: chars.slice(start, i),
         quoted: false,
       });
     }
@@ -633,7 +635,7 @@ function tokenize(text) {
  * * three or more — the n-quote form: the text is literal, and the value ends at
  *   the first run at least as long, whose last delimiters close it. A longer run
  *   therefore belongs to the text, so a value may end with a delimiter.
- * @param {string[]} chars - The document characters
+ * @param {string} chars - The document
  * @param {number} start - Index of the opening quote
  * @param {string} quoteChar - The quote character used
  * @returns {[string, number]} The value and the index after the closing quote
@@ -646,46 +648,45 @@ function readQuoted(chars, start, quoteChar) {
   }
 
   if (opening === 1) {
-    let value = '';
     let i = start + 1;
 
     while (i < chars.length) {
-      if (chars[i] === quoteChar) {
-        if (chars[i + 1] === quoteChar) {
-          value += quoteChar;
-          i += 2;
-          continue;
-        }
-        return [value, i + 1];
+      const next = chars.indexOf(quoteChar, i);
+      if (next < 0) {
+        break;
       }
-      value += chars[i];
-      i += 1;
+      if (chars[next + 1] === quoteChar) {
+        i = next + 2;
+        continue;
+      }
+      const value = chars.slice(start + 1, next);
+      return [value.replaceAll(quoteChar + quoteChar, quoteChar), next + 1];
     }
 
-    throw unterminatedQuote(start);
+    throw unterminatedQuote(chars, start);
   }
 
   let i = start + opening;
   while (i < chars.length) {
-    if (chars[i] !== quoteChar) {
-      i += 1;
-      continue;
+    i = chars.indexOf(quoteChar, i);
+    if (i < 0) {
+      break;
     }
 
     const run = runLength(chars, i, quoteChar);
     if (run >= opening) {
-      const value = chars.slice(start + opening, i + run - opening).join('');
+      const value = chars.slice(start + opening, i + run - opening);
       return [value, i + run];
     }
     i += run;
   }
 
-  throw unterminatedQuote(start);
+  throw unterminatedQuote(chars, start);
 }
 
 /**
  * The length of the run of a character that starts at an index.
- * @param {string[]} chars - The document characters
+ * @param {string} chars - The document
  * @param {number} start - Index the run starts at
  * @param {string} char - The character to count
  * @returns {number} The length of the run
@@ -700,12 +701,21 @@ function runLength(chars, start, char) {
 
 /**
  * The error a quoted value that never closes raises.
- * @param {number} start - Index of the opening quote
+ * @param {string} text - The document
+ * @param {number} start - UTF-16 index of the opening quote
  * @returns {SyntaxError} The error to throw
  */
-function unterminatedQuote(start) {
+function unterminatedQuote(text, start) {
+  // Keep the historical code-point position in errors, without allocating an
+  // array on either the successful path or the error path.
+  let position = 0;
+  let index = 0;
+  while (index < start) {
+    index += text.codePointAt(index) > 0xffff ? 2 : 1;
+    position += 1;
+  }
   return new SyntaxError(
-    `unterminated quoted value starting at character ${start}`
+    `unterminated quoted value starting at character ${position}`
   );
 }
 
@@ -980,37 +990,65 @@ function decodeMarkedValue(rows) {
  * @throws {SyntaxError} If an escape is truncated, malformed or not UTF-8
  */
 function unescape(payload) {
-  const chars = Array.from(payload);
-  const bytes = [];
+  // Each value owns its decoder: a malformed escape must not leave buffered
+  // UTF-8 bytes in the next value. Streaming retains split code points and BOM
+  // handling while bounding temporary storage independently of value size.
+  const decoder = new TextDecoder('utf-8', { fatal: true });
+  const bytes = new Uint8Array(
+    Math.min(UTF8_CHUNK_SIZE, Math.max(payload.length, 1))
+  );
+  const parts = [];
+  let used = 0;
+  const flush = (stream) => {
+    try {
+      parts.push(decoder.decode(bytes.subarray(0, used), { stream }));
+    } catch {
+      throw new SyntaxError('invalid UTF-8 escaped value');
+    }
+    used = 0;
+  };
+  const append = (byte) => {
+    bytes[used++] = byte;
+    if (used === bytes.length) {
+      flush(true);
+    }
+  };
   let i = 0;
+  let position = 0;
 
-  while (i < chars.length) {
-    if (chars[i] !== '%') {
-      for (const byte of UTF8_ENCODER.encode(chars[i])) {
-        bytes.push(byte);
+  while (i < payload.length) {
+    if (payload[i] !== '%') {
+      const code = payload.codePointAt(i);
+      if (code < 128) {
+        append(code);
+        i += 1;
+      } else {
+        const char = String.fromCodePoint(code);
+        for (const byte of UTF8_ENCODER.encode(char)) {
+          append(byte);
+        }
+        i += char.length;
       }
-      i += 1;
+      position += 1;
       continue;
     }
 
-    const escape = chars.slice(i + 1, i + 3).join('');
+    const escape = payload.slice(i + 1, i + 3);
     if (escape.length !== 2) {
       throw new SyntaxError(
-        `truncated escape at character ${i} of an escaped value`
+        `truncated escape at character ${position} of an escaped value`
       );
     }
     if (!/^[0-9a-fA-F]{2}$/.test(escape)) {
       throw new SyntaxError(`invalid escape '%${escape}' in an escaped value`);
     }
-    bytes.push(Number.parseInt(escape, 16));
+    append(Number.parseInt(escape, 16));
     i += 3;
+    position += 3;
   }
 
-  try {
-    return UTF8_DECODER.decode(Uint8Array.from(bytes));
-  } catch {
-    throw new SyntaxError('invalid UTF-8 escaped value');
-  }
+  flush(false);
+  return parts.join('');
 }
 
 /**

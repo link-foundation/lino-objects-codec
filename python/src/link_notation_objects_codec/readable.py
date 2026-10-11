@@ -80,6 +80,7 @@ dicts say so.
 """
 
 import base64
+import codecs
 import math
 import re
 import unicodedata
@@ -596,9 +597,9 @@ def _read_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
     length = len(text)
     i = start + opening
     while i < length:
-        if text[i] != quote_char:
-            i += 1
-            continue
+        i = text.find(quote_char, i)
+        if i < 0:
+            break
 
         run = _run_length(text, i, quote_char)
         if run >= opening:
@@ -611,19 +612,17 @@ def _read_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
 def _read_doubled_quoted(text: str, start: int, quote_char: str) -> tuple[str, int]:
     """Read a value opened by a single delimiter, where a doubled delimiter means
     one literal delimiter."""
-    parts: list[str] = []
     i = start + 1
     length = len(text)
 
     while i < length:
-        if text[i] == quote_char:
-            if i + 1 < length and text[i + 1] == quote_char:
-                parts.append(quote_char)
-                i += 2
-                continue
-            return "".join(parts), i + 1
-        parts.append(text[i])
-        i += 1
+        next_quote = text.find(quote_char, i)
+        if next_quote < 0:
+            break
+        if next_quote + 1 < length and text[next_quote + 1] == quote_char:
+            i = next_quote + 2
+            continue
+        return text[start + 1 : next_quote].replace(quote_char * 2, quote_char), next_quote + 1
 
     raise _unterminated_quote(start)
 
@@ -853,7 +852,19 @@ def _unescape(payload: str) -> str:
     Escapes stand for bytes, so a character outside ASCII is written as its UTF-8
     bytes and read back from them.
     """
+    # Only a bounded byte buffer is temporary; output parts hold decoded text.
+    # A fresh strict decoder retains UTF-8 split across chunks and isolates errors.
+    decoder = codecs.getincrementaldecoder("utf-8")()
+    parts: list[str] = []
     out = bytearray()
+
+    def flush(*, final: bool) -> None:
+        try:
+            parts.append(decoder.decode(out, final=final))
+        except UnicodeDecodeError as error:
+            raise ReadableFormatError(f"invalid UTF-8 escaped value: {error}") from error
+        out.clear()
+
     i = 0
     length = len(payload)
 
@@ -861,20 +872,19 @@ def _unescape(payload: str) -> str:
         if payload[i] != "%":
             out.extend(payload[i].encode("utf-8"))
             i += 1
-            continue
+        else:
+            escape = payload[i + 1 : i + 3]
+            if len(escape) != 2:
+                raise ReadableFormatError(f"truncated escape at character {i} of an escaped value")
+            if not _HEX_ESCAPE.match(escape):
+                raise ReadableFormatError(f"invalid escape '%{escape}' in an escaped value")
+            out.append(int(escape, 16))
+            i += 3
+        if len(out) >= 65536:
+            flush(final=False)
 
-        escape = payload[i + 1 : i + 3]
-        if len(escape) != 2:
-            raise ReadableFormatError(f"truncated escape at character {i} of an escaped value")
-        if not _HEX_ESCAPE.match(escape):
-            raise ReadableFormatError(f"invalid escape '%{escape}' in an escaped value")
-        out.append(int(escape, 16))
-        i += 3
-
-    try:
-        return out.decode("utf-8")
-    except UnicodeDecodeError as error:
-        raise ReadableFormatError(f"invalid UTF-8 escaped value: {error}") from error
+    flush(final=True)
+    return "".join(parts)
 
 
 def _ref_to_value(value: str, quoted: bool) -> None | bool | int | float | str:

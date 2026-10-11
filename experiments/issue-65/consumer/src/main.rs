@@ -8,5 +8,5 @@ fn main() {
     let links = links_notation::parse_lino_to_links(&formatted).unwrap();
     assert!(!links.is_empty());
     assert_eq!(lino_objects_codec::decode(&formatted).unwrap().as_str(), Some(text));
-    println!("Consumer uses links-notation 0.23.0 and the public value formatter.");
+    println!("Consumer uses links-notation 0.25.2 and the public value formatter.");
 }
