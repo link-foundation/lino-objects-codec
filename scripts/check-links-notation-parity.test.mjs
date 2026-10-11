@@ -107,5 +107,15 @@ test("every extractor finds the version in its real manifest", () => {
 });
 
 test("the checked-in manifests agree today", () => {
-  assert.equal(analyzeVersionParity(readDeclarations()).agreed, true);
+  const { agreed, minors, missing } = analyzeVersionParity(readDeclarations());
+  // Name the disagreeing pins: a bare `false !== true` here made the Shared CI
+  // Scripts and Parity workflows red without saying which manifest moved, and
+  // this step runs before the gate's own per-manifest report (issue #71).
+  const unreadable = missing.length > 0 ? `; unreadable: ${missing.join(", ")}` : "";
+  assert.equal(
+    agreed,
+    true,
+    `links-notation minors disagree: ${JSON.stringify(minors)}${unreadable}. ` +
+      "Bump every manifest to the same minor (node scripts/check-links-notation-parity.mjs).",
+  );
 });
