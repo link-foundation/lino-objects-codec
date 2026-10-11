@@ -20,6 +20,7 @@ Usage:
 Environment variables (set by GitHub Actions):
     GITHUB_BASE_REF - base branch name for the PR (defaults to "main")
     HEAD_REF        - PR head branch; automated release branches are exempt
+    PR_AUTHOR       - PR author login; Dependabot PRs are exempt (issue #71)
 
 Exit codes:
     0 - Validation passed (fragment added, or no source changes)
@@ -40,6 +41,11 @@ from pathlib import Path
 # them would deadlock the release jobs.
 RELEASE_BRANCH_PREFIXES = ("changeset-release/", "changeset-manual-release-")
 
+# Logins whose PRs cannot write a fragment. Dependabot bumps pyproject.toml (a
+# source path), so without this every grouped dependency PR failed the check
+# and was merged red (issue #71).
+BOT_AUTHORS = ("dependabot[bot]",)
+
 # Paths are relative to the `python` package directory (git is invoked with
 # --relative). Repo-root-relative paths such as "python/src/..." deliberately
 # do not match: see issue #39 for the same bug in the Rust script.
@@ -56,6 +62,15 @@ def is_release_branch(head_ref: str | None) -> bool:
     if not head_ref:
         return False
     return head_ref.startswith(RELEASE_BRANCH_PREFIXES)
+
+
+def is_bot_author(author: str | None) -> bool:
+    """Check whether the PR was opened by a bot that cannot write a fragment.
+
+    The author decides, not the branch name: anyone can push a branch called
+    ``dependabot/...``, but only Dependabot opens PRs as ``dependabot[bot]``.
+    """
+    return bool(author) and author in BOT_AUTHORS
 
 
 def is_source_file(path: str) -> bool:
@@ -161,6 +176,13 @@ def main() -> int:
     """Main entry point."""
     if is_release_branch(os.environ.get("HEAD_REF")):
         print("Automated release PR detected; skipping the changelog check.")
+        return 0
+    author = os.environ.get("PR_AUTHOR")
+    if is_bot_author(author):
+        print(
+            f"::notice title=Changelog check skipped::{author} cannot write a changelog "
+            "fragment; add one by hand if this update should ship a release."
+        )
         return 0
 
     script_dir = Path(__file__).parent

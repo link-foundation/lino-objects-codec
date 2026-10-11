@@ -316,6 +316,9 @@ jobs:
           # Passed through the environment: a branch name is attacker-controlled
           # and must never be interpolated straight into a shell script.
           HEAD_REF: ${{ github.head_ref }}
+          # Dependabot PRs are exempt (issue #71); decided from the author,
+          # not from the spoofable branch name.
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: python scripts/validate_changeset.py
 
   # RELEASE JOBS - Only run after all CI checks pass

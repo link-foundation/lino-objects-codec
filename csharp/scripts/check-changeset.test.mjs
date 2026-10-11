@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 
 import {
   evaluate,
+  isBotAuthor,
   isChangeset,
   isReleaseBranch,
   isSourceFile,
@@ -54,4 +55,11 @@ test('exempts automated release branches', () => {
   assert.equal(isReleaseBranch('changeset-manual-release-20260820'), true);
   assert.equal(isReleaseBranch('issue-41-297a752a4939'), false);
   assert.equal(isReleaseBranch(undefined), false);
+});
+
+test('exempts Dependabot by author, not by branch name (issue #71)', () => {
+  assert.equal(isBotAuthor('dependabot[bot]'), true);
+  assert.equal(isBotAuthor('konard'), false);
+  assert.equal(isBotAuthor(undefined), false);
+  assert.equal(isBotAuthor(''), false);
 });

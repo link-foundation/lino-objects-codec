@@ -12,6 +12,7 @@
  *
  * Environment variables (set by GitHub Actions):
  *   - GITHUB_BASE_REF: Base branch name for PR (e.g., "main")
+ *   - PR_AUTHOR: PR author login; Dependabot PRs are exempt (issue #71)
  *
  * Exit codes:
  *   - 0: Check passed (fragment added or no source changes)
@@ -19,6 +20,14 @@
  */
 
 import { execSync } from 'child_process';
+
+/**
+ * Logins whose PRs cannot write a changelog fragment. Dependabot bumps
+ * Cargo.toml (a source path), so without this every grouped dependency PR
+ * failed the check and was merged red (issue #71). The author decides, not
+ * the branch name: anyone can push a branch called `dependabot/...`.
+ */
+const BOT_AUTHORS = ['dependabot[bot]'];
 
 /**
  * Execute a shell command and return trimmed output
@@ -96,6 +105,14 @@ function isChangelogFragment(filePath) {
  * Main function to check changelog fragments
  */
 function checkChangelogFragment() {
+  const author = process.env.PR_AUTHOR;
+  if (author && BOT_AUTHORS.includes(author)) {
+    console.log(
+      `::notice title=Changelog check skipped::${author} cannot write a changelog fragment; add one by hand if this update should ship a release.`
+    );
+    process.exit(0);
+  }
+
   console.log('Checking for changelog fragment in PR diff...\n');
 
   const changedFiles = getChangedFiles();

@@ -20,6 +20,7 @@
  * Environment variables (set by GitHub Actions):
  *   - GITHUB_BASE_REF: base branch name for the PR (for example "main")
  *   - HEAD_REF:        PR head branch; automated release branches are exempt
+ *   - PR_AUTHOR:       PR author login; Dependabot PRs are exempt (issue #71)
  *
  * Exit codes:
  *   - 0: check passed (changeset added, or no source changes)
@@ -50,6 +51,26 @@ export function isReleaseBranch(headRef) {
     return false;
   }
   return RELEASE_BRANCH_PREFIXES.some((prefix) => headRef.startsWith(prefix));
+}
+
+/**
+ * Logins whose PRs cannot write a changeset. Dependabot bumps
+ * `src/**.csproj` (a source path), so without this exemption every grouped
+ * dependency PR failed the check (PR #67, run 37956144601) and had to be
+ * merged red, which trains everyone to ignore a red check.
+ * @type {string[]}
+ */
+export const BOT_AUTHORS = ['dependabot[bot]'];
+
+/**
+ * Check whether the PR was opened by a bot that cannot write a changeset.
+ * The author decides, not the branch name: anyone can push a branch called
+ * `dependabot/...`, but only Dependabot opens PRs as `dependabot[bot]`.
+ * @param {string | undefined} author
+ * @returns {boolean}
+ */
+export function isBotAuthor(author) {
+  return Boolean(author) && BOT_AUTHORS.includes(author);
 }
 
 /**
@@ -124,6 +145,12 @@ export function getChangedFiles() {
 export function main() {
   if (isReleaseBranch(process.env.HEAD_REF)) {
     console.log('Automated release PR detected; skipping the changeset check.');
+    return 0;
+  }
+  if (isBotAuthor(process.env.PR_AUTHOR)) {
+    console.log(
+      `::notice title=Changeset check skipped::${process.env.PR_AUTHOR} cannot write a changeset; add one by hand if this update should ship a release.`
+    );
     return 0;
   }
 

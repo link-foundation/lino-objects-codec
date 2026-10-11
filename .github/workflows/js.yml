@@ -137,20 +137,13 @@ jobs:
         working-directory: ./js
         env:
           GITHUB_BASE_REF: ${{ github.base_ref }}
-          GITHUB_BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           # Passed through the environment: a branch name is attacker-controlled
           # and must never be interpolated straight into a shell script.
           HEAD_REF: ${{ github.head_ref }}
-        run: |
-          # Skip changeset check for automated version PRs
-          if [[ "$HEAD_REF" == "changeset-release/"* ]]; then
-            echo "Skipping changeset check for automated release PR"
-            exit 0
-          fi
-
-          # Run changeset validation script
-          node scripts/validate-changeset.mjs
+          # Release PRs and Dependabot PRs are exempt (issue #71); the script
+          # decides from the author, not from the spoofable branch name.
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+        run: node scripts/validate-changeset.mjs
 
   # === LINT AND FORMAT CHECK ===
   # Lint runs independently of changeset-check - it's a fast check that should always run
