@@ -26,10 +26,12 @@ concurrency:
 jobs:
   direct:
     name: Direct dependencies are current
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -42,14 +44,20 @@ jobs:
 
   locks:
     name: Lockfiles have no pending compatible updates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        with:
+          # The `stable` ref supplied the default toolchain; restated now that
+          # the action is pinned by hash.
+          toolchain: stable
       - name: Check npm resolved versions
         working-directory: js
         run: |

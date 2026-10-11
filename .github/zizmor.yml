@@ -1,0 +1,42 @@
+# zizmor configuration for the workflow security audit run by
+# `.github/workflows/workflows.yml` (issue #71, CI/CD best practice #14).
+# Reproduce locally:
+#   pipx run zizmor==1.30.1 --config .github/zizmor.yml --min-confidence low .
+#
+# Blanket policy, copied from the link-foundation pipeline templates:
+# third-party actions must be pinned to a commit hash, because a mutable tag or
+# branch of a repository we do not control is arbitrary code execution in any
+# job that holds credentials. Namespaces trusted to keep their release tags
+# immutable may stay on a readable ref.
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        actions/*: ref-pin
+        github/*: ref-pin
+        docker/*: ref-pin
+        lycheeverse/*: ref-pin
+        zizmorcore/*: ref-pin
+        '*': hash-pin
+
+  # scripts/check_dependency_freshness.py fails a pull request as soon as any
+  # direct dependency is behind its latest release. A Dependabot cooldown
+  # would hold the update PR back for days while every unrelated PR is red on
+  # that gate, so the two policies contradict each other. The freshness gate
+  # is this repository's chosen policy; drop this once it grows a grace
+  # period matching a cooldown.
+  dependabot-cooldown:
+    disable: true
+
+  # Each registry can publish through OIDC trusted publishing, but that needs
+  # a one-time registration by a package owner on the registry side, which no
+  # workflow change can do. The python main run 38145827851 failed exactly
+  # there: no PyPI trusted publisher is registered. Until a maintainer
+  # registers trusted publishers (python/scripts/pypi_publish_preflight.py
+  # prints the exact claims), the token paths stay as fallbacks. Drop each
+  # entry once its registry is migrated.
+  use-trusted-publishing:
+    ignore:
+      - csharp.yml
+      - python.yml
+      - rust.yml

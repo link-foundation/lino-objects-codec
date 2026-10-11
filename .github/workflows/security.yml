@@ -26,7 +26,7 @@ permissions:
 jobs:
   codeql:
     name: CodeQL (${{ matrix.language }})
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-codeql-${{ matrix.language }}
@@ -39,26 +39,34 @@ jobs:
       fail-fast: false
       matrix:
         # `actions` scans the workflow files themselves, which is what would
-        # have caught the `github.head_ref` interpolation fixed in this PR.
-        # Rust has no stable CodeQL pack; `cargo clippy -D warnings` in
-        # rust.yml is its static analysis.
-        language: [javascript-typescript, python, csharp, actions]
+        # have caught the `github.head_ref` interpolation fixed in issue #41.
+        # Rust has been a GA CodeQL language since CodeQL 2.23.3; until issue
+        # #71 it was left out here on the belief that it had no stable pack, so
+        # the Rust crate was the one implementation with no CodeQL coverage.
+        language: [javascript-typescript, python, csharp, rust, actions]
     steps:
       - uses: actions/checkout@v7
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
         with:
-          languages: ${{ matrix.language }}
+          persist-credentials: false
 
+      # Buildless C# extraction restores NuGet references itself and is
+      # better at it with the SDK the project targets on PATH.
       - name: Setup .NET
         if: matrix.language == 'csharp'
         uses: actions/setup-dotnet@v6
         with:
           dotnet-version: '10.0.x'
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v4
+      # Every language here supports `build-mode: none`. Left unset, C# fell
+      # back to autobuild and warned on each run (issue #71): "Cannot build
+      # an overlay database because build-mode is set to "undefined" instead
+      # of "none"". Buildless also drops the autobuild step, whose success
+      # depended on guessing this monorepo's build entry point.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: ${{ matrix.language }}
+          build-mode: none
 
       - name: Analyze
         uses: github/codeql-action/analyze@v4
@@ -71,13 +79,15 @@ jobs:
   # with tools that work today; see dev/log/issues/41/pulls/42/ANALYSIS.md 9.7.
   nuget-audit:
     name: Audit NuGet dependencies
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-nuget-audit
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v6
@@ -102,13 +112,15 @@ jobs:
 
   npm-audit:
     name: Audit npm lock
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-npm-audit
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v7
         with:
@@ -122,16 +134,22 @@ jobs:
 
   cargo-audit:
     name: Audit Cargo lock
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-cargo-audit
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        with:
+          # The `stable` ref supplied the default toolchain; restated now that
+          # the action is pinned by hash.
+          toolchain: stable
 
       - name: Install cargo-audit
         run: cargo install cargo-audit --locked
@@ -142,13 +160,15 @@ jobs:
 
   pip-audit:
     name: Audit Python dependencies
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-pip-audit
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -171,7 +191,7 @@ jobs:
   # Nothing scanned this repository for committed credentials before issue #41.
   secrets-scan:
     name: Scan for Committed Secrets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-secrets-scan
@@ -182,6 +202,7 @@ jobs:
           # Full history: a secret that was committed and later removed is
           # still in the repository and still has to be rotated.
           fetch-depth: 0
+          persist-credentials: false
 
       # The pinned CLI is used instead of gitleaks-action because the action
       # requires a paid licence key for organisation-owned repositories, while
