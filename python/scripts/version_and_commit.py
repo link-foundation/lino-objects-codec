@@ -86,6 +86,30 @@ def configure_git() -> None:
     )
 
 
+def pending_fragments(fragment_dir: Path) -> list[Path]:
+    """Changelog fragments waiting to be collected (not the README or the template)."""
+    if not fragment_dir.is_dir():
+        return []
+    return sorted(path for path in fragment_dir.glob("*.md") if path.name != "README.md")
+
+
+def bump_command(
+    project_root: Path, bump_type: str, description: str, has_fragments: bool
+) -> list[str]:
+    """Build the bump_version.py call.
+
+    With fragments pending, scriv writes the detailed entry after the bump, so
+    the generic "Manual <type> release" heading is skipped to avoid two
+    entries for one version.
+    """
+    command = [sys.executable, str(project_root / "scripts" / "bump_version.py"), bump_type]
+    if description:
+        command.extend(["--description", description])
+    if has_fragments:
+        command.append("--skip-changelog")
+    return command
+
+
 def check_remote_changes(pyproject_path: Path) -> tuple[bool, str]:
     """
     Check if remote main has advanced (handles re-runs).
@@ -183,21 +207,26 @@ def main() -> int:
         old_version = get_current_version(pyproject_path)
         print(f"\nCurrent version: {old_version}")
 
+        # Issue #71: the workflow used to run `scriv collect --version <bump
+        # type>` before this script, so the collected section was titled
+        # "patch" (or "minor"/"major") rather than the version, and the bump
+        # then added a second, generic entry. Collect after the bump instead,
+        # with the real version, as the python pipeline template does.
+        fragments = pending_fragments(project_root / "changelog.d")
+
         # Run version bump
         print(f"\nBumping version ({args.bump_type})...")
-        bump_cmd = [
-            sys.executable,
-            "scripts/bump_version.py",
-            args.bump_type,
-        ]
-        if args.description:
-            bump_cmd.extend(["--description", args.description])
-
-        run_command(bump_cmd)
+        run_command(bump_command(project_root, args.bump_type, args.description, bool(fragments)))
 
         # Get new version
         new_version = get_current_version(pyproject_path)
         print(f"New version: {new_version}")
+
+        if fragments:
+            print(f"Collecting {len(fragments)} changelog fragment(s)...")
+            run_command(["scriv", "collect", "--version", new_version])
+        else:
+            print("No changelog fragments found; keeping the generic release entry")
         set_github_output("new_version", new_version)
 
         # Check for changes

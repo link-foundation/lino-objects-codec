@@ -552,20 +552,8 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Collect changelog fragments
-        working-directory: ./python
-        env:
-          BUMP_TYPE: ${{ github.event.inputs.bump_type }}
-        run: |
-          # Check if there are any fragments to collect
-          FRAGMENTS=$(find changelog.d -name "*.md" ! -name "README.md" ! -name "*.j2" 2>/dev/null | wc -l)
-          if [ "$FRAGMENTS" -gt 0 ]; then
-            echo "Found $FRAGMENTS changelog fragment(s), collecting..."
-            scriv collect --version "${BUMP_TYPE}"
-          else
-            echo "No changelog fragments found, skipping collection"
-          fi
-
+      # version_and_commit.py also collects changelog fragments, after the
+      # bump, so scriv titles the section with the new version (issue #71).
       - name: Version and commit
         id: version
         working-directory: ./python
