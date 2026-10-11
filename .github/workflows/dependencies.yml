@@ -12,6 +12,13 @@ on:
 permissions:
   contents: read
 
+# CI/CD best practice #17 (issue #71): "a newer version was published" is a
+# fact about the world, not about the commit. Pull requests (and a manual
+# dispatch) gate on it; push and the weekly schedule only warn, so a fresh
+# upstream release can no longer turn main red for a commit that broke nothing.
+env:
+  FRESHNESS_MODE: ${{ (github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch') && 'gate' || 'report' }}
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -19,10 +26,12 @@ concurrency:
 jobs:
   direct:
     name: Direct dependencies are current
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.13'
@@ -35,24 +44,41 @@ jobs:
 
   locks:
     name: Lockfiles have no pending compatible updates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        with:
+          # The `stable` ref supplied the default toolchain; restated now that
+          # the action is pinned by hash.
+          toolchain: stable
       - name: Check npm resolved versions
         working-directory: js
         run: |
           npm ci
-          npm outdated
+          if ! npm outdated; then
+            if [ "$FRESHNESS_MODE" = report ]; then
+              echo '::warning title=Stale npm lockfile::js/package-lock.json has newer releases available; run npm update.'
+            else
+              echo '::error title=Stale npm lockfile::js/package-lock.json has newer releases available; run npm update.'
+              exit 1
+            fi
+          fi
       - name: Check Cargo lockfile
         working-directory: rust
         run: |
           cargo update --dry-run 2>&1 | tee cargo-update.log
           if grep -E '^[[:space:]]*(Updating .+ ->|Adding |Removing |Locking [1-9])' cargo-update.log; then
-            echo '::error::Cargo.lock has pending updates; run cargo update.'
-            exit 1
+            if [ "$FRESHNESS_MODE" = report ]; then
+              echo '::warning title=Stale Cargo lockfile::Cargo.lock has pending updates; run cargo update.'
+            else
+              echo '::error title=Stale Cargo lockfile::Cargo.lock has pending updates; run cargo update.'
+              exit 1
+            fi
           fi

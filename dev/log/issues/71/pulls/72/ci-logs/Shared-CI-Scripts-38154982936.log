@@ -1,0 +1,576 @@
+Test Shared Scripts	Set up job	﻿2026-10-11T16:20:05.0868357Z Current runner version: '2.337.0'
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0893167Z ##[group]Runner Image Provisioner
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0894292Z Hosted Compute Agent
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0894891Z Version: 20261002.596
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0895549Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0896281Z Build Date: 2026-10-02T22:28:27Z
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0896942Z Worker ID: {9722794b-0533-498e-9876-0a9213b5b07a}
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0897808Z Region: westus
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0898341Z Cloud: Azure
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0898905Z ##[endgroup]
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0900530Z ##[group]Operating System
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0901227Z Ubuntu
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0901873Z 24.04.5
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0902380Z LTS
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0902862Z ##[endgroup]
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0903463Z ##[group]Runner Image
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0904059Z Image: ubuntu-24.04
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0904731Z Version: 20261004.327.1
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0905814Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0907560Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0908560Z ##[endgroup]
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0909697Z ##[group]GITHUB_TOKEN Permissions
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0911757Z Contents: read
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0912488Z Metadata: read
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0913056Z ##[endgroup]
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0915055Z Secret source: Actions
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0916235Z Cache mode: write
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.0916893Z Prepare workflow directory
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.1269989Z Prepare all required actions
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.1338782Z Getting action download info
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.4993124Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Test Shared Scripts	Set up job	2026-10-11T16:20:05.5987884Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Test Shared Scripts	Set up job	2026-10-11T16:20:06.2000348Z Complete job name: Test Shared Scripts
+Test Shared Scripts	Run actions/checkout@v7	﻿2026-10-11T16:20:06.2786968Z ##[group]Run actions/checkout@v7
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2787898Z with:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2788400Z   repository: link-foundation/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2792730Z   token: ***
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2793180Z   ssh-strict: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2793638Z   ssh-user: git
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2794075Z   persist-credentials: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2794559Z   clean: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2795001Z   sparse-checkout-cone-mode: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2795522Z   fetch-depth: 1
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2795947Z   fetch-tags: false
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2796390Z   show-progress: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2796831Z   lfs: false
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2797240Z   submodules: false
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2797688Z   set-safe-directory: true
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2798186Z   allow-unsafe-pr-checkout: false
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.2798953Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3847637Z Syncing repository: link-foundation/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3850582Z ##[group]Getting Git version info
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3851918Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3853839Z [command]/usr/bin/git version
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3937402Z git version 2.55.0
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3963512Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3976204Z Temporarily overriding HOME='/home/runner/work/_temp/4d0d21c6-c4e6-4584-906f-9b028a126f6b' before making global git config changes
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3978609Z Adding repository directory to the temporary git global config as a safe directory
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.3984583Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4042038Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4046513Z ##[group]Determining repository object format
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4048214Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4049755Z ##[group]Initializing the repository
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4054179Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4205767Z hint: Using 'master' as the name for the initial branch. This default branch name
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4208728Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4212083Z hint: to use in all of your new repositories, which will suppress this warning,
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4214926Z hint: call:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4216664Z hint:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4218568Z hint: 	git config --global init.defaultBranch <name>
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4220453Z hint:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4221669Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4223492Z hint: 'development'. The just-created branch can be renamed via this command:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4225159Z hint:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4226305Z hint: 	git branch -m <name>
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4227517Z hint:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4229519Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4231537Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4234919Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4286778Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4288015Z ##[group]Disabling automatic garbage collection
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4291073Z [command]/usr/bin/git config --local gc.auto 0
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4329125Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4330606Z ##[group]Setting up auth
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4331524Z Removing SSH command configuration
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4336243Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4374430Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4766511Z Removing HTTP extra header
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4772496Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.4808070Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5031385Z Removing includeIf entries pointing to credentials config files
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5036885Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5072713Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5311255Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5353920Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5388817Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5429633Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5467433Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5500416Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5501425Z ##[group]Fetching the repository
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:06.5506967Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4:refs/remotes/pull/72/merge
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1786400Z From https://github.com/link-foundation/lino-objects-codec
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1790415Z  * [new ref]         9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4 -> pull/72/merge
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1797622Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1800763Z ##[group]Determining the checkout info
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1804359Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1806958Z [command]/usr/bin/git sparse-checkout disable
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1857018Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1894625Z ##[group]Checking out the ref
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.1898228Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/72/merge
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2255135Z Note: switching to 'refs/remotes/pull/72/merge'.
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2256336Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2257205Z You are in 'detached HEAD' state. You can look around, make experimental
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2259201Z changes and commit them, and you can discard any commits you make in this
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2261684Z state without impacting any branches by switching back to a branch.
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2262923Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2263788Z If you want to create a new branch to retain commits you create, you may
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2266519Z do so (now or later) by using -c with the switch command. Example:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2267955Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2268566Z   git switch -c <new-branch-name>
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2269468Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2270397Z Or undo this operation with:
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2271424Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2271987Z   git switch -
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2272789Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2274154Z Turn off this advice by setting config variable advice.detachedHead to false
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2276085Z 
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2277758Z HEAD is now at 9cf871a Merge 3d0abdb2f5898312689a1ed9756076f4b3171e9c into 85a1c2d809cd1cc7315f16d4c7f8122e8187e6d3
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2283051Z ##[endgroup]
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2317594Z [command]/usr/bin/git log -1 --format=%H
+Test Shared Scripts	Run actions/checkout@v7	2026-10-11T16:20:07.2346779Z 9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4
+Test Shared Scripts	Setup Node.js	﻿2026-10-11T16:20:07.2752257Z ##[group]Run actions/setup-node@v7
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2753517Z with:
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2754371Z   node-version: 22
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2821815Z   check-latest: false
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2832776Z   token: ***
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2833659Z   package-manager-cache: true
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.2834681Z ##[endgroup]
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.4148145Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.5123007Z ##[group]Environment details
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.8711224Z node: v22.23.3
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.8712294Z npm: 10.9.9
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.8713138Z yarn: 1.22.22
+Test Shared Scripts	Setup Node.js	2026-10-11T16:20:07.8714842Z ##[endgroup]
+Test Shared Scripts	Run shared script tests	﻿2026-10-11T16:20:07.8855812Z ##[group]Run node --test scripts/*.test.mjs
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:07.8856629Z ^[[36;1mnode --test scripts/*.test.mjs^[[0m
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:07.9162642Z shell: /usr/bin/bash -e {0}
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:07.9163189Z ##[endgroup]
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:07.9768398Z TAP version 13
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0309704Z # Subtest: a change to every language is balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0321435Z ok 1 - a change to every language is balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0322606Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0323467Z   duration_ms: 2.528318
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0324377Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0325172Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0326236Z # Subtest: a change to only one language is not balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0327866Z ok 2 - a change to only one language is not balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0328922Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0329732Z   duration_ms: 0.290402
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0330880Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0331683Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0332771Z # Subtest: a change to three of four languages is not balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0334361Z ok 3 - a change to three of four languages is not balanced
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0335438Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0336259Z   duration_ms: 2.451074
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0337146Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0338020Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0339292Z # Subtest: shared-only changes are balanced (nothing to enforce)
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0341872Z ok 4 - shared-only changes are balanced (nothing to enforce)
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0343341Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0344396Z   duration_ms: 0.249546
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0345516Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0346566Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0348063Z # Subtest: dependency-only updates do not count as library source
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0349879Z ok 5 - dependency-only updates do not count as library source
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0352092Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0353137Z   duration_ms: 0.455921
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0354227Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0355275Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0356689Z # Subtest: tests and examples do not count as library source
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0358344Z ok 6 - tests and examples do not count as library source
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0359693Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0361131Z   duration_ms: 0.232574
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0362255Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0363280Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0364611Z # Subtest: backslash and ./ prefixed paths are normalized
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0366292Z ok 7 - backslash and ./ prefixed paths are normalized
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0367587Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0368660Z   duration_ms: 0.403644
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0369792Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0371943Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0373305Z # Subtest: every declared language has a source path
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0374860Z ok 8 - every declared language has a source path
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0376199Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0377241Z   duration_ms: 0.275324
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0378389Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0379424Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0450612Z # Subtest: the requirement syntax of every ecosystem reduces to a minor
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0455507Z ok 9 - the requirement syntax of every ecosystem reduces to a minor
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0457239Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0458421Z   duration_ms: 1.899264
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0459667Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0461647Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0463023Z # Subtest: a missing dependency is not a version
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0464652Z ok 10 - a missing dependency is not a version
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0466052Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0467082Z   duration_ms: 0.237534
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0468137Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0469105Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0470600Z # Subtest: four pins on the same minor agree
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0472097Z ok 11 - four pins on the same minor agree
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0473442Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0474599Z   duration_ms: 0.866267
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0476016Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0477109Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0478443Z # Subtest: a differing patch is still agreement
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0480322Z ok 12 - a differing patch is still agreement
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0482247Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0483479Z   duration_ms: 0.170078
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0484854Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0485980Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0487638Z # Subtest: the four pins this repository actually shipped before issue \#47 diverge
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0489758Z ok 13 - the four pins this repository actually shipped before issue \#47 diverge
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0491521Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0492461Z   duration_ms: 0.237554
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0493211Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0493789Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0494499Z # Subtest: one language falling behind by a minor fails
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0495366Z ok 14 - one language falling behind by a minor fails
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0496094Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0496666Z   duration_ms: 0.200143
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0497266Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0497830Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0498657Z # Subtest: a dependency that cannot be read fails rather than passing quietly
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0500428Z ok 15 - a dependency that cannot be read fails rather than passing quietly
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0501827Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0502528Z   duration_ms: 0.240639
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0503028Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0503418Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0504001Z # Subtest: every extractor finds the version in its real manifest
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0505003Z ok 16 - every extractor finds the version in its real manifest
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0505570Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0505969Z   duration_ms: 0.775628
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0506395Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0506786Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0507281Z # Subtest: the checked-in manifests agree today
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0507908Z ok 17 - the checked-in manifests agree today
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0508405Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0508791Z   duration_ms: 0.507767
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0509376Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0509933Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0904937Z # Subtest: issue \#41 regression: a package that indexes after the old 60s budget still passes
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0907685Z ok 18 - issue \#41 regression: a package that indexes after the old 60s budget still passes
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0909087Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0909921Z   duration_ms: 3.309716
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0911255Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0912002Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0913285Z # Subtest: the NuGet budget covers the documented fifteen minute indexing window
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0915352Z ok 19 - the NuGet budget covers the documented fifteen minute indexing window
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0916623Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0917438Z   duration_ms: 0.3642
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0918311Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0919117Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0920464Z # Subtest: every registry waits at least five minutes
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0921682Z ok 20 - every registry waits at least five minutes
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0922599Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0923291Z   duration_ms: 0.282688
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0924033Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0924720Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0925844Z # Subtest: a version that never appears fails after exhausting the budget
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0927485Z ok 21 - a version that never appears fails after exhausting the budget
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0928569Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0929266Z   duration_ms: 0.436625
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0929821Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0930706Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0931953Z # Subtest: a network error costs one attempt instead of aborting the wait
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0933431Z ok 22 - a network error costs one attempt instead of aborting the wait
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0935793Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0936286Z   duration_ms: 0.448076
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0936752Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0937165Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0946764Z # Subtest: probe URLs match each registry's version endpoint
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0947986Z ok 23 - probe URLs match each registry's version endpoint
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0949252Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0950343Z   duration_ms: 0.309497
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0951806Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0952680Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0953783Z # Subtest: a trailing slash on the base URL does not double up
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0961626Z ok 24 - a trailing slash on the base URL does not double up
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0962976Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0964242Z   duration_ms: 0.282407
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0965402Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0966453Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0968009Z # Subtest: command line options beat environment variables, which beat defaults
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0970550Z ok 25 - command line options beat environment variables, which beat defaults
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0972037Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0973090Z   duration_ms: 1.000367
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0974226Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0975271Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0976617Z # Subtest: --flag=value is accepted as well as --flag value
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0978277Z ok 26 - --flag=value is accepted as well as --flag value
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0979587Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0980970Z   duration_ms: 0.595341
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0982050Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0983033Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0984242Z # Subtest: verbose is off by default and can be switched on either way
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0985414Z ok 27 - verbose is off by default and can be switched on either way
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0986467Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0987091Z   duration_ms: 0.680711
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0987710Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0988298Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0989087Z # Subtest: verbose mode prints the probe URL and the elapsed budget
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0990402Z ok 28 - verbose mode prints the probe URL and the elapsed budget
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0991393Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0992004Z   duration_ms: 0.572248
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0992628Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0993219Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0994019Z # Subtest: quiet mode prints one line per attempt and no probe detail
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0995031Z ok 29 - quiet mode prints one line per attempt and no probe detail
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0996452Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0997643Z   duration_ms: 0.287557
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0998577Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0999190Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.0999916Z # Subtest: an unknown registry is rejected
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1001448Z ok 30 - an unknown registry is rejected
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1002363Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1002951Z   duration_ms: 0.62717
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1003435Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1003854Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1004556Z # Subtest: a non-positive budget is rejected
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1005175Z ok 31 - a non-positive budget is rejected
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1005691Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1006096Z   duration_ms: 0.213178
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1006534Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1006940Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1007428Z # Subtest: main requires a name and a version
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1008154Z ok 32 - main requires a name and a version
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1008659Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1009063Z   duration_ms: 0.392973
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1009510Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1009915Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1106741Z # Subtest: main's failure message distinguishes slow indexing from a failed publish
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1108891Z ok 33 - main's failure message distinguishes slow indexing from a failed publish
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1110268Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1110995Z   duration_ms: 69.339573
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1111771Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1112452Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1113505Z # Subtest: probeOnce reports a network failure without throwing
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1114769Z ok 34 - probeOnce reports a network failure without throwing
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1116008Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1117016Z   duration_ms: 0.373036
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1118102Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1118840Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1119592Z # Subtest: probes identify themselves, because crates.io rejects anonymous clients
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1120909Z ok 35 - probes identify themselves, because crates.io rejects anonymous clients
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1121840Z   ---
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1122710Z   duration_ms: 0.266167
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1123468Z   type: 'test'
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1123938Z   ...
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1235892Z 1..35
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1236831Z # tests 35
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1237618Z # suites 0
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1238454Z # pass 35
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1239229Z # fail 0
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1240307Z # cancelled 0
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1241165Z # skipped 0
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1241933Z # todo 0
+Test Shared Scripts	Run shared script tests	2026-10-11T16:20:08.1242760Z # duration_ms 167.349495
+Test Shared Scripts	Post Setup Node.js	﻿2026-10-11T16:20:08.1465730Z Post job cleanup.
+Test Shared Scripts	Post Run actions/checkout@v7	﻿2026-10-11T16:20:08.2782931Z Post job cleanup.
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3702007Z [command]/usr/bin/git version
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3742448Z git version 2.55.0
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3783527Z Temporarily overriding HOME='/home/runner/work/_temp/2db011e6-e9a8-4964-bd34-857c8c45b067' before making global git config changes
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3785791Z Adding repository directory to the temporary git global config as a safe directory
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3801848Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3834338Z Removing SSH command configuration
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3836317Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.3904168Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4231192Z Removing HTTP extra header
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4233616Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4302417Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4557237Z Removing includeIf entries pointing to credentials config files
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4565633Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4604595Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4606759Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4608541Z includeif.gitdir:/github/workspace/.git.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4609975Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4618077Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4643817Z /home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4658669Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-43938417\-b974\-4ccc\-8f5e\-bcf1da74302f\.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4700765Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4734137Z /home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4743207Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-43938417\-b974\-4ccc\-8f5e\-bcf1da74302f\.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4783607Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4811716Z /github/runner_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4818904Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-43938417\-b974\-4ccc\-8f5e\-bcf1da74302f\.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4857276Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4885045Z /github/runner_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4893754Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-43938417\-b974\-4ccc\-8f5e\-bcf1da74302f\.config
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.4930640Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Test Shared Scripts	Post Run actions/checkout@v7	2026-10-11T16:20:08.5149804Z Removing credentials config '/home/runner/work/_temp/git-credentials-43938417-b974-4ccc-8f5e-bcf1da74302f.config'
+Test Shared Scripts	Complete job	﻿2026-10-11T16:20:08.5297968Z Cleaning up orphan processes
+Lint Workflows	Set up job	﻿2026-10-11T16:20:13.3975292Z Current runner version: '2.337.0'
+Lint Workflows	Set up job	2026-10-11T16:20:13.4002252Z ##[group]Runner Image Provisioner
+Lint Workflows	Set up job	2026-10-11T16:20:13.4003225Z Hosted Compute Agent
+Lint Workflows	Set up job	2026-10-11T16:20:13.4003882Z Version: 20261002.596
+Lint Workflows	Set up job	2026-10-11T16:20:13.4004541Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Lint Workflows	Set up job	2026-10-11T16:20:13.4005308Z Build Date: 2026-10-02T22:28:27Z
+Lint Workflows	Set up job	2026-10-11T16:20:13.4006052Z Worker ID: {0d6e40d1-6229-499e-8c20-6f9ce2f0d146}
+Lint Workflows	Set up job	2026-10-11T16:20:13.4006790Z Region: westus
+Lint Workflows	Set up job	2026-10-11T16:20:13.4007311Z Cloud: Azure
+Lint Workflows	Set up job	2026-10-11T16:20:13.4007915Z ##[endgroup]
+Lint Workflows	Set up job	2026-10-11T16:20:13.4009422Z ##[group]Operating System
+Lint Workflows	Set up job	2026-10-11T16:20:13.4010152Z Ubuntu
+Lint Workflows	Set up job	2026-10-11T16:20:13.4010777Z 24.04.5
+Lint Workflows	Set up job	2026-10-11T16:20:13.4011276Z LTS
+Lint Workflows	Set up job	2026-10-11T16:20:13.4012050Z ##[endgroup]
+Lint Workflows	Set up job	2026-10-11T16:20:13.4012629Z ##[group]Runner Image
+Lint Workflows	Set up job	2026-10-11T16:20:13.4013284Z Image: ubuntu-24.04
+Lint Workflows	Set up job	2026-10-11T16:20:13.4013906Z Version: 20261004.327.1
+Lint Workflows	Set up job	2026-10-11T16:20:13.4014975Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Lint Workflows	Set up job	2026-10-11T16:20:13.4016792Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Lint Workflows	Set up job	2026-10-11T16:20:13.4017789Z ##[endgroup]
+Lint Workflows	Set up job	2026-10-11T16:20:13.4018936Z ##[group]GITHUB_TOKEN Permissions
+Lint Workflows	Set up job	2026-10-11T16:20:13.4020891Z Contents: read
+Lint Workflows	Set up job	2026-10-11T16:20:13.4021548Z Metadata: read
+Lint Workflows	Set up job	2026-10-11T16:20:13.4022354Z ##[endgroup]
+Lint Workflows	Set up job	2026-10-11T16:20:13.4024612Z Secret source: Actions
+Lint Workflows	Set up job	2026-10-11T16:20:13.4025600Z Cache mode: write
+Lint Workflows	Set up job	2026-10-11T16:20:13.4026460Z Prepare workflow directory
+Lint Workflows	Set up job	2026-10-11T16:20:13.4365248Z Prepare all required actions
+Lint Workflows	Set up job	2026-10-11T16:20:13.4415067Z Getting action download info
+Lint Workflows	Set up job	2026-10-11T16:20:13.7869054Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Lint Workflows	Set up job	2026-10-11T16:20:13.9818345Z Complete job name: Lint Workflows
+Lint Workflows	Run actions/checkout@v7	﻿2026-10-11T16:20:14.0595463Z ##[group]Run actions/checkout@v7
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0596387Z with:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0596909Z   repository: link-foundation/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0600645Z   token: ***
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0601088Z   ssh-strict: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0601565Z   ssh-user: git
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0602298Z   persist-credentials: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0602809Z   clean: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0603269Z   sparse-checkout-cone-mode: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0603795Z   fetch-depth: 1
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0604228Z   fetch-tags: false
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0604761Z   show-progress: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0605261Z   lfs: false
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0605680Z   submodules: false
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0606138Z   set-safe-directory: true
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0606663Z   allow-unsafe-pr-checkout: false
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.0607491Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1632427Z Syncing repository: link-foundation/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1635326Z ##[group]Getting Git version info
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1636209Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1637457Z [command]/usr/bin/git version
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1717518Z git version 2.55.0
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1764767Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1773769Z Temporarily overriding HOME='/home/runner/work/_temp/5a28804b-c709-4d7a-b666-9c59cf038c79' before making global git config changes
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1776498Z Adding repository directory to the temporary git global config as a safe directory
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1778226Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1821680Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1825367Z ##[group]Determining repository object format
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1827288Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1835094Z ##[group]Initializing the repository
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1836407Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1971345Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1974132Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1976841Z hint: to use in all of your new repositories, which will suppress this warning,
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1978063Z hint: call:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1978771Z hint:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1979637Z hint: 	git config --global init.defaultBranch <name>
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1980625Z hint:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1981545Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1983372Z hint: 'development'. The just-created branch can be renamed via this command:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1984683Z hint:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1985363Z hint: 	git branch -m <name>
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1986188Z hint:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1987276Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1989342Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.1993057Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2044993Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2046320Z ##[group]Disabling automatic garbage collection
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2053566Z [command]/usr/bin/git config --local gc.auto 0
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2087171Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2088502Z ##[group]Setting up auth
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2089472Z Removing SSH command configuration
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2093458Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2128535Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2487440Z Removing HTTP extra header
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2495172Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2545107Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2769676Z Removing includeIf entries pointing to credentials config files
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2774925Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.2815201Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3045750Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3088853Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3127068Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3165060Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3203014Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3234646Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3235416Z ##[group]Fetching the repository
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.3243968Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4:refs/remotes/pull/72/merge
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8612800Z From https://github.com/link-foundation/lino-objects-codec
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8614456Z  * [new ref]         9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4 -> pull/72/merge
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8617604Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8618833Z ##[group]Determining the checkout info
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8620161Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8623312Z [command]/usr/bin/git sparse-checkout disable
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8678766Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8717360Z ##[group]Checking out the ref
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.8722253Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/72/merge
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9069212Z Note: switching to 'refs/remotes/pull/72/merge'.
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9070184Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9070711Z You are in 'detached HEAD' state. You can look around, make experimental
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9071631Z changes and commit them, and you can discard any commits you make in this
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9072770Z state without impacting any branches by switching back to a branch.
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9073286Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9073639Z If you want to create a new branch to retain commits you create, you may
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9074506Z do so (now or later) by using -c with the switch command. Example:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9074999Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9075217Z   git switch -c <new-branch-name>
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9075563Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9075768Z Or undo this operation with:
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9076083Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9076264Z   git switch -
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9076512Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9076907Z Turn off this advice by setting config variable advice.detachedHead to false
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9077459Z 
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9078093Z HEAD is now at 9cf871a Merge 3d0abdb2f5898312689a1ed9756076f4b3171e9c into 85a1c2d809cd1cc7315f16d4c7f8122e8187e6d3
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9092003Z ##[endgroup]
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9140568Z [command]/usr/bin/git log -1 --format=%H
+Lint Workflows	Run actions/checkout@v7	2026-10-11T16:20:14.9170699Z 9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4
+Lint Workflows	Run actionlint	﻿2026-10-11T16:20:14.9430765Z ##[group]Run curl -sSfL \
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9431407Z ^[[36;1mcurl -sSfL \^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9433045Z ^[[36;1m  "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9434264Z ^[[36;1m  | tar xz actionlint^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9434966Z ^[[36;1m# `queue:` is valid workflow syntax (documented under `concurrency`)^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9435887Z ^[[36;1m# but is newer than actionlint's bundled schema, so it is filtered out.^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9436897Z ^[[36;1m./actionlint -ignore 'unexpected key "queue" for "concurrency" section'^[[0m
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9722199Z shell: /usr/bin/bash -e {0}
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9722803Z env:
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9723251Z   ACTIONLINT_VERSION: 1.7.12
+Lint Workflows	Run actionlint	2026-10-11T16:20:14.9723743Z ##[endgroup]
+Lint Workflows	Post Run actions/checkout@v7	﻿2026-10-11T16:20:16.3259691Z Post job cleanup.
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4184869Z [command]/usr/bin/git version
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4229921Z git version 2.55.0
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4267631Z Temporarily overriding HOME='/home/runner/work/_temp/2e6cae95-1ff0-43f7-b7a0-bea127293b85' before making global git config changes
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4269241Z Adding repository directory to the temporary git global config as a safe directory
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4275057Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4312232Z Removing SSH command configuration
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4319175Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4363715Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4631184Z Removing HTTP extra header
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4634979Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4676927Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4937588Z Removing includeIf entries pointing to credentials config files
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.4945042Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5011502Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5013802Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5014918Z includeif.gitdir:/github/workspace/.git.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5015712Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5022716Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5076506Z /home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5108300Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-5e8f875e\-a921\-4d45\-930d\-01f6d10a9bc3\.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5183334Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5223488Z /home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5233326Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-5e8f875e\-a921\-4d45\-930d\-01f6d10a9bc3\.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5272922Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5299887Z /github/runner_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5307103Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-5e8f875e\-a921\-4d45\-930d\-01f6d10a9bc3\.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5344528Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5372219Z /github/runner_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5380401Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-5e8f875e\-a921\-4d45\-930d\-01f6d10a9bc3\.config
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5419578Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lint Workflows	Post Run actions/checkout@v7	2026-10-11T16:20:16.5647630Z Removing credentials config '/home/runner/work/_temp/git-credentials-5e8f875e-a921-4d45-930d-01f6d10a9bc3.config'
+Lint Workflows	Complete job	﻿2026-10-11T16:20:16.5797952Z Cleaning up orphan processes

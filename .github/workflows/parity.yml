@@ -22,12 +22,13 @@ concurrency:
 jobs:
   parity:
     name: Languages Change Together
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7
@@ -54,10 +55,12 @@ jobs:
   # four different grammars is never intentional (issue #47).
   links-notation-version:
     name: Implementations Pin One Parser Version
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js
         uses: actions/setup-node@v7

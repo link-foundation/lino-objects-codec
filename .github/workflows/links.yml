@@ -27,7 +27,7 @@ permissions:
 jobs:
   link-checker:
     name: Check Links
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     # Typical run is well under a minute with the lychee cache; the timeout
     # stops a slow external host from hanging the workflow.
     timeout-minutes: 10
@@ -36,6 +36,8 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Check links with lychee
         uses: lycheeverse/lychee-action@v2

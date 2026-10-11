@@ -1,0 +1,7 @@
+    109 error[unpinned-uses]
+     44 help[artipacked]
+     23 info[template-injection]
+     13 error[template-injection]
+      6 info[use-trusted-publishing]
+      5 warning[dependabot-cooldown]
+      2 error[cache-poisoning]

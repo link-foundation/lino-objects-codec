@@ -1,0 +1,101 @@
+name: Workflows
+
+# CI/CD best practice #14 (issue #71): the pipeline is code, and nothing else
+# lints it. actionlint checks syntax, expressions and the shell in every `run:`
+# block; zizmor audits for template injection, unpinned third-party actions,
+# persisted checkout credentials and cache poisoning.
+#
+# No `paths:` filter on purpose, like scripts.yml: both jobs take seconds, and
+# a filtered workflow is a check that silently does not run.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# Least privilege: these jobs only read the checked-out tree.
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    name: Lint Workflows
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # Read-only check: a newer run supersedes this one.
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-actionlint
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # A malformed workflow file is rejected by GitHub at dispatch time with no
+      # check attached to the pull request, i.e. a silent false negative: the PR
+      # looks green while a pipeline no longer runs at all.
+      #
+      # The Docker image bundles shellcheck and pyflakes. A bare actionlint
+      # binary without shellcheck on PATH silently skips every shell check and
+      # still exits 0. Reproduce locally with:
+      #   docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.12 -color \
+      #     -ignore 'unexpected key "queue" for "concurrency" section'
+      # Pinned by digest: a mutable tag of a repository we do not control is
+      # arbitrary code execution. Re-resolve when bumping:
+      #   docker buildx imagetools inspect rhysd/actionlint:<tag>
+      #
+      # `queue:` is valid workflow syntax (documented under `concurrency`, and
+      # best practice #10) but is newer than actionlint's bundled schema. Drop
+      # the -ignore once rhysd/actionlint#654 ships in a release.
+      - uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # v1.7.12
+        with:
+          args: -color -ignore "unexpected key .queue. for .concurrency. section"
+
+  zizmor:
+    name: Audit Workflow Security
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      # One version for both passes below; scripts/check_dependency_freshness.py
+      # reads it from this line.
+      ZIZMOR_VERSION: 1.30.1
+    concurrency:
+      group: check-${{ github.workflow }}-${{ github.ref }}-zizmor
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Annotations instead of SARIF: SARIF upload fails silently where code
+      # scanning is unavailable (forks), annotations fail loudly everywhere.
+      # `version` is named rather than left to the action's frozen `latest`
+      # table, so a zizmor bump is a visible line in the diff. Reproduce with:
+      #   pipx run zizmor==1.30.1 --config .github/zizmor.yml --min-confidence low .
+      - uses: zizmorcore/zizmor-action@v0.6.4
+        with:
+          advanced-security: false
+          annotations: true
+          config: .github/zizmor.yml
+          # Low, not medium: artipacked reports at Low confidence, and a floor
+          # above it hides every checkout that forgets persist-credentials.
+          min-confidence: low
+          version: ${{ env.ZIZMOR_VERSION }}
+
+      # The pass above runs `--persona regular`. The audits covering container
+      # image references (`unpinned-images` among them) are pedantic-only, so
+      # the `'*': hash-pin` policy is not enforced against the
+      # `uses: docker://` reference in the actionlint job by that pass. High
+      # severity and high confidence keep that enforcement without the
+      # pedantic persona's stylistic noise; it reports nothing today.
+      - name: Audit for pedantic-only high-severity findings
+        timeout-minutes: 10
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          pipx run "zizmor==${ZIZMOR_VERSION}" --config .github/zizmor.yml \
+            --persona pedantic --min-severity high --min-confidence high \
+            .

@@ -18,6 +18,10 @@ on:
         description: 'Version bump type'
         required: true
         type: choice
+        # Best practice #17: `gh workflow run` cannot fill a form, and a
+        # required input without a default makes the dispatch API answer
+        # HTTP 422 before the run exists.
+        default: patch
         options:
           - patch
           - minor
@@ -49,7 +53,7 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-detect-changes
       cancel-in-progress: true
     name: Detect Changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name != 'workflow_dispatch'
     outputs:
       py-changed: ${{ steps.changes.outputs.py-changed }}
@@ -61,6 +65,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -84,7 +89,7 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-lint
       cancel-in-progress: true
     name: Lint and Format Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [detect-changes]
     # `!cancelled()` is required because detect-changes is skipped on
     # workflow_dispatch; it still propagates a real workflow cancellation.
@@ -104,6 +109,7 @@ jobs:
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
+          persist-credentials: false
 
       # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
       # the base branch moves, so checks would validate code that is not what
@@ -174,12 +180,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-24.04, macos-15, windows-2025]
     steps:
       - uses: actions/checkout@v7
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
+          persist-credentials: false
 
       # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
       # the base branch moves, so checks would validate code that is not what
@@ -211,8 +218,8 @@ jobs:
       # One upload per commit: the matrix legs produce identical coverage for a
       # pure-Python package, and uploading all three only adds Codecov noise.
       - name: Upload coverage to Codecov
-        if: matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v7
+        if: matrix.os == 'ubuntu-24.04'
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
         with:
           files: ./python/coverage.xml
           fail_ci_if_error: false
@@ -226,7 +233,7 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-build
       cancel-in-progress: true
     name: Build Package
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [lint, test]
     # Skipped together with lint and test when nothing relevant changed.
     if: >-
@@ -240,6 +247,7 @@ jobs:
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
+          persist-credentials: false
 
       # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
       # the base branch moves, so checks would validate code that is not what
@@ -285,12 +293,13 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-changelog
       cancel-in-progress: true
     name: Changelog Fragment Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       # Best practice #7: the `refs/pull/N/merge` preview goes stale as soon as
       # the base branch moves, so checks would validate code that is not what
@@ -316,6 +325,9 @@ jobs:
           # Passed through the environment: a branch name is attacker-controlled
           # and must never be interpolated straight into a shell script.
           HEAD_REF: ${{ github.head_ref }}
+          # Dependabot PRs are exempt (issue #71); decided from the author,
+          # not from the spoofable branch name.
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
         run: python scripts/validate_changeset.py
 
   # RELEASE JOBS - Only run after all CI checks pass
@@ -332,15 +344,27 @@ jobs:
       queue: max
     name: Auto Release
     needs: [lint, test, build]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    # `!cancelled()` plus an explicit result check: detect-changes is skipped
+    # on workflow_dispatch, and a skipped ancestor makes the implicit
+    # `success()` skip this job even when lint, test and build passed (issue #71).
+    if: >-
+      ${{
+      !cancelled() &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.build.result == 'success'
+      }}
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
       id-token: write
     steps:
+      # This job writes to the repository (a release commit and tag, or a
+      # release PR branch), so the checkout explicitly persists credentials.
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -353,6 +377,10 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '22'
+          # Release jobs never restore a cache: a cache written by any PR run
+          # would otherwise feed files into the job that publishes (zizmor
+          # cache-poisoning). Only the release scripts run here, no npm install.
+          package-manager-cache: false
 
       - name: Install dependencies
         run: |
@@ -403,9 +431,10 @@ jobs:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
           # Switch to '1' to dump the resolved OIDC claims; quiet by default.
           PYPI_PREFLIGHT_VERBOSE: '0'
+          PACKAGE_NAME: ${{ steps.version_check.outputs.package_name }}
         run: |
           python scripts/pypi_publish_preflight.py \
-            --package "${{ steps.version_check.outputs.package_name }}"
+            --package "${PACKAGE_NAME}"
 
       - name: Publish to PyPI
         id: pypi_publish
@@ -416,7 +445,7 @@ jobs:
         # A PYPI_API_TOKEN secret, when present, takes over so a first release
         # can happen before trusted publishing is registered; without the
         # secret the `password` input is empty and OIDC is used as before.
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           packages-dir: python/dist/
           password: ${{ secrets.PYPI_API_TOKEN }}
@@ -431,9 +460,10 @@ jobs:
         env:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
           PYPI_PREFLIGHT_VERBOSE: '1'
+          PACKAGE_NAME: ${{ steps.version_check.outputs.package_name }}
         run: |
           python scripts/pypi_publish_preflight.py \
-            --package "${{ steps.version_check.outputs.package_name }}"
+            --package "${PACKAGE_NAME}"
 
       - name: Verify package on PyPI
         # Issue #41: this readback allowed twenty-five seconds, the same class
@@ -442,20 +472,23 @@ jobs:
         if: steps.version_check.outputs.should_release == 'true' && steps.pypi_publish.outcome == 'success'
         env:
           REGISTRY_WAIT_VERBOSE: '0'
+          PACKAGE_NAME: ${{ steps.version_check.outputs.package_name }}
+          CURRENT_VERSION: ${{ steps.version_check.outputs.current_version }}
         run: |
           node scripts/wait-for-registry.mjs --registry pypi \
-            --name "${{ steps.version_check.outputs.package_name }}" \
-            --version "${{ steps.version_check.outputs.current_version }}"
+            --name "${PACKAGE_NAME}" \
+            --version "${CURRENT_VERSION}"
 
       - name: Create GitHub Release
         if: steps.version_check.outputs.should_release == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CURRENT_VERSION: ${{ steps.version_check.outputs.current_version }}
         working-directory: ./python
         run: |
           python scripts/create_github_release.py \
-            --version "${{ steps.version_check.outputs.current_version }}" \
-            --repository "${{ github.repository }}" \
+            --version "${CURRENT_VERSION}" \
+            --repository "${GITHUB_REPOSITORY}" \
             --tag-prefix "python_v" \
             --language "Python"
 
@@ -471,16 +504,27 @@ jobs:
       queue: max
     name: Manual Release
     needs: [lint, test, build]
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
+    # `!cancelled()` plus an explicit result check: detect-changes is skipped
+    # on workflow_dispatch, and a skipped ancestor makes the implicit
+    # `success()` skip this job even when lint, test and build passed (issue #71).
+    if: >-
+      ${{
+      !cancelled() &&
+      github.event_name == 'workflow_dispatch' &&
+      needs.build.result == 'success'
+      }}
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
       id-token: write
     steps:
+      # This job writes to the repository (a release commit and tag, or a
+      # release PR branch), so the checkout explicitly persists credentials.
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Setup Python
         uses: actions/setup-python@v7
@@ -498,31 +542,28 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '22'
+          # Release jobs never restore a cache: a cache written by any PR run
+          # would otherwise feed files into the job that publishes (zizmor
+          # cache-poisoning). Only the release scripts run here, no npm install.
+          package-manager-cache: false
 
       - name: Configure git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Collect changelog fragments
-        working-directory: ./python
-        run: |
-          # Check if there are any fragments to collect
-          FRAGMENTS=$(find changelog.d -name "*.md" ! -name "README.md" ! -name "*.j2" 2>/dev/null | wc -l)
-          if [ "$FRAGMENTS" -gt 0 ]; then
-            echo "Found $FRAGMENTS changelog fragment(s), collecting..."
-            scriv collect --version "${{ github.event.inputs.bump_type }}"
-          else
-            echo "No changelog fragments found, skipping collection"
-          fi
-
+      # version_and_commit.py also collects changelog fragments, after the
+      # bump, so scriv titles the section with the new version (issue #71).
       - name: Version and commit
         id: version
         working-directory: ./python
+        env:
+          BUMP_TYPE: ${{ github.event.inputs.bump_type }}
+          DESCRIPTION: ${{ github.event.inputs.description }}
         run: |
           python scripts/version_and_commit.py \
-            --bump-type "${{ github.event.inputs.bump_type }}" \
-            --description "${{ github.event.inputs.description }}"
+            --bump-type "${BUMP_TYPE}" \
+            --description "${DESCRIPTION}"
 
       - name: Build package
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
@@ -548,15 +589,16 @@ jobs:
         env:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
           PYPI_PREFLIGHT_VERBOSE: '0'
+          PACKAGE_NAME: ${{ steps.pkg.outputs.package_name }}
         run: |
           python scripts/pypi_publish_preflight.py \
-            --package "${{ steps.pkg.outputs.package_name }}"
+            --package "${PACKAGE_NAME}"
 
       - name: Publish to PyPI
         id: pypi_publish
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
         # See note above: relies on PyPI Trusted Publisher; see docs/case-studies/issue-25/README.md.
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
         with:
           packages-dir: python/dist/
           password: ${{ secrets.PYPI_API_TOKEN }}
@@ -569,27 +611,31 @@ jobs:
         env:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
           PYPI_PREFLIGHT_VERBOSE: '1'
+          PACKAGE_NAME: ${{ steps.pkg.outputs.package_name }}
         run: |
           python scripts/pypi_publish_preflight.py \
-            --package "${{ steps.pkg.outputs.package_name }}"
+            --package "${PACKAGE_NAME}"
 
       - name: Verify package on PyPI
         if: (steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true') && steps.pypi_publish.outcome == 'success'
         env:
           REGISTRY_WAIT_VERBOSE: '0'
+          PACKAGE_NAME: ${{ steps.pkg.outputs.package_name }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
         run: |
           node scripts/wait-for-registry.mjs --registry pypi \
-            --name "${{ steps.pkg.outputs.package_name }}" \
-            --version "${{ steps.version.outputs.new_version }}"
+            --name "${PACKAGE_NAME}" \
+            --version "${NEW_VERSION}"
 
       - name: Create GitHub Release
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
         working-directory: ./python
         run: |
           python scripts/create_github_release.py \
-            --version "${{ steps.version.outputs.new_version }}" \
-            --repository "${{ github.repository }}" \
+            --version "${NEW_VERSION}" \
+            --repository "${GITHUB_REPOSITORY}" \
             --tag-prefix "python_v" \
             --language "Python"

@@ -1,0 +1,266 @@
+Implementations Pin One Parser Version	UNKNOWN STEP	﻿2026-10-09T16:02:12.6546879Z Current runner version: '2.337.0'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6569745Z ##[group]Runner Image Provisioner
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6571210Z Hosted Compute Agent
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6571859Z Version: 20261002.596
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6572554Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6573304Z Build Date: 2026-10-02T22:28:27Z
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6574007Z Worker ID: {91fc356d-1314-4829-94a9-e1f1aa3b5f7d}
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6574857Z Region: westus2
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6575405Z Cloud: Azure
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6575917Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6577438Z ##[group]Operating System
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6578150Z Ubuntu
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6578738Z 24.04.5
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6579243Z LTS
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6579730Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6580338Z ##[group]Runner Image
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6581295Z Image: ubuntu-24.04
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6581903Z Version: 20261004.327.1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6583196Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6584820Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6585825Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6586969Z ##[group]GITHUB_TOKEN Permissions
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6588786Z Contents: read
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6589450Z Metadata: read
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6590051Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6592281Z Secret source: Dependabot
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6593352Z Cache mode: write
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6594022Z Prepare workflow directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6924507Z Prepare all required actions
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:12.6972368Z Getting action download info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.0570846Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.1637390Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.5656359Z Complete job name: Implementations Pin One Parser Version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6470200Z ##[group]Run actions/checkout@v7
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6471321Z with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6471830Z   repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6475918Z   token: ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6476358Z   ssh-strict: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6476808Z   ssh-user: git
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6477316Z   persist-credentials: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6477847Z   clean: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6478288Z   sparse-checkout-cone-mode: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6478809Z   fetch-depth: 1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6479237Z   fetch-tags: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6479672Z   show-progress: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6480108Z   lfs: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6480668Z   submodules: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6481129Z   set-safe-directory: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6481641Z   allow-unsafe-pr-checkout: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.6482402Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7527458Z Syncing repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7529661Z ##[group]Getting Git version info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7531088Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7533081Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7643447Z git version 2.55.0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7678055Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7685588Z Temporarily overriding HOME='/home/runner/work/_temp/76b1405e-feb3-44ac-884c-f66d4b2f884b' before making global git config changes
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7688271Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7691206Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7742754Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7745140Z ##[group]Determining repository object format
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7752280Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7754387Z ##[group]Initializing the repository
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7756238Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7879619Z hint: Using 'master' as the name for the initial branch. This default branch name
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7881617Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7883292Z hint: to use in all of your new repositories, which will suppress this warning,
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7884641Z hint: call:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7885315Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7885960Z hint: 	git config --global init.defaultBranch <name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7886982Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7887764Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7889492Z hint: 'development'. The just-created branch can be renamed via this command:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7890380Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7891362Z hint: 	git branch -m <name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7891883Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7892531Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7893745Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7904855Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7954062Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7955400Z ##[group]Disabling automatic garbage collection
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7958137Z [command]/usr/bin/git config --local gc.auto 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7992841Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7994295Z ##[group]Setting up auth
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.7998656Z Removing SSH command configuration
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8000226Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8041920Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8447567Z Removing HTTP extra header
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8455335Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8497584Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8729000Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8734688Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8774968Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.8998305Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9039290Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9076282Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9116380Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9152934Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9185273Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9187147Z ##[group]Fetching the repository
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:13.9193605Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +5e9a9598da405242e146cb64adb282ce5d0bd8cb:refs/remotes/pull/67/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4244828Z From https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4247674Z  * [new ref]         5e9a9598da405242e146cb64adb282ce5d0bd8cb -> pull/67/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4254278Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4256925Z ##[group]Determining the checkout info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4259604Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4261778Z [command]/usr/bin/git sparse-checkout disable
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4314487Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4351336Z ##[group]Checking out the ref
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4353895Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/67/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4691888Z Note: switching to 'refs/remotes/pull/67/merge'.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4692737Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4694026Z You are in 'detached HEAD' state. You can look around, make experimental
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4695922Z changes and commit them, and you can discard any commits you make in this
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4697591Z state without impacting any branches by switching back to a branch.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4698553Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4699302Z If you want to create a new branch to retain commits you create, you may
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4702278Z do so (now or later) by using -c with the switch command. Example:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4703684Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4704426Z   git switch -c <new-branch-name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4705484Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4706353Z Or undo this operation with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4707407Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4708030Z   git switch -
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4708976Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4710343Z Turn off this advice by setting config variable advice.detachedHead to false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4712556Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4714306Z HEAD is now at 5e9a959 Merge 3bc957c7d53b73f4f3d70576aaad8906968757d9 into 3d52c62c94bfbfe00b42c7a795327f6af0189eba
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4719188Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4756443Z [command]/usr/bin/git log -1 --format=%H
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.4784312Z 5e9a9598da405242e146cb64adb282ce5d0bd8cb
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5191719Z ##[group]Run actions/setup-node@v7
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5192546Z with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5193073Z   node-version: 22
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5193669Z   check-latest: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5199342Z   token: ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5199915Z   package-manager-cache: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.5200803Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.6533831Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:14.7508895Z ##[group]Environment details
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1466570Z node: v22.23.3
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1467552Z npm: 10.9.9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1468347Z yarn: 1.22.22
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1470871Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1648918Z ##[group]Run node --test scripts/check-links-notation-parity.test.mjs
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1651646Z ^[[36;1mnode --test scripts/check-links-notation-parity.test.mjs^[[0m
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1925243Z shell: /usr/bin/bash -e {0}
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.1926454Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2461476Z TAP version 13
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2911678Z # Subtest: the requirement syntax of every ecosystem reduces to a minor
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2917322Z ok 1 - the requirement syntax of every ecosystem reduces to a minor
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2920342Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2922422Z   duration_ms: 1.721607
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2924410Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2926184Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2928479Z # Subtest: a missing dependency is not a version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2932204Z ok 2 - a missing dependency is not a version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2934578Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2936885Z   duration_ms: 0.226573
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2938815Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2940792Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2942940Z # Subtest: four pins on the same minor agree
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2945625Z ok 3 - four pins on the same minor agree
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2948055Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2952842Z   duration_ms: 0.898679
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2955315Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2957832Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2960869Z # Subtest: a differing patch is still agreement
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2964105Z ok 4 - a differing patch is still agreement
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2966653Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2973317Z   duration_ms: 0.158646
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2981718Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2983575Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2986034Z # Subtest: the four pins this repository actually shipped before issue \#47 diverge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2989204Z ok 5 - the four pins this repository actually shipped before issue \#47 diverge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2991871Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2993079Z   duration_ms: 0.236742
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2994405Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2995483Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2997077Z # Subtest: one language falling behind by a minor fails
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.2999477Z ok 6 - one language falling behind by a minor fails
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3001742Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3002832Z   duration_ms: 0.16045
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3004029Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3005095Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3006929Z # Subtest: a dependency that cannot be read fails rather than passing quietly
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3009616Z ok 7 - a dependency that cannot be read fails rather than passing quietly
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3011846Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3012910Z   duration_ms: 0.229508
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3014141Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3015272Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3017026Z # Subtest: every extractor finds the version in its real manifest
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3019453Z ok 8 - every extractor finds the version in its real manifest
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3021406Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3022785Z   duration_ms: 0.771091
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3024100Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3025186Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3026524Z # Subtest: the checked-in manifests agree today
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3028361Z not ok 9 - the checked-in manifests agree today
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3029873Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3031196Z   duration_ms: 2.313984
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3032440Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3035064Z   location: '/home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:109:1'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3038130Z   failureType: 'testCodeFailure'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3039478Z   error: |-
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3040976Z     Expected values to be strictly equal:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3042433Z     
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3043458Z     false !== true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3044569Z     
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3045606Z   code: 'ERR_ASSERTION'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3046855Z   name: 'AssertionError'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3048111Z   expected: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3049261Z   actual: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3050409Z   operator: 'strictEqual'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3052521Z   stack: |-
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3056612Z     TestContext.<anonymous> (file:///home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:110:10)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3060439Z     Test.runInAsyncScope (node:async_hooks:214:14)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3062635Z     Test.run (node:internal/test_runner/test:1047:25)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3064799Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3067015Z     Test.postRun (node:internal/test_runner/test:1173:19)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3069034Z     Test.run (node:internal/test_runner/test:1101:12)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3071821Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3074006Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3075153Z 1..9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3076242Z # tests 9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3077313Z # suites 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3078877Z # pass 8
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3080786Z # fail 1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3081938Z # cancelled 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3083048Z # skipped 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3084088Z # todo 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3085180Z # duration_ms 72.913115
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3117491Z ##[error]Process completed with exit code 1.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.3419011Z Post job cleanup.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4312632Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4365047Z git version 2.55.0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4404156Z Temporarily overriding HOME='/home/runner/work/_temp/d81d553d-36ec-4efe-9779-d2b6bfdff775' before making global git config changes
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4409458Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4415378Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4447909Z Removing SSH command configuration
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4453983Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4494344Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4738131Z Removing HTTP extra header
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4745720Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.4782481Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5029950Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5037334Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5068356Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5072110Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5075081Z includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5078005Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5086345Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5116919Z /home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5132129Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-269d393a\-71d8\-45fe\-92df\-b3417ea4ce90\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5173256Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5232173Z /home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5246598Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-269d393a\-71d8\-45fe\-92df\-b3417ea4ce90\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5275249Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5302776Z /github/runner_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5323149Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-269d393a\-71d8\-45fe\-92df\-b3417ea4ce90\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5350222Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5378266Z /github/runner_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5389763Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-269d393a\-71d8\-45fe\-92df\-b3417ea4ce90\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5425385Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5656313Z Removing credentials config '/home/runner/work/_temp/git-credentials-269d393a-71d8-45fe-92df-b3417ea4ce90.config'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-09T16:02:15.5813695Z Cleaning up orphan processes

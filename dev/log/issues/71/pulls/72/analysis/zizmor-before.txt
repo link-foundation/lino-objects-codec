@@ -1,0 +1,2193 @@
+ INFO zizmor: 🌈 zizmor v1.30.1
+ INFO audit: zizmor: 🌈 completed ./.github/dependabot.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/csharp.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/dependencies.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/js.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/links.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/parity.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/python.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/rust.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/scripts.yml
+ INFO audit: zizmor: 🌈 completed ./.github/workflows/security.yml
+ INFO audit: zizmor: 🌈 completed ./python/.pre-commit-config.yaml
+warning[dependabot-cooldown]: insufficient cooldown in Dependabot updates
+  --> ./.github/dependabot.yml:11:5
+   |
+11 |   - package-ecosystem: cargo
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^ insufficient implicit default-days (less than 7)
+   |
+   = note: audit confidence → High
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#dependabot-cooldown
+
+warning[dependabot-cooldown]: insufficient cooldown in Dependabot updates
+  --> ./.github/dependabot.yml:22:5
+   |
+22 |   - package-ecosystem: npm
+   |     ^^^^^^^^^^^^^^^^^^^^^^ insufficient implicit default-days (less than 7)
+   |
+   = note: audit confidence → High
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#dependabot-cooldown
+
+warning[dependabot-cooldown]: insufficient cooldown in Dependabot updates
+  --> ./.github/dependabot.yml:28:5
+   |
+28 |   - package-ecosystem: pip
+   |     ^^^^^^^^^^^^^^^^^^^^^^ insufficient implicit default-days (less than 7)
+   |
+   = note: audit confidence → High
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#dependabot-cooldown
+
+warning[dependabot-cooldown]: insufficient cooldown in Dependabot updates
+  --> ./.github/dependabot.yml:34:5
+   |
+34 |   - package-ecosystem: nuget
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^ insufficient implicit default-days (less than 7)
+   |
+   = note: audit confidence → High
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#dependabot-cooldown
+
+warning[dependabot-cooldown]: insufficient cooldown in Dependabot updates
+  --> ./.github/dependabot.yml:40:5
+   |
+40 |   - package-ecosystem: github-actions
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ insufficient implicit default-days (less than 7)
+   |
+   = note: audit confidence → High
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#dependabot-cooldown
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/csharp.yml:64:9
+   |
+64 |         - uses: actions/checkout@v7
+   |  _________^
+65 | |         with:
+66 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:107:9
+    |
+107 |         - uses: actions/checkout@v7
+    |  _________^
+108 | |         with:
+109 | |           # Full history: the merge simulation below needs the base branch.
+110 | |           fetch-depth: 0
+...   |
+113 | |       # the base branch moves, so checks would validate code that is not what
+114 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:189:9
+    |
+189 |         - uses: actions/checkout@v7
+    |  _________^
+190 | |         with:
+191 | |           # Full history: the merge simulation below needs the base branch.
+192 | |           fetch-depth: 0
+...   |
+195 | |       # the base branch moves, so checks would validate code that is not what
+196 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:252:9
+    |
+252 |         - uses: actions/checkout@v7
+    |  _________^
+253 | |         with:
+254 | |           # Full history: the merge simulation below needs the base branch.
+255 | |           fetch-depth: 0
+...   |
+258 | |       # the base branch moves, so checks would validate code that is not what
+259 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:303:9
+    |
+303 |         - uses: actions/checkout@v7
+    |  _________^
+304 | |         with:
+305 | |           fetch-depth: 0
+...   |
+308 | |       # the base branch moves, so checks would validate code that is not what
+309 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:351:9
+    |
+351 |         - uses: actions/checkout@v7
+    |  _________^
+352 | |         with:
+353 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/csharp.yml:493:9
+    |
+493 |         - uses: actions/checkout@v7
+    |  _________^
+494 | |         with:
+495 | |           fetch-depth: 0
+496 | |           token: ${{ secrets.GITHUB_TOKEN }}
+    | |____________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/csharp.yml:419:22
+    |
+403 |           run: |
+    |           --- this step
+...
+419 |             if ! OUT=$(dotnet nuget push artifacts/*.nupkg \
+    |  ______________________^
+420 | |               --api-key "$NUGET_API_KEY" \
+421 | |               --source https://api.nuget.org/v3/index.json \
+422 | |               --skip-duplicate 2>&1); then
+    | |______________________________^ this command
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/csharp.yml:550:22
+    |
+534 |           run: |
+    |           --- this step
+...
+550 |             if ! OUT=$(dotnet nuget push artifacts/*.nupkg \
+    |  ______________________^
+551 | |               --api-key "$NUGET_API_KEY" \
+552 | |               --source https://api.nuget.org/v3/index.json \
+553 | |               --skip-duplicate 2>&1); then
+    | |______________________________^ this command
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:454:20
+    |
+453 |         run: |
+    |         --- this run block
+454 |           PKG="${{ steps.version_check.outputs.package_id }}"
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:455:20
+    |
+453 |         run: |
+    |         --- this run block
+454 |           PKG="${{ steps.version_check.outputs.package_id }}"
+455 |           VER="${{ steps.version_check.outputs.current_version }}"
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:470:28
+    |
+468 |         run: |
+    |         --- this run block
+469 |           node scripts/create-github-release.mjs \
+470 |             --version "${{ steps.version_check.outputs.current_version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:518:30
+    |
+516 |         run: |
+    |         --- this run block
+517 |           node scripts/version-and-commit.mjs \
+518 |             --bump-type "${{ github.event.inputs.bump_type }}" \
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:519:32
+    |
+516 |         run: |
+    |         --- this run block
+...
+519 |             --description "${{ github.event.inputs.description }}"
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:582:20
+    |
+579 |         run: |
+    |         --- this run block
+...
+582 |           VER="${{ steps.version.outputs.new_version }}"
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/csharp.yml:597:28
+    |
+595 |         run: |
+    |         --- this run block
+596 |           node scripts/create-github-release.mjs \
+597 |             --version "${{ steps.version.outputs.new_version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/csharp.yml:64:15
+   |
+64 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/csharp.yml:69:15
+   |
+69 |         uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:107:15
+    |
+107 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:125:15
+    |
+125 |         uses: actions/setup-dotnet@v6
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:131:15
+    |
+131 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:189:15
+    |
+189 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:207:15
+    |
+207 |         uses: actions/setup-dotnet@v6
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:229:15
+    |
+229 |         uses: codecov/codecov-action@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:252:15
+    |
+252 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:270:15
+    |
+270 |         uses: actions/setup-dotnet@v6
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:287:15
+    |
+287 |         uses: actions/upload-artifact@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:303:15
+    |
+303 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:320:15
+    |
+320 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:351:15
+    |
+351 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:356:15
+    |
+356 |         uses: actions/setup-dotnet@v6
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:361:15
+    |
+361 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:392:15
+    |
+392 |         uses: actions/download-artifact@v8
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:493:15
+    |
+493 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:499:15
+    |
+499 |         uses: actions/setup-dotnet@v6
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/csharp.yml:504:15
+    |
+504 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/dependencies.yml:25:9
+   |
+25 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/dependencies.yml:41:9
+   |
+41 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/dependencies.yml:25:15
+   |
+25 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/dependencies.yml:26:15
+   |
+26 |       - uses: actions/setup-python@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/dependencies.yml:41:15
+   |
+41 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/dependencies.yml:42:15
+   |
+42 |       - uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/dependencies.yml:45:15
+   |
+45 |       - uses: dtolnay/rust-toolchain@stable
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/js.yml:62:9
+   |
+62 |         - uses: actions/checkout@v7
+   |  _________^
+63 | |         with:
+64 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/js.yml:87:9
+   |
+87 |         - uses: actions/checkout@v7
+   |  _________^
+88 | |         with:
+89 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:111:9
+    |
+111 |         - uses: actions/checkout@v7
+    |  _________^
+112 | |         with:
+113 | |           fetch-depth: 0
+...   |
+116 | |       # the base branch moves, so checks would validate code that is not what
+117 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:179:9
+    |
+179 |         - uses: actions/checkout@v7
+    |  _________^
+180 | |         with:
+181 | |           # Full history: the merge simulation below needs the base branch.
+182 | |           fetch-depth: 0
+...   |
+185 | |       # the base branch moves, so checks would validate code that is not what
+186 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:241:9
+    |
+241 |         - uses: actions/checkout@v7
+    |  _________^
+242 | |         with:
+243 | |           # Full history: the merge simulation below needs the base branch.
+244 | |           fetch-depth: 0
+...   |
+247 | |       # the base branch moves, so checks would validate code that is not what
+248 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:297:9
+    |
+297 |         - uses: actions/checkout@v7
+    |  _________^
+298 | |         with:
+299 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:382:9
+    |
+382 |         - uses: actions/checkout@v7
+    |  _________^
+383 | |         with:
+384 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/js.yml:443:9
+    |
+443 |         - uses: actions/checkout@v7
+    |  _________^
+444 | |         with:
+445 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:345:76
+    |
+345 |         run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository...
+    |         --- this run block                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:352:76
+    |
+352 |         run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository...
+    |         --- this run block                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:403:82
+    |
+403 |         run: node scripts/version-and-commit.mjs --mode instant --bump-type "${{ github.event.inputs.bump_type }}" --description "$...
+    |         --- this run block                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:403:135
+    |
+403 | ...   run: node scripts/version-and-commit.mjs --mode instant --bump-type "${{ github.event.inputs.bump_type }}" --description "${{ github.event.inputs.description }}"
+    |       --- this run block                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:417:76
+    |
+417 |         run: node scripts/create-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository...
+    |         --- this run block                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:424:76
+    |
+424 |         run: node scripts/format-github-release.mjs --release-version "${{ steps.publish.outputs.published_version }}" --repository...
+    |         --- this run block                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:458:72
+    |
+458 |         run: node scripts/create-manual-changeset.mjs --bump-type "${{ github.event.inputs.bump_type }}" --description "${{ github....
+    |         --- this run block                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/js.yml:458:125
+    |
+458 | ...   run: node scripts/create-manual-changeset.mjs --bump-type "${{ github.event.inputs.bump_type }}" --description "${{ github.event.inputs.description }}"
+    |       --- this run block                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/js.yml:62:15
+   |
+62 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/js.yml:87:15
+   |
+87 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:111:15
+    |
+111 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:128:15
+    |
+128 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:179:15
+    |
+179 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:197:15
+    |
+197 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:241:15
+    |
+241 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:259:15
+    |
+259 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:297:15
+    |
+297 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:302:15
+    |
+302 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:382:15
+    |
+382 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:387:15
+    |
+387 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:443:15
+    |
+443 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:448:15
+    |
+448 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/js.yml:469:15
+    |
+469 |         uses: peter-evans/create-pull-request@v8
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/links.yml:38:9
+   |
+38 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/links.yml:38:15
+   |
+38 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/links.yml:41:15
+   |
+41 |         uses: lycheeverse/lychee-action@v2
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/parity.yml:28:9
+   |
+28 |         - uses: actions/checkout@v7
+   |  _________^
+29 | |         with:
+30 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/parity.yml:60:9
+   |
+60 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/parity.yml:28:15
+   |
+28 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/parity.yml:33:15
+   |
+33 |         uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/parity.yml:60:15
+   |
+60 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/parity.yml:63:15
+   |
+63 |         uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/python.yml:61:9
+   |
+61 |         - uses: actions/checkout@v7
+   |  _________^
+62 | |         with:
+63 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:103:9
+    |
+103 |         - uses: actions/checkout@v7
+    |  _________^
+104 | |         with:
+105 | |           # Full history: the merge simulation below needs the base branch.
+106 | |           fetch-depth: 0
+...   |
+109 | |       # the base branch moves, so checks would validate code that is not what
+110 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:179:9
+    |
+179 |         - uses: actions/checkout@v7
+    |  _________^
+180 | |         with:
+181 | |           # Full history: the merge simulation below needs the base branch.
+182 | |           fetch-depth: 0
+...   |
+185 | |       # the base branch moves, so checks would validate code that is not what
+186 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:239:9
+    |
+239 |         - uses: actions/checkout@v7
+    |  _________^
+240 | |         with:
+241 | |           # Full history: the merge simulation below needs the base branch.
+242 | |           fetch-depth: 0
+...   |
+245 | |       # the base branch moves, so checks would validate code that is not what
+246 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:291:9
+    |
+291 |         - uses: actions/checkout@v7
+    |  _________^
+292 | |         with:
+293 | |           fetch-depth: 0
+...   |
+296 | |       # the base branch moves, so checks would validate code that is not what
+297 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:341:9
+    |
+341 |         - uses: actions/checkout@v7
+    |  _________^
+342 | |         with:
+343 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/python.yml:480:9
+    |
+480 |         - uses: actions/checkout@v7
+    |  _________^
+481 | |         with:
+482 | |           fetch-depth: 0
+483 | |           token: ${{ secrets.GITHUB_TOKEN }}
+    | |____________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/python.yml:419:9
+    |
+419 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this step
+...
+422 |           password: ${{ secrets.PYPI_API_TOKEN }}
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ uses a manually-configured credential instead of Trusted Publishing
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/python.yml:559:9
+    |
+559 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this step
+...
+562 |           password: ${{ secrets.PYPI_API_TOKEN }}
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ uses a manually-configured credential instead of Trusted Publishing
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:408:28
+    |
+406 |         run: |
+    |         --- this run block
+407 |           python scripts/pypi_publish_preflight.py \
+408 |             --package "${{ steps.version_check.outputs.package_name }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:436:28
+    |
+434 |         run: |
+    |         --- this run block
+435 |           python scripts/pypi_publish_preflight.py \
+436 |             --package "${{ steps.version_check.outputs.package_name }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:447:25
+    |
+445 |         run: |
+    |         --- this run block
+446 |           node scripts/wait-for-registry.mjs --registry pypi \
+447 |             --name "${{ steps.version_check.outputs.package_name }}" \
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:448:28
+    |
+445 |         run: |
+    |         --- this run block
+...
+448 |             --version "${{ steps.version_check.outputs.current_version }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:457:28
+    |
+455 |         run: |
+    |         --- this run block
+456 |           python scripts/create_github_release.py \
+457 |             --version "${{ steps.version_check.outputs.current_version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:514:42
+    |
+509 |         run: |
+    |         --- this run block
+...
+514 |             scriv collect --version "${{ github.event.inputs.bump_type }}"
+    |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:524:30
+    |
+522 |         run: |
+    |         --- this run block
+523 |           python scripts/version_and_commit.py \
+524 |             --bump-type "${{ github.event.inputs.bump_type }}" \
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:525:32
+    |
+522 |         run: |
+    |         --- this run block
+...
+525 |             --description "${{ github.event.inputs.description }}"
+    |                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:553:28
+    |
+551 |         run: |
+    |         --- this run block
+552 |           python scripts/pypi_publish_preflight.py \
+553 |             --package "${{ steps.pkg.outputs.package_name }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:574:28
+    |
+572 |         run: |
+    |         --- this run block
+573 |           python scripts/pypi_publish_preflight.py \
+574 |             --package "${{ steps.pkg.outputs.package_name }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:582:25
+    |
+580 |         run: |
+    |         --- this run block
+581 |           node scripts/wait-for-registry.mjs --registry pypi \
+582 |             --name "${{ steps.pkg.outputs.package_name }}" \
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:583:28
+    |
+580 |         run: |
+    |         --- this run block
+...
+583 |             --version "${{ steps.version.outputs.new_version }}"
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/python.yml:592:28
+    |
+590 |         run: |
+    |         --- this run block
+591 |           python scripts/create_github_release.py \
+592 |             --version "${{ steps.version.outputs.new_version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/python.yml:61:15
+   |
+61 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/python.yml:66:15
+   |
+66 |         uses: actions/setup-python@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:103:15
+    |
+103 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:121:15
+    |
+121 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:179:15
+    |
+179 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:197:15
+    |
+197 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:215:15
+    |
+215 |         uses: codecov/codecov-action@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:239:15
+    |
+239 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:257:15
+    |
+257 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:275:15
+    |
+275 |         uses: actions/upload-artifact@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:291:15
+    |
+291 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:308:15
+    |
+308 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:341:15
+    |
+341 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:346:15
+    |
+346 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:353:15
+    |
+353 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:387:15
+    |
+387 |         uses: actions/download-artifact@v8
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:419:15
+    |
+419 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:480:15
+    |
+480 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:486:15
+    |
+486 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:498:15
+    |
+498 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/python.yml:559:15
+    |
+559 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[cache-poisoning]: runtime artifacts potentially vulnerable to a cache poisoning attack
+   --> ./.github/workflows/python.yml:353:9
+    |
+353 |         uses: actions/setup-node@v7
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ omitting `package-manager-cache` enables caching
+...
+419 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |         -------------------------------------------- runtime artifacts usually published here
+    |
+    = note: audit confidence → Low
+    = help: audit documentation → https://docs.zizmor.sh/audits/#cache-poisoning
+
+error[cache-poisoning]: runtime artifacts potentially vulnerable to a cache poisoning attack
+   --> ./.github/workflows/python.yml:498:9
+    |
+498 |         uses: actions/setup-node@v7
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^ omitting `package-manager-cache` enables caching
+...
+559 |         uses: pypa/gh-action-pypi-publish@release/v1
+    |         -------------------------------------------- runtime artifacts usually published here
+    |
+    = note: audit confidence → Low
+    = help: audit documentation → https://docs.zizmor.sh/audits/#cache-poisoning
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/rust.yml:66:9
+   |
+66 |         - uses: actions/checkout@v7
+   |  _________^
+67 | |         with:
+68 | |           fetch-depth: 0
+   | |________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:97:9
+    |
+ 97 |         - uses: actions/checkout@v7
+    |  _________^
+ 98 | |         with:
+ 99 | |           fetch-depth: 0
+...   |
+102 | |       # the base branch moves, so checks would validate code that is not what
+103 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:136:9
+    |
+136 |         - uses: actions/checkout@v7
+    |  _________^
+137 | |         with:
+138 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:178:9
+    |
+178 |         - uses: actions/checkout@v7
+    |  _________^
+179 | |         with:
+180 | |           # Full history: the merge simulation below needs the base branch.
+181 | |           fetch-depth: 0
+...   |
+184 | |       # the base branch moves, so checks would validate code that is not what
+185 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:250:9
+    |
+250 |         - uses: actions/checkout@v7
+    |  _________^
+251 | |         with:
+252 | |           # Full history: the merge simulation below needs the base branch.
+253 | |           fetch-depth: 0
+...   |
+256 | |       # the base branch moves, so checks would validate code that is not what
+257 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:313:9
+    |
+313 |         - uses: actions/checkout@v7
+    |  _________^
+314 | |         with:
+315 | |           # Full history: the merge simulation below needs the base branch.
+316 | |           fetch-depth: 0
+...   |
+319 | |       # the base branch moves, so checks would validate code that is not what
+320 | |       # will actually land. Merge the latest base branch first.
+    | |_______________________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:376:9
+    |
+376 |         - uses: actions/checkout@v7
+    |  _________^
+377 | |         with:
+378 | |           fetch-depth: 0
+379 | |           token: ${{ secrets.GITHUB_TOKEN }}
+    | |____________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:523:9
+    |
+523 |         - uses: actions/checkout@v7
+    |  _________^
+524 | |         with:
+525 | |           fetch-depth: 0
+526 | |           token: ${{ secrets.GITHUB_TOKEN }}
+    | |____________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/rust.yml:638:9
+    |
+638 |         - uses: actions/checkout@v7
+    |  _________^
+639 | |         with:
+640 | |           fetch-depth: 0
+    | |________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/rust.yml:450:22
+    |
+431 |         run: |
+    |         --- this step
+...
+450 |           if ! OUT=$(cargo publish 2>&1); then
+    |                      ^^^^^^^^^^^^^ this command
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[use-trusted-publishing]: prefer trusted publishing for authentication
+   --> ./.github/workflows/rust.yml:578:22
+    |
+562 |         run: |
+    |         --- this step
+...
+578 |           if ! OUT=$(cargo publish 2>&1); then
+    |                      ^^^^^^^^^^^^^ this command
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#use-trusted-publishing
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:411:30
+    |
+409 |         run: |
+    |         --- this run block
+410 |           node scripts/version-and-commit.mjs \
+411 |             --bump-type "${{ steps.bump_type.outputs.bump_type }}"
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:494:28
+    |
+492 |         run: |
+    |         --- this run block
+493 |           node scripts/create-github-release.mjs \
+494 |             --version "${{ steps.current_version.outputs.version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:550:67
+    |
+550 |         run: node scripts/version-and-commit.mjs --bump-type "${{ github.event.inputs.bump_type }}" --description "${{ github.event...
+    |         --- this run block                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:550:120
+    |
+550 | ...   run: node scripts/version-and-commit.mjs --bump-type "${{ github.event.inputs.bump_type }}" --description "${{ github.event.inputs.description }}"
+    |       --- this run block                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:607:44
+    |
+604 |         run: |
+    |         --- this run block
+...
+607 |             --name "$CRATE" --version "${{ steps.version.outputs.new_version }}"
+    |                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+info[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:616:28
+    |
+614 |         run: |
+    |         --- this run block
+615 |           node scripts/create-github-release.mjs \
+616 |             --version "${{ steps.version.outputs.new_version }}" \
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:657:21
+    |
+649 |         run: |
+    |         --- this run block
+...
+657 |           bump: ${{ github.event.inputs.bump_type }}
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[template-injection]: code injection via template expansion
+   --> ./.github/workflows/rust.yml:660:15
+    |
+649 |         run: |
+    |         --- this run block
+...
+660 |           ${{ github.event.inputs.description || 'Manual release' }}
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ may expand into attacker-controllable code
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#template-injection
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/rust.yml:66:15
+   |
+66 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/rust.yml:71:15
+   |
+71 |         uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/rust.yml:97:15
+   |
+97 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:114:15
+    |
+114 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:136:15
+    |
+136 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:141:15
+    |
+141 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:178:15
+    |
+178 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:196:15
+    |
+196 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:201:15
+    |
+201 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:206:15
+    |
+206 |         uses: actions/cache@v6
+    |               ^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:250:15
+    |
+250 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:268:15
+    |
+268 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:271:15
+    |
+271 |         uses: actions/cache@v6
+    |               ^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:313:15
+    |
+313 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:331:15
+    |
+331 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:334:15
+    |
+334 |         uses: actions/cache@v6
+    |               ^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:376:15
+    |
+376 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:382:15
+    |
+382 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:385:15
+    |
+385 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:523:15
+    |
+523 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:529:15
+    |
+529 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:532:15
+    |
+532 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:638:15
+    |
+638 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:643:15
+    |
+643 |         uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/rust.yml:666:15
+    |
+666 |         uses: peter-evans/create-pull-request@v8
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/scripts.yml:35:9
+   |
+35 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/scripts.yml:53:9
+   |
+53 |         - uses: actions/checkout@v7
+   |  _________^
+54 | |
+55 | |       # A malformed workflow file is rejected by GitHub at dispatch time with no
+56 | |       # check attached to the pull request, i.e. a silent false negative: the PR
+57 | |       # looks green while a pipeline no longer runs at all. actionlint parses
+58 | |       # every workflow and also catches shell-injection and stale-context bugs.
+   | |_______________________________________________________________________________^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/scripts.yml:35:15
+   |
+35 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/scripts.yml:38:15
+   |
+38 |         uses: actions/setup-node@v7
+   |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/scripts.yml:53:15
+   |
+53 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/security.yml:47:9
+   |
+47 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+  --> ./.github/workflows/security.yml:80:9
+   |
+80 |       - uses: actions/checkout@v7
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+   |
+   = note: audit confidence → Low
+   = note: this finding has an auto-fix
+   = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/security.yml:111:9
+    |
+111 |       - uses: actions/checkout@v7
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/security.yml:131:9
+    |
+131 |       - uses: actions/checkout@v7
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/security.yml:151:9
+    |
+151 |       - uses: actions/checkout@v7
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+help[artipacked]: credential persistence through GitHub Actions artifacts
+   --> ./.github/workflows/security.yml:180:9
+    |
+180 |         - uses: actions/checkout@v7
+    |  _________^
+181 | |         with:
+182 | |           # Full history: a secret that was committed and later removed is
+183 | |           # still in the repository and still has to be rotated.
+...   |
+187 | |       # requires a paid licence key for organisation-owned repositories, while
+188 | |       # the binary itself is MIT-licensed and free.
+    | |___________________________________________________^ does not set persist-credentials: false
+    |
+    = note: audit confidence → Low
+    = note: this finding has an auto-fix
+    = help: audit documentation → https://docs.zizmor.sh/audits/#artipacked
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:47:15
+   |
+47 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:50:15
+   |
+50 |         uses: github/codeql-action/init@v4
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:56:15
+   |
+56 |         uses: actions/setup-dotnet@v6
+   |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:61:15
+   |
+61 |         uses: github/codeql-action/autobuild@v4
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:64:15
+   |
+64 |         uses: github/codeql-action/analyze@v4
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:80:15
+   |
+80 |       - uses: actions/checkout@v7
+   |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+  --> ./.github/workflows/security.yml:83:15
+   |
+83 |         uses: actions/setup-dotnet@v6
+   |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+   |
+   = note: audit confidence → High
+   = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:111:15
+    |
+111 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:113:15
+    |
+113 |       - uses: actions/setup-node@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:131:15
+    |
+131 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:134:15
+    |
+134 |         uses: dtolnay/rust-toolchain@stable
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:151:15
+    |
+151 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:154:15
+    |
+154 |         uses: actions/setup-python@v7
+    |               ^^^^^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+error[unpinned-uses]: unpinned action reference
+   --> ./.github/workflows/security.yml:180:15
+    |
+180 |       - uses: actions/checkout@v7
+    |               ^^^^^^^^^^^^^^^^^^^ action is not pinned to a hash (required by blanket policy)
+    |
+    = note: audit confidence → High
+    = help: audit documentation → https://docs.zizmor.sh/audits/#unpinned-uses
+
+248 findings (46 suppressed, 5 safe fixes, 79 unsafe fixes): 29 informational, 44 low, 5 medium, 124 high

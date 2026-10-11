@@ -84,3 +84,11 @@ def test_fragment_content_validation_accepts_a_well_formed_fragment(tmp_path: Pa
     valid, error = validate_changeset.validate_fragment_content(fragment)
     assert valid is True
     assert error == ""
+
+
+def test_exempts_dependabot_by_author_not_by_branch_name() -> None:
+    # Issue #71: Dependabot PRs touch pyproject.toml but cannot add a fragment.
+    assert validate_changeset.is_bot_author("dependabot[bot]")
+    assert not validate_changeset.is_bot_author("konard")
+    assert not validate_changeset.is_bot_author(None)
+    assert not validate_changeset.is_bot_author("")

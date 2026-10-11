@@ -1,0 +1,410 @@
+Test Shared Scripts	UNKNOWN STEP	﻿2026-10-11T12:17:29.5828585Z Current runner version: '2.337.0'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5850079Z ##[group]Runner Image Provisioner
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5850815Z Hosted Compute Agent
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5851370Z Version: 20261002.596
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5851894Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5852462Z Build Date: 2026-10-02T22:28:27Z
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5853092Z Worker ID: {682151c9-65f8-4812-93b0-c09704fda143}
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5853723Z Region: westcentralus
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5854228Z Cloud: Azure
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5854676Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5855836Z ##[group]Operating System
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5856451Z Ubuntu
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5856914Z 24.04.5
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5857512Z LTS
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5857958Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5858411Z ##[group]Runner Image
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5858928Z Image: ubuntu-24.04
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5859455Z Version: 20261004.327.1
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5860492Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5861699Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5862872Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5863769Z ##[group]GITHUB_TOKEN Permissions
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5865557Z Contents: read
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5866051Z Metadata: read
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5866558Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5868645Z Secret source: Actions
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5869497Z Cache mode: write
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.5870257Z Prepare workflow directory
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.6173341Z Prepare all required actions
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.6211860Z Getting action download info
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:29.9042038Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:30.1403235Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.0617137Z Complete job name: Test Shared Scripts
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1232406Z ##[group]Run actions/checkout@v7
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1233162Z with:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1233596Z   repository: link-foundation/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1237428Z   token: ***
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1237824Z   ssh-strict: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1238214Z   ssh-user: git
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1238624Z   persist-credentials: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1239057Z   clean: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1239449Z   sparse-checkout-cone-mode: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1239900Z   fetch-depth: 1
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1240276Z   fetch-tags: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1240662Z   show-progress: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1241045Z   lfs: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1241427Z   submodules: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1241828Z   set-safe-directory: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1242264Z   allow-unsafe-pr-checkout: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.1242877Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2066186Z Syncing repository: link-foundation/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2068654Z ##[group]Getting Git version info
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2069879Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2071376Z [command]/usr/bin/git version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2111699Z git version 2.55.0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2128683Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2139934Z Temporarily overriding HOME='/home/runner/work/_temp/b0f9d22c-50db-4131-a28a-9b27d9413a18' before making global git config changes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2141944Z Adding repository directory to the temporary git global config as a safe directory
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2144835Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2186203Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2189602Z ##[group]Determining repository object format
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2191155Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2192295Z ##[group]Initializing the repository
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2195895Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2270679Z hint: Using 'master' as the name for the initial branch. This default branch name
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2272127Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2273848Z hint: to use in all of your new repositories, which will suppress this warning,
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2274936Z hint: call:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2275518Z hint:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2276235Z hint: 	git config --global init.defaultBranch <name>
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2277105Z hint:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2278031Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2279383Z hint: 'development'. The just-created branch can be renamed via this command:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2280415Z hint:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2281014Z hint: 	git branch -m <name>
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2281715Z hint:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2282590Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2284260Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2286937Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2458596Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2460041Z ##[group]Disabling automatic garbage collection
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2463190Z [command]/usr/bin/git config --local gc.auto 0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2499513Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2500330Z ##[group]Setting up auth
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2501063Z Removing SSH command configuration
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2505274Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2538126Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2825345Z Removing HTTP extra header
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2830503Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.2860433Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3046512Z Removing includeIf entries pointing to credentials config files
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3050634Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3082125Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3282092Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3317585Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3350526Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3385011Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3417896Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3443662Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3444328Z ##[group]Fetching the repository
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:31.3449178Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +b48872da6601d2a79b4079b6c0c07b7365743c23:refs/remotes/origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0356624Z From https://github.com/link-foundation/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0358541Z  * [new ref]         b48872da6601d2a79b4079b6c0c07b7365743c23 -> origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0363927Z [command]/usr/bin/git branch --list --remote origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0390148Z   origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0396248Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0419167Z b48872da6601d2a79b4079b6c0c07b7365743c23
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0423412Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0424901Z ##[group]Determining the checkout info
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0426580Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0427549Z [command]/usr/bin/git sparse-checkout disable
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0470269Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0500025Z ##[group]Checking out the ref
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0502322Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0781075Z Switched to a new branch 'main'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0784047Z branch 'main' set up to track 'origin/main'.
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0793108Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0833990Z [command]/usr/bin/git log -1 --format=%H
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.0860852Z b48872da6601d2a79b4079b6c0c07b7365743c23
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1166636Z ##[group]Run actions/setup-node@v7
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1167677Z with:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1168358Z   node-version: 22
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1169106Z   check-latest: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1177100Z   token: ***
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1177924Z   package-manager-cache: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.1178779Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.2211234Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.2878575Z ##[group]Environment details
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5289774Z node: v22.23.3
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5290904Z npm: 10.9.9
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5292136Z yarn: 1.22.22
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5294049Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5505185Z ##[group]Run node --test scripts/*.test.mjs
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5506349Z ^[[36;1mnode --test scripts/*.test.mjs^[[0m
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5719889Z shell: /usr/bin/bash -e {0}
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.5720782Z ##[endgroup]
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6264774Z TAP version 13
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6680660Z # Subtest: a change to every language is balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6683118Z ok 1 - a change to every language is balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6684624Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6685701Z   duration_ms: 1.71309
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6686992Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6688329Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6689966Z # Subtest: a change to only one language is not balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6692102Z ok 2 - a change to only one language is not balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6693896Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6695125Z   duration_ms: 0.18899
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6696494Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6697785Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6699493Z # Subtest: a change to three of four languages is not balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6701468Z ok 3 - a change to three of four languages is not balanced
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6702822Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6703682Z   duration_ms: 1.499413
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6704625Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6705506Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6706865Z # Subtest: shared-only changes are balanced (nothing to enforce)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6710235Z ok 4 - shared-only changes are balanced (nothing to enforce)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6711836Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6712897Z   duration_ms: 0.183262
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6714074Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6715053Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6716473Z # Subtest: dependency-only updates do not count as library source
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6718712Z ok 5 - dependency-only updates do not count as library source
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6719831Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6720585Z   duration_ms: 0.268368
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6721407Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6722255Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6723424Z # Subtest: tests and examples do not count as library source
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6725184Z ok 6 - tests and examples do not count as library source
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6727020Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6728046Z   duration_ms: 0.159246
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6729437Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6730422Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6731828Z # Subtest: backslash and ./ prefixed paths are normalized
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6733691Z ok 7 - backslash and ./ prefixed paths are normalized
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6735195Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6736231Z   duration_ms: 0.273054
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6737397Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6738422Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6739644Z # Subtest: every declared language has a source path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6741323Z ok 8 - every declared language has a source path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6742723Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6743630Z   duration_ms: 0.198134
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6744464Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6745148Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6788124Z # Subtest: the requirement syntax of every ecosystem reduces to a minor
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6790076Z ok 9 - the requirement syntax of every ecosystem reduces to a minor
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6791554Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6792512Z   duration_ms: 1.648203
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6793582Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6794519Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6795749Z # Subtest: a missing dependency is not a version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6797106Z ok 10 - a missing dependency is not a version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6798732Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6799625Z   duration_ms: 0.183162
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6800694Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6801638Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6802822Z # Subtest: four pins on the same minor agree
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6804340Z ok 11 - four pins on the same minor agree
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6805616Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6806361Z   duration_ms: 0.675321
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6807800Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6808507Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6809352Z # Subtest: a differing patch is still agreement
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6810847Z ok 12 - a differing patch is still agreement
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6811796Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6812483Z   duration_ms: 0.12093
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6813249Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6813932Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6815146Z # Subtest: the four pins this repository actually shipped before issue \#47 diverge
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6816942Z ok 13 - the four pins this repository actually shipped before issue \#47 diverge
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6818935Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6819873Z   duration_ms: 0.169161
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6820915Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6821724Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6822610Z # Subtest: one language falling behind by a minor fails
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6823911Z ok 14 - one language falling behind by a minor fails
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6824907Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6825580Z   duration_ms: 0.102662
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6826335Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6827017Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6828320Z # Subtest: a dependency that cannot be read fails rather than passing quietly
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6830002Z ok 15 - a dependency that cannot be read fails rather than passing quietly
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6831226Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6831909Z   duration_ms: 0.163002
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6832672Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6833351Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6834344Z # Subtest: every extractor finds the version in its real manifest
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6835779Z ok 16 - every extractor finds the version in its real manifest
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6836862Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6837708Z   duration_ms: 0.602523
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6838477Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6839157Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6840087Z # Subtest: the checked-in manifests agree today
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6841689Z not ok 17 - the checked-in manifests agree today
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6842974Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6843944Z   duration_ms: 1.468897
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6845027Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6847027Z   location: '/home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:109:1'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6849284Z   failureType: 'testCodeFailure'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6850640Z   error: |-
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6851621Z     Expected values to be strictly equal:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6852551Z     
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6853205Z     false !== true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6854072Z     
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6854746Z   code: 'ERR_ASSERTION'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6855695Z   name: 'AssertionError'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6856835Z   expected: true
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6857939Z   actual: false
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6858684Z   operator: 'strictEqual'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6859625Z   stack: |-
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6862477Z     TestContext.<anonymous> (file:///home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:110:10)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6865714Z     Test.runInAsyncScope (node:async_hooks:214:14)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6867564Z     Test.run (node:internal/test_runner/test:1047:25)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6869687Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6871826Z     Test.postRun (node:internal/test_runner/test:1173:19)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6873632Z     Test.run (node:internal/test_runner/test:1101:12)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6875776Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.6877782Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7115979Z # Subtest: issue \#41 regression: a package that indexes after the old 60s budget still passes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7125521Z ok 18 - issue \#41 regression: a package that indexes after the old 60s budget still passes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7127733Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7128748Z   duration_ms: 2.331416
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7129834Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7130825Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7150750Z # Subtest: the NuGet budget covers the documented fifteen minute indexing window
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7153263Z ok 19 - the NuGet budget covers the documented fifteen minute indexing window
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7155453Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7156397Z   duration_ms: 0.253936
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7157690Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7158664Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7159886Z # Subtest: every registry waits at least five minutes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7161497Z ok 20 - every registry waits at least five minutes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7162580Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7163274Z   duration_ms: 0.157984
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7164188Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7165118Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7166618Z # Subtest: a version that never appears fails after exhausting the budget
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7169088Z ok 21 - a version that never appears fails after exhausting the budget
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7170714Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7171585Z   duration_ms: 0.262419
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7172648Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7173564Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7175078Z # Subtest: a network error costs one attempt instead of aborting the wait
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7176742Z ok 22 - a network error costs one attempt instead of aborting the wait
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7178224Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7179127Z   duration_ms: 0.293645
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7180219Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7181199Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7182616Z # Subtest: probe URLs match each registry's version endpoint
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7184541Z ok 23 - probe URLs match each registry's version endpoint
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7186047Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7186925Z   duration_ms: 0.22214
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7188148Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7189097Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7190487Z # Subtest: a trailing slash on the base URL does not double up
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7192505Z ok 24 - a trailing slash on the base URL does not double up
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7194050Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7195016Z   duration_ms: 0.227868
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7196113Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7197072Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7199124Z # Subtest: command line options beat environment variables, which beat defaults
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7201777Z ok 25 - command line options beat environment variables, which beat defaults
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7203897Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7204864Z   duration_ms: 0.356708
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7205885Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7206796Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7208360Z # Subtest: --flag=value is accepted as well as --flag value
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7210353Z ok 26 - --flag=value is accepted as well as --flag value
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7211898Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7212894Z   duration_ms: 0.403528
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7214025Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7215002Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7216577Z # Subtest: verbose is off by default and can be switched on either way
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7219082Z ok 27 - verbose is off by default and can be switched on either way
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7220733Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7221682Z   duration_ms: 0.568914
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7222511Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7223252Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7224452Z # Subtest: verbose mode prints the probe URL and the elapsed budget
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7226250Z ok 28 - verbose mode prints the probe URL and the elapsed budget
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7228104Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7229091Z   duration_ms: 0.451829
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7230208Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7231200Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7232760Z # Subtest: quiet mode prints one line per attempt and no probe detail
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7234977Z ok 29 - quiet mode prints one line per attempt and no probe detail
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7236320Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7237059Z   duration_ms: 0.219906
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7238252Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7239232Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7240409Z # Subtest: an unknown registry is rejected
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7242003Z ok 30 - an unknown registry is rejected
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7243311Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7244307Z   duration_ms: 0.43178
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7245406Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7246387Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7247768Z # Subtest: a non-positive budget is rejected
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7249677Z ok 31 - a non-positive budget is rejected
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7251054Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7252042Z   duration_ms: 0.173167
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7253161Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7254159Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7255426Z # Subtest: main requires a name and a version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7257088Z ok 32 - main requires a name and a version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7258653Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7259649Z   duration_ms: 0.333504
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7260743Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7261544Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7263019Z # Subtest: main's failure message distinguishes slow indexing from a failed publish
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7265259Z ok 33 - main's failure message distinguishes slow indexing from a failed publish
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7266928Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7267978Z   duration_ms: 49.476374
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7268849Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7269792Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7271114Z # Subtest: probeOnce reports a network failure without throwing
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7273009Z ok 34 - probeOnce reports a network failure without throwing
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7274450Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7275114Z   duration_ms: 0.278543
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7276097Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7276764Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7278368Z # Subtest: probes identify themselves, because crates.io rejects anonymous clients
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7280328Z ok 35 - probes identify themselves, because crates.io rejects anonymous clients
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7282015Z   ---
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7282673Z   duration_ms: 0.257031
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7283514Z   type: 'test'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7284357Z   ...
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7356895Z 1..35
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7358528Z # tests 35
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7359793Z # suites 0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7360970Z # pass 34
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7362149Z # fail 1
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7363317Z # cancelled 0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7364492Z # skipped 0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7365629Z # todo 0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7366859Z # duration_ms 126.630935
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7427882Z ##[error]Process completed with exit code 1.
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.7670366Z Post job cleanup.
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8395800Z [command]/usr/bin/git version
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8434293Z git version 2.55.0
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8475912Z Temporarily overriding HOME='/home/runner/work/_temp/b049df95-5eb6-4665-bb68-19b6e0fcfb3b' before making global git config changes
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8479966Z Adding repository directory to the temporary git global config as a safe directory
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8484325Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8517828Z Removing SSH command configuration
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8523580Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8567100Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8771908Z Removing HTTP extra header
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8777554Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.8811850Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9032057Z Removing includeIf entries pointing to credentials config files
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9037147Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9067714Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9071163Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9073887Z includeif.gitdir:/github/workspace/.git.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9076285Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9081932Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9103889Z /home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9115478Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-bde47bc9\-a0b7\-410c\-bdda\-659950242adb\.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9152423Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9176716Z /home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9186947Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-bde47bc9\-a0b7\-410c\-bdda\-659950242adb\.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9229901Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9253086Z /github/runner_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9266195Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-bde47bc9\-a0b7\-410c\-bdda\-659950242adb\.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9291535Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9313444Z /github/runner_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9322333Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-bde47bc9\-a0b7\-410c\-bdda\-659950242adb\.config
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9356082Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9545989Z Removing credentials config '/home/runner/work/_temp/git-credentials-bde47bc9-a0b7-410c-bdda-659950242adb.config'
+Test Shared Scripts	UNKNOWN STEP	2026-10-11T12:17:32.9691954Z Cleaning up orphan processes

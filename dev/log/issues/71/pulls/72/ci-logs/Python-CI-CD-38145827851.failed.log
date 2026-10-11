@@ -1,0 +1,692 @@
+Auto Release	UNKNOWN STEP	﻿2026-10-11T14:11:36.2105999Z Current runner version: '2.337.0'
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2132055Z ##[group]Runner Image Provisioner
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2132997Z Hosted Compute Agent
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2133663Z Version: 20261002.596
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2134345Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2135215Z Build Date: 2026-10-02T22:28:27Z
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2135948Z Worker ID: {c9a9393a-691e-44c5-af47-0cd7af68c865}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2136760Z Region: eastus
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2137364Z Cloud: Azure
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2137925Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2139832Z ##[group]Operating System
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2140485Z Ubuntu
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2141440Z 24.04.5
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2142114Z LTS
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2142622Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2143202Z ##[group]Runner Image
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2143859Z Image: ubuntu-24.04
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2144435Z Version: 20261004.327.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2145764Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2147364Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2148337Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2149593Z ##[group]GITHUB_TOKEN Permissions
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2152007Z Contents: write
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2152725Z Metadata: read
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2153358Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2155501Z Secret source: Actions
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2156573Z Cache mode: write
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2157500Z Prepare workflow directory
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2498905Z Prepare all required actions
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.2549384Z Getting action download info
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.5263124Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.6180552Z Download action repository 'actions/setup-python@v7' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.7021330Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:36.9124219Z Download action repository 'actions/download-artifact@v8' (SHA:9000827ccba6bdab643e8b6fd33ac0654aef8333)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.0822039Z Download action repository 'pypa/gh-action-pypi-publish@release/v1' (SHA:dc37677b2e1c63e2034f94d8a5b11f265b73ba33)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.3191208Z Getting action download info
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.3831150Z Download action repository 'actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405' (SHA:a309ff8b426b58ec0e2a45f0f869d46889d02405)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.4966567Z Complete job name: Auto Release
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6013559Z ##[group]Run actions/checkout@v7
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6014813Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6015474Z   fetch-depth: 0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6016283Z   repository: link-foundation/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6025487Z   token: ***
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6026171Z   ssh-strict: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6026870Z   ssh-user: git
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6027588Z   persist-credentials: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6028371Z   clean: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6029115Z   sparse-checkout-cone-mode: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6029990Z   fetch-tags: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6030848Z   show-progress: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6031566Z   lfs: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6032217Z   submodules: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6032956Z   set-safe-directory: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6033783Z   allow-unsafe-pr-checkout: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.6034931Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7097633Z Syncing repository: link-foundation/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7100365Z ##[group]Getting Git version info
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7102200Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7104092Z [command]/usr/bin/git version
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7222883Z git version 2.55.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7238981Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7248287Z Temporarily overriding HOME='/home/runner/work/_temp/cd989fa3-1444-4329-a3aa-d9a36b7c9bfd' before making global git config changes
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7251736Z Adding repository directory to the temporary git global config as a safe directory
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7259889Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7305836Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7309392Z ##[group]Determining repository object format
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7311956Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7313897Z ##[group]Initializing the repository
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7316433Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7451577Z hint: Using 'master' as the name for the initial branch. This default branch name
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7454484Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7457507Z hint: to use in all of your new repositories, which will suppress this warning,
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7459591Z hint: call:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7460564Z hint:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7462523Z hint: 	git config --global init.defaultBranch <name>
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7464357Z hint:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7466170Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7469062Z hint: 'development'. The just-created branch can be renamed via this command:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7471525Z hint:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7479211Z hint: 	git branch -m <name>
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7480572Z hint:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7482563Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7485858Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7491705Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7530775Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7532935Z ##[group]Disabling automatic garbage collection
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7535308Z [command]/usr/bin/git config --local gc.auto 0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7571095Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7573087Z ##[group]Setting up auth
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7573978Z Removing SSH command configuration
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7577586Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.7617026Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8030067Z Removing HTTP extra header
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8038630Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8081480Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8317500Z Removing includeIf entries pointing to credentials config files
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8329064Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8368016Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8605976Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8649870Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8686745Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8728129Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8765374Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8797681Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8798924Z ##[group]Fetching the repository
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:37.8804945Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2087805Z From https://github.com/link-foundation/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2089791Z  * [new branch]      issue-1-843d779c4cdb  -> origin/issue-1-843d779c4cdb
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2091946Z  * [new branch]      issue-11-c74c0836aeba -> origin/issue-11-c74c0836aeba
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2093537Z  * [new branch]      issue-15-b28422959bc5 -> origin/issue-15-b28422959bc5
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2095216Z  * [new branch]      issue-17-ace5a094a724 -> origin/issue-17-ace5a094a724
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2097032Z  * [new branch]      issue-19-d88ab983ff7d -> origin/issue-19-d88ab983ff7d
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2098764Z  * [new branch]      issue-20-d21ab54e8ff1 -> origin/issue-20-d21ab54e8ff1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2100515Z  * [new branch]      issue-22-e5ea3b44ef6b -> origin/issue-22-e5ea3b44ef6b
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2102488Z  * [new branch]      issue-25-76b0e5ea19d6 -> origin/issue-25-76b0e5ea19d6
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2104278Z  * [new branch]      issue-27-eb86cc75f92a -> origin/issue-27-eb86cc75f92a
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2106036Z  * [new branch]      issue-29-7f70f0d87db9 -> origin/issue-29-7f70f0d87db9
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2108136Z  * [new branch]      issue-3-397c5eeac29f  -> origin/issue-3-397c5eeac29f
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2109993Z  * [new branch]      issue-31-bd2874f2d076 -> origin/issue-31-bd2874f2d076
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2112052Z  * [new branch]      issue-33-2c527aa50b81 -> origin/issue-33-2c527aa50b81
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2113911Z  * [new branch]      issue-35-03946ff48852 -> origin/issue-35-03946ff48852
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2115750Z  * [new branch]      issue-37-0e0bcabcea22 -> origin/issue-37-0e0bcabcea22
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2117621Z  * [new branch]      issue-39-e53c893293ed -> origin/issue-39-e53c893293ed
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2119471Z  * [new branch]      issue-41-297a752a4939 -> origin/issue-41-297a752a4939
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2121581Z  * [new branch]      issue-43-a666a4fd6f03 -> origin/issue-43-a666a4fd6f03
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2123815Z  * [new branch]      issue-45-f2100b3aab88 -> origin/issue-45-f2100b3aab88
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2125753Z  * [new branch]      issue-47-7a09fbbdea01 -> origin/issue-47-7a09fbbdea01
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2127626Z  * [new branch]      issue-5-9641b6fb00d3  -> origin/issue-5-9641b6fb00d3
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2129536Z  * [new branch]      issue-65-5c21265ef83f -> origin/issue-65-5c21265ef83f
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2132071Z  * [new branch]      issue-69-dab96606bd2e -> origin/issue-69-dab96606bd2e
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2134207Z  * [new branch]      issue-7-7a98520cd689  -> origin/issue-7-7a98520cd689
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2136338Z  * [new branch]      issue-8-8f8d9acce5f1  -> origin/issue-8-8f8d9acce5f1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2138439Z  * [new branch]      issue-9-bef9e95e65ef  -> origin/issue-9-bef9e95e65ef
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2140479Z  * [new branch]      main                  -> origin/main
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2142615Z  * [new tag]         csharp-v0.2.0         -> csharp-v0.2.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2144814Z  * [new tag]         csharp_v0.3.0         -> csharp_v0.3.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2146843Z  * [new tag]         js-v0.3.5             -> js-v0.3.5
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2148789Z  * [new tag]         js_v0.3.6             -> js_v0.3.6
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2150982Z  * [new tag]         js_v0.4.0             -> js_v0.4.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2152691Z  * [new tag]         js_v0.5.0             -> js_v0.5.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2154390Z  * [new tag]         js_v0.5.1             -> js_v0.5.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2156617Z  * [new tag]         js_v0.6.0             -> js_v0.6.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2158667Z  * [new tag]         js_v0.7.0             -> js_v0.7.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2160479Z  * [new tag]         js_v0.8.0             -> js_v0.8.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2162537Z  * [new tag]         js_v0.9.0             -> js_v0.9.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2164320Z  * [new tag]         rust-v0.2.0           -> rust-v0.2.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2166233Z  * [new tag]         rust-v0.2.1           -> rust-v0.2.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2168139Z  * [new tag]         rust_v0.3.0           -> rust_v0.3.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2169976Z  * [new tag]         rust_v0.4.0           -> rust_v0.4.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2172000Z  * [new tag]         rust_v0.4.1           -> rust_v0.4.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2173764Z  * [new tag]         rust_v0.5.0           -> rust_v0.5.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2175576Z  * [new tag]         rust_v0.6.0           -> rust_v0.6.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2177406Z  * [new tag]         rust_v0.7.0           -> rust_v0.7.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2179321Z  * [new tag]         rust_v0.8.0           -> rust_v0.8.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2181361Z  * [new tag]         v0.1.1                -> v0.1.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2183217Z  * [new tag]         v0.3.0                -> v0.3.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2184958Z  * [new tag]         v0.3.1                -> v0.3.1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2186792Z  * [new tag]         v0.3.2                -> v0.3.2
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2188657Z  * [new tag]         v0.3.3                -> v0.3.3
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2193523Z [command]/usr/bin/git branch --list --remote origin/main
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2195453Z   origin/main
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2198556Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2200353Z 03e1e05fb58f5b8464baba0aaa8425d0b61c2e7b
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2204717Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2206859Z ##[group]Determining the checkout info
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2209077Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2211014Z [command]/usr/bin/git sparse-checkout disable
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2258837Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2299208Z ##[group]Checking out the ref
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2304051Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2680079Z Switched to a new branch 'main'
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2685079Z branch 'main' set up to track 'origin/main'.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2695923Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2751094Z [command]/usr/bin/git log -1 --format=%H
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.2783882Z 03e1e05fb58f5b8464baba0aaa8425d0b61c2e7b
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3093937Z ##[group]Run actions/setup-python@v7
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3094660Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3095226Z   python-version: 3.13
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3095836Z   check-latest: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3099397Z   token: ***
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3099973Z   update-environment: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3100908Z   allow-prereleases: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3101576Z   freethreaded: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.3102156Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4312094Z ##[group]Installed versions
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4398204Z Successfully set up CPython (3.13.16)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4400044Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4686849Z ##[group]Run actions/setup-node@v7
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4687969Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4688883Z   node-version: 22
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4689840Z   check-latest: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4694234Z   token: ***
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4694826Z   package-manager-cache: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4695439Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4696067Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4696969Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4697856Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4698680Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4699503Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4708131Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.4711169Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.6072332Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:38.6972536Z ##[group]Environment details
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0272602Z node: v22.23.3
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0274095Z npm: 10.9.9
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0275485Z yarn: 1.22.22
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0277411Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0427225Z ##[group]Run python -m pip install --upgrade pip
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0428103Z ^[[36;1mpython -m pip install --upgrade pip^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0428805Z ^[[36;1mpip install build twine^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0793459Z shell: /usr/bin/bash -e {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0794138Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0794789Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0795675Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0796556Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0797369Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0798209Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0798995Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:39.0799679Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:41.3816551Z Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.13.16/x64/lib/python3.13/site-packages (26.2.1)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.0539393Z Collecting build
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1123232Z   Downloading build-1.6.1-py3-none-any.whl.metadata (5.6 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1345177Z Collecting twine
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1387068Z   Downloading twine-7.0.0-py3-none-any.whl.metadata (3.5 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1552813Z Collecting packaging>=24.0 (from build)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1597659Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1721449Z Collecting pyproject_hooks (from build)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1760229Z   Downloading pyproject_hooks-1.3.3-py3-none-any.whl.metadata (1.3 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1930005Z Collecting readme-renderer>=35.0 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.1972239Z   Downloading readme_renderer-46.0-py3-none-any.whl.metadata (3.0 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2200182Z Collecting requests>=2.20 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2240584Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2374177Z Collecting requests-toolbelt!=0.9.0,>=0.8.0 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2421055Z   Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2643765Z Collecting urllib3>=1.26.0 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2685765Z   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.2961627Z Collecting keyring>=21.2.0 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3004622Z   Downloading keyring-25.7.0-py3-none-any.whl.metadata (21 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3209229Z Collecting rfc3986>=1.4.0 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3247912Z   Downloading rfc3986-2.0.0-py2.py3-none-any.whl.metadata (6.6 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3572124Z Collecting rich>=14.3.3 (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3620815Z   Downloading rich-15.0.0-py3-none-any.whl.metadata (18 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3759202Z Collecting id (from twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3800399Z   Downloading id-1.6.1-py3-none-any.whl.metadata (5.1 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3939392Z Collecting SecretStorage>=3.2 (from keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.3979581Z   Downloading secretstorage-3.5.0-py3-none-any.whl.metadata (4.0 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4114064Z Collecting jeepney>=0.4.2 (from keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4156637Z   Downloading jeepney-0.9.0-py3-none-any.whl.metadata (1.2 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4285393Z Collecting jaraco.classes (from keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4342168Z   Downloading jaraco.classes-3.4.0-py3-none-any.whl.metadata (2.6 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4521700Z Collecting jaraco.functools (from keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4579358Z   Downloading jaraco_functools-4.6.0-py3-none-any.whl.metadata (2.9 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4724415Z Collecting jaraco.context (from keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.4771133Z   Downloading jaraco_context-6.1.2-py3-none-any.whl.metadata (4.2 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5186741Z Collecting nh3>=0.2.14 (from readme-renderer>=35.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5234282Z   Downloading nh3-0.3.7-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.0 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5391652Z Collecting docutils>=0.21.2 (from readme-renderer>=35.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5452031Z   Downloading docutils-0.23-py3-none-any.whl.metadata (15 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5650850Z Collecting Pygments>=2.5.1 (from readme-renderer>=35.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.5701961Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.6979052Z Collecting charset_normalizer<4,>=2 (from requests>=2.20->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7026901Z   Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7198603Z Collecting idna<4,>=2.5 (from requests>=2.20->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7241826Z   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7452370Z Collecting certifi>=2023.5.7 (from requests>=2.20->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7493495Z   Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7687540Z Collecting markdown-it-py>=2.2.0 (from rich>=14.3.3->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7748979Z   Downloading markdown_it_py-4.2.0-py3-none-any.whl.metadata (7.4 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7903934Z Collecting mdurl~=0.1 (from markdown-it-py>=2.2.0->rich>=14.3.3->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.7943764Z   Downloading mdurl-0.1.2-py3-none-any.whl.metadata (1.6 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.9841682Z Collecting cryptography>=2.0 (from SecretStorage>=3.2->keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:42.9885509Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.0927645Z Collecting cffi>=2.0.0 (from cryptography>=2.0->SecretStorage>=3.2->keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.0978444Z   Downloading cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1123456Z Collecting pycparser (from cffi>=2.0.0->cryptography>=2.0->SecretStorage>=3.2->keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1169833Z   Downloading pycparser-3.11-py3-none-any.whl.metadata (8.2 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1367329Z Collecting more-itertools (from jaraco.classes->keyring>=21.2.0->twine)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1433059Z   Downloading more_itertools-11.1.0-py3-none-any.whl.metadata (41 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1543645Z Downloading build-1.6.1-py3-none-any.whl (31 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1607422Z Downloading twine-7.0.0-py3-none-any.whl (43 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1671712Z Downloading keyring-25.7.0-py3-none-any.whl (39 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1772062Z Downloading jeepney-0.9.0-py3-none-any.whl (49 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1834002Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1923226Z Downloading readme_renderer-46.0-py3-none-any.whl (14 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.1987285Z Downloading docutils-0.23-py3-none-any.whl (634 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2088621Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 634.7/634.7 kB 71.6 MB/s  0:00:00
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2132208Z Downloading nh3-0.3.7-cp38-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (832 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2211850Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 832.2/832.2 kB 102.5 MB/s  0:00:00
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2265824Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2389298Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 119.3 MB/s  0:00:00
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2441830Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2524486Z Downloading charset_normalizer-3.5.2-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (254 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2592706Z Downloading idna-3.20-py3-none-any.whl (69 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2656308Z Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2717503Z Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2780887Z Downloading requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2840512Z Downloading rfc3986-2.0.0-py2.py3-none-any.whl (31 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2919262Z Downloading rich-15.0.0-py3-none-any.whl (310 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.2987826Z Downloading markdown_it_py-4.2.0-py3-none-any.whl (91 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3047671Z Downloading mdurl-0.1.2-py3-none-any.whl (10.0 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3105131Z Downloading secretstorage-3.5.0-py3-none-any.whl (15 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3161856Z Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3418581Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 193.3 MB/s  0:00:00
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3463588Z Downloading cffi-2.1.1-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3539858Z Downloading id-1.6.1-py3-none-any.whl (14 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3605122Z Downloading jaraco.classes-3.4.0-py3-none-any.whl (6.8 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3667682Z Downloading jaraco_context-6.1.2-py3-none-any.whl (7.9 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3759332Z Downloading jaraco_functools-4.6.0-py3-none-any.whl (11 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3844515Z Downloading more_itertools-11.1.0-py3-none-any.whl (72 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3916264Z Downloading pycparser-3.11-py3-none-any.whl (51 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.3979362Z Downloading pyproject_hooks-1.3.3-py3-none-any.whl (10 kB)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:43.5335371Z Installing collected packages: urllib3, rfc3986, pyproject_hooks, Pygments, pycparser, packaging, nh3, more-itertools, mdurl, jeepney, jaraco.context, idna, docutils, charset_normalizer, certifi, requests, readme-renderer, markdown-it-py, jaraco.functools, jaraco.classes, id, cffi, build, rich, requests-toolbelt, cryptography, SecretStorage, keyring, twine
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.8738841Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.8775135Z Successfully installed Pygments-2.21.0 SecretStorage-3.5.0 build-1.6.1 certifi-2026.7.22 cffi-2.1.1 charset_normalizer-3.5.2 cryptography-50.0.2 docutils-0.23 id-1.6.1 idna-3.20 jaraco.classes-3.4.0 jaraco.context-6.1.2 jaraco.functools-4.6.0 jeepney-0.9.0 keyring-25.7.0 markdown-it-py-4.2.0 mdurl-0.1.2 more-itertools-11.1.0 nh3-0.3.7 packaging-26.3 pycparser-3.11 pyproject_hooks-1.3.3 readme-renderer-46.0 requests-2.34.2 requests-toolbelt-1.0.0 rfc3986-2.0.0 rich-15.0.0 twine-7.0.0 urllib3-2.8.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9869585Z ##[group]Run # Get current version from pyproject.toml
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9870052Z ^[[36;1m# Get current version from pyproject.toml^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9870495Z ^[[36;1mCURRENT_VERSION=$(grep -Po '(?<=^version = ")[^"]*' pyproject.toml)^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9871208Z ^[[36;1mPACKAGE_NAME=$(grep -Po '(?<=^name = ")[^"]*' pyproject.toml | head -1)^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9871680Z ^[[36;1mecho "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9872105Z ^[[36;1mecho "package_name=$PACKAGE_NAME" >> "$GITHUB_OUTPUT"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9872454Z ^[[36;1m^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9872813Z ^[[36;1m# Decide based on the registry, not on the local git tag. PyPI returns 200 for an^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9873328Z ^[[36;1m# existing version's JSON metadata and 404 otherwise. See^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9873826Z ^[[36;1m# docs/case-studies/issue-25/README.md for why the tag is not a reliable proxy.^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9874545Z ^[[36;1mSTATUS=$(curl -sS -o /dev/null -w '%{http_code}' "https://pypi.org/pypi/${PACKAGE_NAME}/${CURRENT_VERSION}/json")^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9875190Z ^[[36;1mecho "PyPI HTTP status for ${PACKAGE_NAME}@${CURRENT_VERSION}: ${STATUS}"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9875594Z ^[[36;1mif [ "$STATUS" = "200" ]; then^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9876019Z ^[[36;1m  echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} already on PyPI, skipping publish"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9876492Z ^[[36;1m  echo "should_release=false" >> "$GITHUB_OUTPUT"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9876795Z ^[[36;1melse^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9877133Z ^[[36;1m  echo "Version ${PACKAGE_NAME}@${CURRENT_VERSION} is NOT on PyPI, will publish"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9877780Z ^[[36;1m  echo "should_release=true" >> "$GITHUB_OUTPUT"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9878076Z ^[[36;1mfi^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9943658Z shell: /usr/bin/bash -e {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9943939Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9944227Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9944688Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9945138Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9945530Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9945920Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9946333Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:45.9946668Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1167624Z PyPI HTTP status for lino-objects-codec@0.3.1: 404
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1168557Z Version lino-objects-codec@0.3.1 is NOT on PyPI, will publish
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1274094Z ##[group]Run actions/download-artifact@v8
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1274401Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1274593Z   name: dist
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1274798Z   path: python/dist/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1275020Z   merge-multiple: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1275286Z   repository: link-foundation/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1275584Z   run-id: 38145827851
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1275800Z   skip-decompress: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1276038Z   digest-mismatch: error
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1276256Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1276511Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1276952Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1277379Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1277756Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1278135Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1278571Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.1278898Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.2791732Z Downloading single artifact
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.3842573Z Preparing to download the following artifacts:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.3843825Z - dist (ID: 11704542502, Size: 71305, Expected Digest: sha256:201560968ba3ad9f2a7610473f1c1e748a3e99fa1790b2e055cfead033b26ffb)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5207615Z Redirecting to blob download url: https://productionresultssa5.blob.core.windows.net/actions-results/b636aadc-d461-8f93-82b9-fe8dc4516caa/workflow-job-run-596a9ff9-e1e6-583e-9e0c-d4534c4bdefe/artifacts/bcae0416621b3db43d8cba1e4454a792c7af9e4b7287e51056efc5a215d95839.zip
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5209877Z Starting download of artifact to: /home/runner/work/lino-objects-codec/lino-objects-codec/python/dist
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5687502Z (node:2342) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5688748Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5789232Z SHA256 digest of downloaded artifact is 201560968ba3ad9f2a7610473f1c1e748a3e99fa1790b2e055cfead033b26ffb
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5790180Z Artifact download completed successfully.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5791125Z Total of 1 artifact(s) downloaded
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5795875Z Download artifact has finished successfully
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5959947Z ##[group]Run python scripts/pypi_publish_preflight.py \
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5960428Z ^[[36;1mpython scripts/pypi_publish_preflight.py \^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.5961143Z ^[[36;1m  --package "lino-objects-codec"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6024289Z shell: /usr/bin/bash -e {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6024559Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6024848Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6025305Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6025947Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6026339Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6026747Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6027147Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6027479Z   PYPI_API_TOKEN: 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6027703Z   PYPI_PREFLIGHT_VERBOSE: 0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.6027982Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7681488Z ##[warning]PyPI has no project named "lino-objects-codec" yet.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7692558Z PyPI has no project named "lino-objects-codec" yet.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7692949Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7693412Z PyPI cannot attach a trusted publisher to a project that does not exist,
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7694366Z so the first upload needs a *pending* publisher registered beforehand.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7695144Z Without one the upload fails with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7695817Z   invalid-publisher: valid token, but no corresponding publisher
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7696325Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7696658Z How to fix (one-time, outside this repository):
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7697185Z   1. Sign in to PyPI and open
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7697720Z      https://pypi.org/manage/account/publishing/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7698436Z   2. Under "Add a new pending publisher", choose GitHub and enter:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7699110Z        PyPI Project Name: lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7699666Z        Owner:             link-foundation
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7700217Z        Repository name:   lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7701026Z        Workflow name:     python.yml
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7701565Z        Environment name:  (leave blank)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7702040Z   3. Re-run this workflow.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7702288Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7702732Z All five values must match exactly; a publisher registered *with* an
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7703751Z environment will not match a workflow that declares none, and vice versa.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7704285Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7704747Z Alternative for a one-off first release: set the PYPI_API_TOKEN secret
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7705736Z (https://pypi.org/manage/account/token/) and this workflow will upload
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7706491Z with the token instead of OIDC.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7706789Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7707415Z Background: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7708306Z             dev/log/issues/41/pulls/42/ANALYSIS.md
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7964638Z ##[group]Run pypa/gh-action-pypi-publish@release/v1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7965001Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7965221Z   packages-dir: python/dist/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7965477Z   verbose: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7965692Z   skip-existing: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7965912Z   user: __token__
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7966172Z   repository_url: https://upload.pypi.org/legacy/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7966482Z   packages_dir: dist
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7966701Z   verify_metadata: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7966948Z   skip_existing: false
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7967166Z   print_hash: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7967374Z   attestations: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7967584Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7967847Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7968281Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7968917Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7969476Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7969861Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7970244Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.7970570Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8031888Z ##[start-action display=Fail-fast in unsupported environments;id=pypi_publish.__run]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8041920Z ##[end-action id=pypi_publish.__run;outcome=skipped;conclusion=skipped;duration_ms=0]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8044131Z ##[start-action display=Reset path if needed;id=pypi_publish.__run_2]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8071645Z ##[group]Run # Reset path if needed
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8071978Z ^[[36;1m# Reset path if needed^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8072351Z ^[[36;1m# https://github.com/pypa/gh-action-pypi-publish/issues/112^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8072755Z ^[[36;1mif [[ $PATH != *"/usr/bin"* ]]; then^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8073134Z ^[[36;1m  echo "\$PATH=$PATH. Resetting \$PATH for GitHub Actions."^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8073606Z ^[[36;1m  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8074016Z ^[[36;1m  echo "PATH=$PATH" >>"$GITHUB_ENV"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8074318Z ^[[36;1m  echo "$PATH" >>"$GITHUB_PATH"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8074609Z ^[[36;1m  echo "\$PATH reset. \$PATH=$PATH"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8074878Z ^[[36;1mfi^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8139905Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8140266Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8140543Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8141379Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8141827Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8142216Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8142618Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8143023Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8143371Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8248196Z ##[end-action id=pypi_publish.__run_2;outcome=success;conclusion=success;duration_ms=20]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8251170Z ##[start-action display=Discover pre-installed Python;id=pypi_publish.pre-installed-python]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8269303Z ##[group]Run # 🔎 Discover pre-installed Python
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8269693Z ^[[36;1m# 🔎 Discover pre-installed Python^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8270133Z ^[[36;1mecho "python-path=$(command -v python3 || :)" | tee -a "${GITHUB_OUTPUT}"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8339441Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8339797Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8340076Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8340529Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8341233Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8341626Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8342324Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8342741Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8343082Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8446653Z python-path=/opt/hostedtoolcache/Python/3.13.16/x64/bin/python3
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8455696Z ##[end-action id=pypi_publish.pre-installed-python;outcome=success;conclusion=success;duration_ms=20]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8458250Z ##[start-action display=Install Python 3;id=pypi_publish.new-python]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8464263Z ##[end-action id=pypi_publish.new-python;outcome=skipped;conclusion=skipped;duration_ms=0]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8469821Z ##[start-action display=Create Docker container action;id=pypi_publish.__run_3]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8489929Z ##[group]Run # Create Docker container action
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8490312Z ^[[36;1m# Create Docker container action^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8491357Z ^[[36;1m/opt/hostedtoolcache/Python/3.13.16/x64/bin/python3 '/home/runner/work/_actions/pypa/gh-action-pypi-publish/release/v1/create-docker-action.py'^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8555661Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8556026Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8556312Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8556764Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8557214Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8557604Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8558215Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8558613Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8558945Z   REF: release/v1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8559184Z   REPO: pypa/gh-action-pypi-publish
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8559454Z   REPO_ID: 1097519769
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8559671Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8938647Z ##[end-action id=pypi_publish.__run_3;outcome=success;conclusion=success;duration_ms=46]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.8941648Z ##[start-action display=Run Docker container;id=pypi_publish.__self]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9039824Z ##[group]Run ./.github/.tmp/.generated-actions/run-pypi-publish-in-docker-container
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9040268Z with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9040471Z   user: __token__
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9041067Z   repository-url: https://upload.pypi.org/legacy/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9041426Z   packages-dir: python/dist/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9041687Z   verify-metadata: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9041934Z   skip-existing: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9042149Z   verbose: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9042351Z   print-hash: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9042568Z   attestations: true
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9042779Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9043040Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9043473Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9043925Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9044310Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9044701Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9045087Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9045426Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:46.9190327Z ##[command]/usr/bin/docker run --name ghcriopypaghactionpypipublishreleasev1_cf965d --label 846e67 --workdir /github/workspace --rm -e "pythonLocation" -e "PKG_CONFIG_PATH" -e "Python_ROOT_DIR" -e "Python2_ROOT_DIR" -e "Python3_ROOT_DIR" -e "LD_LIBRARY_PATH" -e "INPUT_USER" -e "INPUT_PASSWORD" -e "INPUT_REPOSITORY-URL" -e "INPUT_PACKAGES-DIR" -e "INPUT_VERIFY-METADATA" -e "INPUT_SKIP-EXISTING" -e "INPUT_VERBOSE" -e "INPUT_PRINT-HASH" -e "INPUT_ATTESTATIONS" -e "HOME" -e "GITHUB_JOB" -e "GITHUB_REF" -e "GITHUB_SHA" -e "GITHUB_REPOSITORY" -e "GITHUB_REPOSITORY_OWNER" -e "GITHUB_REPOSITORY_OWNER_ID" -e "GITHUB_RUN_ID" -e "GITHUB_RUN_NUMBER" -e "GITHUB_RETENTION_DAYS" -e "GITHUB_RUN_ATTEMPT" -e "GITHUB_ACTOR_ID" -e "GITHUB_ACTOR" -e "GITHUB_WORKFLOW" -e "GITHUB_HEAD_REF" -e "GITHUB_BASE_REF" -e "GITHUB_EVENT_NAME" -e "GITHUB_SERVER_URL" -e "GITHUB_API_URL" -e "GITHUB_GRAPHQL_URL" -e "GITHUB_REF_NAME" -e "GITHUB_REF_PROTECTED" -e "GITHUB_REF_TYPE" -e "GITHUB_WORKFLOW_REF" -e "GITHUB_WORKFLOW_SHA" -e "GITHUB_REPOSITORY_ID" -e "GITHUB_TRIGGERING_ACTOR" -e "GITHUB_WORKSPACE" -e "GITHUB_ACTION" -e "GITHUB_EVENT_PATH" -e "GITHUB_ACTION_REPOSITORY" -e "GITHUB_ACTION_REF" -e "GITHUB_PATH" -e "GITHUB_ENV" -e "GITHUB_STEP_SUMMARY" -e "GITHUB_STATE" -e "GITHUB_OUTPUT" -e "GITHUB_ARTIFACTS" -e "GITHUB_ARTIFACTS_LIST" -e "GITHUB_ACTION_PATH" -e "RUNNER_OS" -e "RUNNER_ARCH" -e "RUNNER_NAME" -e "RUNNER_ENVIRONMENT" -e "RUNNER_TOOL_CACHE" -e "RUNNER_TEMP" -e "RUNNER_WORKSPACE" -e "ACTIONS_RUNTIME_URL" -e "ACTIONS_RUNTIME_TOKEN" -e "ACTIONS_CACHE_URL" -e "ACTIONS_ID_TOKEN_REQUEST_URL" -e "ACTIONS_ID_TOKEN_REQUEST_TOKEN" -e "ACTIONS_RESULTS_URL" -e "ACTIONS_CACHE_MODE" -e "ACTIONS_ORCHESTRATION_ID" -e GITHUB_ACTIONS=true -e CI=true -v "/var/run/docker.sock":"/var/run/docker.sock" -v "/home/runner/work/_temp":"/github/runner_temp" -v "/home/runner/work/_temp/_github_home":"/github/home" -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" -v "/home/runner/work/lino-objects-codec/lino-objects-codec":"/github/workspace" ghcr.io/pypa/gh-action-pypi-publish:release-v1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.0133723Z Unable to find image 'ghcr.io/pypa/gh-action-pypi-publish:release-v1' locally
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1920204Z release-v1: Pulling from pypa/gh-action-pypi-publish
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1923985Z f96fde5c7579: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1924865Z cd384decb927: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1925561Z 463aa101532a: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1926232Z 4a633c382b06: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1926886Z 7d25e6ce522b: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1927521Z 73aa50089b2f: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1928186Z 3f44ba4af573: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1928774Z e7cfcb60dbfb: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1929332Z 7e9f24617b6b: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1929902Z 6d9fe5224b4e: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1930464Z 533ef6f9b8fa: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1931391Z 3441c4cce8f1: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1931986Z 70fcbeac8774: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1932590Z 4f4fb700ef54: Pulling fs layer
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1933072Z 4a633c382b06: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1933541Z 7d25e6ce522b: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1933972Z 73aa50089b2f: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1934418Z 3f44ba4af573: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1934852Z e7cfcb60dbfb: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1935283Z 7e9f24617b6b: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1935723Z 6d9fe5224b4e: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1936207Z 533ef6f9b8fa: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1936643Z 3441c4cce8f1: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1937059Z 70fcbeac8774: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.1937485Z 4f4fb700ef54: Waiting
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.2969069Z cd384decb927: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.2970208Z cd384decb927: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3406978Z 463aa101532a: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3407813Z 463aa101532a: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3442798Z f96fde5c7579: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3446094Z f96fde5c7579: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3476851Z 4a633c382b06: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3477849Z 4a633c382b06: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3878679Z 7d25e6ce522b: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3879362Z 7d25e6ce522b: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3930198Z 3f44ba4af573: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.3930845Z 3f44ba4af573: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.4467133Z e7cfcb60dbfb: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.4499608Z 7e9f24617b6b: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.4500370Z 7e9f24617b6b: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5020352Z 533ef6f9b8fa: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5022642Z 533ef6f9b8fa: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5023585Z 6d9fe5224b4e: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5095841Z 73aa50089b2f: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5108825Z 73aa50089b2f: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5509110Z 70fcbeac8774: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5511520Z 70fcbeac8774: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5720038Z 4f4fb700ef54: Verifying Checksum
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5721969Z 4f4fb700ef54: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:47.5758282Z 3441c4cce8f1: Download complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:48.5060004Z f96fde5c7579: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:50.9275183Z cd384decb927: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:51.5381499Z 463aa101532a: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:51.5504155Z 4a633c382b06: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:51.5596791Z 7d25e6ce522b: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0389494Z 73aa50089b2f: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0468688Z 3f44ba4af573: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0571050Z e7cfcb60dbfb: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0659907Z 7e9f24617b6b: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0732731Z 6d9fe5224b4e: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0807344Z 533ef6f9b8fa: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0878163Z 3441c4cce8f1: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.0970538Z 70fcbeac8774: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.1036572Z 4f4fb700ef54: Pull complete
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.1082029Z Digest: sha256:a68d05519f6d7e47372aeaddab80b851b69afa89be179ec41775c72c4e3ab2d5
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:53.1092946Z Status: Downloaded newer image for ghcr.io/pypa/gh-action-pypi-publish:release-v1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.5169323Z ##[error]Trusted publishing exchange failure: 
+Auto Release	UNKNOWN STEP	Token request failed: the server refused the request for the following reasons:
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	* `invalid-publisher`: valid token, but no corresponding publisher (Publisher with matching claims was not found)
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	This generally indicates a trusted publisher configuration error, but could
+Auto Release	UNKNOWN STEP	also indicate an internal error on GitHub or PyPI's part.
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	The claims rendered below are **for debugging purposes only**. You should **not**
+Auto Release	UNKNOWN STEP	use them to configure a trusted publisher unless they already match your expectations.
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	If a claim is not present in the claim set, then it is rendered as `MISSING`.
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	* `sub`: `repo:link-foundation/lino-objects-codec:ref:refs/heads/main`
+Auto Release	UNKNOWN STEP	* `repository`: `link-foundation/lino-objects-codec`
+Auto Release	UNKNOWN STEP	* `repository_owner`: `link-foundation`
+Auto Release	UNKNOWN STEP	* `repository_owner_id`: `176174013`
+Auto Release	UNKNOWN STEP	* `workflow_ref`: `link-foundation/lino-objects-codec/.github/workflows/python.yml@refs/heads/main`
+Auto Release	UNKNOWN STEP	* `job_workflow_ref`: `link-foundation/lino-objects-codec/.github/workflows/python.yml@refs/heads/main`
+Auto Release	UNKNOWN STEP	* `ref`: `refs/heads/main`
+Auto Release	UNKNOWN STEP	* `environment`: `MISSING`
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	See https://docs.pypi.org/trusted-publishers/troubleshooting/ for more help.
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6398387Z ##[end-action id=pypi_publish.__self;outcome=failure;conclusion=failure;duration_ms=7745]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6474822Z ##[group]Run python scripts/pypi_publish_preflight.py \
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6475286Z ^[[36;1mpython scripts/pypi_publish_preflight.py \^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6475640Z ^[[36;1m  --package "lino-objects-codec"^[[0m
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6537675Z shell: /usr/bin/bash -e {0}
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6537941Z env:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6538222Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6538680Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6539126Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6539525Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6539915Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6540322Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6541044Z   PYPI_API_TOKEN: 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6541398Z   PYPI_PREFLIGHT_VERBOSE: 1
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.6541821Z ##[endgroup]
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7470792Z PyPI preflight: resolved OIDC claims
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7471290Z {
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7471528Z   "environment": "",
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7471802Z   "owner": "link-foundation",
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7472084Z   "ref": "refs/heads/main",
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7472401Z   "repository": "lino-objects-codec",
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7472722Z   "workflow": "python.yml"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7472986Z }
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7473323Z PyPI preflight: PYPI_API_TOKEN configured: False
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7473934Z PyPI preflight: probing https://pypi.org/pypi/lino-objects-codec/json
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7475481Z ##[warning]PyPI has no project named "lino-objects-codec" yet.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7476728Z PyPI has no project named "lino-objects-codec" yet.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7477031Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7477353Z PyPI cannot attach a trusted publisher to a project that does not exist,
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7478010Z so the first upload needs a *pending* publisher registered beforehand.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7478514Z Without one the upload fails with:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7478968Z   invalid-publisher: valid token, but no corresponding publisher
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7479292Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7479505Z How to fix (one-time, outside this repository):
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7479875Z   1. Sign in to PyPI and open
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7480239Z      https://pypi.org/manage/account/publishing/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7481034Z   2. Under "Add a new pending publisher", choose GitHub and enter:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7481506Z        PyPI Project Name: lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7481881Z        Owner:             link-foundation
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7482261Z        Repository name:   lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7482620Z        Workflow name:     python.yml
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7483293Z        Environment name:  (leave blank)
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7483617Z   3. Re-run this workflow.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7483772Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7484035Z All five values must match exactly; a publisher registered *with* an
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7484601Z environment will not match a workflow that declares none, and vice versa.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7484932Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7485211Z Alternative for a one-off first release: set the PYPI_API_TOKEN secret
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7485778Z (https://pypi.org/manage/account/token/) and this workflow will upload
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7486213Z with the token instead of OIDC.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7486389Z 
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7486749Z Background: https://docs.pypi.org/trusted-publishers/creating-a-project-through-oidc/
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7487271Z             dev/log/issues/41/pulls/42/ANALYSIS.md
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7708883Z Post job cleanup.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.7782249Z Post job cleanup.
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8661511Z [command]/usr/bin/git version
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8717729Z git version 2.55.0
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8762528Z Temporarily overriding HOME='/home/runner/work/_temp/dac3dc11-99a2-4df8-8852-2125485115d4' before making global git config changes
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8764044Z Adding repository directory to the temporary git global config as a safe directory
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8768939Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8806210Z Removing SSH command configuration
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8814915Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.8854525Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9119919Z Removing HTTP extra header
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9125856Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9165295Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9452829Z Removing includeIf entries pointing to credentials config files
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9454243Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9479194Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9480799Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9482046Z includeif.gitdir:/github/workspace/.git.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9482885Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9490406Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9541955Z /home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9553924Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-aa24aaf1\-f3fc\-4e59\-8c3c\-10507d28da4f\.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9598482Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9636975Z /home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9647768Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-aa24aaf1\-f3fc\-4e59\-8c3c\-10507d28da4f\.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9692141Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9722713Z /github/runner_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9730957Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-aa24aaf1\-f3fc\-4e59\-8c3c\-10507d28da4f\.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9769747Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9797295Z /github/runner_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9807273Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-aa24aaf1\-f3fc\-4e59\-8c3c\-10507d28da4f\.config
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:54.9849968Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:55.0082148Z Removing credentials config '/home/runner/work/_temp/git-credentials-aa24aaf1-f3fc-4e59-8c3c-10507d28da4f.config'
+Auto Release	UNKNOWN STEP	2026-10-11T14:11:55.0226374Z Cleaning up orphan processes

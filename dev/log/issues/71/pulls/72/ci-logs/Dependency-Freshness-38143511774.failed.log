@@ -1,0 +1,616 @@
+Lockfiles have no pending compatible updates	UNKNOWN STEP	﻿2026-10-11T13:31:27.3420028Z Current runner version: '2.337.0'
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3445802Z ##[group]Runner Image Provisioner
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3447094Z Hosted Compute Agent
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3447701Z Version: 20261002.596
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3448475Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3449289Z Build Date: 2026-10-02T22:28:27Z
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3450090Z Worker ID: {249aa2e1-a92c-436f-9601-4a5e3c79d1c1}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3450836Z Region: eastus
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3451432Z Cloud: Azure
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3452079Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3454174Z ##[group]Operating System
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3454899Z Ubuntu
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3455454Z 24.04.5
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3455964Z LTS
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3456804Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3457369Z ##[group]Runner Image
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3457956Z Image: ubuntu-24.04
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3458599Z Version: 20261004.327.1
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3459826Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3461600Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3462579Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3463785Z ##[group]GITHUB_TOKEN Permissions
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3466653Z Contents: read
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3467330Z Metadata: read
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3467892Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3470073Z Secret source: Actions
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3471086Z Cache mode: write
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3472172Z Prepare workflow directory
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3811927Z Prepare all required actions
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.3861284Z Getting action download info
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.6284029Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.7323826Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:27.9379712Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:686976e191b89faba57d3206551f0f330d8cb249)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.1676244Z Complete job name: Lockfiles have no pending compatible updates
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2454097Z ##[group]Run actions/checkout@v7
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2455256Z with:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2455928Z   repository: link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2460365Z   token: ***
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2460993Z   ssh-strict: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2461537Z   ssh-user: git
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2462107Z   persist-credentials: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2462749Z   clean: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2463285Z   sparse-checkout-cone-mode: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2463952Z   fetch-depth: 1
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2464523Z   fetch-tags: false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2465132Z   show-progress: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2465718Z   lfs: false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2466218Z   submodules: false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2466990Z   set-safe-directory: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2467609Z   allow-unsafe-pr-checkout: false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.2468573Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3576137Z Syncing repository: link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3579591Z ##[group]Getting Git version info
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3580973Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3582587Z [command]/usr/bin/git version
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3671333Z git version 2.55.0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3695540Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3738691Z Temporarily overriding HOME='/home/runner/work/_temp/4cf26d3e-037b-41ae-b76b-8fbca363a635' before making global git config changes
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3751695Z Adding repository directory to the temporary git global config as a safe directory
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3765291Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3801630Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3807615Z ##[group]Determining repository object format
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3810348Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3837199Z ##[group]Initializing the repository
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3840657Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3929737Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3947957Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3950042Z hint: to use in all of your new repositories, which will suppress this warning,
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3951566Z hint: call:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3952560Z hint:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3953700Z hint: 	git config --global init.defaultBranch <name>
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3955220Z hint:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3956736Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3958549Z hint: 'development'. The just-created branch can be renamed via this command:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3960110Z hint:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3960772Z hint: 	git branch -m <name>
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3961571Z hint:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3962454Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3964675Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.3968740Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4019362Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4021835Z ##[group]Disabling automatic garbage collection
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4039648Z [command]/usr/bin/git config --local gc.auto 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4108681Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4111157Z ##[group]Setting up auth
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4112397Z Removing SSH command configuration
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4113546Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4144774Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4534632Z Removing HTTP extra header
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4541759Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4585771Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4838147Z Removing includeIf entries pointing to credentials config files
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4844028Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.4883099Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5113783Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5157153Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5193137Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5230004Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5349828Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5353584Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5354395Z ##[group]Fetching the repository
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.5356827Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +404980cf1754f783e7a1f8d119c1b476c89b1d10:refs/remotes/pull/70/merge
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8704690Z From https://github.com/link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8705898Z  * [new ref]         404980cf1754f783e7a1f8d119c1b476c89b1d10 -> pull/70/merge
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8728223Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8738451Z ##[group]Determining the checkout info
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8740409Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8741687Z [command]/usr/bin/git sparse-checkout disable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8779415Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8817847Z ##[group]Checking out the ref
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.8821778Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/70/merge
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9164716Z Note: switching to 'refs/remotes/pull/70/merge'.
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9166828Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9169475Z You are in 'detached HEAD' state. You can look around, make experimental
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9171966Z changes and commit them, and you can discard any commits you make in this
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9174221Z state without impacting any branches by switching back to a branch.
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9175479Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9177129Z If you want to create a new branch to retain commits you create, you may
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9179090Z do so (now or later) by using -c with the switch command. Example:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9180609Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9181556Z   git switch -c <new-branch-name>
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9182788Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9183427Z Or undo this operation with:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9184289Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9184782Z   git switch -
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9185482Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9186581Z Turn off this advice by setting config variable advice.detachedHead to false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9187652Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9188863Z HEAD is now at 404980c Merge f14972fd15c62088d7439ca267485997f5f87109 into b48872da6601d2a79b4079b6c0c07b7365743c23
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9192676Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9229974Z [command]/usr/bin/git log -1 --format=%H
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9260222Z 404980cf1754f783e7a1f8d119c1b476c89b1d10
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9661895Z ##[group]Run actions/setup-node@v7
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9663156Z with:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9664051Z   node-version: 22
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9665029Z   check-latest: false
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9676380Z   token: ***
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9677403Z   package-manager-cache: true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:28.9678539Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.0980124Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.1842263Z ##[group]Environment details
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5298412Z node: v22.23.3
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5299253Z npm: 10.9.9
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5299727Z yarn: 1.22.22
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5300848Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5595161Z ##[group]Run dtolnay/rust-toolchain@stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5595645Z with:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5595947Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5596717Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5668706Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5736609Z ##[group]Run if [[ -z $toolchain ]]; then
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5737096Z ^[[36;1mif [[ -z $toolchain ]]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5737707Z ^[[36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5738366Z ^[[36;1m  echo "'toolchain' is a required input" >&2^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5738746Z ^[[36;1m  exit 1^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5739153Z ^[[36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5739639Z ^[[36;1m  if [[ Linux == macOS ]]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5740277Z ^[[36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5740870Z ^[[36;1m  else^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5741341Z ^[[36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5742075Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5742441Z ^[[36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5743069Z ^[[36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5743600Z ^[[36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5744179Z ^[[36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5744734Z ^[[36;1melse^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5744983Z ^[[36;1m  delimiter=EOF^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5745354Z ^[[36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5745921Z ^[[36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.5746670Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6014497Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6014941Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6015183Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6015448Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6159312Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=48]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6164166Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6192975Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6193536Z ^[[36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6252903Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6253335Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6344109Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=17]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6346994Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6380152Z ##[group]Run if ! command -v rustup &>/dev/null; then
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6380595Z ^[[36;1mif ! command -v rustup &>/dev/null; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6381442Z ^[[36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6382248Z ^[[36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6382584Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6440146Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6440548Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6440798Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6441096Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6529630Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=18]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6532078Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6538174Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6551315Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6602251Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6602993Z ^[[36;1mset -f  # split targets and components on commas and whitespace, without glob expansion^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6603497Z ^[[36;1mflags=()^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6603834Z ^[[36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6604305Z ^[[36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6604875Z ^[[36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6605366Z ^[[36;1mlog=$(mktemp)^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6605665Z ^[[36;1mtrap 'rm -f "$log"' EXIT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6605979Z ^[[36;1mfor attempt in 1 2 3 4 5; do^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6607084Z ^[[36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6607726Z ^[[36;1m    break^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6608014Z ^[[36;1m  else^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6608262Z ^[[36;1m    status=$?^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6608531Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6608893Z ^[[36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6609511Z ^[[36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6610044Z ^[[36;1m    exit "$status"^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6610320Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6610744Z ^[[36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6611233Z ^[[36;1m  sleep 30^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6611488Z ^[[36;1mdone^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6669410Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6669942Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6670195Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6670499Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6670751Z   targets: 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6670984Z   components: 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6671239Z   RUSTUP_PERMIT_COPY_RENAME: 1
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.6671523Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.8452476Z info: syncing channel updates for stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9182026Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9260755Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9261352Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9308176Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=275]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9315305Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9345288Z ##[group]Run rustup default "$toolchain" --force-non-host
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9345785Z ^[[36;1mrustup default "$toolchain" --force-non-host^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9411244Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9411671Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9411951Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9412285Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9412567Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9538900Z info: using existing install for stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9547438Z info: default toolchain set to stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9547842Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9621757Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9622468Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9639039Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=32]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9643430Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9673160Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9674113Z ^[[36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9674853Z ^[[36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9675437Z ^[[36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9738651Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9739052Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9739303Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9739603Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:29.9739850Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0118067Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=47]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0121214Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0150477Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0151077Z ^[[36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0151463Z ^[[36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0151797Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0218602Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0219003Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0219257Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0219568Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0318324Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=19]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0320886Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0348843Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0349299Z ^[[36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0349690Z ^[[36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0350034Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0413579Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0413991Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0414241Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0414544Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0414809Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0507709Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=18]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0511486Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0540221Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0540815Z ^[[36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0541616Z ^[[36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0542425Z ^[[36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0543092Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0543700Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0544285Z ^[[36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0544929Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0545523Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0545922Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0546157Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0611480Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0611896Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0612383Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0612706Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0612985Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0613272Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0613567Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0963445Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=45]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0968404Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0998315Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0999140Z ^[[36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.0999833Z ^[[36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1000369Z ^[[36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1000728Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1066726Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1067138Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1067392Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1067903Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1068180Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1068452Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1068700Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1288154Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=31]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1293286Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1321538Z ##[group]Run rustc +"$toolchain" --version --verbose
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1321969Z ^[[36;1mrustc +"$toolchain" --version --verbose^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1387903Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1388292Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1388542Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1388865Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1389137Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1389408Z   toolchain: stable
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1389662Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1589749Z rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1591511Z binary: rustc
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1593165Z commit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1594073Z commit-date: 2026-09-28
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1594783Z host: x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1595574Z release: 1.99.0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1596182Z LLVM version: 23.1.1
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1669745Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=37]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1737353Z ##[group]Run npm ci
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1737678Z ^[[36;1mnpm ci^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1737929Z ^[[36;1mnpm outdated^[[0m
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1804756Z shell: /usr/bin/bash -e {0}
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1805139Z env:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1805387Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1805694Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1805971Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:30.1806515Z ##[endgroup]
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4115646Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4116890Z > lino-objects-codec@0.9.0 prepare
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4117710Z > husky || true
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4117950Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4547138Z .git can't be found
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4547782Z added 131 packages, and audited 132 packages in 2s
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4548220Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4548478Z 31 packages are looking for funding
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4548957Z   run `npm fund` for details
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4558103Z 
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:32.4558473Z found 0 vulnerabilities
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0067285Z Package         Current  Wanted  Latest  Location                     Depended by
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0068502Z jscpd             5.4.0   5.4.1   5.4.1  node_modules/jscpd           js
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0070001Z links-notation   0.23.0  0.23.0  0.25.2  node_modules/links-notation  js
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0071122Z prettier          3.9.9  3.9.10  3.9.10  node_modules/prettier        js
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0172401Z ##[error]Process completed with exit code 1.
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.0346158Z Post job cleanup.
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1239329Z [command]/usr/bin/git version
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1283855Z git version 2.55.0
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1325954Z Temporarily overriding HOME='/home/runner/work/_temp/6c420a2a-65d5-44ee-815e-e67be8e7e9f9' before making global git config changes
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1328768Z Adding repository directory to the temporary git global config as a safe directory
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1332572Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1368462Z Removing SSH command configuration
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1376774Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1418687Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1675743Z Removing HTTP extra header
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1683044Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.1722043Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2002554Z Removing includeIf entries pointing to credentials config files
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2011696Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2046401Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2047988Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2049185Z includeif.gitdir:/github/workspace/.git.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2050227Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2058132Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2088327Z /home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2101756Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-0abd828a\-c89d\-4e9b\-8cbe\-0210f6312b63\.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2150211Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2183494Z /home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2199266Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-0abd828a\-c89d\-4e9b\-8cbe\-0210f6312b63\.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2270402Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2287556Z /github/runner_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2299076Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-0abd828a\-c89d\-4e9b\-8cbe\-0210f6312b63\.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2345607Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2364637Z /github/runner_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2385250Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-0abd828a\-c89d\-4e9b\-8cbe\-0210f6312b63\.config
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2416116Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2661960Z Removing credentials config '/home/runner/work/_temp/git-credentials-0abd828a-c89d-4e9b-8cbe-0210f6312b63.config'
+Lockfiles have no pending compatible updates	UNKNOWN STEP	2026-10-11T13:31:33.2823708Z Cleaning up orphan processes
+Direct dependencies are current	UNKNOWN STEP	﻿2026-10-11T13:31:27.3932944Z Current runner version: '2.337.0'
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3961817Z ##[group]Runner Image Provisioner
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3963012Z Hosted Compute Agent
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3963705Z Version: 20261002.596
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3964439Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3965320Z Build Date: 2026-10-02T22:28:27Z
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3966101Z Worker ID: {f540cbaa-4005-4a39-96ff-47cdc9b0368e}
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3967383Z Region: eastus
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3968119Z Cloud: Azure
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3968778Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3971388Z ##[group]Operating System
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3972141Z Ubuntu
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3972776Z 24.04.5
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3973483Z LTS
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3974105Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3974818Z ##[group]Runner Image
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3975577Z Image: ubuntu-24.04
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3976289Z Version: 20261004.327.1
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3978281Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3980173Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3981373Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3982738Z ##[group]GITHUB_TOKEN Permissions
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3985157Z Contents: read
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3986009Z Metadata: read
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3987012Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3989397Z Secret source: Actions
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3990521Z Cache mode: write
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.3991683Z Prepare workflow directory
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.4342300Z Prepare all required actions
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.4392441Z Getting action download info
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.6812664Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:27.8023279Z Download action repository 'actions/setup-python@v7' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.0390199Z Complete job name: Direct dependencies are current
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1185805Z ##[group]Run actions/checkout@v7
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1187045Z with:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1187596Z   repository: link-foundation/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1191953Z   token: ***
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1192418Z   ssh-strict: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1192882Z   ssh-user: git
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1193357Z   persist-credentials: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1193888Z   clean: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1194361Z   sparse-checkout-cone-mode: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1194915Z   fetch-depth: 1
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1195374Z   fetch-tags: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1195850Z   show-progress: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1196323Z   lfs: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1196901Z   submodules: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1197389Z   set-safe-directory: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1197930Z   allow-unsafe-pr-checkout: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.1198773Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2279123Z Syncing repository: link-foundation/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2281317Z ##[group]Getting Git version info
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2282772Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2284790Z [command]/usr/bin/git version
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2398598Z git version 2.55.0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2402006Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2413192Z Temporarily overriding HOME='/home/runner/work/_temp/762a4723-7d2c-4361-a000-3af9f02a1ae8' before making global git config changes
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2415815Z Adding repository directory to the temporary git global config as a safe directory
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2420417Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2484802Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2489120Z ##[group]Determining repository object format
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2490854Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2492175Z ##[group]Initializing the repository
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2495547Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2610914Z hint: Using 'master' as the name for the initial branch. This default branch name
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2615605Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2617821Z hint: to use in all of your new repositories, which will suppress this warning,
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2618711Z hint: call:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2619300Z hint:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2619983Z hint: 	git config --global init.defaultBranch <name>
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2620713Z hint:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2621379Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2622453Z hint: 'development'. The just-created branch can be renamed via this command:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2623309Z hint:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2623781Z hint: 	git branch -m <name>
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2624326Z hint:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2625223Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2627184Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2629593Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2683069Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2683980Z ##[group]Disabling automatic garbage collection
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2687432Z [command]/usr/bin/git config --local gc.auto 0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2720642Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2721645Z ##[group]Setting up auth
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2722675Z Removing SSH command configuration
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2727589Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.2764141Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3178577Z Removing HTTP extra header
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3186127Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3238292Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3467379Z Removing includeIf entries pointing to credentials config files
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3473727Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3511079Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3764438Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3809263Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3846169Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3885943Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3927021Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3969057Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3970014Z ##[group]Fetching the repository
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.3979832Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +404980cf1754f783e7a1f8d119c1b476c89b1d10:refs/remotes/pull/70/merge
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7161808Z From https://github.com/link-foundation/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7162860Z  * [new ref]         404980cf1754f783e7a1f8d119c1b476c89b1d10 -> pull/70/merge
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7166182Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7167678Z ##[group]Determining the checkout info
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7168821Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7173381Z [command]/usr/bin/git sparse-checkout disable
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7231968Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7269327Z ##[group]Checking out the ref
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7274430Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/70/merge
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7616239Z Note: switching to 'refs/remotes/pull/70/merge'.
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7617318Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7617953Z You are in 'detached HEAD' state. You can look around, make experimental
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7619251Z changes and commit them, and you can discard any commits you make in this
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7620473Z state without impacting any branches by switching back to a branch.
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7621184Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7621657Z If you want to create a new branch to retain commits you create, you may
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7622783Z do so (now or later) by using -c with the switch command. Example:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7623438Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7623872Z   git switch -c <new-branch-name>
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7624616Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7625064Z Or undo this operation with:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7625780Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7626243Z   git switch -
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7627040Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7627858Z Turn off this advice by setting config variable advice.detachedHead to false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7628894Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7630281Z HEAD is now at 404980c Merge f14972fd15c62088d7439ca267485997f5f87109 into b48872da6601d2a79b4079b6c0c07b7365743c23
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7634645Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7681819Z [command]/usr/bin/git log -1 --format=%H
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.7712001Z 404980cf1754f783e7a1f8d119c1b476c89b1d10
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8095892Z ##[group]Run actions/setup-python@v7
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8097275Z with:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8098017Z   python-version: 3.13
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8098873Z   check-latest: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8106497Z   token: ***
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8107654Z   update-environment: true
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8108551Z   allow-prereleases: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8109069Z   freethreaded: false
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.8109525Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.9367967Z ##[group]Installed versions
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.9455273Z Successfully set up CPython (3.13.16)
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.9457150Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.9654202Z ##[group]Run python -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:28.9656171Z ^[[36;1mpython -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v^[[0m
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0004321Z shell: /usr/bin/bash -e {0}
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0005116Z env:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0005839Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0007357Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0008523Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0009492Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0010377Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0011284Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:29.0012052Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.0872696Z test_action_bundle_and_prerelease_tags_are_not_action_versions (test_dependency_freshness.DependencyFreshnessTests.test_action_bundle_and_prerelease_tags_are_not_action_versions) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.0878766Z test_blocker_must_be_on_the_manifest_line (test_dependency_freshness.DependencyFreshnessTests.test_blocker_must_be_on_the_manifest_line) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.0970616Z test_blockers_do_not_spread_to_other_declarations_of_the_same_package (test_dependency_freshness.DependencyFreshnessTests.test_blockers_do_not_spread_to_other_declarations_of_the_same_package) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.0973784Z test_current_and_unbounded_dependencies_pass (test_dependency_freshness.DependencyFreshnessTests.test_current_and_unbounded_dependencies_pass) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1172024Z test_every_ecosystem_build_and_dev_dependencies_are_read (test_dependency_freshness.DependencyFreshnessTests.test_every_ecosystem_build_and_dev_dependencies_are_read) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1175394Z test_moving_major_action_tag_tracks_patches (test_dependency_freshness.DependencyFreshnessTests.test_moving_major_action_tag_tracks_patches) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1178813Z test_only_an_open_issue_is_an_exception (test_dependency_freshness.DependencyFreshnessTests.test_only_an_open_issue_is_an_exception) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1181270Z test_outside_semver_range_is_stale (test_dependency_freshness.DependencyFreshnessTests.test_outside_semver_range_is_stale) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1184159Z test_two_component_version_has_an_implicit_zero_patch (test_dependency_freshness.DependencyFreshnessTests.test_two_component_version_has_an_implicit_zero_patch) ... ok
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1185750Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1186154Z ----------------------------------------------------------------------
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1187434Z Ran 9 tests in 0.031s
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1187812Z 
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1188050Z OK
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1188901Z BLOCKED blocked: https://github.com/owner/repo/issues/123
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1423342Z ##[group]Run python scripts/check_dependency_freshness.py
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1424140Z ^[[36;1mpython scripts/check_dependency_freshness.py^[[0m
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1493950Z shell: /usr/bin/bash -e {0}
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1494515Z env:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1495108Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1495979Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1497091Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1497931Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1498750Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1499627Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1504306Z   GH_TOKEN: ***
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:31.1504855Z ##[endgroup]
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4918142Z ERROR rust/Cargo.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4919263Z ERROR rust/Cargo.toml: serde_json 1.0.151 is behind latest 1.0.152
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4920310Z ERROR rust/Cargo.toml: serde_json 1.0.151 is behind latest 1.0.152
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4921107Z ERROR rust/Cargo.toml: proptest 1.11.0 is behind latest 1.12.0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4922213Z ERROR experiments/issue-37/parenthesis-indentation/Cargo.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4923689Z ERROR experiments/issue-43/line-format-probe/Cargo.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4925813Z ERROR experiments/issue-45/quote-probe/Cargo.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4928075Z ERROR experiments/issue-65/consumer/Cargo.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4929853Z ERROR js/package.json: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4931183Z ERROR js/package.json: jscpd 5.4.0 is behind latest 5.4.1
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4932078Z ERROR js/package.json: prettier 3.9.9 is behind latest 3.9.10
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4933002Z ERROR python/pyproject.toml: links-notation 0.23.0 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4933973Z ERROR python/pyproject.toml: ruff 0.16.10 is behind latest 0.17.0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4935279Z ERROR csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj: Link.Foundation.Links.Notation 0.25.1 is behind latest 0.25.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4936698Z ERROR csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj: xunit.v3 4.0.1 is behind latest 4.0.2
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.4938405Z ERROR csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj: xunit.runner.visualstudio 4.0.0 is behind latest 4.0.1
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.5310655Z ##[error]Process completed with exit code 1.
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.6109740Z Post job cleanup.
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7003913Z [command]/usr/bin/git version
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7047668Z git version 2.55.0
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7090350Z Temporarily overriding HOME='/home/runner/work/_temp/02227023-5dd6-40be-9baf-0cfbc18c9b63' before making global git config changes
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7091922Z Adding repository directory to the temporary git global config as a safe directory
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7096322Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7131850Z Removing SSH command configuration
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7139457Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7178971Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7433614Z Removing HTTP extra header
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7441778Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7487256Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7756491Z Removing includeIf entries pointing to credentials config files
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7764646Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7958172Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7960122Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7961662Z includeif.gitdir:/github/workspace/.git.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7962686Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.7976927Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.8007945Z /home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.8015749Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-d1b0a1be\-689d\-42a8\-8098\-b7c2cad8a7f3\.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.8430581Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.8471675Z /home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.8481789Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-d1b0a1be\-689d\-42a8\-8098\-b7c2cad8a7f3\.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.9570531Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.9593194Z /github/runner_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:35.9600580Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-d1b0a1be\-689d\-42a8\-8098\-b7c2cad8a7f3\.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0008850Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0042696Z /github/runner_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0052515Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-d1b0a1be\-689d\-42a8\-8098\-b7c2cad8a7f3\.config
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0097417Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0346163Z Removing credentials config '/home/runner/work/_temp/git-credentials-d1b0a1be-689d-42a8-8098-b7c2cad8a7f3.config'
+Direct dependencies are current	UNKNOWN STEP	2026-10-11T13:31:36.0504172Z Cleaning up orphan processes
