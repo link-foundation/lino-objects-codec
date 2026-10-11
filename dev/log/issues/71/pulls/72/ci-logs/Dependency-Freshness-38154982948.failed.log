@@ -1,0 +1,15 @@
+Direct dependencies are current	Check latest releases across all four ecosystems	﻿2026-10-11T16:19:45.6449731Z ##[group]Run python scripts/check_dependency_freshness.py
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6450720Z ^[[36;1mpython scripts/check_dependency_freshness.py^[[0m
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6501769Z shell: /usr/bin/bash -e {0}
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6502425Z env:
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6503047Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6504068Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6505100Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6506054Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6507005Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6507968Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6514366Z   GH_TOKEN: ***
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6514885Z ##[endgroup]
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.6877269Z ERROR rust/Cargo.toml: serde_json 1.0.152 is behind latest 1.0.154
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.6877739Z ERROR rust/Cargo.toml: serde_json 1.0.152 is behind latest 1.0.154
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.7219211Z ##[error]Process completed with exit code 1.

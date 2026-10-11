@@ -1,0 +1,5 @@
+38157081405	Check Links	notice	Summary report available at: https://github.com/link-foundation/lino-objects-codec/actions/runs/38157081405#summary-114522168438
+38157081355	Test (.NET on macos-15)	notice	Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.
+38157081417	Test (Python 3.13 on macos-15)	notice	Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.
+38157081415	Test (Node.js on macos-15)	notice	Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.
+38157081357	Test (Rust on macos-15)	notice	Due to capacity constraints, jobs targeting macOS arm64 runners may experience longer queue times.

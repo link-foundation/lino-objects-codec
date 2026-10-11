@@ -1,0 +1,566 @@
+Languages Change Together	UNKNOWN STEP	﻿2026-10-11T13:31:27.5825707Z Current runner version: '2.337.0'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5850163Z ##[group]Runner Image Provisioner
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5851171Z Hosted Compute Agent
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5851987Z Version: 20261002.596
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5852675Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5853408Z Build Date: 2026-10-02T22:28:27Z
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5854088Z Worker ID: {d8434619-f5e7-46ff-b923-5cf38e73e0a1}
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5854808Z Region: centralus
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5855367Z Cloud: Azure
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5855978Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5857662Z ##[group]Operating System
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5858297Z Ubuntu
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5858844Z 24.04.5
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5859406Z LTS
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5859934Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5860514Z ##[group]Runner Image
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5861120Z Image: ubuntu-24.04
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5862003Z Version: 20261004.327.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5863395Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5864951Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5865893Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5867033Z ##[group]GITHUB_TOKEN Permissions
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5869158Z Contents: read
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5869743Z Metadata: read
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5870317Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5872671Z Secret source: Actions
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5873652Z Cache mode: write
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.5874362Z Prepare workflow directory
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.6241275Z Prepare all required actions
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.6296776Z Getting action download info
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.8777093Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:27.9962157Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.7702567Z Complete job name: Languages Change Together
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8449055Z ##[group]Run actions/checkout@v7
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8450040Z with:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8450713Z   fetch-depth: 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8451589Z   repository: link-foundation/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8456051Z   token: ***
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8456690Z   ssh-strict: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8457281Z   ssh-user: git
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8457879Z   persist-credentials: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8458595Z   clean: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8459198Z   sparse-checkout-cone-mode: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8459922Z   fetch-tags: false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8460647Z   show-progress: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8461254Z   lfs: false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8462040Z   submodules: false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8462674Z   set-safe-directory: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8463370Z   allow-unsafe-pr-checkout: false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.8464262Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9507586Z Syncing repository: link-foundation/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9509857Z ##[group]Getting Git version info
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9511063Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9512924Z [command]/usr/bin/git version
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9588581Z git version 2.55.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9609116Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9619805Z Temporarily overriding HOME='/home/runner/work/_temp/33cbc62e-ae0d-43f6-bc9a-2feb90cf79c6' before making global git config changes
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9622767Z Adding repository directory to the temporary git global config as a safe directory
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9625366Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9675243Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9677855Z ##[group]Determining repository object format
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9679910Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9681903Z ##[group]Initializing the repository
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9683936Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9809511Z hint: Using 'master' as the name for the initial branch. This default branch name
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9811291Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9813205Z hint: to use in all of your new repositories, which will suppress this warning,
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9814153Z hint: call:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9814754Z hint:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9815461Z hint: 	git config --global init.defaultBranch <name>
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9816246Z hint:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9817030Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9818179Z hint: 'development'. The just-created branch can be renamed via this command:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9819162Z hint:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9819754Z hint: 	git branch -m <name>
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9820372Z hint:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9821209Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9826660Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9836782Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9894801Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9896252Z ##[group]Disabling automatic garbage collection
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9898054Z [command]/usr/bin/git config --local gc.auto 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9946268Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9948114Z ##[group]Setting up auth
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9950988Z Removing SSH command configuration
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9954856Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:28.9977088Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0344653Z Removing HTTP extra header
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0358701Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0388135Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0588464Z Removing includeIf entries pointing to credentials config files
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0593266Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0623546Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0821868Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0858471Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0889722Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0926394Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0959184Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0989329Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0990531Z ##[group]Fetching the repository
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.0996481Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +404980cf1754f783e7a1f8d119c1b476c89b1d10:refs/remotes/pull/70/merge
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8777594Z From https://github.com/link-foundation/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8780208Z  * [new branch]      issue-1-843d779c4cdb                     -> origin/issue-1-843d779c4cdb
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8783536Z  * [new branch]      issue-11-c74c0836aeba                    -> origin/issue-11-c74c0836aeba
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8786648Z  * [new branch]      issue-15-b28422959bc5                    -> origin/issue-15-b28422959bc5
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8789804Z  * [new branch]      issue-17-ace5a094a724                    -> origin/issue-17-ace5a094a724
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8793518Z  * [new branch]      issue-19-d88ab983ff7d                    -> origin/issue-19-d88ab983ff7d
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8796958Z  * [new branch]      issue-20-d21ab54e8ff1                    -> origin/issue-20-d21ab54e8ff1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8800219Z  * [new branch]      issue-22-e5ea3b44ef6b                    -> origin/issue-22-e5ea3b44ef6b
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8803009Z  * [new branch]      issue-25-76b0e5ea19d6                    -> origin/issue-25-76b0e5ea19d6
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8806111Z  * [new branch]      issue-27-eb86cc75f92a                    -> origin/issue-27-eb86cc75f92a
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8809216Z  * [new branch]      issue-29-7f70f0d87db9                    -> origin/issue-29-7f70f0d87db9
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8812131Z  * [new branch]      issue-3-397c5eeac29f                     -> origin/issue-3-397c5eeac29f
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8814897Z  * [new branch]      issue-31-bd2874f2d076                    -> origin/issue-31-bd2874f2d076
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8817871Z  * [new branch]      issue-33-2c527aa50b81                    -> origin/issue-33-2c527aa50b81
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8820840Z  * [new branch]      issue-35-03946ff48852                    -> origin/issue-35-03946ff48852
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8823617Z  * [new branch]      issue-37-0e0bcabcea22                    -> origin/issue-37-0e0bcabcea22
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8826662Z  * [new branch]      issue-39-e53c893293ed                    -> origin/issue-39-e53c893293ed
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8829228Z  * [new branch]      issue-41-297a752a4939                    -> origin/issue-41-297a752a4939
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8832059Z  * [new branch]      issue-43-a666a4fd6f03                    -> origin/issue-43-a666a4fd6f03
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8834868Z  * [new branch]      issue-45-f2100b3aab88                    -> origin/issue-45-f2100b3aab88
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8837670Z  * [new branch]      issue-47-7a09fbbdea01                    -> origin/issue-47-7a09fbbdea01
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8840429Z  * [new branch]      issue-5-9641b6fb00d3                     -> origin/issue-5-9641b6fb00d3
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8844264Z  * [new branch]      issue-65-5c21265ef83f                    -> origin/issue-65-5c21265ef83f
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8848186Z  * [new branch]      issue-69-dab96606bd2e                    -> origin/issue-69-dab96606bd2e
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8852491Z  * [new branch]      issue-7-7a98520cd689                     -> origin/issue-7-7a98520cd689
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8856633Z  * [new branch]      issue-8-8f8d9acce5f1                     -> origin/issue-8-8f8d9acce5f1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8860434Z  * [new branch]      issue-9-bef9e95e65ef                     -> origin/issue-9-bef9e95e65ef
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8863833Z  * [new branch]      main                                     -> origin/main
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8866118Z  * [new tag]         csharp-v0.2.0                            -> csharp-v0.2.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8868722Z  * [new tag]         csharp_v0.3.0                            -> csharp_v0.3.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8871593Z  * [new tag]         js-v0.3.5                                -> js-v0.3.5
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8874231Z  * [new tag]         js_v0.3.6                                -> js_v0.3.6
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8876318Z  * [new tag]         js_v0.4.0                                -> js_v0.4.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8878451Z  * [new tag]         js_v0.5.0                                -> js_v0.5.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8880787Z  * [new tag]         js_v0.5.1                                -> js_v0.5.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8883530Z  * [new tag]         js_v0.6.0                                -> js_v0.6.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8885889Z  * [new tag]         js_v0.7.0                                -> js_v0.7.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8888296Z  * [new tag]         js_v0.8.0                                -> js_v0.8.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8890770Z  * [new tag]         js_v0.9.0                                -> js_v0.9.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8893536Z  * [new tag]         rust-v0.2.0                              -> rust-v0.2.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8896183Z  * [new tag]         rust-v0.2.1                              -> rust-v0.2.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8898373Z  * [new tag]         rust_v0.3.0                              -> rust_v0.3.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8900492Z  * [new tag]         rust_v0.4.0                              -> rust_v0.4.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8902960Z  * [new tag]         rust_v0.4.1                              -> rust_v0.4.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8905013Z  * [new tag]         rust_v0.5.0                              -> rust_v0.5.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8907049Z  * [new tag]         rust_v0.6.0                              -> rust_v0.6.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8909174Z  * [new tag]         rust_v0.7.0                              -> rust_v0.7.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8911842Z  * [new tag]         rust_v0.8.0                              -> rust_v0.8.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8913966Z  * [new tag]         v0.1.1                                   -> v0.1.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8915795Z  * [new tag]         v0.3.0                                   -> v0.3.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8917631Z  * [new tag]         v0.3.1                                   -> v0.3.1
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8919631Z  * [new tag]         v0.3.2                                   -> v0.3.2
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8921727Z  * [new tag]         v0.3.3                                   -> v0.3.3
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8924134Z  * [new ref]         404980cf1754f783e7a1f8d119c1b476c89b1d10 -> pull/70/merge
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8928771Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8930531Z ##[group]Determining the checkout info
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8932745Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8933934Z [command]/usr/bin/git sparse-checkout disable
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8937175Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8941168Z ##[group]Checking out the ref
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.8943137Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/70/merge
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9207963Z Note: switching to 'refs/remotes/pull/70/merge'.
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9209197Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9210128Z You are in 'detached HEAD' state. You can look around, make experimental
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9212761Z changes and commit them, and you can discard any commits you make in this
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9215240Z state without impacting any branches by switching back to a branch.
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9217404Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9218609Z If you want to create a new branch to retain commits you create, you may
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9220942Z do so (now or later) by using -c with the switch command. Example:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9222446Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9222993Z   git switch -c <new-branch-name>
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9223867Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9224391Z Or undo this operation with:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9225183Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9225644Z   git switch -
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9226255Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9227317Z Turn off this advice by setting config variable advice.detachedHead to false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9229024Z 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9230575Z HEAD is now at 404980c Merge f14972fd15c62088d7439ca267485997f5f87109 into b48872da6601d2a79b4079b6c0c07b7365743c23
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9235502Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9263394Z [command]/usr/bin/git log -1 --format=%H
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9288746Z 404980cf1754f783e7a1f8d119c1b476c89b1d10
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9647400Z ##[group]Run actions/setup-node@v7
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9648627Z with:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9649533Z   node-version: 22
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9650628Z   check-latest: false
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9659395Z   token: ***
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9660416Z   package-manager-cache: true
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:29.9661695Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:30.1042055Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:30.7273190Z ##[group]Environment details
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4335071Z node: v22.23.3
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4335832Z npm: 10.9.9
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4336167Z yarn: 1.22.22
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4337197Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4468294Z ##[group]Run node --test scripts/check-language-parity.test.mjs
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4468919Z ^[[36;1mnode --test scripts/check-language-parity.test.mjs^[[0m
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4800736Z shell: /usr/bin/bash -e {0}
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.4801173Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.5616108Z TAP version 13
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6030352Z # Subtest: a change to every language is balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6033998Z ok 1 - a change to every language is balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6034611Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6035083Z   duration_ms: 1.74969
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6035798Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6036421Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6040699Z # Subtest: a change to only one language is not balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6042148Z ok 2 - a change to only one language is not balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6043041Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6044317Z   duration_ms: 0.164628
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6044855Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6045238Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6045974Z # Subtest: a change to three of four languages is not balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6046892Z ok 3 - a change to three of four languages is not balanced
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6047470Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6047882Z   duration_ms: 1.001462
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6048387Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6048852Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6049534Z # Subtest: shared-only changes are balanced (nothing to enforce)
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6073333Z ok 4 - shared-only changes are balanced (nothing to enforce)
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6074272Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6074977Z   duration_ms: 0.167099
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6075733Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6076406Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6077423Z # Subtest: dependency-only updates do not count as library source
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6078786Z ok 5 - dependency-only updates do not count as library source
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6079793Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6080336Z   duration_ms: 0.219071
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6080916Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6081578Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6082301Z # Subtest: tests and examples do not count as library source
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6082996Z ok 6 - tests and examples do not count as library source
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6083399Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6083679Z   duration_ms: 0.111451
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6083973Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6084232Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6084708Z # Subtest: backslash and ./ prefixed paths are normalized
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6085520Z ok 7 - backslash and ./ prefixed paths are normalized
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6086066Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6086505Z   duration_ms: 0.195793
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6086938Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6087311Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6087807Z # Subtest: every declared language has a source path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6088290Z ok 8 - every declared language has a source path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6088636Z   ---
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6088905Z   duration_ms: 0.158689
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6089193Z   type: 'test'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6089454Z   ...
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6139625Z 1..8
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6140100Z # tests 8
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6140496Z # suites 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6140867Z # pass 8
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6141220Z # fail 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6141816Z # cancelled 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6142261Z # skipped 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6142621Z # todo 0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6143048Z # duration_ms 77.162901
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6246215Z ##[group]Run node scripts/check-language-parity.mjs
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6246688Z ^[[36;1mnode scripts/check-language-parity.mjs^[[0m
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6292651Z shell: /usr/bin/bash -e {0}
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6293172Z env:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6293444Z   PARITY_BASE_REF: main
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6293736Z   PARITY_SKIP_REASON: 
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6294016Z ##[endgroup]
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6708926Z Language parity: no language source changed; nothing to enforce.
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.6855317Z Post job cleanup.
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.8099483Z Post job cleanup.
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9000073Z [command]/usr/bin/git version
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9039016Z git version 2.55.0
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9072556Z Temporarily overriding HOME='/home/runner/work/_temp/c38ff360-765c-492b-8b64-cac0ddc3f805' before making global git config changes
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9074142Z Adding repository directory to the temporary git global config as a safe directory
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9079017Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9118237Z Removing SSH command configuration
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9123790Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9157894Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9370463Z Removing HTTP extra header
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9376842Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9412752Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9621808Z Removing includeIf entries pointing to credentials config files
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9629071Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9656915Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9658730Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9659980Z includeif.gitdir:/github/workspace/.git.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9670376Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9677930Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9698113Z /home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9708467Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-447bc3df\-a0ca\-4dd7\-849e\-139f9ef070b3\.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9747449Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9772096Z /home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9780606Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-447bc3df\-a0ca\-4dd7\-849e\-139f9ef070b3\.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9815387Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9836646Z /github/runner_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9842848Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-447bc3df\-a0ca\-4dd7\-849e\-139f9ef070b3\.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9877604Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9902883Z /github/runner_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9909967Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-447bc3df\-a0ca\-4dd7\-849e\-139f9ef070b3\.config
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:32.9948064Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:33.0149753Z Removing credentials config '/home/runner/work/_temp/git-credentials-447bc3df-a0ca-4dd7-849e-139f9ef070b3.config'
+Languages Change Together	UNKNOWN STEP	2026-10-11T13:31:33.0287650Z Cleaning up orphan processes
+Implementations Pin One Parser Version	UNKNOWN STEP	﻿2026-10-11T13:31:27.8262948Z Current runner version: '2.337.0'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8281408Z ##[group]Runner Image Provisioner
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8281950Z Hosted Compute Agent
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8282363Z Version: 20261002.596
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8282789Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8283218Z Build Date: 2026-10-02T22:28:27Z
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8283686Z Worker ID: {4124a235-4f07-4c4a-b126-e7e1473bc1fe}
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8284102Z Region: westus3
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8284461Z Cloud: Azure
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8284838Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8285608Z ##[group]Operating System
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8286017Z Ubuntu
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8286334Z 24.04.5
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8286636Z LTS
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8287030Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8287369Z ##[group]Runner Image
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8287812Z Image: ubuntu-24.04
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8288481Z Version: 20261004.327.1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8289350Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8290205Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8290826Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8291484Z ##[group]GITHUB_TOKEN Permissions
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8292781Z Contents: read
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8293129Z Metadata: read
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8293459Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8294866Z Secret source: Actions
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8295418Z Cache mode: write
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8295933Z Prepare workflow directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8513112Z Prepare all required actions
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:27.8546043Z Getting action download info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:28.1266885Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:28.3381454Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4301860Z Complete job name: Implementations Pin One Parser Version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4877525Z ##[group]Run actions/checkout@v7
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4878485Z with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4879054Z   repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4884469Z   token: ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4884954Z   ssh-strict: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4885452Z   ssh-user: git
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4885987Z   persist-credentials: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4886665Z   clean: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4887402Z   sparse-checkout-cone-mode: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4888399Z   fetch-depth: 1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4889099Z   fetch-tags: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4889838Z   show-progress: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4890576Z   lfs: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4891194Z   submodules: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4891721Z   set-safe-directory: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4892316Z   allow-unsafe-pr-checkout: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.4893056Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5617829Z Syncing repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5620476Z ##[group]Getting Git version info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5621977Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5624031Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5679822Z git version 2.55.0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5695034Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5702809Z Temporarily overriding HOME='/home/runner/work/_temp/1bccd05f-bd5d-4f40-8895-967a4ef198af' before making global git config changes
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5705421Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.5708424Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.6405245Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.6407172Z ##[group]Determining repository object format
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.6408376Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.6409229Z ##[group]Initializing the repository
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.6411420Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7617928Z hint: Using 'master' as the name for the initial branch. This default branch name
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7618881Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7619426Z hint: to use in all of your new repositories, which will suppress this warning,
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7619853Z hint: call:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7620097Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7620453Z hint: 	git config --global init.defaultBranch <name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7620801Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7621174Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7621580Z hint: 'development'. The just-created branch can be renamed via this command:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7621837Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7622006Z hint: 	git branch -m <name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7622173Z hint:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.7622400Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8002927Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8005909Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8100379Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8101097Z ##[group]Disabling automatic garbage collection
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8103250Z [command]/usr/bin/git config --local gc.auto 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8200608Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8201259Z ##[group]Setting up auth
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8201618Z Removing SSH command configuration
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8205712Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8240230Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8729685Z Removing HTTP extra header
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8734754Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8765833Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8968562Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.8972242Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.9005614Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.9210981Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:29.9489885Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.0001338Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.0901241Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.1403476Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.2300419Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.2301030Z ##[group]Fetching the repository
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:30.2306168Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +404980cf1754f783e7a1f8d119c1b476c89b1d10:refs/remotes/pull/70/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1226179Z From https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1227323Z  * [new ref]         404980cf1754f783e7a1f8d119c1b476c89b1d10 -> pull/70/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1229799Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1230434Z ##[group]Determining the checkout info
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1231071Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1234382Z [command]/usr/bin/git sparse-checkout disable
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1402820Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1457535Z ##[group]Checking out the ref
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1458270Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/70/merge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1710661Z Note: switching to 'refs/remotes/pull/70/merge'.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1710965Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1711170Z You are in 'detached HEAD' state. You can look around, make experimental
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1711714Z changes and commit them, and you can discard any commits you make in this
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1712241Z state without impacting any branches by switching back to a branch.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1712731Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1712974Z If you want to create a new branch to retain commits you create, you may
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1713599Z do so (now or later) by using -c with the switch command. Example:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1713866Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714023Z   git switch -c <new-branch-name>
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714195Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714356Z Or undo this operation with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714704Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714798Z   git switch -
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1714962Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1715136Z Turn off this advice by setting config variable advice.detachedHead to false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1715388Z 
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1715669Z HEAD is now at 404980c Merge f14972fd15c62088d7439ca267485997f5f87109 into b48872da6601d2a79b4079b6c0c07b7365743c23
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1725788Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1903667Z [command]/usr/bin/git log -1 --format=%H
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.1933103Z 404980cf1754f783e7a1f8d119c1b476c89b1d10
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2276138Z ##[group]Run actions/setup-node@v7
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2276487Z with:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2276732Z   node-version: 22
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2276968Z   check-latest: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2279575Z   token: ***
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2279837Z   package-manager-cache: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.2280101Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.3195394Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.3941550Z ##[group]Environment details
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6274648Z node: v22.23.3
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6275117Z npm: 10.9.9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6275423Z yarn: 1.22.22
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6276009Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6717020Z ##[group]Run node --test scripts/check-links-notation-parity.test.mjs
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.6717377Z ^[[36;1mnode --test scripts/check-links-notation-parity.test.mjs^[[0m
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.7080373Z shell: /usr/bin/bash -e {0}
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.7080574Z ##[endgroup]
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.7884094Z TAP version 13
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8171878Z # Subtest: the requirement syntax of every ecosystem reduces to a minor
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8174509Z ok 1 - the requirement syntax of every ecosystem reduces to a minor
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8174874Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8198790Z   duration_ms: 1.243818
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8203602Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8203797Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8204110Z # Subtest: a missing dependency is not a version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8204522Z ok 2 - a missing dependency is not a version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8204795Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8204914Z   duration_ms: 0.147852
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205048Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205161Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205413Z # Subtest: four pins on the same minor agree
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205623Z ok 3 - four pins on the same minor agree
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205772Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8205880Z   duration_ms: 0.507622
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8206004Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8206116Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8206582Z # Subtest: a differing patch is still agreement
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8206798Z ok 4 - a differing patch is still agreement
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8206948Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8207056Z   duration_ms: 0.104217
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8207180Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8207288Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8207556Z # Subtest: the four pins this repository actually shipped before issue \#47 diverge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8208316Z ok 5 - the four pins this repository actually shipped before issue \#47 diverge
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8208529Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8208639Z   duration_ms: 0.123636
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8208764Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8208873Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209059Z # Subtest: one language falling behind by a minor fails
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209300Z ok 6 - one language falling behind by a minor fails
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209512Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209622Z   duration_ms: 0.063325
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209743Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8209854Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210102Z # Subtest: a dependency that cannot be read fails rather than passing quietly
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210430Z ok 7 - a dependency that cannot be read fails rather than passing quietly
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210628Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210746Z   duration_ms: 0.109514
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210870Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8210980Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211190Z # Subtest: every extractor finds the version in its real manifest
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211473Z ok 8 - every extractor finds the version in its real manifest
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211650Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211758Z   duration_ms: 0.424237
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211880Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8211996Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8212164Z # Subtest: the checked-in manifests agree today
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8212398Z not ok 9 - the checked-in manifests agree today
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8212555Z   ---
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8212664Z   duration_ms: 1.388756
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8212787Z   type: 'test'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8213138Z   location: '/home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:109:1'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8213479Z   failureType: 'testCodeFailure'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8213626Z   error: |-
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8213773Z     Expected values to be strictly equal:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8213922Z     
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214031Z     false !== true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214145Z     
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214253Z   code: 'ERR_ASSERTION'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214388Z   name: 'AssertionError'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214517Z   expected: true
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214639Z   actual: false
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8214762Z   operator: 'strictEqual'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8215120Z   stack: |-
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8215534Z     TestContext.<anonymous> (file:///home/runner/work/lino-objects-codec/lino-objects-codec/scripts/check-links-notation-parity.test.mjs:110:10)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8215937Z     Test.runInAsyncScope (node:async_hooks:214:14)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8216159Z     Test.run (node:internal/test_runner/test:1047:25)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8216428Z     Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8216693Z     Test.postRun (node:internal/test_runner/test:1173:19)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8216922Z     Test.run (node:internal/test_runner/test:1101:12)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8217300Z     async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8217641Z   ...
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8258902Z 1..9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8259157Z # tests 9
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8259336Z # suites 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8259514Z # pass 8
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8259691Z # fail 1
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8259855Z # cancelled 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8260039Z # skipped 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8260212Z # todo 0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8260703Z # duration_ms 46.129037
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8312732Z ##[error]Process completed with exit code 1.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.8515749Z Post job cleanup.
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9099221Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9132000Z git version 2.55.0
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9155976Z Temporarily overriding HOME='/home/runner/work/_temp/2cb5a523-0f43-47a3-8808-2d008a7ec2ff' before making global git config changes
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9156702Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9159364Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9188662Z Removing SSH command configuration
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9190655Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9219396Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9412987Z Removing HTTP extra header
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9418506Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9447674Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9645234Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9653188Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9679563Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9680355Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9680892Z includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9681285Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9686891Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9708870Z /home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9716316Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-425c4366\-f088\-4401\-a9ca\-7201df058780\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9754645Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9776155Z /home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9782490Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-425c4366\-f088\-4401\-a9ca\-7201df058780\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9813610Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9834310Z /github/runner_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9839200Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-425c4366\-f088\-4401\-a9ca\-7201df058780\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9867768Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9888421Z /github/runner_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9893319Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-425c4366\-f088\-4401\-a9ca\-7201df058780\.config
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:31.9923235Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:32.0094474Z Removing credentials config '/home/runner/work/_temp/git-credentials-425c4366-f088-4401-a9ca-7201df058780.config'
+Implementations Pin One Parser Version	UNKNOWN STEP	2026-10-11T13:31:32.0210235Z Cleaning up orphan processes

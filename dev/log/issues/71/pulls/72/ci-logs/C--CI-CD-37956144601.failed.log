@@ -1,0 +1,273 @@
+Changeset Check	UNKNOWN STEP	﻿2026-10-09T16:02:12.6842067Z Current runner version: '2.337.0'
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6867072Z ##[group]Runner Image Provisioner
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6867982Z Hosted Compute Agent
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6868553Z Version: 20261002.596
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6869493Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6870410Z Build Date: 2026-10-02T22:28:27Z
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6871094Z Worker ID: {bd3f56bc-ec33-4897-b9f6-6cc5c7da9434}
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6871884Z Region: centralus
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6872452Z Cloud: Azure
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6873138Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6875168Z ##[group]Operating System
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6875997Z Ubuntu
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6876858Z 24.04.5
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6877499Z LTS
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6878239Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6878912Z ##[group]Runner Image
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6879838Z Image: ubuntu-24.04
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6880629Z Version: 20261004.327.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6882405Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6884666Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6885833Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6887306Z ##[group]GITHUB_TOKEN Permissions
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6889818Z Contents: read
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6890463Z Metadata: read
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6891071Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6893433Z Secret source: Dependabot
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6894393Z Cache mode: write
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.6895068Z Prepare workflow directory
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.7312375Z Prepare all required actions
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:12.7366353Z Getting action download info
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.0100094Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.1106639Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.8711322Z Complete job name: Changeset Check
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9425573Z ##[group]Run actions/checkout@v7
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9426604Z with:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9427196Z   fetch-depth: 0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9427958Z   repository: link-foundation/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9433220Z   token: ***
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9433904Z   ssh-strict: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9434501Z   ssh-user: git
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9435103Z   persist-credentials: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9435796Z   clean: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9436409Z   sparse-checkout-cone-mode: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9437194Z   fetch-tags: false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9438023Z   show-progress: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9438618Z   lfs: false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9439409Z   submodules: false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9440087Z   set-safe-directory: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9440796Z   allow-unsafe-pr-checkout: false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9441719Z env:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9442288Z   DOTNET_NOLOGO: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9442952Z   DOTNET_CLI_TELEMETRY_OPTOUT: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9443831Z   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:13.9444598Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0471792Z Syncing repository: link-foundation/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0474924Z ##[group]Getting Git version info
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0476307Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0478455Z [command]/usr/bin/git version
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0512128Z git version 2.55.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0530641Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0539065Z Temporarily overriding HOME='/home/runner/work/_temp/449a4b27-5672-4c0a-87a1-9d41efcc835a' before making global git config changes
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0541904Z Adding repository directory to the temporary git global config as a safe directory
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0544186Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0602310Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0605404Z ##[group]Determining repository object format
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0607549Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0608998Z ##[group]Initializing the repository
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0610855Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0717854Z hint: Using 'master' as the name for the initial branch. This default branch name
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0719974Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0721695Z hint: to use in all of your new repositories, which will suppress this warning,
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0723190Z hint: call:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0723999Z hint:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0725040Z hint: 	git config --global init.defaultBranch <name>
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0726181Z hint:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0727271Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0729009Z hint: 'development'. The just-created branch can be renamed via this command:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0730637Z hint:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0731578Z hint: 	git branch -m <name>
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0732535Z hint:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0733708Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0736406Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0740009Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0784637Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0786314Z ##[group]Disabling automatic garbage collection
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0788582Z [command]/usr/bin/git config --local gc.auto 0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0820139Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0822487Z ##[group]Setting up auth
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0823777Z Removing SSH command configuration
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0825811Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.0855300Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1215971Z Removing HTTP extra header
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1223217Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1254902Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1453584Z Removing includeIf entries pointing to credentials config files
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1458959Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1489668Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1673948Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1711232Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1741132Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1774932Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1805046Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1834193Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1835329Z ##[group]Fetching the repository
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.1840408Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +5e9a9598da405242e146cb64adb282ce5d0bd8cb:refs/remotes/pull/67/merge
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9932815Z From https://github.com/link-foundation/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9935473Z  * [new branch]      dependabot/all_dependencies-f1bd69bc6e   -> origin/dependabot/all_dependencies-f1bd69bc6e
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9938295Z  * [new branch]      issue-1-843d779c4cdb                     -> origin/issue-1-843d779c4cdb
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9941049Z  * [new branch]      issue-11-c74c0836aeba                    -> origin/issue-11-c74c0836aeba
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9943886Z  * [new branch]      issue-15-b28422959bc5                    -> origin/issue-15-b28422959bc5
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9946413Z  * [new branch]      issue-17-ace5a094a724                    -> origin/issue-17-ace5a094a724
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9949542Z  * [new branch]      issue-19-d88ab983ff7d                    -> origin/issue-19-d88ab983ff7d
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9952258Z  * [new branch]      issue-20-d21ab54e8ff1                    -> origin/issue-20-d21ab54e8ff1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9954759Z  * [new branch]      issue-22-e5ea3b44ef6b                    -> origin/issue-22-e5ea3b44ef6b
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9957231Z  * [new branch]      issue-25-76b0e5ea19d6                    -> origin/issue-25-76b0e5ea19d6
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9960201Z  * [new branch]      issue-27-eb86cc75f92a                    -> origin/issue-27-eb86cc75f92a
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9963026Z  * [new branch]      issue-29-7f70f0d87db9                    -> origin/issue-29-7f70f0d87db9
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9965787Z  * [new branch]      issue-3-397c5eeac29f                     -> origin/issue-3-397c5eeac29f
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9968477Z  * [new branch]      issue-31-bd2874f2d076                    -> origin/issue-31-bd2874f2d076
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9971733Z  * [new branch]      issue-33-2c527aa50b81                    -> origin/issue-33-2c527aa50b81
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9974384Z  * [new branch]      issue-35-03946ff48852                    -> origin/issue-35-03946ff48852
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9976980Z  * [new branch]      issue-37-0e0bcabcea22                    -> origin/issue-37-0e0bcabcea22
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9979768Z  * [new branch]      issue-39-e53c893293ed                    -> origin/issue-39-e53c893293ed
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9982434Z  * [new branch]      issue-41-297a752a4939                    -> origin/issue-41-297a752a4939
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9985265Z  * [new branch]      issue-43-a666a4fd6f03                    -> origin/issue-43-a666a4fd6f03
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9988117Z  * [new branch]      issue-45-f2100b3aab88                    -> origin/issue-45-f2100b3aab88
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9991192Z  * [new branch]      issue-47-7a09fbbdea01                    -> origin/issue-47-7a09fbbdea01
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9994252Z  * [new branch]      issue-5-9641b6fb00d3                     -> origin/issue-5-9641b6fb00d3
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:14.9997572Z  * [new branch]      issue-65-5c21265ef83f                    -> origin/issue-65-5c21265ef83f
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0001637Z  * [new branch]      issue-7-7a98520cd689                     -> origin/issue-7-7a98520cd689
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0005501Z  * [new branch]      issue-8-8f8d9acce5f1                     -> origin/issue-8-8f8d9acce5f1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0008683Z  * [new branch]      issue-9-bef9e95e65ef                     -> origin/issue-9-bef9e95e65ef
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0011718Z  * [new branch]      main                                     -> origin/main
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0015109Z  * [new tag]         csharp-v0.2.0                            -> csharp-v0.2.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0017689Z  * [new tag]         csharp_v0.3.0                            -> csharp_v0.3.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0020843Z  * [new tag]         js-v0.3.5                                -> js-v0.3.5
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0023189Z  * [new tag]         js_v0.3.6                                -> js_v0.3.6
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0025647Z  * [new tag]         js_v0.4.0                                -> js_v0.4.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0028629Z  * [new tag]         js_v0.5.0                                -> js_v0.5.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0031940Z  * [new tag]         js_v0.5.1                                -> js_v0.5.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0035229Z  * [new tag]         js_v0.6.0                                -> js_v0.6.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0038370Z  * [new tag]         js_v0.7.0                                -> js_v0.7.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0041709Z  * [new tag]         js_v0.8.0                                -> js_v0.8.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0044732Z  * [new tag]         js_v0.9.0                                -> js_v0.9.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0047602Z  * [new tag]         rust-v0.2.0                              -> rust-v0.2.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0050137Z  * [new tag]         rust-v0.2.1                              -> rust-v0.2.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0052915Z  * [new tag]         rust_v0.3.0                              -> rust_v0.3.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0055443Z  * [new tag]         rust_v0.4.0                              -> rust_v0.4.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0057574Z  * [new tag]         rust_v0.4.1                              -> rust_v0.4.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0059836Z  * [new tag]         rust_v0.5.0                              -> rust_v0.5.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0062061Z  * [new tag]         rust_v0.6.0                              -> rust_v0.6.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0064479Z  * [new tag]         rust_v0.7.0                              -> rust_v0.7.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0066830Z  * [new tag]         rust_v0.8.0                              -> rust_v0.8.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0069545Z  * [new tag]         v0.1.1                                   -> v0.1.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0072182Z  * [new tag]         v0.3.0                                   -> v0.3.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0074803Z  * [new tag]         v0.3.1                                   -> v0.3.1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0077721Z  * [new tag]         v0.3.2                                   -> v0.3.2
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0080776Z  * [new tag]         v0.3.3                                   -> v0.3.3
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0083681Z  * [new ref]         5e9a9598da405242e146cb64adb282ce5d0bd8cb -> pull/67/merge
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0089653Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0092328Z ##[group]Determining the checkout info
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0095243Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0096941Z [command]/usr/bin/git sparse-checkout disable
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0101917Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0107799Z ##[group]Checking out the ref
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0110634Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/67/merge
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0343859Z Note: switching to 'refs/remotes/pull/67/merge'.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0345218Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0346337Z You are in 'detached HEAD' state. You can look around, make experimental
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0349494Z changes and commit them, and you can discard any commits you make in this
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0352818Z state without impacting any branches by switching back to a branch.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0354862Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0356330Z If you want to create a new branch to retain commits you create, you may
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0359817Z do so (now or later) by using -c with the switch command. Example:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0361938Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0362813Z   git switch -c <new-branch-name>
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0364023Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0364808Z Or undo this operation with:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0366098Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0366775Z   git switch -
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0367659Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0369495Z Turn off this advice by setting config variable advice.detachedHead to false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0371055Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0372739Z HEAD is now at 5e9a959 Merge 3bc957c7d53b73f4f3d70576aaad8906968757d9 into 3d52c62c94bfbfe00b42c7a795327f6af0189eba
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0378687Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0400735Z [command]/usr/bin/git log -1 --format=%H
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0423662Z 5e9a9598da405242e146cb64adb282ce5d0bd8cb
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0695783Z ##[group]Run bash scripts/simulate-fresh-merge.sh
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0697532Z ^[[36;1mbash scripts/simulate-fresh-merge.sh^[[0m
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0919674Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0921267Z env:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0922150Z   DOTNET_NOLOGO: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0923195Z   DOTNET_CLI_TELEMETRY_OPTOUT: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0924456Z   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0925683Z   BASE_REF: main
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.0926617Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.1045858Z === Synchronizing with the latest main ===
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4415685Z From https://github.com/link-foundation/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4418636Z  * branch            main       -> FETCH_HEAD
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4460071Z Current checkout (merge preview): 5e9a9598da405242e146cb64adb282ce5d0bd8cb
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4476298Z Latest base branch (main):   3d52c62c94bfbfe00b42c7a795327f6af0189eba
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4497188Z Merge preview is up to date with main; no simulation needed.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4706507Z ##[group]Run actions/setup-node@v7
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4707623Z with:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4708448Z   node-version: 22
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4709462Z   check-latest: false
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4719826Z   token: ***
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4720752Z   package-manager-cache: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4721874Z env:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4722729Z   DOTNET_NOLOGO: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4723710Z   DOTNET_CLI_TELEMETRY_OPTOUT: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4724867Z   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.4726006Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:15.5972926Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:16.7925339Z ##[group]Environment details
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1278329Z node: v22.23.3
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1278788Z npm: 10.9.9
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1279010Z yarn: 1.22.22
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1282153Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1384684Z ##[group]Run node scripts/check-changeset.mjs
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1385080Z ^[[36;1mnode scripts/check-changeset.mjs^[[0m
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1478685Z shell: /usr/bin/bash -e {0}
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1479009Z env:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1479449Z   DOTNET_NOLOGO: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1479721Z   DOTNET_CLI_TELEMETRY_OPTOUT: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1480016Z   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1480322Z   GITHUB_BASE_REF: main
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1480611Z   HEAD_REF: dependabot/all_dependencies-f1bd69bc6e
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1480955Z ##[endgroup]
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1821386Z Comparing against origin/main...HEAD
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1907467Z Source files changed: 1
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1927171Z ##[error]No changeset found in this PR. Add a release note in csharp/.changeset/
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1934713Z   src/Lino.Objects.Codec/Lino.Objects.Codec.csproj
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1935133Z Changesets added: 0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1935376Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1935609Z To create a changeset:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1935966Z   Add csharp/.changeset/YYYYMMDD_HHMMSS_description.md
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1936204Z 
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1936465Z See csharp/.changeset/README.md for the expected format.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.1944987Z ##[error]Process completed with exit code 1.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.2079524Z Post job cleanup.
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.2934904Z [command]/usr/bin/git version
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.2982174Z git version 2.55.0
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3013830Z Temporarily overriding HOME='/home/runner/work/_temp/98b1958f-bf06-4cc1-95bd-9e9bcf5ee6ea' before making global git config changes
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3015254Z Adding repository directory to the temporary git global config as a safe directory
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3018998Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3050079Z Removing SSH command configuration
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3056744Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3092874Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3321256Z Removing HTTP extra header
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3347453Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3356592Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3557206Z Removing includeIf entries pointing to credentials config files
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3563738Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3591014Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3592706Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3593799Z includeif.gitdir:/github/workspace/.git.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3594642Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3600737Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3622525Z /home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3643109Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-112b5af6\-e1c6\-4e91\-a8bf\-4bf43f88a39a\.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3697524Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3716987Z /home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3737756Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-112b5af6\-e1c6\-4e91\-a8bf\-4bf43f88a39a\.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3779899Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3796223Z /github/runner_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3807602Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-112b5af6\-e1c6\-4e91\-a8bf\-4bf43f88a39a\.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3856183Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3883252Z /github/runner_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3892252Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-112b5af6\-e1c6\-4e91\-a8bf\-4bf43f88a39a\.config
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.3938098Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.4171191Z Removing credentials config '/home/runner/work/_temp/git-credentials-112b5af6-e1c6-4e91-a8bf-4bf43f88a39a.config'
+Changeset Check	UNKNOWN STEP	2026-10-09T16:02:19.4314421Z Cleaning up orphan processes

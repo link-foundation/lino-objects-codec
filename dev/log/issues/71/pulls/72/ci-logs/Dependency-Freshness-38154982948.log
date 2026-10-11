@@ -1,0 +1,616 @@
+Direct dependencies are current	Set up job	﻿2026-10-11T16:19:43.7638626Z Current runner version: '2.337.0'
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7662099Z ##[group]Runner Image Provisioner
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7663036Z Hosted Compute Agent
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7663618Z Version: 20261002.596
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7664152Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7664846Z Build Date: 2026-10-02T22:28:27Z
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7665457Z Worker ID: {2b1cc5a2-83e3-4651-a56a-20fac485d15c}
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7666028Z Region: westus2
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7666550Z Cloud: Azure
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7666998Z ##[endgroup]
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7668316Z ##[group]Operating System
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7668891Z Ubuntu
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7669308Z 24.04.5
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7669777Z LTS
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7670205Z ##[endgroup]
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7670736Z ##[group]Runner Image
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7671288Z Image: ubuntu-24.04
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7671754Z Version: 20261004.327.1
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7672925Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7674512Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7675395Z ##[endgroup]
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7676293Z ##[group]GITHUB_TOKEN Permissions
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7678066Z Contents: read
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7678554Z Metadata: read
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7679146Z ##[endgroup]
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7681273Z Secret source: Actions
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7682288Z Cache mode: write
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7682884Z Prepare workflow directory
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7916917Z Prepare all required actions
+Direct dependencies are current	Set up job	2026-10-11T16:19:43.7946594Z Getting action download info
+Direct dependencies are current	Set up job	2026-10-11T16:19:44.1336075Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Direct dependencies are current	Set up job	2026-10-11T16:19:44.2887083Z Download action repository 'actions/setup-python@v7' (SHA:5fda3b95a4ea91299a34e894583c3862153e4b97)
+Direct dependencies are current	Set up job	2026-10-11T16:19:44.4609427Z Complete job name: Direct dependencies are current
+Direct dependencies are current	Run actions/checkout@v7	﻿2026-10-11T16:19:44.5032889Z ##[group]Run actions/checkout@v7
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5033351Z with:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5033614Z   repository: link-foundation/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5035637Z   token: ***
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5035864Z   ssh-strict: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5036095Z   ssh-user: git
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5036332Z   persist-credentials: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5036593Z   clean: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5036828Z   sparse-checkout-cone-mode: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5037098Z   fetch-depth: 1
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5037329Z   fetch-tags: false
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5037566Z   show-progress: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5037802Z   lfs: false
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5038020Z   submodules: false
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5038256Z   set-safe-directory: true
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5038523Z   allow-unsafe-pr-checkout: false
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5038943Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5678632Z Syncing repository: link-foundation/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5680174Z ##[group]Getting Git version info
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5680711Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5681381Z [command]/usr/bin/git version
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5749503Z git version 2.55.0
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5762520Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5770912Z Temporarily overriding HOME='/home/runner/work/_temp/6154b2e6-6607-489f-a63b-f8ce1fea68ef' before making global git config changes
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5771823Z Adding repository directory to the temporary git global config as a safe directory
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5774228Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5812986Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5815280Z ##[group]Determining repository object format
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5816461Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5817026Z ##[group]Initializing the repository
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5819821Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5919941Z hint: Using 'master' as the name for the initial branch. This default branch name
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5920808Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5921573Z hint: to use in all of your new repositories, which will suppress this warning,
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5921962Z hint: call:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5922410Z hint:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5922702Z hint: 	git config --global init.defaultBranch <name>
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5923187Z hint:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5923648Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5924416Z hint: 'development'. The just-created branch can be renamed via this command:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5925012Z hint:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5925344Z hint: 	git branch -m <name>
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5925714Z hint:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5926200Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5927371Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5930737Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5976565Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5977261Z ##[group]Disabling automatic garbage collection
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.5979110Z [command]/usr/bin/git config --local gc.auto 0
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6035167Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6035782Z ##[group]Setting up auth
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6036205Z Removing SSH command configuration
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6040054Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6069768Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6344837Z Removing HTTP extra header
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6348025Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6374382Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6533773Z Removing includeIf entries pointing to credentials config files
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6537218Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6562988Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6725540Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6753727Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6778797Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6805913Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6831275Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6854483Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6854890Z ##[group]Fetching the repository
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:44.6858572Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4:refs/remotes/pull/72/merge
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1314573Z From https://github.com/link-foundation/lino-objects-codec
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1315227Z  * [new ref]         9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4 -> pull/72/merge
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1318875Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1319470Z ##[group]Determining the checkout info
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1320075Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1323227Z [command]/usr/bin/git sparse-checkout disable
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1368276Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1394573Z ##[group]Checking out the ref
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1397088Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/72/merge
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1644432Z Note: switching to 'refs/remotes/pull/72/merge'.
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1644973Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1645436Z You are in 'detached HEAD' state. You can look around, make experimental
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1646220Z changes and commit them, and you can discard any commits you make in this
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1647040Z state without impacting any branches by switching back to a branch.
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1647482Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1647782Z If you want to create a new branch to retain commits you create, you may
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1648511Z do so (now or later) by using -c with the switch command. Example:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1648905Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1649083Z   git switch -c <new-branch-name>
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1649366Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1649538Z Or undo this operation with:
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1649806Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1649963Z   git switch -
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1650174Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1650511Z Turn off this advice by setting config variable advice.detachedHead to false
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1650995Z 
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1651523Z HEAD is now at 9cf871a Merge 3d0abdb2f5898312689a1ed9756076f4b3171e9c into 85a1c2d809cd1cc7315f16d4c7f8122e8187e6d3
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1654490Z ##[endgroup]
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1688999Z [command]/usr/bin/git log -1 --format=%H
+Direct dependencies are current	Run actions/checkout@v7	2026-10-11T16:19:45.1711511Z 9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4
+Direct dependencies are current	Run actions/setup-python@v7	﻿2026-10-11T16:19:45.1959608Z ##[group]Run actions/setup-python@v7
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1960089Z with:
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1960421Z   python-version: 3.13
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1960820Z   check-latest: false
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1964377Z   token: ***
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1964755Z   update-environment: true
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1965170Z   allow-prereleases: false
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1965572Z   freethreaded: false
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.1965939Z ##[endgroup]
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.2685889Z ##[group]Installed versions
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.2743489Z Successfully set up CPython (3.13.16)
+Direct dependencies are current	Run actions/setup-python@v7	2026-10-11T16:19:45.2744157Z ##[endgroup]
+Direct dependencies are current	Test freshness gate, including blocker policy	﻿2026-10-11T16:19:45.2887605Z ##[group]Run python -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.2888652Z ^[[36;1mpython -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v^[[0m
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3127937Z shell: /usr/bin/bash -e {0}
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3128324Z env:
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3128616Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3129076Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3129506Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3129891Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3130284Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3130673Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.3131014Z ##[endgroup]
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6096223Z test_action_bundle_and_prerelease_tags_are_not_action_versions (test_dependency_freshness.DependencyFreshnessTests.test_action_bundle_and_prerelease_tags_are_not_action_versions) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6100340Z test_blocker_must_be_on_the_manifest_line (test_dependency_freshness.DependencyFreshnessTests.test_blocker_must_be_on_the_manifest_line) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6150741Z test_blockers_do_not_spread_to_other_declarations_of_the_same_package (test_dependency_freshness.DependencyFreshnessTests.test_blockers_do_not_spread_to_other_declarations_of_the_same_package) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6253115Z test_current_and_unbounded_dependencies_pass (test_dependency_freshness.DependencyFreshnessTests.test_current_and_unbounded_dependencies_pass) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6256748Z test_every_ecosystem_build_and_dev_dependencies_are_read (test_dependency_freshness.DependencyFreshnessTests.test_every_ecosystem_build_and_dev_dependencies_are_read) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6259901Z test_moving_major_action_tag_tracks_patches (test_dependency_freshness.DependencyFreshnessTests.test_moving_major_action_tag_tracks_patches) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6262987Z test_only_an_open_issue_is_an_exception (test_dependency_freshness.DependencyFreshnessTests.test_only_an_open_issue_is_an_exception) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6266179Z test_outside_semver_range_is_stale (test_dependency_freshness.DependencyFreshnessTests.test_outside_semver_range_is_stale) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6268917Z test_two_component_version_has_an_implicit_zero_patch (test_dependency_freshness.DependencyFreshnessTests.test_two_component_version_has_an_implicit_zero_patch) ... ok
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6270600Z 
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6270962Z ----------------------------------------------------------------------
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6272013Z BLOCKED blocked: https://github.com/owner/repo/issues/123
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6272904Z Ran 9 tests in 0.016s
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6273225Z 
+Direct dependencies are current	Test freshness gate, including blocker policy	2026-10-11T16:19:45.6273408Z OK
+Direct dependencies are current	Check latest releases across all four ecosystems	﻿2026-10-11T16:19:45.6449731Z ##[group]Run python scripts/check_dependency_freshness.py
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6450720Z ^[[36;1mpython scripts/check_dependency_freshness.py^[[0m
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6501769Z shell: /usr/bin/bash -e {0}
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6502425Z env:
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6503047Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6504068Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib/pkgconfig
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6505100Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6506054Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6507005Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.16/x64
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6507968Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.16/x64/lib
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6514366Z   GH_TOKEN: ***
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:45.6514885Z ##[endgroup]
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.6877269Z ERROR rust/Cargo.toml: serde_json 1.0.152 is behind latest 1.0.154
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.6877739Z ERROR rust/Cargo.toml: serde_json 1.0.152 is behind latest 1.0.154
+Direct dependencies are current	Check latest releases across all four ecosystems	2026-10-11T16:19:51.7219211Z ##[error]Process completed with exit code 1.
+Direct dependencies are current	Post Run actions/checkout@v7	﻿2026-10-11T16:19:51.7315998Z Post job cleanup.
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7898714Z [command]/usr/bin/git version
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7929208Z git version 2.55.0
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7951218Z Temporarily overriding HOME='/home/runner/work/_temp/6897dca9-d741-43a0-893e-3efb67176b16' before making global git config changes
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7952074Z Adding repository directory to the temporary git global config as a safe directory
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7954906Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7979983Z Removing SSH command configuration
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.7984554Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8012331Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8198409Z Removing HTTP extra header
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8203080Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8236246Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8426698Z Removing includeIf entries pointing to credentials config files
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8431878Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8457324Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8457872Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8458311Z includeif.gitdir:/github/workspace/.git.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8458651Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8464350Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8484879Z /home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8491926Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-d643abe5\-0737\-4d57\-b45d\-ba7622da8c69\.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8524207Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8545101Z /home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8550693Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-d643abe5\-0737\-4d57\-b45d\-ba7622da8c69\.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8578048Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8598377Z /github/runner_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8602754Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-d643abe5\-0737\-4d57\-b45d\-ba7622da8c69\.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8630240Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8650176Z /github/runner_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8655496Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-d643abe5\-0737\-4d57\-b45d\-ba7622da8c69\.config
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8683859Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Direct dependencies are current	Post Run actions/checkout@v7	2026-10-11T16:19:51.8852430Z Removing credentials config '/home/runner/work/_temp/git-credentials-d643abe5-0737-4d57-b45d-ba7622da8c69.config'
+Direct dependencies are current	Complete job	﻿2026-10-11T16:19:51.8972723Z Cleaning up orphan processes
+Lockfiles have no pending compatible updates	Set up job	﻿2026-10-11T16:19:47.8805292Z Current runner version: '2.337.0'
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8831687Z ##[group]Runner Image Provisioner
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8832604Z Hosted Compute Agent
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8833288Z Version: 20261002.596
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8833919Z Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8834631Z Build Date: 2026-10-02T22:28:27Z
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8835818Z Worker ID: {1d0b0e6a-f88a-45d4-a601-9643815480fb}
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8836618Z Region: westus2
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8837219Z Cloud: Azure
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8837761Z ##[endgroup]
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8839354Z ##[group]Operating System
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8840136Z Ubuntu
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8840698Z 24.04.5
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8841243Z LTS
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8841776Z ##[endgroup]
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8842321Z ##[group]Runner Image
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8842969Z Image: ubuntu-24.04
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8843605Z Version: 20261004.327.1
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8844691Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8846869Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8847942Z ##[endgroup]
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8849136Z ##[group]GITHUB_TOKEN Permissions
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8851131Z Contents: read
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8851806Z Metadata: read
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8852508Z ##[endgroup]
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8854687Z Secret source: Actions
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8856027Z Cache mode: write
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.8856892Z Prepare workflow directory
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.9259153Z Prepare all required actions
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:47.9308524Z Getting action download info
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:48.2909864Z Download action repository 'actions/checkout@v7' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:48.3962466Z Download action repository 'actions/setup-node@v7' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:48.6814315Z Download action repository 'dtolnay/rust-toolchain@stable' (SHA:686976e191b89faba57d3206551f0f330d8cb249)
+Lockfiles have no pending compatible updates	Set up job	2026-10-11T16:19:48.9894717Z Complete job name: Lockfiles have no pending compatible updates
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	﻿2026-10-11T16:19:49.0734686Z ##[group]Run actions/checkout@v7
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0736203Z with:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0736893Z   repository: link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0741748Z   token: ***
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0742354Z   ssh-strict: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0742984Z   ssh-user: git
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0743669Z   persist-credentials: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0744332Z   clean: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0745152Z   sparse-checkout-cone-mode: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0745887Z   fetch-depth: 1
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0746556Z   fetch-tags: false
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0747206Z   show-progress: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0747804Z   lfs: false
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0748495Z   submodules: false
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0749126Z   set-safe-directory: true
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0749775Z   allow-unsafe-pr-checkout: false
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.0750902Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1807909Z Syncing repository: link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1810812Z ##[group]Getting Git version info
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1812026Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1813755Z [command]/usr/bin/git version
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1919699Z git version 2.55.0
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1946159Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1957741Z Temporarily overriding HOME='/home/runner/work/_temp/e5165ddb-10ab-4bb4-a0d5-d60384f305bd' before making global git config changes
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1959783Z Adding repository directory to the temporary git global config as a safe directory
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.1965726Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2027169Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2029767Z ##[group]Determining repository object format
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2032122Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2034436Z ##[group]Initializing the repository
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2036186Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2160950Z hint: Using 'master' as the name for the initial branch. This default branch name
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2163360Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2165160Z hint: to use in all of your new repositories, which will suppress this warning,
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2166393Z hint: call:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2167269Z hint:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2168543Z hint: 	git config --global init.defaultBranch <name>
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2169956Z hint:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2171285Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2173410Z hint: 'development'. The just-created branch can be renamed via this command:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2175240Z hint:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2176318Z hint: 	git branch -m <name>
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2177536Z hint:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2179083Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2181173Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2183907Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2249863Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2251373Z ##[group]Disabling automatic garbage collection
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2254694Z [command]/usr/bin/git config --local gc.auto 0
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2296405Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2304752Z ##[group]Setting up auth
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2306161Z Removing SSH command configuration
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2313855Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2344631Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2747777Z Removing HTTP extra header
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2753716Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.2793554Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3022815Z Removing includeIf entries pointing to credentials config files
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3028498Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3068009Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3303354Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3347465Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3383789Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3423287Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3463565Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3498389Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3500312Z ##[group]Fetching the repository
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.3507860Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4:refs/remotes/pull/72/merge
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8032876Z From https://github.com/link-foundation/lino-objects-codec
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8035467Z  * [new ref]         9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4 -> pull/72/merge
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8039850Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8041531Z ##[group]Determining the checkout info
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8043270Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8046739Z [command]/usr/bin/git sparse-checkout disable
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8111311Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8216909Z ##[group]Checking out the ref
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8218635Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/72/merge
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8504713Z Note: switching to 'refs/remotes/pull/72/merge'.
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8506437Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8507659Z You are in 'detached HEAD' state. You can look around, make experimental
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8510562Z changes and commit them, and you can discard any commits you make in this
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8513601Z state without impacting any branches by switching back to a branch.
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8516271Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8517649Z If you want to create a new branch to retain commits you create, you may
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8520507Z do so (now or later) by using -c with the switch command. Example:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8522285Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8523173Z   git switch -c <new-branch-name>
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8524507Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8525615Z Or undo this operation with:
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8526892Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8527573Z   git switch -
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8528554Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8530437Z Turn off this advice by setting config variable advice.detachedHead to false
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8532638Z 
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8534990Z HEAD is now at 9cf871a Merge 3d0abdb2f5898312689a1ed9756076f4b3171e9c into 85a1c2d809cd1cc7315f16d4c7f8122e8187e6d3
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8542736Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8570005Z [command]/usr/bin/git log -1 --format=%H
+Lockfiles have no pending compatible updates	Run actions/checkout@v7	2026-10-11T16:19:49.8601749Z 9cf871afc4da392ae9bc08c6e5d11b4836b4a7d4
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	﻿2026-10-11T16:19:49.9005884Z ##[group]Run actions/setup-node@v7
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9007086Z with:
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9007945Z   node-version: 22
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9008880Z   check-latest: false
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9018274Z   token: ***
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9019239Z   package-manager-cache: true
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:49.9020329Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.0455775Z Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.1480128Z ##[group]Environment details
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.5256025Z node: v22.23.3
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.5257805Z npm: 10.9.9
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.5259326Z yarn: 1.22.22
+Lockfiles have no pending compatible updates	Run actions/setup-node@v7	2026-10-11T16:19:50.5262215Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	﻿2026-10-11T16:19:50.5847051Z ##[group]Run dtolnay/rust-toolchain@stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.5848273Z with:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.5849077Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.5849945Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.5942390Z ##[start-action display=Parse toolchain version;id=__dtolnay_rust-toolchain.parse]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6038351Z ##[group]Run if [[ -z $toolchain ]]; then
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6039673Z ^[[36;1mif [[ -z $toolchain ]]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6041598Z ^[[36;1m  # GitHub does not enforce `required: true` inputs itself. https://github.com/actions/runner/issues/1070^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6043658Z ^[[36;1m  echo "'toolchain' is a required input" >&2^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6044859Z ^[[36;1m  exit 1^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6046349Z ^[[36;1melif [[ $toolchain =~ ^stable' '[0-9]+' '(year|month|week|day)s?' 'ago$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6047943Z ^[[36;1m  if [[ Linux == macOS ]]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6049900Z ^[[36;1m    echo "toolchain=1.$((($(date -v-$(sed 's/stable \([0-9]*\) \(.\).*/\1\2/' <<< $toolchain) +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6051935Z ^[[36;1m  else^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6053490Z ^[[36;1m    echo "toolchain=1.$((($(date --date "${toolchain#stable }" +%s)/60/60/24-16569)/7/6))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6055827Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6057043Z ^[[36;1melif [[ $toolchain =~ ^stable' 'minus' '[0-9]+' 'releases?$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6059037Z ^[[36;1m  echo "toolchain=1.$((($(date +%s)/60/60/24-16569)/7/6-${toolchain//[^0-9]/}))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6060813Z ^[[36;1melif [[ $toolchain =~ ^1\.[0-9]+$ ]]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6062796Z ^[[36;1m  echo "toolchain=1.$((i=${toolchain#1.}, c=($(date +%s)/60/60/24-16569)/7/6, i+9*i*(10*i<=c)+90*i*(100*i<=c)))" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6064698Z ^[[36;1melse^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6065698Z ^[[36;1m  delimiter=EOF^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6066932Z ^[[36;1m  while [[ $toolchain == *$delimiter* ]]; do delimiter+=_; done^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6068872Z ^[[36;1m  printf 'toolchain<<%s\n%s\n%s\n' "$delimiter" "$toolchain" "$delimiter" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6070508Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6384482Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6386292Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6387200Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6388179Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6565538Z ##[end-action id=__dtolnay_rust-toolchain.parse;outcome=success;conclusion=success;duration_ms=62]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6575238Z ##[start-action display=Set $CARGO_HOME;id=__dtolnay_rust-toolchain.__run]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6630353Z ##[group]Run echo CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6632142Z ^[[36;1mecho CARGO_HOME=${CARGO_HOME:-"$HOME/.cargo"} >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6704772Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6706454Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6839790Z ##[end-action id=__dtolnay_rust-toolchain.__run;outcome=success;conclusion=success;duration_ms=26]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6846845Z ##[start-action display=Install rustup if needed;id=__dtolnay_rust-toolchain.__run_2]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6910866Z ##[group]Run if ! command -v rustup &>/dev/null; then
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6912273Z ^[[36;1mif ! command -v rustup &>/dev/null; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6914890Z ^[[36;1m  curl --proto '=https' --tlsv1.2 --retry 10 --retry-connrefused --location --silent --show-error --fail https://sh.rustup.rs | sh -s -- --default-toolchain none -y^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6917828Z ^[[36;1m  echo "$CARGO_HOME/bin" >> $GITHUB_PATH^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6918953Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6995612Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6996942Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6997770Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.6998774Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7130086Z ##[end-action id=__dtolnay_rust-toolchain.__run_2;outcome=success;conclusion=success;duration_ms=28]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7137547Z ##[start-action display=Install rustup if needed on windows;id=__dtolnay_rust-toolchain.__run_3]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7152691Z ##[end-action id=__dtolnay_rust-toolchain.__run_3;outcome=skipped;conclusion=skipped;duration_ms=0]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7171585Z ##[start-action display=rustup toolchain install stable;id=__dtolnay_rust-toolchain.__run_4]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7224741Z ##[group]Run set -f  # split targets and components on commas and whitespace, without glob expansion
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7227365Z ^[[36;1mset -f  # split targets and components on commas and whitespace, without glob expansion^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7257469Z ^[[36;1mflags=()^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7258675Z ^[[36;1mfor t in ${targets//,/ }; do flags+=(--target "$t"); done^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7260240Z ^[[36;1mfor c in ${components//,/ }; do flags+=(--component "$c"); done^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7262117Z ^[[36;1mif [[ $toolchain == nightly && -n $components ]]; then flags+=(--allow-downgrade); fi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7263697Z ^[[36;1mlog=$(mktemp)^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7264660Z ^[[36;1mtrap 'rm -f "$log"' EXIT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7265960Z ^[[36;1mfor attempt in 1 2 3 4 5; do^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7268282Z ^[[36;1m  if rustup toolchain install "$toolchain" "${flags[@]}" --profile minimal --no-self-update --force-non-host 2>&1 | tee "$log"; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7270436Z ^[[36;1m    break^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7271265Z ^[[36;1m  else^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7272078Z ^[[36;1m    status=$?^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7272947Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7274060Z ^[[36;1m  if [[ $attempt == 5 ]] || ! grep -Fq 'checksum failed for ' "$log" \^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7276388Z ^[[36;1m      || ! grep -Fq 'this is likely due to an ongoing update of the official release server' "$log"; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7278134Z ^[[36;1m    exit "$status"^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7279066Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7280410Z ^[[36;1m  echo "Retrying rustup toolchain install in 30 seconds (retry $attempt of 4)" >&2^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7282080Z ^[[36;1m  sleep 30^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7282927Z ^[[36;1mdone^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7359633Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7360947Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7361779Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7362783Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7363606Z   targets: 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7364383Z   components: 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7365546Z   RUSTUP_PERMIT_COPY_RENAME: 1
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.7366539Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:50.9393901Z info: syncing channel updates for stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0313907Z 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0396566Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0398097Z 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0448455Z ##[end-action id=__dtolnay_rust-toolchain.__run_4;outcome=success;conclusion=success;duration_ms=327]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0459356Z ##[start-action display=rustup default stable;id=__dtolnay_rust-toolchain.__run_5]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0512476Z ##[group]Run rustup default "$toolchain" --force-non-host
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0513916Z ^[[36;1mrustup default "$toolchain" --force-non-host^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0589269Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0590539Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0591364Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0592375Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0593214Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0754534Z info: using existing install for stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0764032Z info: default toolchain set to stable-x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0765745Z 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0844094Z   stable-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0845951Z 
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0869337Z ##[end-action id=__dtolnay_rust-toolchain.__run_5;outcome=success;conclusion=success;duration_ms=40]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0877857Z ##[start-action display=Create cachekey;id=__dtolnay_rust-toolchain.rustc-version]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0931999Z ##[group]Run DATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0935179Z ^[[36;1mDATE=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-date: \(20[0-9][0-9]\)-\([01][0-9]\)-\([0-3][0-9]\)$/\1\2\3/p')^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0937649Z ^[[36;1mHASH=$(rustc +"$toolchain" --version --verbose | sed -ne 's/^commit-hash: //p')^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.0939509Z ^[[36;1mecho "cachekey=$(echo $DATE$HASH | head -c12)" >> $GITHUB_OUTPUT^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1016448Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1017733Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1018548Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1019550Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1020398Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1458070Z ##[end-action id=__dtolnay_rust-toolchain.rustc-version;outcome=success;conclusion=success;duration_ms=57]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1471270Z ##[start-action display=Disable incremental compilation;id=__dtolnay_rust-toolchain.__run_6]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1556884Z ##[group]Run if [ -z "${CARGO_INCREMENTAL+set}" ]; then
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1559522Z ^[[36;1mif [ -z "${CARGO_INCREMENTAL+set}" ]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1561706Z ^[[36;1m  echo CARGO_INCREMENTAL=0 >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1563684Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1672618Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1674807Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1676536Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1678257Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1845390Z ##[end-action id=__dtolnay_rust-toolchain.__run_6;outcome=success;conclusion=success;duration_ms=37]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1852218Z ##[start-action display=Enable colors in Cargo output;id=__dtolnay_rust-toolchain.__run_7]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1906756Z ##[group]Run if [ -z "${CARGO_TERM_COLOR+set}" ]; then
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1908100Z ^[[36;1mif [ -z "${CARGO_TERM_COLOR+set}" ]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1909402Z ^[[36;1m  echo CARGO_TERM_COLOR=always >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1910560Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1983652Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1985192Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1986059Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1987062Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.1987919Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2113264Z ##[end-action id=__dtolnay_rust-toolchain.__run_7;outcome=success;conclusion=success;duration_ms=25]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2121713Z ##[start-action display=Enable Cargo sparse registry;id=__dtolnay_rust-toolchain.__run_8]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2174943Z ##[group]Run # implemented in 1.66, stabilized in 1.68, made default in 1.70
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2176887Z ^[[36;1m# implemented in 1.66, stabilized in 1.68, made default in 1.70^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2179350Z ^[[36;1mif [ -z "${CARGO_REGISTRIES_CRATES_IO_PROTOCOL+set}" -o -f "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol ]; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2181977Z ^[[36;1m  if rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[89]\.'; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2184107Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2186363Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2188265Z ^[[36;1m  elif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.6[67]\.'; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2190379Z ^[[36;1m    touch "/home/runner/work/_temp"/.implicit_cargo_registries_crates_io_protocol || true^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2192290Z ^[[36;1m    echo CARGO_REGISTRIES_CRATES_IO_PROTOCOL=git >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2193621Z ^[[36;1m  fi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2194388Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2265480Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2266760Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2267569Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2268779Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2269663Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2270567Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2271395Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2646835Z ##[end-action id=__dtolnay_rust-toolchain.__run_8;outcome=success;conclusion=success;duration_ms=52]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2655662Z ##[start-action display=Work around spurious network errors in curl 8.0;id=__dtolnay_rust-toolchain.__run_9]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2708809Z ##[group]Run # https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2711342Z ^[[36;1m# https://rust-lang.zulipchat.com/#narrow/stream/246057-t-cargo/topic/timeout.20investigation^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2713559Z ^[[36;1mif rustc +"$toolchain" --version --verbose | grep -q '^release: 1\.7[01]\.'; then^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2715454Z ^[[36;1m  echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2716644Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2789246Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2790505Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2791283Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2792454Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2793320Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2794212Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.2795179Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3047265Z ##[end-action id=__dtolnay_rust-toolchain.__run_9;outcome=success;conclusion=success;duration_ms=38]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3057008Z ##[start-action display=rustc +stable --version --verbose;id=__dtolnay_rust-toolchain.__run_10]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3108899Z ##[group]Run rustc +"$toolchain" --version --verbose
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3110206Z ^[[36;1mrustc +"$toolchain" --version --verbose^[[0m
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3182700Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3183938Z env:
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3184723Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3186019Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3186942Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3187829Z   toolchain: stable
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3188616Z ##[endgroup]
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3408806Z rustc 1.99.0 (b940084d7 2026-09-28)
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3410995Z binary: rustc
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3412348Z commit-hash: b940084d7eb6a299eb4bfeb8e34901bc051e7ac4
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3413721Z commit-date: 2026-09-28
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3414865Z host: x86_64-unknown-linux-gnu
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3416763Z release: 1.99.0
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3417801Z LLVM version: 23.1.1
+Lockfiles have no pending compatible updates	Run dtolnay/rust-toolchain@stable	2026-10-11T16:19:51.3438339Z ##[end-action id=__dtolnay_rust-toolchain.__run_10;outcome=success;conclusion=success;duration_ms=37]
+Lockfiles have no pending compatible updates	Check npm resolved versions	﻿2026-10-11T16:19:51.3569043Z ##[group]Run npm ci
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3569947Z ^[[36;1mnpm ci^[[0m
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3570764Z ^[[36;1mnpm outdated^[[0m
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3644277Z shell: /usr/bin/bash -e {0}
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3645380Z env:
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3646177Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3647160Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3648038Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:51.3648925Z ##[endgroup]
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7565513Z 
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7566860Z > lino-objects-codec@0.9.1 prepare
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7567822Z > husky || true
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7568240Z 
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7998992Z .git can't be found
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7999566Z added 131 packages, and audited 132 packages in 2s
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.7999830Z 
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.8000143Z 31 packages are looking for funding
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.8000485Z   run `npm fund` for details
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.8015810Z 
+Lockfiles have no pending compatible updates	Check npm resolved versions	2026-10-11T16:19:53.8016218Z found 0 vulnerabilities
+Lockfiles have no pending compatible updates	Check Cargo lockfile	﻿2026-10-11T16:19:54.3529682Z ##[group]Run cargo update --dry-run 2>&1 | tee cargo-update.log
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3530238Z ^[[36;1mcargo update --dry-run 2>&1 | tee cargo-update.log^[[0m
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3530779Z ^[[36;1mif grep -E '^[[:space:]]*(Updating .+ ->|Adding |Removing |Locking [1-9])' cargo-update.log; then^[[0m
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3531362Z ^[[36;1m  echo '::error::Cargo.lock has pending updates; run cargo update.'^[[0m
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3531767Z ^[[36;1m  exit 1^[[0m
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3531970Z ^[[36;1mfi^[[0m
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3596932Z shell: /usr/bin/bash -e {0}
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3597237Z env:
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3597461Z   CARGO_HOME: /home/runner/.cargo
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3597726Z   CARGO_INCREMENTAL: 0
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3597960Z   CARGO_TERM_COLOR: always
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.3598198Z ##[endgroup]
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.4475561Z ^[[1m^[[92m    Updating^[[0m crates.io index
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.8796815Z ^[[1m^[[92m     Locking^[[0m 3 packages to highest Rust 1.87 compatible versions
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.8806297Z ^[[1m^[[92m      Adding^[[0m foldhash v0.2.0
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.8841280Z ^[[1m^[[92m    Updating^[[0m serde_json v1.0.152 -> v1.0.154
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.8854386Z ^[[1m^[[92m    Updating^[[0m syn v3.0.7 -> v3.0.8
+Lockfiles have no pending compatible updates	Check Cargo lockfile	2026-10-11T16:19:54.8859407Z ^[[1m^[[33mwarning^[[0m: not updating lockfile due to dry run
+Lockfiles have no pending compatible updates	Post Run actions/setup-node@v7	﻿2026-10-11T16:19:54.9063881Z Post job cleanup.
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	﻿2026-10-11T16:19:55.0437098Z Post job cleanup.
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1412752Z [command]/usr/bin/git version
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1461487Z git version 2.55.0
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1504666Z Temporarily overriding HOME='/home/runner/work/_temp/91663326-6df3-4178-81ac-dda9dd823be8' before making global git config changes
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1506676Z Adding repository directory to the temporary git global config as a safe directory
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1510455Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1544886Z Removing SSH command configuration
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1552486Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1591380Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1916351Z Removing HTTP extra header
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1917959Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.1959140Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2329849Z Removing includeIf entries pointing to credentials config files
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2338639Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2379530Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2383222Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2384635Z includeif.gitdir:/github/workspace/.git.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2386538Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2393143Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2431695Z /home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2450710Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-093a66dc\-62fb\-4003\-8a15\-4835ca6d3ac6\.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2512838Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2569324Z /home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2582965Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-093a66dc\-62fb\-4003\-8a15\-4835ca6d3ac6\.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2626301Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2654002Z /github/runner_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2661599Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-093a66dc\-62fb\-4003\-8a15\-4835ca6d3ac6\.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2700097Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2729296Z /github/runner_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2736138Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-093a66dc\-62fb\-4003\-8a15\-4835ca6d3ac6\.config
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.2778256Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Lockfiles have no pending compatible updates	Post Run actions/checkout@v7	2026-10-11T16:19:55.3024500Z Removing credentials config '/home/runner/work/_temp/git-credentials-093a66dc-62fb-4003-8a15-4835ca6d3ac6.config'
+Lockfiles have no pending compatible updates	Complete job	﻿2026-10-11T16:19:55.3184141Z Cleaning up orphan processes

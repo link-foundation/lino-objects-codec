@@ -1,0 +1,44 @@
+=== C--CI-CD-37956144601.failed.log
+2026-10-09T16:02:19.1927171Z ##[error]No changeset found in this PR. Add a release note in csharp/.changeset/
+2026-10-09T16:02:19.1944987Z ##[error]Process completed with exit code 1.
+=== Cross-Language-Parity-37956144558.failed.log
+2026-10-09T16:02:15.3028361Z not ok 9 - the checked-in manifests agree today
+2026-10-09T16:02:15.3117491Z ##[error]Process completed with exit code 1.
+=== Cross-Language-Parity-38143511775.failed.log
+2026-10-11T13:31:31.8212398Z not ok 9 - the checked-in manifests agree today
+2026-10-11T13:31:31.8312732Z ##[error]Process completed with exit code 1.
+=== Dependency-Freshness-37956144485.failed.log
+2026-10-09T16:02:15.4238480Z ^[[36;1mnpm outdated^[[0m
+2026-10-09T16:02:17.6455823Z ##[error]Process completed with exit code 1.
+2026-10-09T16:02:20.9054366Z ##[error]Process completed with exit code 1.
+=== Dependency-Freshness-38138700301.failed.log
+2026-10-11T12:17:35.1027248Z ^[[36;1mnpm outdated^[[0m
+2026-10-11T12:17:37.0649016Z ##[error]Process completed with exit code 1.
+2026-10-11T12:17:38.5487861Z ##[error]Process completed with exit code 1.
+=== Dependency-Freshness-38143511774.failed.log
+2026-10-11T13:31:30.1737929Z ^[[36;1mnpm outdated^[[0m
+2026-10-11T13:31:33.0172401Z ##[error]Process completed with exit code 1.
+2026-10-11T13:31:35.5310655Z ##[error]Process completed with exit code 1.
+=== Dependency-Freshness-38154982948.failed.log
+2026-10-11T16:19:51.7219211Z ##[error]Process completed with exit code 1.
+=== Python-CI-CD-37559124943.failed.log
+* `invalid-publisher`: valid token, but no corresponding publisher (Publisher with matching claims was not found)
+2026-10-07T02:02:24.1349450Z   invalid-publisher: valid token, but no corresponding publisher
+2026-10-07T02:02:28.7921156Z Status: Downloaded newer image for ghcr.io/pypa/gh-action-pypi-publish:release-v1
+2026-10-07T02:02:30.1625347Z ##[error]Trusted publishing exchange failure: 
+2026-10-07T02:02:30.3911670Z   invalid-publisher: valid token, but no corresponding publisher
+=== Python-CI-CD-38145827851.failed.log
+* `invalid-publisher`: valid token, but no corresponding publisher (Publisher with matching claims was not found)
+2026-10-11T14:11:46.7695817Z   invalid-publisher: valid token, but no corresponding publisher
+2026-10-11T14:11:53.1092946Z Status: Downloaded newer image for ghcr.io/pypa/gh-action-pypi-publish:release-v1
+2026-10-11T14:11:54.5169323Z ##[error]Trusted publishing exchange failure: 
+2026-10-11T14:11:54.7478968Z   invalid-publisher: valid token, but no corresponding publisher
+=== Shared-CI-Scripts-37956144479.failed.log
+2026-10-09T16:02:14.2648368Z not ok 17 - the checked-in manifests agree today
+2026-10-09T16:02:14.3560506Z ##[error]Process completed with exit code 1.
+=== Shared-CI-Scripts-38138700169.failed.log
+2026-10-11T12:17:32.6841689Z not ok 17 - the checked-in manifests agree today
+2026-10-11T12:17:32.7427882Z ##[error]Process completed with exit code 1.
+=== Shared-CI-Scripts-38143511771.failed.log
+2026-10-11T13:31:29.5699092Z not ok 17 - the checked-in manifests agree today
+2026-10-11T13:31:29.6417737Z ##[error]Process completed with exit code 1.
