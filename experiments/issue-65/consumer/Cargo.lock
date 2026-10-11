@@ -46,9 +46,9 @@ checksum = "8f42a60cbdf9a97f5d2305f08a87dc4e09308d1276d28c869c684d7777685682"
 
 [[package]]
 name = "links-notation"
-version = "0.23.0"
+version = "0.25.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3f67fe67f0d77d6fceab5fdc7d69c3b976ae61eb28f6f1d67b22df2aac60347"
+checksum = "0cdf424d630f91b6745c4e850ecfdfd7fbbef863db958fa7d197983cd802e0b3"
 dependencies = [
  "links-notation-macro",
  "nom",
@@ -56,9 +56,9 @@ dependencies = [
 
 [[package]]
 name = "links-notation-macro"
-version = "0.1.0"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f30ea96250240a92d69d45579dbd199a713e7a79acfa53033d24628dad23cff5"
+checksum = "b42d4a79a99204f93c19d70c0c6c8a174842438bf6588a830df911aedcc1d523"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -67,7 +67,7 @@ dependencies = [
 
 [[package]]
 name = "lino-objects-codec"
-version = "0.7.0"
+version = "0.8.0"
 dependencies = [
  "base64",
  "links-notation",
@@ -138,9 +138,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.151"
+version = "1.0.152"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c841b55ecdae098c80dcae9cf767f6f8a0c2cdb3416bbef72181df4d0fe73f14"
+checksum = "1741ab7a6cc54a03a89b5d563ed60075c277d9e3cfa73ad0c1f23f23974703c6"
 dependencies = [
  "indexmap",
  "itoa",
@@ -152,9 +152,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "3.0.6"
+version = "3.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8593e8e72159ed2257d083c7a454a85cbf854f37a0966d8d483aff8c8a3ebcee"
+checksum = "d62a2e0561533f2ca2561d0cf27fd9fedb640a1bf2616ff5d5c80d99017faadc"
 dependencies = [
  "proc-macro2",
  "quote",

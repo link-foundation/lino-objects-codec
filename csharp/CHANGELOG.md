@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-10-11
+
+### Fixed
+
+- Avoid full-document character copies and full temporary byte copies for large readable values.
+
+### Changed
+
+- Update links-notation to 0.25.2 and refresh xUnit test tooling.
+
 ## [0.3.0] - 2026-10-07
 
 ### Added

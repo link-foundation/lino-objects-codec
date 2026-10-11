@@ -25,7 +25,7 @@ This library provides universal serialization and deserialization with built-in 
 
 - **[Python](python/)** - Full implementation for Python 3.13+
 - **[JavaScript](js/)** - Full implementation for Node.js 22.11+
-- **[Rust](rust/)** - Full implementation for Rust 1.85+
+- **[Rust](rust/)** - Full implementation for Rust 1.87+ (tests require 1.88+)
 - **[C#](csharp/)** - Full implementation for .NET 10.0+
 
 All implementations share the same design philosophy and provide feature parity.

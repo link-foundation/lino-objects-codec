@@ -599,7 +599,9 @@ public static class Readable
     /// </summary>
     private static List<Token> Tokenize(string text)
     {
-        var chars = text.ToCharArray();
+        // ASCII delimiters can be scanned directly in UTF-16; slices keep
+        // surrogate pairs intact without copying the whole document.
+        var chars = text;
         var tokens = new List<Token>();
         int i = 0;
 
@@ -643,7 +645,7 @@ public static class Readable
                 {
                     i++;
                 }
-                tokens.Add(new Token(TokenKind.Ref, new string(chars, start, i - start), false));
+                tokens.Add(new Token(TokenKind.Ref, chars.Substring(start, i - start), false));
             }
         }
 
@@ -665,7 +667,7 @@ public static class Readable
     /// delimiter.</item>
     /// </list>
     /// </remarks>
-    private static (string Value, int Next) ReadQuoted(char[] chars, int start, char quoteChar)
+    private static (string Value, int Next) ReadQuoted(string chars, int start, char quoteChar)
     {
         var opening = RunLength(chars, start, quoteChar);
 
@@ -682,17 +684,17 @@ public static class Readable
         int i = start + opening;
         while (i < chars.Length)
         {
-            if (chars[i] != quoteChar)
+            i = chars.IndexOf(quoteChar, i);
+            if (i < 0)
             {
-                i++;
-                continue;
+                break;
             }
 
             var run = RunLength(chars, i, quoteChar);
             if (run >= opening)
             {
                 var length = i + run - opening - (start + opening);
-                var value = new string(chars, start + opening, length);
+                var value = chars.Substring(start + opening, length);
                 return (value, i + run);
             }
             i += run;
@@ -706,32 +708,31 @@ public static class Readable
     /// delimiter. This is how versions up to 0.6.0 wrote a value holding both
     /// quote kinds, so their documents keep decoding.
     /// </summary>
-    private static (string Value, int Next) ReadDoubledQuoted(char[] chars, int start, char quoteChar)
+    private static (string Value, int Next) ReadDoubledQuoted(string chars, int start, char quoteChar)
     {
-        var value = new StringBuilder();
         int i = start + 1;
 
         while (i < chars.Length)
         {
-            if (chars[i] == quoteChar)
+            var next = chars.IndexOf(quoteChar, i);
+            if (next < 0)
             {
-                if (i + 1 < chars.Length && chars[i + 1] == quoteChar)
-                {
-                    value.Append(quoteChar);
-                    i += 2;
-                    continue;
-                }
-                return (value.ToString(), i + 1);
+                break;
             }
-            value.Append(chars[i]);
-            i++;
+            if (next + 1 < chars.Length && chars[next + 1] == quoteChar)
+            {
+                i = next + 2;
+                continue;
+            }
+            var value = chars.Substring(start + 1, next - start - 1);
+            return (value.Replace(new string(quoteChar, 2), quoteChar.ToString(), StringComparison.Ordinal), next + 1);
         }
 
         throw UnterminatedQuote(start);
     }
 
     /// <summary>The length of the run of a character that starts at an index.</summary>
-    private static int RunLength(char[] chars, int start, char c)
+    private static int RunLength(string chars, int start, char c)
     {
         int i = start;
         while (i < chars.Length && chars[i] == c)
@@ -1060,18 +1061,46 @@ public static class Readable
     /// <exception cref="FormatException">If an escape is truncated, malformed or not UTF-8</exception>
     private static string Unescape(string payload)
     {
-        var bytes = new List<byte>(payload.Length);
+        // Per-value state and fixed buffers retain split UTF-8 sequences while
+        // avoiding a full payload byte list followed by a second byte array.
+        var decoder = StrictUtf8.GetDecoder();
+        var capacity = Math.Clamp(payload.Length, 6, 65536);
+        var bytes = new byte[capacity];
+        var chars = new char[capacity];
+        var output = new StringBuilder();
+        int used = 0;
+
+        void Flush(bool final)
+        {
+            try
+            {
+                var count = decoder.GetChars(bytes.AsSpan(0, used), chars.AsSpan(), flush: final);
+                output.Append(chars.AsSpan(0, count));
+            }
+            catch (DecoderFallbackException e)
+            {
+                throw new FormatException("invalid UTF-8 escaped value", e);
+            }
+            used = 0;
+        }
+
         int i = 0;
         int position = 0;
 
         while (i < payload.Length)
         {
+            // Leave room for a UTF-16 pair, including the existing replacement
+            // behavior for a high surrogate followed by a non-low surrogate.
+            if (used > bytes.Length - 6)
+            {
+                Flush(false);
+            }
             if (payload[i] != '%')
             {
                 // Copied over as it is, one whole character at a time, so that a
                 // surrogate pair keeps standing for the character it spells.
                 var width = char.IsHighSurrogate(payload[i]) && i + 1 < payload.Length ? 2 : 1;
-                bytes.AddRange(Encoding.UTF8.GetBytes(payload.Substring(i, width)));
+                used += Encoding.UTF8.GetBytes(payload.AsSpan(i, width), bytes.AsSpan(used));
                 i += width;
                 position++;
                 continue;
@@ -1090,19 +1119,13 @@ public static class Readable
             {
                 throw new FormatException($"invalid escape '%{escape}' in an escaped value");
             }
-            bytes.Add(value);
+            bytes[used++] = value;
             i += 3;
             position += 3;
         }
 
-        try
-        {
-            return StrictUtf8.GetString(bytes.ToArray());
-        }
-        catch (DecoderFallbackException e)
-        {
-            throw new FormatException("invalid UTF-8 escaped value", e);
-        }
+        Flush(true);
+        return output.ToString();
     }
 
     /// <summary>
