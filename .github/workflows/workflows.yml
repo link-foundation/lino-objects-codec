@@ -48,7 +48,8 @@ jobs:
       #   docker buildx imagetools inspect rhysd/actionlint:<tag>
       #
       # `queue:` is valid workflow syntax (documented under `concurrency`, and
-      # best practice #10) but is newer than actionlint's bundled schema.
+      # best practice #10) but is newer than actionlint's bundled schema. Drop
+      # the -ignore once rhysd/actionlint#654 ships in a release.
       - uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # v1.7.12
         with:
           args: -color -ignore "unexpected key .queue. for .concurrency. section"
