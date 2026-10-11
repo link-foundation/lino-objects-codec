@@ -4,7 +4,10 @@ import shutil
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from check_dependency_freshness import Dependency, ROOT, blocker_on_line, check, declarations, latest, manifest_blocker
+import contextlib
+import io
+
+from check_dependency_freshness import Dependency, ROOT, blocker_on_line, check, declarations, latest, manifest_blocker, report
 
 
 class DependencyFreshnessTests(unittest.TestCase):
@@ -84,6 +87,20 @@ class DependencyFreshnessTests(unittest.TestCase):
         ]):
             self.assertEqual(latest("github-actions", "github/codeql-action"), "4.35.1")
         latest.cache_clear()
+
+    def test_report_mode_warns_instead_of_failing(self):
+        # Issue #71: a newer upstream release made every push to main red.
+        # Pull requests gate; push and schedule only report.
+        finding = ["rust/Cargo.toml: serde_json 1.0.152 is behind latest 1.0.154"]
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            self.assertEqual(report(finding, "report"), 0)
+        self.assertIn("::warning title=Stale dependency::rust/Cargo.toml: serde_json", out.getvalue())
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(err):
+            self.assertEqual(report(finding, "gate"), 1)
+        self.assertIn("ERROR rust/Cargo.toml: serde_json", err.getvalue())
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(report([], "gate"), 0)
 
 
 if __name__ == "__main__":

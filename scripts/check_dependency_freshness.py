@@ -6,6 +6,11 @@ floors (including dev/build dependencies), not just semver-compatible updates.
 Put `# https://github.com/OWNER/REPO/issues/N` on a blocked manifest line;
 NuGet uses an XML comment. The issue must still be open. npm's JSON cannot
 carry comments, so npm dependencies have no exception mechanism.
+
+`--mode report` (or FRESHNESS_MODE=report) turns every finding into a
+`::warning::` annotation and exits 0. A newer upstream release is a fact about
+the world, not about the commit, so only pull requests gate on it; pushes and
+the weekly schedule report (CI/CD best practice #17, issue #71).
 """
 
 import argparse
@@ -202,27 +207,43 @@ def check(dependency: Dependency, latest_version, issue_state) -> str | None:
     return f"{dependency.manifest}: {dependency.name} {dependency.version} is behind latest {current}"
 
 
-def main() -> int:
+def report(failures: list[str], mode: str) -> int:
+    """Print the findings and return the exit code for the chosen mode."""
+    for error in failures:
+        if mode == "report":
+            print(f"::warning title=Stale dependency::{error}")
+        else:
+            print(f"ERROR {error}", file=sys.stderr)
+    if failures and mode == "report":
+        print(f"Report mode: {len(failures)} finding(s) above are advisory; a pull request gates on them.", file=sys.stderr)
+    return int(bool(failures)) if mode == "gate" else 0
+
+
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", action="store_true", help="report current registry data as JSON")
-    args = parser.parse_args()
-    failures, report = [], []
+    parser.add_argument(
+        "--mode",
+        choices=["gate", "report"],
+        default=os.environ.get("FRESHNESS_MODE") or "gate",
+        help="gate: exit 1 on findings (pull requests); report: warn and exit 0 (push, schedule)",
+    )
+    args = parser.parse_args(argv)
+    failures, registry = [], []
     for dependency in declarations():
         try:
             current = latest(dependency.ecosystem, dependency.name)
-            report.append({**dependency.__dict__, "latest": current})
+            registry.append({**dependency.__dict__, "latest": current})
             error = check(dependency, latest, lambda repo, number: get_json(f"https://api.github.com/repos/{repo}/issues/{number}")["state"])
             if error:
                 failures.append(error)
         except Exception as error:
             failures.append(f"{dependency.manifest}: cannot verify {dependency.name}: {error}")
     if args.json:
-        print(json.dumps(report, indent=2))
-    for error in failures:
-        print(f"ERROR {error}", file=sys.stderr)
+        print(json.dumps(registry, indent=2))
     if not failures:
-        print(f"All {len(report)} direct dependency declarations are current.", file=sys.stderr)
-    return int(bool(failures))
+        print(f"All {len(registry)} direct dependency declarations are current.", file=sys.stderr)
+    return report(failures, args.mode)
 
 
 if __name__ == "__main__":
