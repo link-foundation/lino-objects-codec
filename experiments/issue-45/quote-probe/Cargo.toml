@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-links-notation = "0.25.2"
+links-notation = "0.27.1"

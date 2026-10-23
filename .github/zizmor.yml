@@ -1,7 +1,7 @@
 # zizmor configuration for the workflow security audit run by
 # `.github/workflows/workflows.yml` (issue #71, CI/CD best practice #14).
 # Reproduce locally:
-#   pipx run zizmor==1.30.1 --config .github/zizmor.yml --min-confidence low .
+#   pipx run zizmor==1.31.1 --config .github/zizmor.yml --min-confidence low .
 #
 # Blanket policy, copied from the link-foundation pipeline templates:
 # third-party actions must be pinned to a commit hash, because a mutable tag or
@@ -34,9 +34,9 @@ rules:
   # there: no PyPI trusted publisher is registered. Until a maintainer
   # registers trusted publishers (python/scripts/pypi_publish_preflight.py
   # prints the exact claims), the token paths stay as fallbacks. Drop each
-  # entry once its registry is migrated.
+  # entry once its workflow tries trusted publishing first; rust.yml does
+  # since issue #73 (rust-lang/crates-io-auth-action, token fallback).
   use-trusted-publishing:
     ignore:
       - csharp.yml
       - python.yml
-      - rust.yml

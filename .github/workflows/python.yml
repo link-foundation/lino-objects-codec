@@ -445,7 +445,7 @@ jobs:
         # A PYPI_API_TOKEN secret, when present, takes over so a first release
         # can happen before trusted publishing is registered; without the
         # secret the `password` input is empty and OIDC is used as before.
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: python/dist/
           password: ${{ secrets.PYPI_API_TOKEN }}
@@ -598,7 +598,7 @@ jobs:
         id: pypi_publish
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
         # See note above: relies on PyPI Trusted Publisher; see docs/case-studies/issue-25/README.md.
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: python/dist/
           password: ${{ secrets.PYPI_API_TOKEN }}
