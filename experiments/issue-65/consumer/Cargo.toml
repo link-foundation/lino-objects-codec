@@ -7,4 +7,4 @@ publish = false
 
 [dependencies]
 lino-objects-codec = { path = "../../../rust", features = ["serde_json"] }
-links-notation = "0.25.2"
+links-notation = "0.27.1"
