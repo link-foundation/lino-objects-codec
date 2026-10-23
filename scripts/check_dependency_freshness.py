@@ -31,7 +31,7 @@ ISSUE = re.compile(r"https://github\.com/([\w.-]+/[\w.-]+)/issues/(\d+)")
 # `owner/repo@vN[.N.N]`, or a hash pin whose trailing comment names the release
 # (`owner/repo@<40 hex> # vN.N.N`). Before issue #71 only the first form was
 # read, so hash-pinning an action silently removed it from this check. A hash
-# pinned to a branch (`# stable branch @ <date>`) has no release to compare.
+# pinned to a branch (`# master branch @ <date>`) has no release to compare.
 ACTION_REF = re.compile(
     r"uses:\s*([\w.-]+/[\w.-]+)(?:/[\w/-]+)?@(?:v(\d+(?:\.\d+)*)\b|[0-9a-f]{40}\s+#\s*v(\d+(?:\.\d+)*))"
 )

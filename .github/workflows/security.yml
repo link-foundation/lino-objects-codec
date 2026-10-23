@@ -145,10 +145,11 @@ jobs:
           persist-credentials: false
 
       - name: Setup Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
 
       - name: Install cargo-audit
