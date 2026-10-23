@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.2] - 2026-10-23
+
+### Changed
+
+- Update `links-notation` from 0.25.2 to 0.27.1, the latest release (0.26.0 included), so a project that also depends on the current parser resolves one copy instead of two (issue #74). No public API changes: no `links-notation` type is part of this crate's API, and the test suite passes unchanged against 0.25.2, 0.26.0 and 0.27.1.
+
+### Changed
+
+- Releases now publish to crates.io through trusted publishing (OIDC, `rust-lang/crates-io-auth-action`) first, falling back to the `CARGO_REGISTRY_TOKEN` / `CARGO_TOKEN` secret only when no trusted publisher is registered. The publish step names which credential it used and, on failure, points to the crate's Trusted Publishing settings (issue #73).
+
 ## [0.9.1] - 2026-10-11
 
 ### Changed

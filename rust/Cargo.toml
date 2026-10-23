@@ -1,6 +1,6 @@
 [package]
 name = "lino-objects-codec"
-version = "0.9.1"
+version = "0.9.2"
 edition = "2024"
 rust-version = "1.87"
 description = "A library to encode/decode objects to/from links notation"
