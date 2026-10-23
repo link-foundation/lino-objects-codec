@@ -204,10 +204,11 @@ jobs:
         run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
           components: rustfmt, clippy
 
@@ -280,10 +281,11 @@ jobs:
         run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
 
       - name: Cache cargo dependencies
@@ -348,10 +350,11 @@ jobs:
         run: bash scripts/simulate-fresh-merge.sh
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
 
       - name: Cache cargo dependencies
@@ -396,6 +399,9 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      # crates.io trusted publishing (issue #73): the auth step below trades
+      # this job's GitHub OIDC token for a short-lived publish token.
+      id-token: write
     steps:
       # This job writes to the repository (a release commit and tag, or a
       # release PR branch), so the checkout explicitly persists credentials.
@@ -406,10 +412,11 @@ jobs:
           persist-credentials: true
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
 
       - name: Setup Node.js
@@ -456,24 +463,49 @@ jobs:
         working-directory: ./rust
         run: cargo build --release
 
+      # Issue #73, organization policy: trusted publishing (OIDC) first, the
+      # token secret only as a fallback. The exchange fails while crates.io has
+      # no trusted publisher for this repository and rust.yml; continue-on-error
+      # lets the publish step fall back to CARGO_REGISTRY_TOKEN / CARGO_TOKEN,
+      # and that step still fails when neither credential works, so nothing is
+      # masked. The action's post step revokes the temporary token.
+      - name: Authenticate with crates.io (trusted publishing)
+        id: crates_auth
+        if: steps.release_check.outputs.should_release == 'true'
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+        continue-on-error: true
+
       - name: Publish to crates.io
         if: steps.release_check.outputs.should_release == 'true'
         working-directory: ./rust
         env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ steps.crates_auth.outputs.token || secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
+          TRUSTED_PUBLISHING: ${{ steps.crates_auth.outcome }}
         run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' Cargo.toml | head -1)
+          SETTINGS="https://crates.io/crates/${CRATE}/settings"
+          PUBLISHER="owner ${GITHUB_REPOSITORY%%/*}, repository ${GITHUB_REPOSITORY#*/}, workflow rust.yml, no environment"
+          if [ "$TRUSTED_PUBLISHING" = success ]; then
+            echo "Publishing with a crates.io trusted publishing (OIDC) token."
+          else
+            echo "::warning title=crates.io trusted publishing unavailable::OIDC token exchange outcome: ${TRUSTED_PUBLISHING:-skipped}. Falling back to the CARGO_REGISTRY_TOKEN / CARGO_TOKEN secret. To publish without a long-lived token, register the trusted publisher at ${SETTINGS} (Trusted Publishing -> Add -> GitHub: ${PUBLISHER})."
+          fi
           if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
-            echo "::error title=CARGO_REGISTRY_TOKEN missing::Cannot publish to crates.io without an API token."
+            echo "::error title=crates.io credentials missing::Cannot publish to crates.io: trusted publishing is unavailable and no token secret is set."
             echo ""
-            echo "How to fix:"
-            echo "  1. Generate a token at https://crates.io/me (Account Settings -> API Tokens)."
-            echo "     Scope: 'publish-update' for this crate."
-            echo "  2. Add it to this repo at:"
+            echo "How to fix (either one is enough; trusted publishing is preferred):"
+            echo "  1. Trusted publishing, with no secret to rotate: as a crate owner open"
+            echo "     ${SETTINGS} -> Trusted Publishing -> Add -> GitHub"
+            echo "     and enter: ${PUBLISHER}."
+            echo "     Docs: https://crates.io/docs/trusted-publishing"
+            echo "  2. Token fallback: generate a token at https://crates.io/settings/tokens"
+            echo "     (scope 'publish-update' for this crate) and add it to this repo at"
             echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
             echo "     Name: CARGO_REGISTRY_TOKEN  (CARGO_TOKEN is also accepted as a fallback)"
             echo "  3. Re-run this workflow."
             echo ""
-            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "See docs/case-studies/issue-75/README.md (trusted publishing),"
+            echo "    docs/case-studies/issue-29/README.md (credentials) and"
             echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
@@ -487,16 +519,27 @@ jobs:
               exit 0
             fi
             if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|invalid token|token (expired|rejected)'; then
-              echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN."
+              if [ "$TRUSTED_PUBLISHING" = success ]; then
+                echo "::error title=crates.io credentials rejected::crates.io rejected the trusted publishing (OIDC) token."
+                echo ""
+                echo "How to fix:"
+                echo "  1. Check the trusted publisher at ${SETTINGS} (Trusted Publishing)."
+                echo "     It must read: ${PUBLISHER}."
+                echo "  2. Re-run this workflow. Docs: https://crates.io/docs/trusted-publishing"
+              else
+                echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN (trusted publishing was unavailable)."
+                echo ""
+                echo "How to fix (either one is enough; trusted publishing is preferred):"
+                echo "  1. Register the trusted publisher so no token is needed: as a crate owner open"
+                echo "     ${SETTINGS} -> Trusted Publishing -> Add -> GitHub"
+                echo "     and enter: ${PUBLISHER}."
+                echo "     Docs: https://crates.io/docs/trusted-publishing"
+                echo "  2. Or rotate the token, which may have expired or been revoked, at"
+                echo "     https://crates.io/settings/tokens (scope 'publish-update' for this crate)"
+                echo "     and update Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN."
+              fi
               echo ""
-              echo "How to fix:"
-              echo "  1. The token may have expired or been revoked. Rotate it at"
-              echo "     https://crates.io/me  (Account Settings -> API Tokens)"
-              echo "  2. Update the secret at:"
-              echo "     Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN"
-              echo "  3. Verify the token's scope includes 'publish-update' for this crate."
-              echo ""
-              echo "See docs/case-studies/issue-29/README.md."
+              echo "See docs/case-studies/issue-75/README.md and docs/case-studies/issue-29/README.md."
             fi
             exit 1
           fi
@@ -553,6 +596,9 @@ jobs:
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+      # crates.io trusted publishing (issue #73): the auth step below trades
+      # this job's GitHub OIDC token for a short-lived publish token.
+      id-token: write
     steps:
       # This job writes to the repository (a release commit and tag, or a
       # release PR branch), so the checkout explicitly persists credentials.
@@ -563,10 +609,11 @@ jobs:
           persist-credentials: true
 
       - name: Set up Rust
-        uses: dtolnay/rust-toolchain@686976e191b89faba57d3206551f0f330d8cb249 # stable branch @ 2026-10-09
+        uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
-          # The `stable` ref supplied the default toolchain; restated now that
-          # the action is pinned by hash.
+          # The `stable` branch ref supplied this default; it is restated because
+          # the action is hash-pinned to a master commit (issue #75: the stable
+          # branch is rebuilt per release, so its old commits turn unreachable).
           toolchain: stable
 
       - name: Setup Node.js
@@ -595,24 +642,49 @@ jobs:
         working-directory: ./rust
         run: cargo build --release
 
+      # Issue #73, organization policy: trusted publishing (OIDC) first, the
+      # token secret only as a fallback. The exchange fails while crates.io has
+      # no trusted publisher for this repository and rust.yml; continue-on-error
+      # lets the publish step fall back to CARGO_REGISTRY_TOKEN / CARGO_TOKEN,
+      # and that step still fails when neither credential works, so nothing is
+      # masked. The action's post step revokes the temporary token.
+      - name: Authenticate with crates.io (trusted publishing)
+        id: crates_auth
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        uses: rust-lang/crates-io-auth-action@3268eb413133e2960fa4ae0e963ca76380c54cd9 # v1.0.6
+        continue-on-error: true
+
       - name: Publish to crates.io
         if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
         working-directory: ./rust
         env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
+          CARGO_REGISTRY_TOKEN: ${{ steps.crates_auth.outputs.token || secrets.CARGO_REGISTRY_TOKEN || secrets.CARGO_TOKEN }}
+          TRUSTED_PUBLISHING: ${{ steps.crates_auth.outcome }}
         run: |
+          CRATE=$(sed -n 's|^name = "\(.*\)"|\1|p' Cargo.toml | head -1)
+          SETTINGS="https://crates.io/crates/${CRATE}/settings"
+          PUBLISHER="owner ${GITHUB_REPOSITORY%%/*}, repository ${GITHUB_REPOSITORY#*/}, workflow rust.yml, no environment"
+          if [ "$TRUSTED_PUBLISHING" = success ]; then
+            echo "Publishing with a crates.io trusted publishing (OIDC) token."
+          else
+            echo "::warning title=crates.io trusted publishing unavailable::OIDC token exchange outcome: ${TRUSTED_PUBLISHING:-skipped}. Falling back to the CARGO_REGISTRY_TOKEN / CARGO_TOKEN secret. To publish without a long-lived token, register the trusted publisher at ${SETTINGS} (Trusted Publishing -> Add -> GitHub: ${PUBLISHER})."
+          fi
           if [ -z "$CARGO_REGISTRY_TOKEN" ]; then
-            echo "::error title=CARGO_REGISTRY_TOKEN missing::Cannot publish to crates.io without an API token."
+            echo "::error title=crates.io credentials missing::Cannot publish to crates.io: trusted publishing is unavailable and no token secret is set."
             echo ""
-            echo "How to fix:"
-            echo "  1. Generate a token at https://crates.io/me (Account Settings -> API Tokens)."
-            echo "     Scope: 'publish-update' for this crate."
-            echo "  2. Add it to this repo at:"
+            echo "How to fix (either one is enough; trusted publishing is preferred):"
+            echo "  1. Trusted publishing, with no secret to rotate: as a crate owner open"
+            echo "     ${SETTINGS} -> Trusted Publishing -> Add -> GitHub"
+            echo "     and enter: ${PUBLISHER}."
+            echo "     Docs: https://crates.io/docs/trusted-publishing"
+            echo "  2. Token fallback: generate a token at https://crates.io/settings/tokens"
+            echo "     (scope 'publish-update' for this crate) and add it to this repo at"
             echo "     Settings -> Secrets and variables -> Actions -> New repository secret"
             echo "     Name: CARGO_REGISTRY_TOKEN  (CARGO_TOKEN is also accepted as a fallback)"
             echo "  3. Re-run this workflow."
             echo ""
-            echo "See docs/case-studies/issue-29/README.md (credentials) and"
+            echo "See docs/case-studies/issue-75/README.md (trusted publishing),"
+            echo "    docs/case-studies/issue-29/README.md (credentials) and"
             echo "    docs/case-studies/issue-25/README.md (publishing pipeline)."
             exit 1
           fi
@@ -623,16 +695,27 @@ jobs:
               exit 0
             fi
             if echo "$OUT" | grep -qiE 'unauthorized|forbidden|403|401|invalid token|token (expired|rejected)'; then
-              echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN."
+              if [ "$TRUSTED_PUBLISHING" = success ]; then
+                echo "::error title=crates.io credentials rejected::crates.io rejected the trusted publishing (OIDC) token."
+                echo ""
+                echo "How to fix:"
+                echo "  1. Check the trusted publisher at ${SETTINGS} (Trusted Publishing)."
+                echo "     It must read: ${PUBLISHER}."
+                echo "  2. Re-run this workflow. Docs: https://crates.io/docs/trusted-publishing"
+              else
+                echo "::error title=crates.io credentials rejected::crates.io rejected CARGO_REGISTRY_TOKEN (trusted publishing was unavailable)."
+                echo ""
+                echo "How to fix (either one is enough; trusted publishing is preferred):"
+                echo "  1. Register the trusted publisher so no token is needed: as a crate owner open"
+                echo "     ${SETTINGS} -> Trusted Publishing -> Add -> GitHub"
+                echo "     and enter: ${PUBLISHER}."
+                echo "     Docs: https://crates.io/docs/trusted-publishing"
+                echo "  2. Or rotate the token, which may have expired or been revoked, at"
+                echo "     https://crates.io/settings/tokens (scope 'publish-update' for this crate)"
+                echo "     and update Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN."
+              fi
               echo ""
-              echo "How to fix:"
-              echo "  1. The token may have expired or been revoked. Rotate it at"
-              echo "     https://crates.io/me  (Account Settings -> API Tokens)"
-              echo "  2. Update the secret at:"
-              echo "     Settings -> Secrets and variables -> Actions -> CARGO_REGISTRY_TOKEN"
-              echo "  3. Verify the token's scope includes 'publish-update' for this crate."
-              echo ""
-              echo "See docs/case-studies/issue-29/README.md."
+              echo "See docs/case-studies/issue-75/README.md and docs/case-studies/issue-29/README.md."
             fi
             exit 1
           fi
