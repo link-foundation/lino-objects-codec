@@ -19,7 +19,7 @@ Objective: fully implement and verify issue #77 in PR #78 on branch
   real-world example under examples/.
 - [x] Add disabled-by-default tracing if the existing tracing is insufficient.
 - [x] Add the release fragments required by all four release workflows.
-- [ ] Run focused regression tests, then all local suites and applicable CI checks.
+- [x] Run focused regression tests, then all local suites and applicable CI checks.
   Save large outputs to logs; build Rust with one job and reduced debug info.
 - [ ] Review the complete diff for bugs, regressions, and requirement coverage.
 - [ ] Fetch/merge the default branch, preserving history; run local checks before
@@ -38,3 +38,16 @@ its quote tokenizer runs. Python/Rust/C# remove blank physical lines before
 passing text to links-notation. These operations cannot preserve quoted
 multiline reference content. Existing primitive parsing, definition references,
 legacy headers, and quote-doubling syntax must remain compatible.
+
+## Validation so far
+
+- JavaScript: 539 tests, 13 release-helper tests, lint, format, duplication check,
+  existing examples and the multiline catalog example pass.
+- Python: 536 tests, Ruff lint/format, mypy and the file-size gate pass.
+- Rust: all-feature tests (128 including doctests), no-default-feature tests,
+  clippy with warnings denied, fmt, file-size gate and 22 release-helper tests pass.
+- C#: 541 tests, build with warnings as errors and format verification pass.
+- Shared scripts: 44 Node tests and 12 Python tests pass.
+- All four release-fragment validators and both language/parser parity gates pass.
+- The dependency freshness check found three outdated Python dev-tool floors;
+  these are refreshed to the versions already used for the successful local run.
