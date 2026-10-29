@@ -1,5 +1,11 @@
 # lino-objects-codec
 
+## 0.9.4
+
+### Patch Changes
+
+- 4765b97: Preserve multiline strings in `parseIndented`, including blank lines, indentation, quotes and CRLFs. Quote literal backticks and empty references so values survive `formatIndented`/`parseIndented` unchanged.
+
 ## 0.9.3
 
 ### Patch Changes
