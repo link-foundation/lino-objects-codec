@@ -1072,33 +1072,25 @@ public static class Format
             throw new ArgumentException("text is required for ParseIndented", nameof(text));
         }
 
-        var lines = text.Split('\n');
-        if (lines.Length == 0)
-        {
-            throw new ArgumentException("text must have at least one line (the identifier)", nameof(text));
-        }
-
-        // Filter out empty lines to preserve indentation structure for the parser
-        // Empty lines would break the indentation context in links-notation
-        var nonEmptyLines = lines.Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
-
-        if (nonEmptyLines.Length == 0)
+        // Skip only whitespace before the header. The parser understands quoted
+        // continuations; filtering the body would delete blank lines in values.
+        var remaining = text.TrimStart();
+        if (remaining.Length == 0)
         {
             throw new ArgumentException("text must have at least one non-empty line (the identifier)", nameof(text));
         }
 
         // Convert to standard lino format by adding colon after first line if not present
         // This allows the links-notation parser to properly parse the indented structure
-        var firstLine = nonEmptyLines[0].Trim();
-        string linoText;
-        if (firstLine.EndsWith(':'))
+        var headerEnd = remaining.IndexOf('\n');
+        var firstLine = (headerEnd < 0 ? remaining : remaining[..headerEnd]).TrimEnd();
+        var body = headerEnd < 0 ? "" : remaining[(headerEnd + 1)..];
+        if (!firstLine.EndsWith(':'))
         {
-            linoText = string.Join("\n", nonEmptyLines);
+            firstLine += ":";
         }
-        else
-        {
-            linoText = $"{firstLine}:\n{string.Join("\n", nonEmptyLines.Skip(1))}";
-        }
+        var linoText = firstLine + "\n" + body;
+        CodecDebug.Trace("format.ParseIndented", () => $"preserved {linoText.Length} input characters");
 
         // Use links-notation parser
         var parsed = SharedParser.Parse(linoText);

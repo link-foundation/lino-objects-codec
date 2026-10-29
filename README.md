@@ -355,6 +355,10 @@ console.log(formatted);
 
 // Parse it back
 const { id, obj } = parseIndented({ text: formatted });
+
+// Quoted values can span lines; blank lines and indentation are preserved.
+const record = { id: "doc", obj: { t: "line1\n\n  line2" } };
+parseIndented({ text: formatIndented(record) }); // returns record
 ```
 
 **Python:**

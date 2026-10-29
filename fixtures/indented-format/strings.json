@@ -1,0 +1,23 @@
+[
+  { "name": "reported newline", "value": "line1\nline2" },
+  { "name": "blank continuation", "value": "line1\n\nline2" },
+  { "name": "only newlines", "value": "\n\n\n" },
+  { "name": "leading and trailing", "value": "\nfirst\nlast\n" },
+  { "name": "whitespace continuation", "value": "first\n  \n\t \nlast" },
+  { "name": "indentation", "value": "first\n  indented\n\tdeeper\nlast  " },
+  {
+    "name": "looks like definitions",
+    "value": "first\n\nother:\n  key value\nlast"
+  },
+  { "name": "single quote", "value": "it's\na message" },
+  { "name": "double quote", "value": "say \"hello\"\nagain" },
+  { "name": "both quotes", "value": "say \"it's\"\nagain 'hello'" },
+  { "name": "backticks", "value": "`literal`\n`text`" },
+  { "name": "crlf", "value": "first\r\n\r\nlast\r\n" },
+  { "name": "carriage return", "value": "first\rlast" },
+  { "name": "literal escapes", "value": "first\\n%0A\nsecond\\r%0D" },
+  { "name": "unicode", "value": "世界🌍\nκαλημέρα\nمرحبا" },
+  { "name": "controls", "value": "first\u0000\u0001\nlast\u007f" },
+  { "name": "empty string", "value": "" },
+  { "name": "single line", "value": "one line" }
+]

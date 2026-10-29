@@ -10,6 +10,8 @@ from typing import Any
 
 from links_notation import Parser
 
+from .debug import trace
+
 # Shared parser instance
 _parser = Parser()
 
@@ -200,24 +202,20 @@ def parse_indented(text: str) -> tuple[str, dict[str, Any]]:
     if not text:
         raise ValueError("text is required for parse_indented")
 
-    lines = text.split("\n")
-    if len(lines) == 0:
-        raise ValueError("text must have at least one line (the identifier)")
-
-    # Filter out empty lines to preserve indentation structure for the parser
-    # Empty lines would break the indentation context in links-notation
-    non_empty_lines = [line for line in lines if line.strip()]
-
-    if len(non_empty_lines) == 0:
+    # Skip only the blank lines before the header. The parser understands quoted
+    # continuations; filtering the body would delete blank lines inside values.
+    remaining = text.lstrip()
+    if not remaining:
         raise ValueError("text must have at least one non-empty line (the identifier)")
 
     # Convert to standard lino format by adding colon after first line if not present
     # This allows the links-notation parser to properly parse the indented structure
-    first_line = non_empty_lines[0].strip()
+    header, _, body = remaining.partition("\n")
+    first_line = header.rstrip()
     if not first_line.endswith(":"):
-        lino_text = first_line + ":\n" + "\n".join(non_empty_lines[1:])
-    else:
-        lino_text = "\n".join(non_empty_lines)
+        first_line += ":"
+    lino_text = first_line + "\n" + body
+    trace("format.parse_indented", lambda: f"preserved {len(lino_text)} input characters")
 
     # Use links-notation parser
     parsed = _parser.parse(lino_text)

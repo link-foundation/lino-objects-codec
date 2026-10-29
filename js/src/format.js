@@ -12,6 +12,7 @@
  */
 
 import { Parser as LinoParser } from 'links-notation';
+import { trace } from './debug.js';
 
 // Shared parser instance
 const parser = new LinoParser();
@@ -42,7 +43,7 @@ export function escapeReference(options = {}) {
   const str = String(value);
 
   // Check if escaping is needed (contains spaces, quotes, parentheses, colons, or newlines)
-  const needsEscaping = /[\s()'":]/g.test(str) || str.includes('\n');
+  const needsEscaping = str === '' || /[\s()'":`]/.test(str);
 
   if (!needsEscaping) {
     return str;
@@ -780,7 +781,7 @@ function splitIndentedDefinitions(text) {
   const definitions = [];
   let currentDefinition = null;
 
-  for (const rawLine of text.split(/\r?\n/)) {
+  for (const rawLine of splitIndentedLines(text)) {
     if (!rawLine.trim()) {
       continue;
     }
@@ -802,6 +803,46 @@ function splitIndentedDefinitions(text) {
   }
 
   return definitions;
+}
+
+/**
+ * Split at newlines outside quoted references. A continuation is value content,
+ * including its blank lines, indentation and carriage returns, even when it
+ * looks like a new definition. Keep doubled quotes in the same reference.
+ *
+ * @private
+ * @param {string} text - Complete indented document
+ * @returns {string[]} Logical lines, with quoted content preserved verbatim
+ */
+function splitIndentedLines(text) {
+  const lines = [];
+  let start = 0;
+  let quote = null;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    if (quote) {
+      if (char === quote) {
+        if (text[index + 1] === quote) {
+          index += 1;
+        } else {
+          quote = null;
+        }
+      }
+    } else if (
+      isIndentedQuote(char) &&
+      (index === 0 || /\s/.test(text[index - 1]))
+    ) {
+      quote = char;
+    } else if (char === '\n') {
+      lines.push(text.slice(start, index));
+      start = index + 1;
+    }
+  }
+
+  lines.push(text.slice(start));
+  trace('format.parseIndented', () => `read ${lines.length} logical lines`);
+  return lines;
 }
 
 /**
@@ -827,9 +868,10 @@ function parseIndentedScalarToken(token) {
  * Parse an indented Links Notation string back to an object.
  *
  * This parser handles the recursive definition format emitted by
- * formatIndented. Quoted references stay strings, while unquoted references are
- * parsed dynamically as numbers, booleans, null, definition references, or
- * strings.
+ * formatIndented. Quoted references may span lines and retain their contents
+ * verbatim, including blank lines and indentation. They stay strings, while
+ * unquoted references are parsed dynamically as numbers, booleans, null,
+ * definition references, or strings.
  *
  * Parses strings like:
  * ```
