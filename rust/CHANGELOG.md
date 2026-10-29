@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.3] - 2026-10-29
+
+### Fixed
+
+- Preserve multiline strings, blank and whitespace-only continuation lines, and carriage returns when parsing `format_indented` output. Add shared regression fixtures for all four implementations and opt-in parsing traces.
+
 ## [0.9.2] - 2026-10-23
 
 ### Changed
