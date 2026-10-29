@@ -257,22 +257,10 @@ pub fn parse_indented(text: &str) -> Result<(String, HashMap<String, String>), F
         ));
     }
 
-    let lines: Vec<&str> = text.lines().collect();
-    if lines.is_empty() {
-        return Err(FormatError::InvalidInput(
-            "text must have at least one line (the identifier)".to_string(),
-        ));
-    }
-
-    // Filter out empty lines to preserve indentation structure for the parser
-    // Empty lines would break the indentation context in links-notation
-    let non_empty_lines: Vec<&str> = lines
-        .iter()
-        .filter(|l| !l.trim().is_empty())
-        .copied()
-        .collect();
-
-    if non_empty_lines.is_empty() {
+    // Skip only whitespace before the header. Preserve the body for the parser,
+    // including quoted blank lines and CRLFs (`lines()` would strip the CRs).
+    let remaining = text.trim_start();
+    if remaining.is_empty() {
         return Err(FormatError::InvalidInput(
             "text must have at least one non-empty line (the identifier)".to_string(),
         ));
@@ -280,12 +268,16 @@ pub fn parse_indented(text: &str) -> Result<(String, HashMap<String, String>), F
 
     // Convert to standard lino format by adding colon after first line if not present
     // This allows the links-notation parser to properly parse the indented structure
-    let first_line = non_empty_lines[0].trim();
+    let (header, body) = remaining.split_once('\n').unwrap_or((remaining, ""));
+    let first_line = header.trim_end();
     let lino_text = if first_line.ends_with(':') {
-        non_empty_lines.join("\n")
+        format!("{first_line}\n{body}")
     } else {
-        format!("{}:\n{}", first_line, non_empty_lines[1..].join("\n"))
+        format!("{first_line}:\n{body}")
     };
+    crate::debug::trace("format.parse_indented", || {
+        format!("preserved {} input bytes", lino_text.len())
+    });
 
     // Use links-notation parser
     let parsed = parse_lino_to_links(&lino_text)

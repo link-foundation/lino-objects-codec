@@ -28,10 +28,10 @@ dependencies = [
 # ".[dev]"` resolves to what CI runs instead of to a years-old release that
 # lints and type-checks by different rules. See issue #47.
 dev = [
-    "pytest>=9.1.1",
+    "pytest>=9.2.0",
     "pytest-cov>=7.1.0",
-    "ruff>=0.17.2",
-    "mypy>=2.4.0",
+    "ruff>=0.17.3",
+    "mypy>=2.4.1",
     "scriv[toml]>=1.8",
 ]
 
