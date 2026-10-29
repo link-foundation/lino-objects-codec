@@ -3,8 +3,12 @@ use std::collections::HashMap;
 
 #[test]
 fn shared_indented_strings_roundtrip() {
-    let cases: serde_json::Value =
-        serde_json::from_str(include_str!("../../fixtures/indented-format/strings.json")).unwrap();
+    let path = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/../fixtures/indented-format/strings.json"
+    );
+    let text = std::fs::read_to_string(path).unwrap();
+    let cases: serde_json::Value = serde_json::from_str(&text).unwrap();
     for case in cases.as_array().unwrap() {
         let name = case["name"].as_str().unwrap();
         let value = case["value"].as_str().unwrap();
