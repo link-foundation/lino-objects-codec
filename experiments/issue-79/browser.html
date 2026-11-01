@@ -1,0 +1,63 @@
+<!doctype html>
+<!-- Serve the repository root (e.g. `python3 -m http.server 8079`) after
+     `cd js && npm ci`, then open http://localhost:8079/experiments/issue-79/browser.html.
+     A real browser has neither `process` nor `Buffer`. -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>issue 79: lino-objects-codec in a browser</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "links-notation": "/js/node_modules/links-notation/dist/index.js"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <pre id="out">running…</pre>
+    <script type="module">
+      const out = [];
+      out.push(
+        `typeof process: ${typeof process}, typeof Buffer: ${typeof Buffer}`,
+      );
+      const codec = await import("/js/src/index.js");
+      const attempt = (title, run) => {
+        try {
+          out.push(`ok   ${title} ${JSON.stringify(run())}`);
+        } catch (error) {
+          out.push(`FAIL ${title} ${error.name}: ${error.message}`);
+        }
+      };
+      attempt("formatIndented", () =>
+        codec.formatIndented({
+          id: "settings",
+          obj: { "skin.name": "liquid" },
+        }),
+      );
+      attempt(
+        "parseIndented",
+        () =>
+          codec.parseIndented({ text: "settings:\n  skin.name liquid" }).obj,
+      );
+      attempt("decode", () =>
+        codec.decode({ notation: '(\n  skin.name "liquid"\n)' }),
+      );
+      attempt('decode of a (base64 "…") value', () =>
+        codec.decode({ notation: '(\n  name (base64 "bGlxdWlk")\n)' }),
+      );
+      attempt("compact round trip", () => {
+        const notation = codec.encodeCompact({ obj: { name: "✓ à la mode" } });
+        return [notation, codec.decode({ notation })];
+      });
+      codec.setDebugEnabled(true);
+      attempt(
+        "parseIndented with tracing on",
+        () =>
+          codec.parseIndented({ text: "settings:\n  skin.name liquid" }).obj,
+      );
+      codec.setDebugEnabled(null);
+      document.getElementById("out").textContent = out.join("\n");
+    </script>
+  </body>
+</html>

@@ -31,6 +31,7 @@ These tools enable easy implementation of higher-level features like:
 - **Object Identity**: Shared references and circular references are preserved by the compact format (`encodeCompact`) via object ids
 - **Full Unicode**: Strings are always written as text — a newline stays a newline and a tab stays a tab, so every word stays greppable; only the characters a form cannot carry are percent-escaped, in a value marked individually as `(escaped "…")`
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
+- **Browser Ready**: No Node-only globals are required — without `process` or `Buffer` (a Vite, esbuild or Rollup bundle) every function works unchanged
 - **Compact JSON/Lino Conversion**: Convert between JSON and compact Links Notation with `jsonToLino({ json })` and `linoToJson({ lino })`
 - **Reference Escaping**: Properly escape strings for Links Notation format with `escapeReference({ value })`
 - **Fuzzy Matching**: Find similar strings with Levenshtein distance and keyword similarity
@@ -410,7 +411,9 @@ setDebugEnabled(true); // force on
 setDebugEnabled(null); // follow LINO_CODEC_DEBUG again
 ```
 
-Trace lines are written to standard error, prefixed with `[lino-codec]`. The
+Trace lines are written to standard error, prefixed with `[lino-codec]`. In a
+browser, where there is no `process`, the environment variable counts as unset
+and trace lines go to `console.debug`. The
 same switch and the same `LINO_CODEC_DEBUG` variable exist in the Python, Rust
 and C# implementations.
 

@@ -12,6 +12,7 @@
 import { Parser, Link } from 'links-notation';
 import * as readable from './readable.js';
 import { trace } from './debug.js';
+import { decodeUtf8Base64, encodeUtf8Base64 } from './base64.js';
 
 /**
  * Codec for encoding/decoding JavaScript objects to/from Links Notation.
@@ -385,7 +386,7 @@ export class ObjectCodec {
     }
     if (typeof obj === 'string') {
       // Encode strings as base64 to handle special characters, newlines, etc.
-      const b64Encoded = Buffer.from(obj, 'utf-8').toString('base64');
+      const b64Encoded = encodeUtf8Base64(obj);
       return this._makeLink(ObjectCodec.TYPE_STR, b64Encoded);
     }
     if (Array.isArray(obj)) {
@@ -462,7 +463,7 @@ export class ObjectCodec {
    */
   static _decodeBase64Payload(raw) {
     try {
-      return Buffer.from(raw, 'base64').toString('utf-8');
+      return decodeUtf8Base64(raw);
     } catch {
       // If decode fails, return the raw value
       return raw;
