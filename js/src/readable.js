@@ -79,6 +79,7 @@
  */
 
 import { trace } from './debug.js';
+import { decodeUtf8Base64 } from './base64.js';
 
 /** Default indentation used by {@link encode}. */
 export const DEFAULT_INDENT = '  ';
@@ -975,7 +976,7 @@ function decodeMarkedValue(rows) {
   }
 
   if (marker.value === BASE64_MARKER) {
-    return { value: Buffer.from(payload.value, 'base64').toString('utf-8') };
+    return { value: decodeUtf8Base64(payload.value) };
   }
 
   return undefined;

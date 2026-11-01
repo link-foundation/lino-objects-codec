@@ -485,7 +485,8 @@ Tracing is off by default and can be turned on in any language by setting the
 `LINO_CODEC_DEBUG` environment variable to a truthy value (`1`, `true`, `yes` or
 `on`), or from code (`set_debug_enabled` / `setDebugEnabled` /
 `CodecDebug.SetEnabled`). Trace lines go to standard error, prefixed with
-`[lino-codec]`.
+`[lino-codec]`. In a browser, where JavaScript has no `process`, the variable
+counts as unset and trace lines go to `console.debug`.
 
 ## Development
 
