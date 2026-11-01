@@ -21,7 +21,7 @@ with `Buffer is not defined`). After the fix, every case prints `ok`.
 
 `browser.html` runs the same cases in a real browser without a bundler. Serve
 the repository root, for example `python3 -m http.server 8079`, and open
-http://localhost:8079/experiments/issue-79/browser.html. In Chromium (via
+`/experiments/issue-79/browser.html` on that server. In Chromium (via
 Playwright) the page reported `typeof process: undefined, typeof Buffer:
 undefined` and `ok` for all six cases after the fix.
 
