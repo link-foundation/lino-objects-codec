@@ -423,6 +423,9 @@ object, bare-value lines make an array:
 - Strings are double-quoted and written as text; numbers, `true`, `false` and
   `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
+- A JavaScript integer Number beyond `Number.MAX_SAFE_INTEGER` is written with
+  an exponent (`1e18` as `1e+18`), because bare digits a reader cannot hold
+  exactly read back as a string; it reads back as the same Number
 - An empty array is `()`; an empty object is `(` + newline + `)`
 - A string is written as text whatever it holds: a newline stays a newline and
   a tab stays a tab, so every word stays greppable

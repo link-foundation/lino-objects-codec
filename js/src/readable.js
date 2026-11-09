@@ -34,6 +34,11 @@
  * | `string`                        | quoted text, never base64                |
  * | `number` / `boolean` / `null` / `undefined` | bare, so the type survives the round trip |
  *
+ * An integer Number beyond `Number.MAX_SAFE_INTEGER` is written with an exponent
+ * (`1e18` as `1e+18`): bare digits that do not fit a safe integer read back as a
+ * string, so that a `bigint` keeps every digit, while the exponent form reads
+ * back as the same Number.
+ *
  * Empty containers keep their type: an empty array is `()` on one line, while an
  * empty object is written as `(` and `)` on two lines.
  *
@@ -419,6 +424,13 @@ function formatNumber(value) {
   }
   if (value === -Infinity) {
     return '-Infinity';
+  }
+  // A bare integer spelling beyond Number.MAX_SAFE_INTEGER reads back as a
+  // string (refToValue keeps digits it cannot hold exactly), so an unsafe
+  // integer Number is written with an exponent, which reads back as the same
+  // Number. toExponential() keeps exactly the digits needed to round-trip.
+  if (Number.isInteger(value) && !Number.isSafeInteger(value)) {
+    return value.toExponential();
   }
   return String(value);
 }
