@@ -20,7 +20,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-    "links-notation>=0.27.1,<0.28.0",
+    "links-notation>=0.31.3,<0.32.0",
 ]
 
 [project.optional-dependencies]
@@ -30,9 +30,9 @@ dependencies = [
 dev = [
     "pytest>=9.2.0",
     "pytest-cov>=7.1.0",
-    "ruff>=0.17.3",
+    "ruff>=0.17.4",
     "mypy>=2.4.1",
-    "scriv[toml]>=1.8",
+    "scriv[toml]>=1.8.1",
 ]
 
 [project.urls]

@@ -347,6 +347,11 @@ bare-value lines make an array:
 - Strings are double-quoted and written as text: `name "Alice"`
 - Numbers, `true`, `false` and `null` are bare, so types survive a round trip
 - `NaN`, `Infinity` and `-Infinity` are written as such
+- An integer Number beyond `Number.MAX_SAFE_INTEGER` is written with an
+  exponent — `1e18` as `1e+18`, `-9007199254740992` as
+  `-9.007199254740992e+15` — so it reads back as the same Number; bare digits
+  that do not fit a safe integer (a `bigint`, or a hand-written identifier) read
+  back as their exact digit string
 - An empty array is `()`; an empty object is `(` + newline + `)`
 - A string is written as text whatever it holds: a newline stays a newline and
   a tab stays a tab, so every word stays greppable

@@ -1,7 +1,7 @@
 # zizmor configuration for the workflow security audit run by
 # `.github/workflows/workflows.yml` (issue #71, CI/CD best practice #14).
 # Reproduce locally:
-#   pipx run zizmor==1.31.1 --config .github/zizmor.yml --min-confidence low .
+#   pipx run zizmor==1.32.0 --config .github/zizmor.yml --min-confidence low .
 #
 # Blanket policy, copied from the link-foundation pipeline templates:
 # third-party actions must be pinned to a commit hash, because a mutable tag or

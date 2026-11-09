@@ -4,9 +4,9 @@ version = 4
 
 [[package]]
 name = "links-notation"
-version = "0.27.1"
+version = "0.31.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d9f029afccea88d0172f161424435d81ddedf2db29505de317c7b5fa55ef1cf4"
+checksum = "b7c9656daddfe14ca33be9874693dfd69cae73d2c35adb93cdfdaa911c59ddc1"
 dependencies = [
  "links-notation-macro",
  "nom",

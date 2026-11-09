@@ -61,7 +61,7 @@ jobs:
     env:
       # One version for both passes below; scripts/check_dependency_freshness.py
       # reads it from this line.
-      ZIZMOR_VERSION: 1.31.1
+      ZIZMOR_VERSION: 1.32.0
     concurrency:
       group: check-${{ github.workflow }}-${{ github.ref }}-zizmor
       cancel-in-progress: true
@@ -74,8 +74,8 @@ jobs:
       # scanning is unavailable (forks), annotations fail loudly everywhere.
       # `version` is named rather than left to the action's frozen `latest`
       # table, so a zizmor bump is a visible line in the diff. Reproduce with:
-      #   pipx run zizmor==1.31.1 --config .github/zizmor.yml --min-confidence low .
-      - uses: zizmorcore/zizmor-action@v0.8.0
+      #   pipx run zizmor==1.32.0 --config .github/zizmor.yml --min-confidence low .
+      - uses: zizmorcore/zizmor-action@v0.8.1
         with:
           advanced-security: false
           annotations: true
