@@ -49,24 +49,30 @@ jobs:
         with:
           persist-credentials: false
 
-      # Buildless C# extraction restores NuGet references itself and is
-      # better at it with the SDK the project targets on PATH.
       - name: Setup .NET
         if: matrix.language == 'csharp'
         uses: actions/setup-dotnet@v6.1.0
         with:
           global-json-file: csharp/global.json
 
-      # Every language here supports `build-mode: none`. Left unset, C# fell
-      # back to autobuild and warned on each run (issue #71): "Cannot build
-      # an overlay database because build-mode is set to "undefined" instead
-      # of "none"". Buildless also drops the autobuild step, whose success
-      # depended on guessing this monorepo's build entry point.
+      # C# buildless extraction replaces the targeting-pack directory and fails
+      # to restore this .NET 11 graph. Trace the real locked builds instead of
+      # accepting incomplete references or guessing monorepo build entrypoints.
+      # Other languages retain an explicit buildless mode (issue #71).
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4.39.3
         with:
           languages: ${{ matrix.language }}
-          build-mode: none
+          build-mode: ${{ matrix.language == 'csharp' && 'manual' || 'none' }}
+
+      - name: Build C# projects for analysis
+        if: matrix.language == 'csharp'
+        working-directory: ./csharp
+        run: |
+          for project in Lino.Objects.Codec.sln examples/BasicUsage.csproj ../experiments/issue-47/csharp-interop/Interop.csproj; do
+            dotnet restore "$project" --locked-mode
+            dotnet build "$project" --no-restore --configuration Release --no-incremental -p:UseSharedCompilation=false
+          done
 
       - name: Analyze
         uses: github/codeql-action/analyze@v4.39.3
@@ -135,8 +141,13 @@ jobs:
       - name: Audit the committed lockfiles
         working-directory: ./js
         run: |
-          npm audit --prefix .. --package-lock-only
-          npm audit --package-lock-only
+          status=0
+          npm audit --prefix .. --package-lock-only || status=1
+          npm audit --package-lock-only || status=1
+          if [ "$status" -ne 0 ]; then
+            echo '::error::Resolve every advisory in both lockfiles. npm 12.2.2 bundles vulnerable glob/minimatch; the released CLI must be fixed upstream: https://github.com/npm/cli/issues/10299'
+          fi
+          exit "$status"
 
   cargo-audit:
     name: Audit Cargo lock
