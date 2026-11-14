@@ -18,7 +18,7 @@
  * 4. If no PR found, simply don't display any PR link (no guessing)
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
+ * - Shared lockfile-managed release dependencies from the repository root
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  *

@@ -7,7 +7,7 @@
  *   instant: Run instant version bump with bump_type (patch|minor|major) and optional description
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
+ * - Shared lockfile-managed release dependencies from the repository root
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
