@@ -138,16 +138,14 @@ jobs:
           echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       # Audit both committed npm trees, including private release tools.
+      # npm's latest official bundle needs an upstream release. Only PRs may
+      # defer the two recorded findings; main fails with repair instructions.
+      # The helper keeps enforcing application findings and all new advisories.
+      - name: Test audit enforcement and the PR-only upstream deferral
+        run: node --test scripts/audit-npm-locks.test.mjs
+
       - name: Audit the committed lockfiles
-        working-directory: ./js
-        run: |
-          status=0
-          npm audit --prefix .. --package-lock-only || status=1
-          npm audit --package-lock-only || status=1
-          if [ "$status" -ne 0 ]; then
-            echo '::error::Resolve every advisory in both lockfiles. npm 12.2.2 bundles vulnerable glob/minimatch; the released CLI must be fixed upstream: https://github.com/npm/cli/issues/10299'
-          fi
-          exit "$status"
+        run: node scripts/audit-npm-locks.mjs
 
   cargo-audit:
     name: Audit Cargo lock
