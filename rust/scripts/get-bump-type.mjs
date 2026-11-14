@@ -7,7 +7,7 @@
  * Outputs the bump type to GITHUB_OUTPUT if running in GitHub Actions
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
+ * - Shared lockfile-managed release dependencies from the repository root
  */
 
 import { readFileSync, readdirSync, appendFileSync } from 'fs';

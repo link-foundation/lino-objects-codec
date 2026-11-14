@@ -67,10 +67,10 @@ export function escapeReference(options = {}) {
 
     if (doubleQuoteCount < singleQuoteCount) {
       // Use double quotes, escape internal double quotes by doubling
-      return `"${str.replace(/"/g, '""')}"`;
+      return `"${str.replaceAll('"', '""')}"`;
     } else {
       // Use single quotes, escape internal single quotes by doubling
-      return `'${str.replace(/'/g, "''")}'`;
+      return `'${str.replaceAll("'", "''")}'`;
     }
   }
 
@@ -96,10 +96,7 @@ export function unescapeReference(options = {}) {
   }
 
   // Unescape doubled quotes (Links Notation escape sequences)
-  let unescaped = str.replace(/""/g, '"'); // "" -> "
-  unescaped = unescaped.replace(/''/g, "'"); // '' -> '
-
-  return unescaped;
+  return str.replaceAll('""', '"').replaceAll("''", "'");
 }
 
 /**
@@ -351,7 +348,7 @@ function quoteReference(value) {
   }
 
   if (str.includes("'") && str.includes('"')) {
-    return `'${str.replace(/'/g, "''")}'`;
+    return `'${str.replaceAll("'", "''")}'`;
   }
 
   return `'${str}'`;
@@ -413,11 +410,16 @@ function formatIndentedScalarValue(value, reservedReferences = new Set()) {
  * @returns {string} Sanitized id segment
  */
 function sanitizeIdentifierPart(value) {
-  const sanitized = String(value)
-    .replace(/[^A-Za-z0-9_-]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-
-  return sanitized || 'item';
+  const sanitized = String(value).replace(/[^A-Za-z0-9_-]+/g, '_');
+  let start = 0;
+  let end = sanitized.length;
+  while (start < end && sanitized[start] === '_') {
+    start += 1;
+  }
+  while (end > start && sanitized[end - 1] === '_') {
+    end -= 1;
+  }
+  return sanitized.slice(start, end) || 'item';
 }
 
 /**

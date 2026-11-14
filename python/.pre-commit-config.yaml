@@ -1,6 +1,7 @@
+files: ^python/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -11,15 +12,16 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.4
+    rev: v0.17.5
     hooks:
-      - id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-check
+        args: [--config, python/pyproject.toml, --fix, --exit-non-zero-on-fix]
       - id: ruff-format
+        args: [--config, python/pyproject.toml]
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.13.0
+    rev: v2.4.1
     hooks:
       - id: mypy
-        additional_dependencies: [pytest, pytest-asyncio]
-        args: [--strict, --ignore-missing-imports]
+        additional_dependencies: [pytest==9.2.0, links-notation==0.31.5]
+        args: [--config-file, python/pyproject.toml, --strict, --ignore-missing-imports]

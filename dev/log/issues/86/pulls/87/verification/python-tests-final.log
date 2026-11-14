@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.15.2, pytest-9.2.0, pluggy-1.7.0
+rootdir: /tmp/gh-issue-solver-1794665145423/python
+configfile: pyproject.toml
+plugins: cov-7.1.0, platformdirs-4.14.5
+collected 536 items
+
+python/tests/test_basic_types.py ......................                  [  4%]
+python/tests/test_circular_references.py .............                   [  6%]
+python/tests/test_collections.py .................                       [  9%]
+python/tests/test_compact_interop.py ...                                 [ 10%]
+python/tests/test_create_github_release_helpers.py ....                  [ 11%]
+python/tests/test_detect_code_changes.py ..........                      [ 12%]
+python/tests/test_format.py ........................                     [ 17%]
+python/tests/test_indented_multiline.py ..................               [ 20%]
+python/tests/test_large_documents.py .............                       [ 23%]
+python/tests/test_plain_text_values.py ................................. [ 29%]
+                                                                         [ 29%]
+python/tests/test_pypi_publish_preflight.py ...............              [ 32%]
+python/tests/test_readable_conformance.py .............................. [ 37%]
+........................................................................ [ 51%]
+........................................................................ [ 64%]
+........................................................................ [ 77%]
+........................................................................ [ 91%]
+............                                                             [ 93%]
+python/tests/test_single_line_format.py ....................             [ 97%]
+python/tests/test_validate_changeset.py ..........                       [ 99%]
+python/tests/test_value_helpers.py .                                     [ 99%]
+python/tests/test_version_and_commit.py ...                              [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.15.2-final-0 ________________
+
+Name                                                 Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------------
+python/src/link_notation_objects_codec/__init__.py       9      0   100%
+python/src/link_notation_objects_codec/codec.py        278     41    85%   294, 310, 335, 358, 396-397, 404, 415-423, 478, 500, 511-517, 525, 531, 543, 550, 553-565, 576-579, 710
+python/src/link_notation_objects_codec/debug.py         17      3    82%   27, 39, 54
+python/src/link_notation_objects_codec/format.py        80      4    95%   58, 209, 224, 243
+python/src/link_notation_objects_codec/readable.py     439     25    94%   223, 229, 366-368, 482-485, 602, 621, 627, 662, 678, 699, 705, 722, 780, 786, 792, 811, 814-815, 837, 844-845
+----------------------------------------------------------------------------------
+TOTAL                                                  823     73    91%
+============================= 536 passed in 3.21s ==============================

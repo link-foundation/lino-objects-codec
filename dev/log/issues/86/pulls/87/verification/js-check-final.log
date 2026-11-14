@@ -1,0 +1,159 @@
+npm notice run lino-objects-codec@0.9.6 check
+npm notice run npm run lint && npm run format:check && npm run check:duplication
+npm notice run lino-objects-codec@0.9.6 lint
+npm notice run eslint . --max-warnings 0
+npm notice run lino-objects-codec@0.9.6 format:check
+npm notice run prettier --check .
+Checking formatting...
+All matched files use Prettier code style!
+npm notice run lino-objects-codec@0.9.6 check:duplication
+npm notice run jscpd .
+Using config from .jscpd.json
+[1mClone found (javascript)[22m
+ - [1m[32mREADME.md:javascript[39m[22m [63:12 - 71:6] (8 lines, 33 tokens)
+   examples/basic_usage.js [15:24 - 22:8]
+[1mClone found (javascript)[22m
+ - [1m[32mREADME.md:javascript[39m[22m [63:14 - 69:2] (7 lines, 30 tokens)
+   tests/test_format.test.js [336:10 - 342:6]
+[1mClone found (javascript)[22m
+ - [1m[32mREADME.md:javascript[39m[22m [63:14 - 69:2] (7 lines, 30 tokens)
+   tests/test_format.test.js [420:32 - 426:4]
+[1mClone found (markdown)[22m
+ - [1m[32mREADME.md:markdown[39m[22m [625:25 - 633:2] (9 lines, 33 tokens)
+   README.md:markdown [637:39 - 645:2]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/changeset-version.mjs[39m[22m [29:45 - 34:2] (6 lines, 35 tokens)
+   scripts/create-manual-changeset.mjs [79:44 - 84:2]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/changeset-version.mjs[39m[22m [29:45 - 34:2] (6 lines, 35 tokens)
+   scripts/instant-version-bump.mjs [111:53 - 116:2]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/changeset-version.mjs[39m[22m [29:45 - 34:2] (6 lines, 35 tokens)
+   scripts/validate-changeset.mjs [165:55 - 170:4]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/check-changesets.mjs[39m[22m [26:1 - 32:2] (7 lines, 46 tokens)
+   scripts/detect-code-changes.mjs [62:1 - 68:2]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/check-version.mjs[39m[22m [26:41 - 47:9] (22 lines, 55 tokens)
+   scripts/detect-code-changes.mjs [40:36 - 62:9]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-github-release.mjs[39m[22m [26:38 - 37:15] (12 lines, 49 tokens)
+   scripts/format-release-notes.mjs [36:77 - 47:15]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-github-release.mjs[39m[22m [28:45 - 35:32] (8 lines, 32 tokens)
+   scripts/create-manual-changeset.mjs [21:27 - 27:32]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-github-release.mjs[39m[22m [28:1 - 37:15] (10 lines, 48 tokens)
+   scripts/format-github-release.mjs [17:1 - 26:15]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-github-release.mjs[39m[22m [28:45 - 35:32] (8 lines, 32 tokens)
+   scripts/publish-to-npm.mjs [31:38 - 37:32]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-manual-changeset.mjs[39m[22m [19:77 - 38:18] (20 lines, 93 tokens)
+   scripts/instant-version-bump.mjs [15:49 - 34:18]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/create-manual-changeset.mjs[39m[22m [21:55 - 29:15] (9 lines, 33 tokens)
+   scripts/publish-to-npm.mjs [31:66 - 38:18]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/publish-to-npm.mjs[39m[22m [29:34 - 38:18] (10 lines, 42 tokens)
+   scripts/version-and-commit.mjs [17:55 - 27:15]
+[1mClone found (javascript)[22m
+ - [1m[32mscripts/publish-to-npm.mjs[39m[22m [388:3 - 394:8] (7 lines, 30 tokens)
+   scripts/version-and-commit.mjs [210:3 - 216:8]
+[1mClone found (javascript)[22m
+ - [1m[32msrc/codec.js[39m[22m [415:9 - 420:15] (6 lines, 30 tokens)
+   src/codec.js [591:20 - 596:15]
+[1mClone found (javascript)[22m
+ - [1m[32msrc/format.js[39m[22m [53:3 - 64:48] (12 lines, 65 tokens)
+   src/format.js [342:3 - 350:48]
+[1mClone found (javascript)[22m
+ - [1m[32msrc/fuzzy-match.js[39m[22m [170:30 - 177:5] (8 lines, 43 tokens)
+   src/fuzzy-match.js [221:31 - 227:8]
+[1mClone found (javascript)[22m
+ - [1m[32msrc/fuzzy-match.js[39m[22m [184:60 - 193:8] (10 lines, 50 tokens)
+   src/fuzzy-match.js [234:12 - 243:10]
+[1mClone found (javascript)[22m
+ - [1m[32msrc/readable.js[39m[22m [254:5 - 264:16] (11 lines, 50 tokens)
+   src/readable.js [300:17 - 310:16]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_basic_types.test.js[39m[22m [23:24 - 30:6] (8 lines, 39 tokens)
+   tests/test_basic_types.test.js [43:29 - 50:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_basic_types.test.js[39m[22m [112:63 - 117:33] (6 lines, 50 tokens)
+   tests/test_basic_types.test.js [189:3 - 194:33]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_basic_types.test.js[39m[22m [188:31 - 193:34] (6 lines, 44 tokens)
+   tests/test_basic_types.test.js [202:34 - 207:34]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [25:37 - 30:10] (6 lines, 34 tokens)
+   tests/test_circular_references.test.js [74:32 - 79:10]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [88:12 - 94:28] (7 lines, 43 tokens)
+   tests/test_circular_references.test.js [215:12 - 221:28]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [88:17 - 93:29] (6 lines, 31 tokens)
+   tests/test_circular_references.test.js [244:16 - 249:29]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [132:31 - 140:49] (9 lines, 52 tokens)
+   tests/test_circular_references.test.js [147:46 - 155:49]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [136:19 - 142:24] (7 lines, 33 tokens)
+   tests/test_circular_references.test.js [172:12 - 178:24]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_circular_references.test.js[39m[22m [136:11 - 142:10] (7 lines, 31 tokens)
+   tests/test_circular_references.test.js [190:10 - 196:10]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_collections.test.js[39m[22m [24:22 - 30:6] (7 lines, 39 tokens)
+   tests/test_collections.test.js [100:22 - 106:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_collections.test.js[39m[22m [56:35 - 65:6] (10 lines, 51 tokens)
+   tests/test_collections.test.js [76:25 - 86:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_collections.test.js[39m[22m [139:39 - 148:6] (10 lines, 49 tokens)
+   tests/test_collections.test.js [161:5 - 170:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_collections.test.js[39m[22m [193:4 - 200:6] (8 lines, 39 tokens)
+   tests/test_collections.test.js [205:4 - 212:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_format.test.js[39m[22m [209:45 - 215:6] (7 lines, 38 tokens)
+   tests/test_format.test.js [216:58 - 222:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_format.test.js[39m[22m [209:45 - 215:6] (7 lines, 38 tokens)
+   tests/test_format.test.js [223:39 - 229:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_format.test.js[39m[22m [209:45 - 215:6] (7 lines, 38 tokens)
+   tests/test_format.test.js [236:3 - 243:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_format.test.js[39m[22m [443:20 - 452:4] (10 lines, 54 tokens)
+   tests/test_format.test.js [476:22 - 485:4]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_format.test.js[39m[22m [444:5 - 454:6] (11 lines, 55 tokens)
+   tests/test_format.test.js [457:39 - 467:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_plain_text_values.test.js[39m[22m [63:62 - 69:6] (7 lines, 34 tokens)
+   tests/test_plain_text_values.test.js [107:62 - 112:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_plain_text_values.test.js[39m[22m [63:71 - 69:6] (7 lines, 30 tokens)
+   tests/test_single_line_format.test.js [97:57 - 101:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_readable_conformance.test.js[39m[22m [118:44 - 123:6] (6 lines, 68 tokens)
+   tests/test_readable_conformance.test.js [151:63 - 156:6]
+[1mClone found (javascript)[22m
+ - [1m[32mtests/test_unsafe_integer_numbers.test.js[39m[22m [126:50 - 132:6] (7 lines, 40 tokens)
+   tests/test_unsafe_integer_numbers.test.js [133:48 - 139:6]
+[90m┌────────────┬────────────────┬─────────────┬──────────────┬──────────────┬──────────────────┬───────────────────┐[39m
+[90m│[39m[31m Format     [39m[90m│[39m[31m Files analyzed [39m[90m│[39m[31m Total lines [39m[90m│[39m[31m Total tokens [39m[90m│[39m[31m Clones found [39m[90m│[39m[31m Duplicated lines [39m[90m│[39m[31m Duplicated tokens [39m[90m│[39m
+[90m├────────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤[39m
+[90m│[39m bash       [90m│[39m 1              [90m│[39m 10          [90m│[39m 71           [90m│[39m 0            [90m│[39m 0 (0.00%)        [90m│[39m 0 (0.00%)         [90m│[39m
+[90m├────────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤[39m
+[90m│[39m javascript [90m│[39m 50             [90m│[39m 9266        [90m│[39m 41682        [90m│[39m 43           [90m│[39m 366 (3.95%)      [90m│[39m 1826 (4.38%)      [90m│[39m
+[90m├────────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤[39m
+[90m│[39m json       [90m│[39m 2              [90m│[39m 87          [90m│[39m 254          [90m│[39m 0            [90m│[39m 0 (0.00%)        [90m│[39m 0 (0.00%)         [90m│[39m
+[90m├────────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤[39m
+[90m│[39m markdown   [90m│[39m 2              [90m│[39m 996         [90m│[39m 8478         [90m│[39m 1            [90m│[39m 9 (0.90%)        [90m│[39m 33 (0.39%)        [90m│[39m
+[90m├────────────┼────────────────┼─────────────┼──────────────┼──────────────┼──────────────────┼───────────────────┤[39m
+[90m│[39m [1mTotal:[22m     [90m│[39m 55             [90m│[39m 10359       [90m│[39m 50485        [90m│[39m 44           [90m│[39m 375 (3.62%)      [90m│[39m 1859 (3.68%)      [90m│[39m
+[90m└────────────┴────────────────┴─────────────┴──────────────┴──────────────┴──────────────────┴───────────────────┘[39m
+[90mFound 44 clones.[39m
+[32mHTML report saved to ./reports/jscpd/jscpd-report.html[39m
+[90mtime: 28.827ms[39m

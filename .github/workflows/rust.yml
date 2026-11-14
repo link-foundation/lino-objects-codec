@@ -6,11 +6,19 @@ on:
       - main
     paths:
       - 'rust/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/release-tools.mjs'
+      - 'rust-toolchain.toml'
       - '.github/workflows/rust.yml'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - 'rust/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/release-tools.mjs'
+      - 'rust-toolchain.toml'
       - '.github/workflows/rust.yml'
   workflow_dispatch:
     inputs:
@@ -67,15 +75,22 @@ jobs:
       workflow-changed: ${{ steps.changes.outputs.workflow-changed }}
       any-code-changed: ${{ steps.changes.outputs.any-code-changed }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Detect changes
         id: changes
@@ -99,7 +114,7 @@ jobs:
     needs: [detect-changes]
     if: github.event_name == 'pull_request' && needs.detect-changes.outputs.any-code-changed == 'true'
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -117,9 +132,16 @@ jobs:
         run: bash scripts/simulate-fresh-merge.sh
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Check for changelog fragments
         working-directory: ./rust
@@ -142,15 +164,22 @@ jobs:
     runs-on: ubuntu-24.04
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Check for manual version changes
         working-directory: ./rust
@@ -185,7 +214,7 @@ jobs:
       )
       }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
@@ -209,16 +238,23 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
           components: rustfmt, clippy
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cargo/bin/
@@ -262,7 +298,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, macos-15, windows-2025]
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
@@ -286,10 +322,10 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cargo/bin/
@@ -331,7 +367,7 @@ jobs:
     needs: [lint, test]
     if: ${{ !cancelled() && needs.lint.result == 'success' && needs.test.result == 'success' }}
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           # Full history: the merge simulation below needs the base branch.
           fetch-depth: 0
@@ -355,10 +391,10 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
 
       - name: Cache cargo dependencies
-        uses: actions/cache@v6
+        uses: actions/cache@v6.1.0
         with:
           path: |
             ~/.cargo/bin/
@@ -405,7 +441,7 @@ jobs:
     steps:
       # This job writes to the repository (a release commit and tag, or a
       # release PR branch), so the checkout explicitly persists credentials.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -417,12 +453,19 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Configure git
         working-directory: ./rust
@@ -607,7 +650,7 @@ jobs:
       }}
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -668,7 +711,7 @@ jobs:
     steps:
       # This job writes to the repository (a release commit and tag, or a
       # release PR branch), so the checkout explicitly persists credentials.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -680,12 +723,19 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Configure git
         working-directory: ./rust
@@ -837,15 +887,22 @@ jobs:
     steps:
       # This job writes to the repository (a release commit and tag, or a
       # release PR branch), so the checkout explicitly persists credentials.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Create changelog fragment
         working-directory: ./rust

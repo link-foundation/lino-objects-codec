@@ -7,12 +7,14 @@
  *   instant: Run instant version bump with bump_type (patch|minor|major) and optional description
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
+ * - Shared lockfile-managed release dependencies from the repository root
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
 
-import { readFileSync, readdirSync } from 'fs';
+import { readdirSync } from 'fs';
+
+import { packageVersion } from './package-version.mjs';
 
 import { loadReleaseTools, setOutput } from './release-tools.mjs';
 
@@ -107,14 +109,8 @@ function countChangesets() {
  * Get package version
  * @param {string} source - 'local' or 'remote'
  */
-async function getVersion(source = 'local') {
-  if (source === 'remote') {
-    const result = await $`git show origin/main:package.json`.run({
-      capture: true,
-    });
-    return JSON.parse(result.stdout).version;
-  }
-  return JSON.parse(readFileSync('./package.json', 'utf8')).version;
+function getVersion(source = 'local') {
+  return packageVersion(source === 'remote' ? { ref: 'origin/main' } : {});
 }
 
 async function main() {
@@ -198,9 +194,7 @@ async function main() {
       await $`git add -A`;
 
       // Commit with version number as message
-      const commitMessage = newVersion;
-      const escapedMessage = commitMessage.replace(/"/g, '\\"');
-      await $`git commit -m "${escapedMessage}"`;
+      await $`git commit -m ${newVersion}`;
 
       // Push directly to main
       await $`git push origin main`;

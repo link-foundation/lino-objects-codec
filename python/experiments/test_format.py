@@ -2,14 +2,15 @@
 """Quick test to verify the encoder produces the correct format."""
 
 import sys
+from typing import Any
 
 sys.path.insert(0, "src")
 
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import decode, encode
 
 # Test 1: Self-referencing list
 print("Test 1: Self-referencing list")
-lst = []
+lst: list[Any] = []
 lst.append(lst)
 encoded = encode(lst)
 print(f"  Encoded: {encoded}")
@@ -19,7 +20,7 @@ print()
 
 # Test 2: Self-referencing dict
 print("Test 2: Self-referencing dict")
-d = {}
+d: dict[str, Any] = {}
 d["self"] = d
 encoded = encode(d)
 print(f"  Encoded: {encoded}")
@@ -29,16 +30,14 @@ print()
 
 # Test 3: Mutual reference lists
 print("Test 3: Mutual reference lists")
-list1 = [1, 2]
-list2 = [3, 4]
+list1: list[Any] = [1, 2]
+list2: list[Any] = [3, 4]
 list1.append(list2)
 list2.append(list1)
 encoded = encode(list1)
 print(f"  Encoded: {encoded}")
 print("  Expected: (obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))")
-print(
-    f"  Match: {encoded == '(obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))'}"
-)
+print(f"  Match: {encoded == '(obj_0: list (int 1) (int 2) (obj_1: list (int 3) (int 4) obj_0))'}")
 print()
 
 # Test 4: Round-trip

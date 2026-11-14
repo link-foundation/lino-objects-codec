@@ -21,6 +21,7 @@ updates:
 
   - package-ecosystem: npm
     directories:
+      - /
       - /js
     patterns: ['*']
     multi-ecosystem-group: all-dependencies
@@ -34,6 +35,10 @@ updates:
   - package-ecosystem: nuget
     directories:
       - /csharp
+      - /csharp/examples
+      - /csharp/src/Lino.Objects.Codec
+      - /csharp/tests/Lino.Objects.Codec.Tests
+      - /experiments/issue-47/csharp-interop
     patterns: ['*']
     multi-ecosystem-group: all-dependencies
 
@@ -42,3 +47,18 @@ updates:
       - /
     patterns: ['*']
     multi-ecosystem-group: all-dependencies
+
+  - package-ecosystem: dotnet-sdk
+    directory: /csharp
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: rust-toolchain
+    directory: /
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: pre-commit
+    directory: /python
+    schedule:
+      interval: weekly

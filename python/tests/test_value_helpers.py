@@ -6,7 +6,7 @@ from link_notation_objects_codec import (
 )
 
 
-def test_public_value_helpers():
+def test_public_value_helpers() -> None:
     for value in ["", "both \"quotes\" and 'quotes'", "line\n\nnext\r\n", "\\n %0A\t\0", "世界🌍"]:
         line = format_value_single_line(value)
         assert "\n" not in line and "\r" not in line

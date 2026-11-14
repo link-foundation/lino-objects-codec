@@ -1,22 +1,12 @@
 import { appendFileSync } from 'node:fs';
 
+export { loadReleaseTools } from '../../scripts/release-tools.mjs';
+
 /** Append release step outputs when running under GitHub Actions. */
 export function setOutput(key, value) {
   if (process.env.GITHUB_OUTPUT) {
     appendFileSync(process.env.GITHUB_OUTPUT, `${key}=${value}\n`);
   }
-}
-
-/** Load the shared tools used by release commands, only when invoked. */
-export async function loadReleaseTools(
-  { configuration = true } = {},
-  fetchSource = globalThis.fetch
-) {
-  const { use } = eval(
-    await (await fetchSource('https://unpkg.com/use-m/use.js')).text()
-  );
-  const { $ } = await use('command-stream');
-  return configuration ? { $, ...(await use('lino-arguments')) } : { $ };
 }
 
 /** Common named options; --release-version avoids yargs' --version flag. */

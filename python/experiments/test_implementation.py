@@ -1,9 +1,11 @@
 """Test the new implementation."""
 
-from link_notation_objects_codec import encode, decode
+from typing import Any
+
+from link_notation_objects_codec import decode, encode
 
 print("=== Test 1: Simple self-reference (dict) ===")
-obj = {}
+obj: dict[str, Any] = {}
 obj["self"] = obj
 obj["other"] = {"1": 1, "2": 2}
 
@@ -25,7 +27,7 @@ except Exception as e:
 
 print()
 print("=== Test 2: Simple self-reference (list) ===")
-lst = []
+lst: list[Any] = []
 lst.append(lst)
 
 encoded2 = encode(lst)
@@ -44,8 +46,8 @@ except Exception as e:
 
 print()
 print("=== Test 3: Mutual references ===")
-list1 = [1, 2]
-list2 = [3, 4]
+list1: list[Any] = [1, 2]
+list2: list[Any] = [3, 4]
 list1.append(list2)
 list2.append(list1)
 

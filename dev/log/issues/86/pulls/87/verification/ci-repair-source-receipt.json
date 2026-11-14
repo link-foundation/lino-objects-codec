@@ -1,0 +1,487 @@
+{
+  "capturedAt": "2026-11-14T16:04:26.522528+00:00",
+  "base": "023932fc611d1f170de7e459af23c2b1ebf05ace",
+  "head": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+  "merge": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+  "runs": [
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937845,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Broken Link Checker",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937869,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Cross-Language Parity",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937894,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Dependency Freshness",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937893,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Shared CI Scripts",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937928,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Workflows",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937877,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Security",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612938018,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Python CI/CD",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937882,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "JavaScript CI/CD",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:25Z",
+      "databaseId": 43612937881,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "Rust CI/CD",
+      "status": "completed"
+    },
+    {
+      "conclusion": "success",
+      "createdAt": "2026-11-14T15:57:24Z",
+      "databaseId": 43612937828,
+      "headSha": "358c86b643444cab9e37cb1035ce22aa0c0c08fc",
+      "name": "C# CI/CD",
+      "status": "completed"
+    }
+  ],
+  "checks": [
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132503487153",
+      "name": "Instant Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132503487233",
+      "name": "Release Pending Check",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132503487280",
+      "name": "Auto Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132503379852",
+      "name": "Build Package",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132502190460",
+      "name": "Test (Rust on macos-15)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132503202736",
+      "name": "Instant Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132503202764",
+      "name": "Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132503168338",
+      "name": "Manual Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132503167354",
+      "name": "Auto Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132503029453",
+      "name": "Build Package",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132503032842",
+      "name": "Manual Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132503033623",
+      "name": "Auto Release",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132502126147",
+      "name": "Test (Node.js on macos-15)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132502825531",
+      "name": "Build Package",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501921548",
+      "name": "Test (.NET on macos-15)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501852080",
+      "name": "Test (Python 3.15 on macos-15)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132502190449",
+      "name": "Test (Rust on windows-2025)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132502190166",
+      "name": "Test (Rust on ubuntu-24.04)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/runs/132502240574",
+      "name": "CodeQL",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132502042259",
+      "name": "Lint and Format Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727876",
+      "name": "Audit Cargo lock",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501728058",
+      "name": "CodeQL (javascript-typescript)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132502125796",
+      "name": "Test (Node.js on ubuntu-24.04)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501728027",
+      "name": "CodeQL (csharp)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727943",
+      "name": "CodeQL (rust)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132502029146",
+      "name": "Lint and Format Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132502125830",
+      "name": "Test (Node.js on windows-2025)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501728104",
+      "name": "CodeQL (actions)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132502042256",
+      "name": "Changelog Fragment Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501852140",
+      "name": "Test (Python 3.15 on ubuntu-24.04)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132502029073",
+      "name": "Check for Changesets",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727970",
+      "name": "Audit npm lock",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501921374",
+      "name": "Test (.NET on windows-2025)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727929",
+      "name": "CodeQL (python)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501920948",
+      "name": "Lint and Format Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132501727952",
+      "name": "Version Modification Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501728223",
+      "name": "Changelog Fragment Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501851925",
+      "name": "Lint and Format Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132501727766",
+      "name": "Detect Changes",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501920916",
+      "name": "Test (.NET on ubuntu-24.04)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132501727927",
+      "name": "Detect Changes",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132501727738",
+      "name": "Check for Manual Version Changes",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937928/job/132501728117",
+      "name": "Audit Workflow Security",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727914",
+      "name": "Scan for Committed Secrets",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937869/job/132501727474",
+      "name": "Languages Change Together",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501852090",
+      "name": "Test (Python 3.15 on windows-2025)",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937928/job/132501727755",
+      "name": "Lint Workflows",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727877",
+      "name": "Audit Python dependencies",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937893/job/132501727605",
+      "name": "Test Shared Scripts",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501728169",
+      "name": "Detect Changes",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937877/job/132501727624",
+      "name": "Audit NuGet dependencies",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937894/job/132501727934",
+      "name": "Direct dependencies are current",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612938018/job/132501727938",
+      "name": "Detect Changes",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937894/job/132501727544",
+      "name": "Lockfiles have no pending compatible updates",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937845/job/132501727179",
+      "name": "Check Links",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937828/job/132501727781",
+      "name": "Changeset Check",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "pass",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937869/job/132501727191",
+      "name": "Implementations Pin One Parser Version",
+      "state": "SUCCESS"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937881/job/132501729346",
+      "name": "Create Changelog PR",
+      "state": "SKIPPED"
+    },
+    {
+      "bucket": "skipping",
+      "link": "https://github.com/link-foundation/lino-objects-codec/actions/runs/43612937882/job/132501728650",
+      "name": "Create Changeset PR",
+      "state": "SKIPPED"
+    }
+  ],
+  "analyses": [
+    {
+      "category": ".github/workflows/security.yml:codeql/language:rust",
+      "commit_sha": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+      "created_at": "2026-11-14T16:01:38Z",
+      "error": "",
+      "id": 2167925303,
+      "results_count": 0
+    },
+    {
+      "category": ".github/workflows/security.yml:codeql/language:csharp",
+      "commit_sha": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+      "created_at": "2026-11-14T16:00:28Z",
+      "error": "",
+      "id": 2167922627,
+      "results_count": 0
+    },
+    {
+      "category": ".github/workflows/security.yml:codeql/language:javascript-typescript",
+      "commit_sha": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+      "created_at": "2026-11-14T16:00:06Z",
+      "error": "",
+      "id": 2167921802,
+      "results_count": 0
+    },
+    {
+      "category": ".github/workflows/security.yml:codeql/language:actions",
+      "commit_sha": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+      "created_at": "2026-11-14T15:59:29Z",
+      "error": "",
+      "id": 2167920528,
+      "results_count": 0
+    },
+    {
+      "category": ".github/workflows/security.yml:codeql/language:python",
+      "commit_sha": "5f6a6ec871d1efb9bb611a09b5510190f29be932",
+      "created_at": "2026-11-14T15:59:21Z",
+      "error": "",
+      "id": 2167920263,
+      "results_count": 0
+    }
+  ],
+  "openAlerts": []
+}

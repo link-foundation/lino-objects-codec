@@ -34,30 +34,22 @@ test('release output appends values and is harmless outside GitHub Actions', () 
 
 test('release loader requests configuration only for commands that need it', async () => {
   const calls = [];
-  globalThis.__releaseToolCalls = calls;
-  const fetchSource = async (url) => {
-    assert.equal(url, 'https://unpkg.com/use-m/use.js');
-    return {
-      text: async () => `({ use: async name => {
-        globalThis.__releaseToolCalls.push(name);
-        return name === 'command-stream' ? { $: 'shell' } : { makeConfig: 'config' };
-      } })`,
-    };
+  const importModule = async (name) => {
+    calls.push(name);
+    return name === 'command-stream'
+      ? { $: 'shell' }
+      : { makeConfig: 'config' };
   };
-  try {
-    assert.deepEqual(await loadReleaseTools({}, fetchSource), {
-      $: 'shell',
-      makeConfig: 'config',
-    });
-    assert.deepEqual(calls.splice(0), ['command-stream', 'lino-arguments']);
-    assert.deepEqual(
-      await loadReleaseTools({ configuration: false }, fetchSource),
-      { $: 'shell' }
-    );
-    assert.deepEqual(calls, ['command-stream']);
-  } finally {
-    delete globalThis.__releaseToolCalls;
-  }
+  assert.deepEqual(await loadReleaseTools({}, importModule), {
+    $: 'shell',
+    makeConfig: 'config',
+  });
+  assert.deepEqual(calls.splice(0), ['command-stream', 'lino-arguments']);
+  assert.deepEqual(
+    await loadReleaseTools({ configuration: false }, importModule),
+    { $: 'shell' }
+  );
+  assert.deepEqual(calls, ['command-stream']);
 });
 
 test('release arguments retain environment defaults and do not shadow --version', () => {

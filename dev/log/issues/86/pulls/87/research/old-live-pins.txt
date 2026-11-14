@@ -1,0 +1,22 @@
+./rust/scripts/crates-release-helpers.mjs:225: * Whether a resolved version satisfies a caret requirement such as `^0.31.4`
+./rust/scripts/crates-release-helpers.mjs:226: * (or the bare `0.31.4` cargo reads the same way). Only caret requirements
+./rust/scripts/crates-release-helpers.mjs:229: * @param {string} version - e.g. `0.31.4`
+./rust/scripts/crates-release-helpers.mjs:230: * @param {string} req - e.g. `^0.31.4`
+./rust/scripts/crates-release-helpers.mjs:256: * Parse `cargo tree --prefix none` lines such as `links-notation v0.31.4`.
+./rust/scripts/verify-published-crate.mjs:16: *      requirements (`0.31.4` in the manifest is `^0.31.4` on the registry) and
+./rust/scripts/crates-release-helpers.test.mjs:108:links-notation = "0.31.4"
+./rust/scripts/crates-release-helpers.test.mjs:146:    { name: 'links-notation', kind: 'normal', req: '0.31.4', optional: false },
+./rust/scripts/crates-release-helpers.test.mjs:157:      '[dependencies]\nlino = { package = "links-notation", version = "0.31.4" }\n'
+./rust/scripts/crates-release-helpers.test.mjs:163:        req: '0.31.4',
+./rust/scripts/crates-release-helpers.test.mjs:171:  assert.equal(normalizeRequirement('0.31.4'), '^0.31.4');
+./rust/scripts/crates-release-helpers.test.mjs:172:  assert.equal(normalizeRequirement('^0.31.4'), '^0.31.4');
+./rust/scripts/crates-release-helpers.test.mjs:183:    ['links-notation (normal): crates.io has ^0.27.1, expected ^0.31.4']
+./rust/scripts/crates-release-helpers.test.mjs:190:    body: REGISTRY_0_9_3.replace('^0.27.1', '^0.31.4'),
+./rust/scripts/crates-release-helpers.test.mjs:230:  assert.equal(satisfiesCaret('0.31.4', '0.31.4'), true);
+./rust/scripts/crates-release-helpers.test.mjs:231:  assert.equal(satisfiesCaret('0.31.9', '^0.31.4'), true);
+./rust/scripts/crates-release-helpers.test.mjs:232:  assert.equal(satisfiesCaret('0.31.3', '^0.31.4'), false);
+./rust/scripts/crates-release-helpers.test.mjs:233:  assert.equal(satisfiesCaret('0.27.1', '^0.31.4'), false);
+./rust/scripts/crates-release-helpers.test.mjs:234:  assert.equal(satisfiesCaret('0.32.0', '^0.31.4'), false);
+./rust/scripts/crates-release-helpers.test.mjs:243:    'lino-objects-codec v0.9.4\nbase64 v0.23.1\nlinks-notation v0.31.4\nlinks-notation v0.27.1 (*)\n'
+./rust/scripts/crates-release-helpers.test.mjs:246:  assert.equal(tree.get('links-notation'), '0.31.4');
+./experiments/issue-65/consumer/src/main.rs:11:    println!("Consumer uses links-notation 0.31.4 and the public value formatter.");

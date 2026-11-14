@@ -4,11 +4,7 @@
 
 console.log('process.argv:', process.argv);
 
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
-
-const { makeConfig } = await use('lino-arguments');
+import { makeConfig } from 'lino-arguments';
 
 const config = makeConfig({
   yargs: ({ yargs, getenv }) =>

@@ -524,7 +524,7 @@ class _Node:
         is_ref: bool,
         value: str = "",
         quoted: bool = False,
-        rows: list[list["_Node"]] | None = None,
+        rows: list[list[_Node]] | None = None,
         multiline: bool = False,
         is_object: bool = False,
     ) -> None:

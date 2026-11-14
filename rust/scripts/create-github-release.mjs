@@ -14,7 +14,6 @@
  *   - Body MUST contain a crates.io shields.io badge
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
@@ -29,14 +28,13 @@ import {
   normalizeReleaseVersionForBadge,
 } from './release-format-helpers.mjs';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
+import {
+  extractChangelogEntry,
+  hasShieldsBadge,
+} from '../../scripts/release-notes.mjs';
 
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+import { $ } from 'command-stream';
+import { makeConfig } from 'lino-arguments';
 
 const CARGO_TOML_PATH = './Cargo.toml';
 
@@ -120,23 +118,7 @@ try {
     changelog = '';
   }
 
-  // Extract changelog entry for this version
-  // Read from CHANGELOG.md between this version header and the next version header
-  const versionHeaderRegex = new RegExp(
-    `## \\[?${semver.replace(/\./g, '\\.')}\\]?[\\s\\S]*?(?=## \\[?\\d|$)`
-  );
-  const match = changelog.match(versionHeaderRegex);
-
-  let releaseNotes = '';
-  if (match) {
-    // Remove the version header itself and trim
-    releaseNotes = match[0]
-      .replace(
-        new RegExp(`## \\[?${semver.replace(/\./g, '\\.')}\\]?[^\\n]*`),
-        ''
-      )
-      .trim();
-  }
+  let releaseNotes = extractChangelogEntry(changelog, semver);
 
   if (!releaseNotes) {
     releaseNotes = `Release ${semver}`;
@@ -146,7 +128,7 @@ try {
   // when the changelog body itself does not embed one. The format-release
   // script will skip any release that already contains a shields.io badge,
   // so adding it here is idempotent.
-  if (crateName && !/img\.shields\.io/.test(releaseNotes)) {
+  if (crateName && !hasShieldsBadge(releaseNotes)) {
     const badge = buildCratesIoVersionBadge(crateName, semver);
     releaseNotes = `${releaseNotes}\n\n---\n\n${badge}`;
   }

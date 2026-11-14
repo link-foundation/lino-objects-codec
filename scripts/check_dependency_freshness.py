@@ -16,7 +16,6 @@ the weekly schedule report (CI/CD best practice #17, issue #71).
 import argparse
 import json
 import os
-from pathlib import Path
 import re
 import sys
 import tomllib
@@ -25,6 +24,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from functools import cache
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 ISSUE = re.compile(r"https://github\.com/([\w.-]+/[\w.-]+)/issues/(\d+)")
@@ -38,9 +38,21 @@ ACTION_REF = re.compile(
 # Tools installed by version rather than through `uses: owner/repo@vN`:
 # (workflow, pattern whose group 1 is the version, GitHub repository).
 TOOLS = [
-    (".github/workflows/workflows.yml", r"uses:\s*docker://rhysd/actionlint@sha256:[0-9a-f]{64}\s+#\s*v(\d+(?:\.\d+)*)", "rhysd/actionlint"),
-    (".github/workflows/workflows.yml", r"^\s*ZIZMOR_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)", "zizmorcore/zizmor"),
-    (".github/workflows/security.yml", r"^\s*GITLEAKS_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)", "gitleaks/gitleaks"),
+    (
+        ".github/workflows/workflows.yml",
+        r"uses:\s*docker://rhysd/actionlint@sha256:[0-9a-f]{64}\s+#\s*v(\d+(?:\.\d+)*)",
+        "rhysd/actionlint",
+    ),
+    (
+        ".github/workflows/workflows.yml",
+        r"^\s*ZIZMOR_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)",
+        "zizmorcore/zizmor",
+    ),
+    (
+        ".github/workflows/security.yml",
+        r"^\s*GITLEAKS_VERSION:\s*['\"]?v?(\d+(?:\.\d+)*)",
+        "gitleaks/gitleaks",
+    ),
 ]
 
 
@@ -66,11 +78,11 @@ def version_key(version: str) -> tuple[int, ...]:
 def declaration_matches(declaration: str, name: str) -> bool:
     escaped = re.escape(name)
     return bool(
-        re.match(rf'''\s*["']?{escaped}["']?\s*=''', declaration)
-        or re.search(rf'''["']{escaped}(?:\[|[<=>~!;'"\s])''', declaration)
-        or re.search(rf'''\bInclude=["']{escaped}["']''', declaration)
-        or re.search(rf'''\buses:\s*{escaped}(?:/[^@\s]+)?@''', declaration)
-        or re.match(rf'''\s*{escaped}\s*:''', declaration)
+        re.match(rf"""\s*["']?{escaped}["']?\s*=""", declaration)
+        or re.search(rf"""["']{escaped}(?:\[|[<=>~!;'"\s])""", declaration)
+        or re.search(rf"""\bInclude=["']{escaped}["']""", declaration)
+        or re.search(rf"""\buses:\s*{escaped}(?:/[^@\s]+)?@""", declaration)
+        or re.match(rf"""\s*{escaped}\s*:""", declaration)
     )
 
 
@@ -87,14 +99,16 @@ def blocker_on_line(text: str, name: str) -> str | None:
     return None
 
 
-def manifest_blocker(text: str, name: str, requirement: str, used: set[tuple[int, int, str]]) -> str | None:
+def manifest_blocker(
+    text: str, name: str, requirement: str, used: set[tuple[int, int, str]]
+) -> str | None:
     """Match each parsed dependency to one physical declaration, including repeats.
 
     Consume even uncommented lines so a dev dependency's comment cannot excuse
     a runtime dependency with the same name and version. Match the exact quoted
     requirement, rather than a version substring or a renamed Cargo package.
     """
-    quoted = re.compile(rf'''(["']){re.escape(requirement)}\1''')
+    quoted = re.compile(rf"""(["']){re.escape(requirement)}\1""")
     for index, line in enumerate(text.splitlines()):
         declaration = line.partition("#" if "#" in line else "<!--")[0]
         if declaration_matches(declaration, name):
@@ -109,7 +123,10 @@ def manifest_blocker(text: str, name: str, requirement: str, used: set[tuple[int
 def declarations(root: Path = ROOT) -> list[Dependency]:
     result = []
     # Include maintained experiment crates too; path dependencies are local.
-    cargo_paths = [root / "rust/Cargo.toml", *sorted((root / "experiments").glob("**/Cargo.toml"))]
+    cargo_paths = [
+        root / "rust/Cargo.toml",
+        *sorted((root / "experiments").glob("**/Cargo.toml")),
+    ]
     for path in cargo_paths:
         if "target" in path.parts:
             continue
@@ -126,12 +143,33 @@ def declarations(root: Path = ROOT) -> list[Dependency]:
                             continue
                         name = spec.get("package", name)
                         spec = spec.get("version", "")
-                    result.append(Dependency("cargo", name, floor(spec), str(path.relative_to(root)), manifest_blocker(text, declared_name, spec, used)))
-    path = root / "js/package.json"
-    data = json.loads(path.read_text())
-    for section in ["dependencies", "devDependencies", "optionalDependencies"]:
-        for name, spec in data.get(section, {}).items():
-            result.append(Dependency("npm", name, floor(spec), str(path.relative_to(root))))
+                    result.append(
+                        Dependency(
+                            "cargo",
+                            name,
+                            floor(spec),
+                            str(path.relative_to(root)),
+                            manifest_blocker(text, declared_name, spec, used),
+                        )
+                    )
+    for relative in ["package.json", "js/package.json"]:
+        path = root / relative
+        if not path.exists():
+            continue
+        data = json.loads(path.read_text())
+        for section in ["dependencies", "devDependencies", "optionalDependencies"]:
+            for name, spec in data.get(section, {}).items():
+                result.append(Dependency("npm", name, floor(spec), relative))
+        for name, spec in data.get("engines", {}).items():
+            if name in {"node", "npm"}:
+                result.append(
+                    Dependency(
+                        "toolchain" if name == "node" else "npm",
+                        name,
+                        floor(spec),
+                        relative,
+                    )
+                )
     path = root / "python/pyproject.toml"
     text = path.read_text()
     used = set()
@@ -141,27 +179,116 @@ def declarations(root: Path = ROOT) -> list[Dependency]:
         specs.extend(group)
     for spec in specs:
         name = re.match(r"[\w.-]+", spec).group()
-        result.append(Dependency("pypi", name, floor(spec), str(path.relative_to(root)), manifest_blocker(text, name, spec, used)))
-    for path in sorted((root / "csharp").glob("**/*.csproj")):
+        result.append(
+            Dependency(
+                "pypi",
+                name,
+                floor(spec),
+                str(path.relative_to(root)),
+                manifest_blocker(text, name, spec, used),
+            )
+        )
+    for path in sorted(
+        [
+            *(root / "csharp").glob("**/*.csproj"),
+            *(root / "experiments").glob("**/*.csproj"),
+        ]
+    ):
         if "obj" in path.parts or "bin" in path.parts:
             continue
         text = path.read_text()
         used = set()
         for ref in ET.fromstring(text).iter("PackageReference"):
-            result.append(Dependency("nuget", ref.attrib["Include"], floor(ref.attrib["Version"]), str(path.relative_to(root)), manifest_blocker(text, ref.attrib["Include"], ref.attrib["Version"], used)))
+            result.append(
+                Dependency(
+                    "nuget",
+                    ref.attrib["Include"],
+                    floor(ref.attrib["Version"]),
+                    str(path.relative_to(root)),
+                    manifest_blocker(
+                        text, ref.attrib["Include"], ref.attrib["Version"], used
+                    ),
+                )
+            )
     for path in sorted((root / ".github/workflows").glob("*.yml")):
         text = path.read_text()
+        for name, pattern, ecosystem in [
+            ("node", r"node-version:\s*['\"]?([\d.]+)", "toolchain"),
+            ("python", r"python-version:\s*['\"]?([\d.]+)", "toolchain"),
+            ("rust", r"toolchain:\s*['\"]?([\d.]+)", "toolchain"),
+            ("npm", r"npm@([\d.]+)", "npm"),
+            ("pip", r"pip==([\d.]+)", "pypi"),
+            ("cargo-audit", r"cargo-audit --version ([\d.]+)", "cargo"),
+        ]:
+            for version in re.findall(pattern, text):
+                result.append(
+                    Dependency(ecosystem, name, version, str(path.relative_to(root)))
+                )
         for line in text.splitlines():
             for name, tag, pinned in ACTION_REF.findall(line):
-                result.append(Dependency("github-actions", name, tag or pinned, str(path.relative_to(root)), blocker_on_line(line, name)))
+                result.append(
+                    Dependency(
+                        "github-actions",
+                        name,
+                        tag or pinned,
+                        str(path.relative_to(root)),
+                        blocker_on_line(line, name),
+                    )
+                )
     for relative, pattern, name in TOOLS:
         path = root / relative
-        line = next((line for line in path.read_text().splitlines() if re.search(pattern, line)), None)
+        line = next(
+            (
+                line
+                for line in path.read_text().splitlines()
+                if re.search(pattern, line)
+            ),
+            None,
+        )
         if line is None:
             # A tool that moved without this table following it would
             # otherwise silently drop out of the check (issue #71).
             raise ValueError(f"{relative}: no line matches {pattern!r} for {name}")
-        result.append(Dependency("github-tools", name, re.search(pattern, line).group(1), relative, blocker_on_line(line, name)))
+        result.append(
+            Dependency(
+                "github-tools",
+                name,
+                re.search(pattern, line).group(1),
+                relative,
+                blocker_on_line(line, name),
+            )
+        )
+    path = root / "python/.pre-commit-config.yaml"
+    if path.exists():
+        repo = None
+        for line in path.read_text().splitlines():
+            match = re.search(r"repo: https://github.com/([\w.-]+/[\w.-]+)", line)
+            if match:
+                repo = match[1]
+            match = re.search(r"rev: v?([\d.]+)", line)
+            if match and repo:
+                result.append(
+                    Dependency(
+                        "github-hooks", repo, match[1], str(path.relative_to(root))
+                    )
+                )
+    for relative, name in [
+        ("rust-toolchain.toml", "rust"),
+        ("csharp/global.json", "dotnet-sdk"),
+    ]:
+        path = root / relative
+        if path.exists():
+            data = (
+                json.loads(path.read_text())
+                if path.suffix == ".json"
+                else tomllib.loads(path.read_text())
+            )
+            version = (
+                data["sdk"]["version"]
+                if name == "dotnet-sdk"
+                else data["toolchain"]["channel"]
+            )
+            result.append(Dependency("toolchain", name, floor(version), relative))
     return result
 
 
@@ -170,50 +297,132 @@ def get_json(url: str):
     headers = {"User-Agent": "lino-objects-codec-dependency-freshness"}
     if url.startswith("https://api.github.com/") and os.environ.get("GH_TOKEN"):
         headers["Authorization"] = f"Bearer {os.environ['GH_TOKEN']}"
-    with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as response:
+    with urllib.request.urlopen(
+        urllib.request.Request(url, headers=headers), timeout=30
+    ) as response:
         return json.load(response)
 
 
 @cache
 def latest(ecosystem: str, name: str) -> str:
+    if ecosystem == "toolchain":
+        if name == "node":
+            return next(
+                row["version"].removeprefix("v")
+                for row in get_json("https://nodejs.org/dist/index.json")
+                if re.fullmatch(r"v\d+\.\d+\.\d+", row["version"])
+            )
+        if name == "python":
+            versions = get_json(
+                "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json"
+            )
+            return max(
+                (row["version"] for row in versions if row["stable"]), key=version_key
+            )
+        if name == "dotnet-sdk":
+            releases = get_json(
+                "https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json"
+            )["releases-index"]
+            return max(
+                (
+                    row["latest-sdk"]
+                    for row in releases
+                    if re.fullmatch(r"\d+\.\d+\.\d+", row["latest-sdk"])
+                ),
+                key=version_key,
+            )
+        if name == "rust":
+            with urllib.request.urlopen(
+                "https://static.rust-lang.org/dist/channel-rust-stable.toml", timeout=30
+            ) as response:
+                return tomllib.loads(response.read().decode())["pkg"]["rust"][
+                    "version"
+                ].split()[0]
+        raise ValueError(f"unknown toolchain: {name}")
+    if ecosystem == "github-hooks":
+        # Some mirrors publish only Git tags, with no GitHub Releases.
+        versions = []
+        for page in range(1, 6):
+            tags = get_json(
+                f"https://api.github.com/repos/{name}/tags?per_page=100&page={page}"
+            )
+            versions.extend(
+                tag["name"].removeprefix("v")
+                for tag in tags
+                if re.fullmatch(r"v?\d+\.\d+\.\d+", tag["name"])
+            )
+            if len(tags) < 100:
+                break
+        return max(versions, key=version_key)
     if ecosystem in {"github-actions", "github-tools"}:
-        tag = get_json(f"https://api.github.com/repos/{name}/releases/latest")["tag_name"]
+        tag = get_json(f"https://api.github.com/repos/{name}/releases/latest")[
+            "tag_name"
+        ]
         if re.fullmatch(r"v?\d+(?:\.\d+){0,3}", tag):
             return tag.removeprefix("v")
         # CodeQL also publishes bundle releases in the action repository.
         # Those tags do not version the action; find its stable release instead.
         for page in range(1, 6):
-            releases = get_json(f"https://api.github.com/repos/{name}/releases?per_page=100&page={page}")
+            releases = get_json(
+                f"https://api.github.com/repos/{name}/releases?per_page=100&page={page}"
+            )
             for release in releases:
                 tag = release["tag_name"]
-                if not release.get("prerelease") and not release.get("draft") and re.fullmatch(r"v?\d+(?:\.\d+){0,3}", tag):
+                if (
+                    not release.get("prerelease")
+                    and not release.get("draft")
+                    and re.fullmatch(r"v?\d+(?:\.\d+){0,3}", tag)
+                ):
                     return tag.removeprefix("v")
             if len(releases) < 100:
                 break
         raise ValueError("no stable action version found in recent releases")
     if ecosystem == "npm":
-        return get_json(f"https://registry.npmjs.org/{urllib.parse.quote(name, safe='')}/latest")["version"]
+        return get_json(
+            f"https://registry.npmjs.org/{urllib.parse.quote(name, safe='')}/latest"
+        )["version"]
     if ecosystem == "pypi":
         return get_json(f"https://pypi.org/pypi/{name}/json")["info"]["version"]
     if ecosystem == "nuget":
-        versions = get_json(f"https://api.nuget.org/v3-flatcontainer/{name.lower()}/index.json")["versions"]
+        versions = get_json(
+            f"https://api.nuget.org/v3-flatcontainer/{name.lower()}/index.json"
+        )["versions"]
     elif ecosystem == "cargo":
         # Cargo's sparse index avoids crates.io API rate limits and returns the
         # same published versions Cargo itself resolves.
         name = name.lower()
-        prefix = "1" if len(name) == 1 else "2" if len(name) == 2 else f"3/{name[0]}" if len(name) == 3 else f"{name[:2]}/{name[2:4]}"
-        with urllib.request.urlopen(f"https://index.crates.io/{prefix}/{name}", timeout=30) as response:
-            versions = [entry["vers"] for line in response for entry in [json.loads(line)] if not entry["yanked"]]
+        prefix = (
+            "1"
+            if len(name) == 1
+            else "2"
+            if len(name) == 2
+            else f"3/{name[0]}"
+            if len(name) == 3
+            else f"{name[:2]}/{name[2:4]}"
+        )
+        with urllib.request.urlopen(
+            f"https://index.crates.io/{prefix}/{name}", timeout=30
+        ) as response:
+            versions = [
+                entry["vers"]
+                for line in response
+                for entry in [json.loads(line)]
+                if not entry["yanked"]
+            ]
     else:
         raise ValueError(f"unknown ecosystem: {ecosystem}")
-    return max((v for v in versions if re.fullmatch(r"\d+(?:\.\d+){1,3}", v)), key=version_key)
+    return max(
+        (v for v in versions if re.fullmatch(r"\d+(?:\.\d+){1,3}", v)), key=version_key
+    )
 
 
 def check(dependency: Dependency, latest_version, issue_state) -> str | None:
     current = latest_version(dependency.ecosystem, dependency.name)
     if dependency.ecosystem == "github-actions" and "." not in dependency.version:
         current = current.split(".")[0]
-    if dependency.version is None or version_key(dependency.version) >= version_key(current):
+    if dependency.version is None or version_key(dependency.version) >= version_key(
+        current
+    ):
         return None
     if dependency.blocker:
         match = ISSUE.fullmatch(dependency.blocker)
@@ -231,13 +440,18 @@ def report(failures: list[str], mode: str) -> int:
         else:
             print(f"ERROR {error}", file=sys.stderr)
     if failures and mode == "report":
-        print(f"Report mode: {len(failures)} finding(s) above are advisory; a pull request gates on them.", file=sys.stderr)
+        print(
+            f"Report mode: {len(failures)} finding(s) above are advisory; a pull request gates on them.",
+            file=sys.stderr,
+        )
     return int(bool(failures)) if mode == "gate" else 0
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--json", action="store_true", help="report current registry data as JSON")
+    parser.add_argument(
+        "--json", action="store_true", help="report current registry data as JSON"
+    )
     parser.add_argument(
         "--mode",
         choices=["gate", "report"],
@@ -250,15 +464,26 @@ def main(argv: list[str] | None = None) -> int:
         try:
             current = latest(dependency.ecosystem, dependency.name)
             registry.append({**dependency.__dict__, "latest": current})
-            error = check(dependency, latest, lambda repo, number: get_json(f"https://api.github.com/repos/{repo}/issues/{number}")["state"])
+            error = check(
+                dependency,
+                latest,
+                lambda repo, number: get_json(
+                    f"https://api.github.com/repos/{repo}/issues/{number}"
+                )["state"],
+            )
             if error:
                 failures.append(error)
         except Exception as error:
-            failures.append(f"{dependency.manifest}: cannot verify {dependency.name}: {error}")
+            failures.append(
+                f"{dependency.manifest}: cannot verify {dependency.name}: {error}"
+            )
     if args.json:
         print(json.dumps(registry, indent=2))
     if not failures:
-        print(f"All {len(registry)} direct dependency declarations are current.", file=sys.stderr)
+        print(
+            f"All {len(registry)} direct dependency declarations are current.",
+            file=sys.stderr,
+        )
     return report(failures, args.mode)
 
 

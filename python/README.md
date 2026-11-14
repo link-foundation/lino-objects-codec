@@ -86,8 +86,8 @@ assert decode(encode(-123)) == -123
 
 # Floats
 assert decode(encode(3.14)) == 3.14
-assert decode(encode(float('inf'))) == float('inf')
-assert decode(encode(float('nan')))  # NaN != NaN, but both are NaN
+assert decode(encode(float("inf"))) == float("inf")
+assert decode(encode(float("nan")))  # NaN != NaN, but both are NaN
 
 # Strings (with full Unicode support)
 assert decode(encode("hello")) == "hello"
@@ -109,23 +109,13 @@ nested = [[1, 2], [3, 4], [5, [6, 7]]]
 assert decode(encode(nested)) == nested
 
 # Dictionaries
-person = {
-    "name": "Bob",
-    "age": 25,
-    "email": "bob@example.com"
-}
+person = {"name": "Bob", "age": 25, "email": "bob@example.com"}
 assert decode(encode(person)) == person
 
 # Complex nested structures
 complex_data = {
-    "users": [
-        {"id": 1, "name": "Alice"},
-        {"id": 2, "name": "Bob"}
-    ],
-    "metadata": {
-        "version": 1,
-        "count": 2
-    }
+    "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
+    "metadata": {"version": 1, "count": 2},
 }
 assert decode(encode(complex_data)) == complex_data
 ```
@@ -264,8 +254,8 @@ LINO_CODEC_DEBUG=1 python your_script.py   # 1, true, yes or on
 ```python
 from link_notation_objects_codec import set_debug_enabled
 
-set_debug_enabled(True)   # force on
-set_debug_enabled(None)   # follow LINO_CODEC_DEBUG again
+set_debug_enabled(True)  # force on
+set_debug_enabled(None)  # follow LINO_CODEC_DEBUG again
 ```
 
 Trace lines are written to standard error, prefixed with `[lino-codec]`. The

@@ -30,6 +30,8 @@ import sys
 import urllib.parse
 from pathlib import Path
 
+from release_notes import has_shields_badge
+
 
 def normalize_release_version_for_badge(release_version: str) -> str:
     """Strip any language prefix and leading "v" so we always have bare semver.
@@ -66,7 +68,7 @@ def build_pypi_badge(package_name: str, release_version: str) -> str:
     )
 
 
-def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess:
+def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
     """Run a command and handle errors."""
     print(f"Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)
@@ -254,7 +256,7 @@ def main() -> int:
         package_name = args.package_name or detect_pypi_package_name(project_root)
 
         release_notes = extract_changelog_entry(changelog_path, semver)
-        if package_name and "img.shields.io" not in release_notes:
+        if package_name and not has_shields_badge(release_notes):
             badge = build_pypi_badge(package_name, semver)
             release_notes = f"{release_notes}\n\n---\n\n{badge}"
 

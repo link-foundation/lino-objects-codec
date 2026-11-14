@@ -6,33 +6,33 @@ from link_notation_objects_codec import decode, encode
 class TestLists:
     """Tests for list type serialization."""
 
-    def test_encode_empty_list(self):
+    def test_encode_empty_list(self) -> None:
         """Test encoding empty list."""
         result = encode([])
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_simple_list(self):
+    def test_encode_simple_list(self) -> None:
         """Test encoding simple list."""
         result = encode([1, 2, 3])
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_empty_list(self):
+    def test_decode_empty_list(self) -> None:
         """Test decoding empty list."""
         encoded = encode([])
         result = decode(encoded)
         assert result == []
         assert isinstance(result, list)
 
-    def test_decode_simple_list(self):
+    def test_decode_simple_list(self) -> None:
         """Test decoding simple list."""
         encoded = encode([1, 2, 3])
         result = decode(encoded)
         assert result == [1, 2, 3]
         assert isinstance(result, list)
 
-    def test_roundtrip_list(self):
+    def test_roundtrip_list(self) -> None:
         """Test roundtrip encoding/decoding of lists."""
         test_values = [
             [],
@@ -49,7 +49,7 @@ class TestLists:
             assert decoded == value
             assert isinstance(decoded, list)
 
-    def test_nested_lists(self):
+    def test_nested_lists(self) -> None:
         """Test encoding/decoding nested lists."""
         test_values = [
             [[]],
@@ -67,33 +67,33 @@ class TestLists:
 class TestDicts:
     """Tests for dict type serialization."""
 
-    def test_encode_empty_dict(self):
+    def test_encode_empty_dict(self) -> None:
         """Test encoding empty dict."""
         result = encode({})
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_simple_dict(self):
+    def test_encode_simple_dict(self) -> None:
         """Test encoding simple dict."""
         result = encode({"a": 1, "b": 2})
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_empty_dict(self):
+    def test_decode_empty_dict(self) -> None:
         """Test decoding empty dict."""
         encoded = encode({})
         result = decode(encoded)
         assert result == {}
         assert isinstance(result, dict)
 
-    def test_decode_simple_dict(self):
+    def test_decode_simple_dict(self) -> None:
         """Test decoding simple dict."""
         encoded = encode({"a": 1, "b": 2})
         result = decode(encoded)
         assert result == {"a": 1, "b": 2}
         assert isinstance(result, dict)
 
-    def test_roundtrip_dict(self):
+    def test_roundtrip_dict(self) -> None:
         """Test roundtrip encoding/decoding of dicts."""
         test_values = [
             {},
@@ -110,7 +110,7 @@ class TestDicts:
             assert decoded == value
             assert isinstance(decoded, dict)
 
-    def test_nested_dicts(self):
+    def test_nested_dicts(self) -> None:
         """Test encoding/decoding nested dicts."""
         test_values = [
             {"a": {}},
@@ -123,7 +123,7 @@ class TestDicts:
             decoded = decode(encoded)
             assert decoded == value
 
-    def test_dict_with_various_key_types(self):
+    def test_dict_with_various_key_types(self) -> None:
         """Test encoding/decoding dicts with different key types."""
         # In JSON-like objects, keys are typically strings
         # But Python allows other immutable types as keys
@@ -142,7 +142,7 @@ class TestDicts:
 class TestComplexStructures:
     """Tests for complex nested structures."""
 
-    def test_list_of_dicts(self):
+    def test_list_of_dicts(self) -> None:
         """Test encoding/decoding list of dicts."""
         value = [
             {"name": "Alice", "age": 30},
@@ -152,7 +152,7 @@ class TestComplexStructures:
         decoded = decode(encoded)
         assert decoded == value
 
-    def test_dict_of_lists(self):
+    def test_dict_of_lists(self) -> None:
         """Test encoding/decoding dict of lists."""
         value = {
             "numbers": [1, 2, 3],
@@ -163,7 +163,7 @@ class TestComplexStructures:
         decoded = decode(encoded)
         assert decoded == value
 
-    def test_deeply_nested_structure(self):
+    def test_deeply_nested_structure(self) -> None:
         """Test encoding/decoding deeply nested structures."""
         value = {
             "users": [
@@ -188,7 +188,7 @@ class TestComplexStructures:
         decoded = decode(encoded)
         assert decoded == value
 
-    def test_json_like_object(self):
+    def test_json_like_object(self) -> None:
         """Test encoding/decoding typical JSON-like object."""
         value = {
             "id": 123,

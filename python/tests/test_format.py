@@ -13,35 +13,35 @@ from link_notation_objects_codec import (
 class TestEscapeReference:
     """Tests for escape_reference function."""
 
-    def test_simple_string(self):
+    def test_simple_string(self) -> None:
         assert escape_reference("hello") == "hello"
         assert escape_reference("world") == "world"
 
-    def test_numbers(self):
+    def test_numbers(self) -> None:
         assert escape_reference(42) == "42"
         assert escape_reference(3.14) == "3.14"
         assert escape_reference(-17) == "-17"
 
-    def test_booleans(self):
+    def test_booleans(self) -> None:
         assert escape_reference(True) == "True"
         assert escape_reference(False) == "False"
 
-    def test_string_with_spaces(self):
+    def test_string_with_spaces(self) -> None:
         result = escape_reference("hello world")
         assert result.startswith("'") or result.startswith('"')
         assert "hello world" in result
 
-    def test_string_with_single_quotes(self):
+    def test_string_with_single_quotes(self) -> None:
         result = escape_reference("it's")
         assert result.startswith('"')
         assert result == '"it\'s"'
 
-    def test_string_with_double_quotes(self):
+    def test_string_with_double_quotes(self) -> None:
         result = escape_reference('he said "hello"')
         assert result.startswith("'")
         assert result == "'he said \"hello\"'"
 
-    def test_string_with_both_quotes(self):
+    def test_string_with_both_quotes(self) -> None:
         result = escape_reference('"it\'s" he said')
         assert result.startswith("'") or result.startswith('"')
 
@@ -49,23 +49,23 @@ class TestEscapeReference:
 class TestUnescapeReference:
     """Tests for unescape_reference function."""
 
-    def test_simple_string(self):
+    def test_simple_string(self) -> None:
         assert unescape_reference("hello") == "hello"
 
-    def test_doubled_double_quotes(self):
+    def test_doubled_double_quotes(self) -> None:
         assert unescape_reference('he said ""hello""') == 'he said "hello"'
 
-    def test_doubled_single_quotes(self):
+    def test_doubled_single_quotes(self) -> None:
         assert unescape_reference("it''s") == "it's"
 
-    def test_none(self):
+    def test_none(self) -> None:
         assert unescape_reference(None) is None
 
 
 class TestFormatIndented:
     """Tests for format_indented function."""
 
-    def test_basic_object(self):
+    def test_basic_object(self) -> None:
         result = format_indented(
             "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019",
             {
@@ -82,36 +82,36 @@ class TestFormatIndented:
         assert lines[3] == '  command "echo test"'
         assert lines[4] == '  exitCode "0"'
 
-    def test_custom_indentation(self):
+    def test_custom_indentation(self) -> None:
         result = format_indented("test-id", {"key": "value"}, indent="    ")
         lines = result.split("\n")
         assert lines[0] == "test-id"
         assert lines[1] == '    key "value"'
 
-    def test_value_with_double_quotes(self):
+    def test_value_with_double_quotes(self) -> None:
         # Values containing double quotes are wrapped in single quotes (links-notation style)
         result = format_indented("test-id", {"message": 'He said "hello"'})
         lines = result.split("\n")
         assert lines[0] == "test-id"
         assert lines[1] == "  message 'He said \"hello\"'"
 
-    def test_key_with_space(self):
+    def test_key_with_space(self) -> None:
         result = format_indented("test-id", {"key with space": "value"})
         lines = result.split("\n")
         assert lines[0] == "test-id"
         assert "'key with space'" in lines[1] or '"key with space"' in lines[1]
 
-    def test_null_value(self):
+    def test_null_value(self) -> None:
         result = format_indented("test-id", {"key": None})
         lines = result.split("\n")
         assert lines[0] == "test-id"
         assert lines[1] == '  key "null"'
 
-    def test_requires_id(self):
+    def test_requires_id(self) -> None:
         with pytest.raises(ValueError, match="id is required"):
             format_indented("", {"key": "value"})
 
-    def test_requires_dict(self):
+    def test_requires_dict(self) -> None:
         with pytest.raises(ValueError, match="obj must be a dict"):
             format_indented("test", [1, 2, 3])  # type: ignore
 
@@ -119,7 +119,7 @@ class TestFormatIndented:
 class TestParseIndented:
     """Tests for parse_indented function."""
 
-    def test_basic_object(self):
+    def test_basic_object(self) -> None:
         text = """6dcf4c1b-ff3f-482c-95ab-711ea7d1b019
   uuid "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
   status "executed"
@@ -133,7 +133,7 @@ class TestParseIndented:
         assert obj["command"] == "echo test"
         assert obj["exitCode"] == "0"
 
-    def test_value_with_quotes(self):
+    def test_value_with_quotes(self) -> None:
         # Links-notation style: use single quotes to wrap value containing double quotes
         text = """test-id
   message 'He said "hello"'"""
@@ -142,7 +142,7 @@ class TestParseIndented:
         assert identifier == "test-id"
         assert obj["message"] == 'He said "hello"'
 
-    def test_empty_lines_are_skipped(self):
+    def test_empty_lines_are_skipped(self) -> None:
         text = """test-id
 
   key "value"
@@ -154,7 +154,7 @@ class TestParseIndented:
         assert obj["key"] == "value"
         assert obj["another"] == "value2"
 
-    def test_requires_text(self):
+    def test_requires_text(self) -> None:
         with pytest.raises(ValueError, match="text is required"):
             parse_indented("")
 
@@ -162,7 +162,7 @@ class TestParseIndented:
 class TestRoundtrip:
     """Roundtrip tests for format_indented/parse_indented."""
 
-    def test_basic_roundtrip(self):
+    def test_basic_roundtrip(self) -> None:
         original_id = "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019"
         original_obj = {
             "uuid": "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019",
@@ -177,7 +177,7 @@ class TestRoundtrip:
         assert parsed_id == original_id
         assert parsed_obj == original_obj
 
-    def test_roundtrip_with_quotes(self):
+    def test_roundtrip_with_quotes(self) -> None:
         original_id = "test-id"
         original_obj = {"message": 'He said "hello"'}
 

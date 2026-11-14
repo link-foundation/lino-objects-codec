@@ -304,25 +304,24 @@ pub fn parse_indented(text: &str) -> Result<(String, HashMap<String, String>), F
             values: child_values,
             ..
         } = child
+            && child_values.len() == 2
         {
-            if child_values.len() == 2 {
-                let key_ref = &child_values[0];
-                let value_ref = &child_values[1];
+            let key_ref = &child_values[0];
+            let value_ref = &child_values[1];
 
-                // Get key string
-                let key = match key_ref {
-                    LiNo::Ref(k) => k.clone(),
-                    LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
-                };
+            // Get key string
+            let key = match key_ref {
+                LiNo::Ref(k) => k.clone(),
+                LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
+            };
 
-                // Get value string
-                let value = match value_ref {
-                    LiNo::Ref(v) => v.clone(),
-                    LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
-                };
+            // Get value string
+            let value = match value_ref {
+                LiNo::Ref(v) => v.clone(),
+                LiNo::Link { id, .. } => id.clone().unwrap_or_default(),
+            };
 
-                obj.insert(key, value);
-            }
+            obj.insert(key, value);
         }
     }
 

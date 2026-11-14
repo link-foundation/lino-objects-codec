@@ -1,6 +1,6 @@
 """Test string encoding issues."""
 
-from links_notation import Parser, Link, format_links
+from links_notation import Link, Parser, format_links
 
 # Test encoding a string with newline
 parser = Parser()

@@ -5,24 +5,25 @@ import sys
 
 sys.path.insert(0, "src")
 
-from links_notation import Parser
+from links_notation import Link, Parser
 
 # Test parsing the encoded string
 parser = Parser()
-encoded = "(obj_0: dict ((str bmFtZQ==) (str ZGljdDE=)) ((str b3RoZXI=) (obj_1: dict ((str bmFtZQ==) (str ZGljdDI=)) ((str b3RoZXI=) obj_0))))"
+encoded = (
+    "(obj_0: dict ((str bmFtZQ==) (str ZGljdDE=)) "
+    "((str b3RoZXI=) (obj_1: dict ((str bmFtZQ==) (str ZGljdDI=)) ((str b3RoZXI=) obj_0))))"
+)
 
 print("Parsing:", encoded)
 links = parser.parse(encoded)
 print(f"Number of links: {len(links)}")
 
 
-def print_link(link, indent=0):
+def print_link(link: Link, indent: int = 0) -> None:
     prefix = "  " * indent
     print(f"{prefix}Link:")
     print(f"{prefix}  id: {link.id if hasattr(link, 'id') else 'N/A'}")
-    print(
-        f"{prefix}  values: {len(link.values) if hasattr(link, 'values') and link.values else 0}"
-    )
+    print(f"{prefix}  values: {len(link.values) if hasattr(link, 'values') and link.values else 0}")
     if hasattr(link, "values") and link.values:
         for i, val in enumerate(link.values):
             print(f"{prefix}  value[{i}]:")

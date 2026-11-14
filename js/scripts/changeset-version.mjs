@@ -9,7 +9,7 @@
  * 2. Runs `npm install` to synchronize package-lock.json with the new versions
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
+ * - Shared lockfile-managed release dependencies from the repository root
  * - command-stream: Modern shell command execution with streaming support
  */
 

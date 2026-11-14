@@ -1,7 +1,8 @@
 [package]
 name = "quote-probe"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.100"
 
 [dependencies]
-links-notation = "0.31.4"
+links-notation = "0.31.5"

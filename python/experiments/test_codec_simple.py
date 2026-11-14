@@ -1,6 +1,6 @@
 """Simple test of codec implementation."""
 
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import decode, encode
 
 # Test basic types
 print("=== Testing None ===")

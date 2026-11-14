@@ -1,0 +1,108 @@
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1437378Z # npm audit report
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1437731Z 
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1437948Z glob  9.0.0 - 14.0.1
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1438422Z Severity: moderate
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1439307Z Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal - https://github.com/advisories/GHSA-3g3m-2fjr-6pw4
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1440554Z Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1441107Z fix available via `npm audit fix --force`
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1441578Z Will install npm@9.6.2, which is a breaking change
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1441982Z node_modules/npm/node_modules/glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1442423Z   @npmcli/map-workspaces  >=3.0.3
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1442817Z   Depends on vulnerable versions of glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1443307Z   Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1443757Z   node_modules/npm/node_modules/@npmcli/map-workspaces
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1444184Z     @npmcli/arborist  >=6.2.6
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1444706Z     Depends on vulnerable versions of @npmcli/map-workspaces
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1445252Z     Depends on vulnerable versions of @npmcli/metavuln-calculator
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1445774Z     Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1446187Z     Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1446794Z     node_modules/npm/node_modules/@npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1447236Z       libnpmdiff  >=5.0.14
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1447650Z       Depends on vulnerable versions of @npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1448175Z       Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1448623Z       Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1449073Z       node_modules/npm/node_modules/libnpmdiff
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1449573Z         npm  7.21.0 - 8.5.4 || 8.19.0 - 8.19.2 || >=9.0.0-pre.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1450292Z         Depends on vulnerable versions of @npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1450895Z         Depends on vulnerable versions of @npmcli/config
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1451415Z         Depends on vulnerable versions of @npmcli/map-workspaces
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1451975Z         Depends on vulnerable versions of @npmcli/metavuln-calculator
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1452559Z         Depends on vulnerable versions of @npmcli/package-json
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1453142Z         Depends on vulnerable versions of @sigstore/tuf
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1453661Z         Depends on vulnerable versions of cacache
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1454107Z         Depends on vulnerable versions of glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1454565Z         Depends on vulnerable versions of libnpmdiff
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1455055Z         Depends on vulnerable versions of libnpmexec
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1455505Z         Depends on vulnerable versions of libnpmfund
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1455994Z         Depends on vulnerable versions of libnpmpack
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1456481Z         Depends on vulnerable versions of libnpmpublish
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1456927Z         Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1457395Z         Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1457788Z         node_modules/npm
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1458168Z       libnpmexec  >=5.0.14
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1458587Z       Depends on vulnerable versions of @npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1459018Z       Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1459756Z       node_modules/npm/node_modules/libnpmexec
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1460419Z       libnpmfund  >=4.0.14
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1460912Z       Depends on vulnerable versions of @npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1461371Z       node_modules/npm/node_modules/libnpmfund
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1461734Z       libnpmpack  >=5.0.14
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1462156Z       Depends on vulnerable versions of @npmcli/arborist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1462609Z       Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1463103Z       node_modules/npm/node_modules/libnpmpack
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1463492Z     @npmcli/config  >=9.0.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1463920Z     Depends on vulnerable versions of @npmcli/map-workspaces
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1464446Z     node_modules/npm/node_modules/@npmcli/config
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1464880Z   @npmcli/package-json  3.1.0 - 8.0.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1465363Z   Depends on vulnerable versions of glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1465815Z   node_modules/npm/node_modules/@npmcli/package-json
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1466220Z   cacache  17.0.5 - 21.0.1
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1466611Z   Depends on vulnerable versions of glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1467020Z   node_modules/npm/node_modules/cacache
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1467415Z   npm-packlist  >=8.0.1
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1467823Z   Depends on vulnerable versions of glob
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1468243Z   Depends on vulnerable versions of ignore-walk
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1468737Z   node_modules/npm/node_modules/npm-packlist
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1469014Z 
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1469179Z minimatch  7.0.0 - 11.0.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1469764Z Severity: moderate
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1470822Z minimatch has potential denial of service via globparts amplification - https://github.com/advisories/GHSA-g3hv-75wg-m249
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1471540Z fix available via `npm audit fix --force`
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1472038Z Will install npm@9.6.2, which is a breaking change
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1472502Z node_modules/npm/node_modules/minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1472961Z   @tufjs/models  >=1.0.1
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1473336Z   Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1473762Z   node_modules/npm/node_modules/@tufjs/models
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1474167Z     tuf-js  >=1.1.2
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1474555Z     Depends on vulnerable versions of @tufjs/models
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1475061Z     node_modules/npm/node_modules/tuf-js
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1475418Z       @sigstore/tuf  *
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1475771Z       Depends on vulnerable versions of tuf-js
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1476233Z       node_modules/npm/node_modules/@sigstore/tuf
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1476626Z         sigstore  >=1.6.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1477103Z         Depends on vulnerable versions of @sigstore/tuf
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1477553Z         node_modules/npm/node_modules/sigstore
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1477966Z           libnpmpublish  >=9.0.0-pre.0
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1478513Z           Depends on vulnerable versions of sigstore
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1479001Z           node_modules/npm/node_modules/libnpmpublish
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1479468Z           pacote  >=17.0.2
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1480003Z           Depends on vulnerable versions of sigstore
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1480452Z           node_modules/npm/node_modules/pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1480913Z             @npmcli/metavuln-calculator  >=7.0.1
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1481370Z             Depends on vulnerable versions of pacote
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1481880Z             node_modules/npm/node_modules/@npmcli/metavuln-calculator
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1482371Z   ignore-walk  >=6.0.2
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1482727Z   Depends on vulnerable versions of minimatch
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1483377Z   node_modules/npm/node_modules/npm-packlist/node_modules/ignore-walk
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1483752Z 
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1483955Z 21 moderate severity vulnerabilities
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1484189Z 
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1484495Z To address issues that do not require attention, run:
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1484891Z   npm audit fix
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1485045Z 
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1485506Z To address all issues (including breaking changes), run:
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.1485976Z   npm audit fix --force
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.4495325Z found 0 vulnerabilities
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.4541718Z ##[error]Resolve every advisory in both lockfiles. npm 12.2.2 bundles vulnerable glob/minimatch; the released CLI must be fixed upstream: https://github.com/npm/cli/issues/10299
+Audit npm lock	Audit the committed lockfiles	2026-11-14T15:32:59.4547846Z ##[error]Process completed with exit code 1.
+Audit npm lock	Post Run actions/checkout@v7.0.1	﻿2026-11-14T15:32:59.4653399Z Post job cleanup.

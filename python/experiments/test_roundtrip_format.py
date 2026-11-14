@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 """Test roundtrip encoding/decoding with the new format."""
 
-from links_notation import Link, Parser
 import base64
 
+from links_notation import Link, Parser
 
-def create_test_structure():
+
+def create_test_structure() -> None:
     """Create: obj = {"self": obj}"""
     # Expected output: (obj_0: dict ((str c2VsZg==) obj_0))
     # OR: (obj_0: dict obj_0 ((str c2VsZg==) obj_0))

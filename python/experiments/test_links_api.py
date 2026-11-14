@@ -1,6 +1,6 @@
 """Experiment to understand the links-notation API."""
 
-from links_notation import Parser, Link, format_links
+from links_notation import Link, Parser, format_links
 
 # Test how to create links properly
 parser = Parser()

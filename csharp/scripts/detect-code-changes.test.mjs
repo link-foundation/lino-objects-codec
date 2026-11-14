@@ -89,3 +89,12 @@ test('markdown is excluded from code changes anywhere in the package', () => {
   assert.equal(isExcludedFromCodeChanges('src/README.md'), true);
   assert.equal(isExcludedFromCodeChanges('src/Codec.cs'), false);
 });
+
+// Shared tools participate in each package's CI decisions.
+test('shared locked release tooling triggers package checks', () => {
+  for (const file of ['package.json', 'package-lock.json', 'scripts/release-tools.mjs']) {
+    const { outputs } = classifyChanges([file], 'csharp/');
+    assert.equal(outputs['workflow-changed'], 'true', file);
+    assert.equal(outputs['any-code-changed'], 'true', file);
+  }
+});

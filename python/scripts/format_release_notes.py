@@ -24,6 +24,8 @@ import re
 import subprocess
 import sys
 
+from release_notes import has_shields_badge
+
 
 def run_gh_command(args: list[str]) -> tuple[bool, str]:
     """Run a gh CLI command and return (success, output)."""
@@ -82,7 +84,7 @@ def format_release_body(
 ) -> str:
     """Format the release body with enhanced information."""
     # Check if already formatted (has PyPI badge)
-    if "pypi.org/project" in body.lower() or "img.shields.io" in body.lower():
+    if has_shields_badge(body):
         print("Release notes already formatted, skipping")
         return body
 

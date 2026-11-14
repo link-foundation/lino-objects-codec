@@ -15,7 +15,7 @@ keep working and migrate to the readable form on the next write.
 import base64
 import math
 import re
-from typing import Any
+from typing import Any, cast
 
 from links_notation import Link, Parser
 
@@ -276,7 +276,7 @@ class ObjectCodec:
             return "\n".join(link.format() for link in all_links)
 
         # Single link output
-        return main_link.format()
+        return cast(str, main_link.format())
 
     def encode_obfuscated(self, obj: Any) -> str:
         """

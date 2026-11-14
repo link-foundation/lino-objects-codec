@@ -1,0 +1,10 @@
+# Issue 86 research and reproductions
+
+Run these tools from the repository root. The complete analysis, registry receipts, comparison and logs are in `dev/log/issues/86/pulls/87/` and https://github.com/link-foundation/lino-objects-codec/pull/87.
+
+- `python experiments/issue-86/inventory.py after` queries the registries with four small network workers, collecting every live manifest and npm/Python/Cargo/NuGet lock entry. It does not install or build. The archived `before` snapshot was captured before implementation; do not relabel the current manifests as the original state by overwriting it.
+- `python experiments/issue-86/report.py` renders the saved before/after inventories and explains retained transitive versions using the installed parent manifests. Install both npm locks first to include bundled parent metadata. This does not change dependencies.
+- `python/.venv/bin/mypy --config-file /dev/null --no-incremental --strict experiments/issue-86/parser_typing.py` reproduces the upstream parser wheel's missing `py.typed` marker outside the codec's necessary `ignore_missing_imports` configuration. The empty config isolates the diagnostic from project settings. This diagnostic is intentionally expected until https://github.com/link-foundation/links-notation/issues/411 is resolved.
+- `bash experiments/issue-86/codeql-restore.sh /absolute/path/to/dotnet` reproduces CodeQL's failed .NET 11 restore with substituted empty targeting-pack directories, then verifies the real locked restore and Release build succeed. It cleans its own scratch directory. CI uses documented manual C# analysis until https://github.com/github/codeql/issues/23133 is resolved.
+
+The npm security reproduction needs no resource-exhaustion payload: install the committed root npm lock and run `npm audit --package-lock-only`. The two advisories remain in npm 12.2.2's bundled copies despite consumer overrides; https://github.com/npm/cli/issues/10299 contains the existing minimal override reproduction and our evidence update. Do not treat the application's separate clean npm audit as proof that the CLI bundle is clean.

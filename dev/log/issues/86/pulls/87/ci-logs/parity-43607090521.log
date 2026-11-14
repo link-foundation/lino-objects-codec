@@ -1,0 +1,562 @@
+Implementations Pin One Parser Version	Set up job	﻿2026-11-14T14:52:27.5557223Z Current runner version: '2.338.2'
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5584254Z ##[group]Runner Image Provisioner
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5585188Z Hosted Compute Agent
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5585931Z Version: 20261103.629
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5586587Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5587408Z Build Date: 2026-11-03T17:26:59Z
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5588134Z Worker ID: {f48ba68a-38ca-4857-97c4-bda6818de95a}
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5588889Z Region: eastus2
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5589962Z Cloud: Azure
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5590590Z ##[endgroup]
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5592206Z ##[group]Operating System
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5592901Z Ubuntu
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5593439Z 24.04.5
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5594035Z LTS
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5594666Z ##[endgroup]
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5595655Z ##[group]Runner Image
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5596775Z Image: ubuntu-24.04
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5597734Z Version: 20261111.370.1
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5599888Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5602694Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5604527Z ##[endgroup]
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5606233Z ##[group]GITHUB_TOKEN Permissions
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5608952Z Contents: read
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5610266Z Metadata: read
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5611325Z ##[endgroup]
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5614479Z Secret source: Actions
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5616161Z Cache mode: write
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.5617832Z Prepare workflow directory
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.6095337Z Prepare all required actions
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.6166948Z Getting action download info
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.8273463Z Download action repository 'actions/checkout@v7.0.1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:27.9537041Z Download action repository 'actions/setup-node@v7.1.0' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Implementations Pin One Parser Version	Set up job	2026-11-14T14:52:28.1443115Z Complete job name: Implementations Pin One Parser Version
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	﻿2026-11-14T14:52:28.2333032Z ##[group]Run actions/checkout@v7.0.1
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2333972Z with:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2334463Z   persist-credentials: false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2335119Z   repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2339725Z   token: ***
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2340217Z   ssh-strict: true
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2340675Z   ssh-user: git
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2341154Z   clean: true
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2341664Z   sparse-checkout-cone-mode: true
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2342248Z   fetch-depth: 1
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2342707Z   fetch-tags: false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2343200Z   show-progress: true
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2343707Z   lfs: false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2344182Z   submodules: false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2344694Z   set-safe-directory: true
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2345222Z   allow-unsafe-pr-checkout: false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.2346215Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5533629Z Syncing repository: link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5535882Z ##[group]Getting Git version info
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5537429Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5539931Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5676699Z git version 2.56.1
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5703620Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5716826Z Temporarily overriding HOME='/home/runner/work/_temp/963527dd-3164-439e-9029-d74c08631405' before making global git config changes
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5720418Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5727031Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5788655Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5794451Z ##[group]Determining repository object format
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5796894Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5798739Z ##[group]Initializing the repository
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5802605Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5939822Z hint: Using 'master' as the name for the initial branch. This default branch name
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5942078Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5944052Z hint: to use in all of your new repositories, which will suppress this warning,
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5945633Z hint: call:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5946574Z hint:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5947706Z hint: 	git config --global init.defaultBranch <name>
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5948985Z hint:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5950493Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5952366Z hint: 'development'. The just-created branch can be renamed via this command:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5953885Z hint:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5954753Z hint: 	git branch -m <name>
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5955751Z hint:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5957009Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5959661Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.5973498Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6060862Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6063516Z ##[group]Disabling automatic garbage collection
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6065519Z [command]/usr/bin/git config --local gc.auto 0
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6108869Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6110879Z ##[group]Setting up auth
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6112047Z Removing SSH command configuration
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6116600Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6171016Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6677291Z Removing HTTP extra header
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6691669Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6737991Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.6992467Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7000330Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7055044Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7308164Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7361323Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7407915Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7454678Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7499694Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7554957Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7556704Z ##[group]Fetching the repository
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:28.7563572Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +54f87ddfea345aac50c3cc6a16c79e4b8a084189:refs/remotes/pull/87/merge
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1025442Z From https://github.com/link-foundation/lino-objects-codec
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1028834Z  * [new ref]         54f87ddfea345aac50c3cc6a16c79e4b8a084189 -> pull/87/merge
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1035397Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1037923Z ##[group]Determining the checkout info
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1041110Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1042821Z [command]/usr/bin/git sparse-checkout disable
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1114245Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1158784Z ##[group]Checking out the ref
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1162220Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/87/merge
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1772347Z Note: switching to 'refs/remotes/pull/87/merge'.
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1773823Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1774970Z You are in 'detached HEAD' state. You can look around, make experimental
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1777011Z changes and commit them, and you can discard any commits you make in this
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1778872Z state without impacting any branches by switching back to a branch.
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1780250Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1780984Z If you want to create a new branch to retain commits you create, you may
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1782625Z do so (now or later) by using -c with the switch command. Example:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1783564Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1784148Z   git switch -c <new-branch-name>
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1785258Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1786052Z Or undo this operation with:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1787320Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1788061Z   git switch -
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1789320Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1790860Z Turn off this advice by setting config variable advice.detachedHead to false
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1793114Z 
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1795588Z HEAD is now at 54f87dd Merge 0ad69b8f085c1f6891baa597f9c271db5b73700b into 023932fc611d1f170de7e459af23c2b1ebf05ace
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1803299Z ##[endgroup]
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1854341Z [command]/usr/bin/git log -1 --format=%H
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1893878Z 54f87ddfea345aac50c3cc6a16c79e4b8a084189
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1905247Z ##[group]Removing auth
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1907350Z Removing SSH command configuration
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1910860Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.1958241Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2201941Z Removing HTTP extra header
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2205463Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2251876Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2488231Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2492638Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2531684Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2536585Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2540959Z includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2543773Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2550851Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2580832Z /home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2593092Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-8c0dcdd3\-f3fd\-477e\-89ea\-b31148747710\.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2656705Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2691476Z /home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2702675Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-8c0dcdd3\-f3fd\-477e\-89ea\-b31148747710\.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2747941Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2783246Z /github/runner_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2792299Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-8c0dcdd3\-f3fd\-477e\-89ea\-b31148747710\.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2840151Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2876576Z /github/runner_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2888277Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-8c0dcdd3\-f3fd\-477e\-89ea\-b31148747710\.config
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.2936439Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.3196032Z Removing credentials config '/home/runner/work/_temp/git-credentials-8c0dcdd3-f3fd-477e-89ea-b31148747710.config'
+Implementations Pin One Parser Version	Run actions/checkout@v7.0.1	2026-11-14T14:52:29.3202929Z ##[endgroup]
+Implementations Pin One Parser Version	Setup Node.js	﻿2026-11-14T14:52:29.3666528Z ##[group]Run actions/setup-node@v7.1.0
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3667922Z with:
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3668923Z   node-version: 26.13.1
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3670308Z   package-manager-cache: false
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3671572Z   check-latest: false
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3682074Z   token: ***
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.3683110Z ##[endgroup]
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.5023541Z Attempting to download 26.13.1...
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:29.9564274Z Acquiring 26.13.1 - x64 from https://github.com/actions/node-versions/releases/download/26.13.1-43134154182/node-26.13.1-linux-x64.tar.gz
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:30.4183899Z Extracting ...
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:30.4344555Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/cfd6ca17-73ab-4554-b387-f63a1368dd5c -f /home/runner/work/_temp/7333030c-63a4-4f58-b9b6-57108ad5bbbb
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:31.7891414Z Adding to the cache ...
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:33.6255171Z ##[group]Environment details
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:33.8500742Z node: v26.13.1
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:33.8501225Z npm: 11.20.0
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:33.8501547Z yarn: 1.22.22
+Implementations Pin One Parser Version	Setup Node.js	2026-11-14T14:52:33.8503356Z ##[endgroup]
+Implementations Pin One Parser Version	Install locked release tools and npm	﻿2026-11-14T14:52:33.8695189Z ##[group]Run npm ci --ignore-scripts
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:33.8695603Z ^[[36;1mnpm ci --ignore-scripts^[[0m
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:33.8696006Z ^[[36;1mecho "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"^[[0m
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:33.8722094Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:33.8722480Z ##[endgroup]
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.0996751Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1005361Z added 58 packages, and audited 206 packages in 3s
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1006002Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1006381Z 37 packages are looking for funding
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1006920Z   run `npm fund` for details
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1365003Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1365853Z 21 moderate severity vulnerabilities
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1366133Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1366417Z To address issues that do not require attention, run:
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1366794Z   npm audit fix
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1366936Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1367199Z To address all issues (including breaking changes), run:
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1367549Z   npm audit fix --force
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1367773Z 
+Implementations Pin One Parser Version	Install locked release tools and npm	2026-11-14T14:52:37.1367909Z Run `npm audit` for details.
+Implementations Pin One Parser Version	Check version-gate helper's own tests	﻿2026-11-14T14:52:37.1896710Z ##[group]Run node --test scripts/check-links-notation-parity.test.mjs
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.1897285Z ^[[36;1mnode --test scripts/check-links-notation-parity.test.mjs^[[0m
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.1921652Z shell: /usr/bin/bash -e {0}
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.1921927Z ##[endgroup]
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2837457Z ✔ the requirement syntax of every ecosystem reduces to a minor (1.089857ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2859629Z ✔ a missing dependency is not a version (0.14442ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2860671Z ✔ four pins on the same minor agree (0.771192ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2861584Z ✔ a differing patch is still agreement (0.17116ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2862456Z ✔ the four pins this repository actually shipped before issue #47 diverge (0.176089ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2863105Z ✔ one language falling behind by a minor fails (0.214521ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2863733Z ✔ a dependency that cannot be read fails rather than passing quietly (0.177201ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2864396Z ✔ every extractor finds the version in its real manifest (0.87749ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2865010Z ✔ the checked-in manifests agree today (0.377196ms)
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2952120Z ℹ tests 9
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2952431Z ℹ suites 0
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2960330Z ℹ pass 9
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2974138Z ℹ fail 0
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2974958Z ℹ cancelled 0
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2975570Z ℹ skipped 0
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2976471Z ℹ todo 0
+Implementations Pin One Parser Version	Check version-gate helper's own tests	2026-11-14T14:52:37.2977018Z ℹ duration_ms 70.079909
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	﻿2026-11-14T14:52:37.3048168Z ##[group]Run node scripts/check-links-notation-parity.mjs
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3048638Z ^[[36;1mnode scripts/check-links-notation-parity.mjs^[[0m
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3070968Z shell: /usr/bin/bash -e {0}
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3071232Z ##[endgroup]
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3392137Z Declared `links-notation` requirement per implementation:
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3395105Z   Rust       0.31.5   (rust/Cargo.toml)
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3396053Z   JavaScript ^0.31.5   (js/package.json)
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3396739Z   Python     >=0.31.5   (python/pyproject.toml)
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3397602Z   C#         0.31.1   (csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj)
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3398155Z 
+Implementations Pin One Parser Version	Enforce one links-notation version across implementations	2026-11-14T14:52:37.3398810Z links-notation parity: all four implementations pin 0.31.x.
+Implementations Pin One Parser Version	Post Setup Node.js	﻿2026-11-14T14:52:37.3529955Z Post job cleanup.
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	﻿2026-11-14T14:52:37.4957098Z Post job cleanup.
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.5897528Z [command]/usr/bin/git version
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.5944459Z git version 2.56.1
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.5985527Z Temporarily overriding HOME='/home/runner/work/_temp/1b6f892f-e727-48a6-8667-16efd6bedd3e' before making global git config changes
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.5987353Z Adding repository directory to the temporary git global config as a safe directory
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.5991809Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6028178Z Removing SSH command configuration
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6036418Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6083726Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6353607Z Removing HTTP extra header
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6361478Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6403586Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6733644Z Removing includeIf entries pointing to credentials config files
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6755136Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Implementations Pin One Parser Version	Post Run actions/checkout@v7.0.1	2026-11-14T14:52:37.6824371Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Implementations Pin One Parser Version	Complete job	﻿2026-11-14T14:52:37.7293405Z Cleaning up orphan processes
+Languages Change Together	Set up job	﻿2026-11-14T14:54:02.1450875Z Current runner version: '2.338.2'
+Languages Change Together	Set up job	2026-11-14T14:54:02.1489037Z ##[group]Runner Image Provisioner
+Languages Change Together	Set up job	2026-11-14T14:54:02.1490526Z Hosted Compute Agent
+Languages Change Together	Set up job	2026-11-14T14:54:02.1491481Z Version: 20261103.629
+Languages Change Together	Set up job	2026-11-14T14:54:02.1492598Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+Languages Change Together	Set up job	2026-11-14T14:54:02.1494022Z Build Date: 2026-11-03T17:26:59Z
+Languages Change Together	Set up job	2026-11-14T14:54:02.1495480Z Worker ID: {83cfedaa-5fde-47a4-8837-fe5552649db6}
+Languages Change Together	Set up job	2026-11-14T14:54:02.1496897Z Region: eastus
+Languages Change Together	Set up job	2026-11-14T14:54:02.1497793Z Cloud: Azure
+Languages Change Together	Set up job	2026-11-14T14:54:02.1498633Z ##[endgroup]
+Languages Change Together	Set up job	2026-11-14T14:54:02.1501167Z ##[group]Operating System
+Languages Change Together	Set up job	2026-11-14T14:54:02.1502220Z Ubuntu
+Languages Change Together	Set up job	2026-11-14T14:54:02.1503274Z 24.04.5
+Languages Change Together	Set up job	2026-11-14T14:54:02.1504272Z LTS
+Languages Change Together	Set up job	2026-11-14T14:54:02.1505483Z ##[endgroup]
+Languages Change Together	Set up job	2026-11-14T14:54:02.1506659Z ##[group]Runner Image
+Languages Change Together	Set up job	2026-11-14T14:54:02.1507754Z Image: ubuntu-24.04
+Languages Change Together	Set up job	2026-11-14T14:54:02.1508929Z Version: 20261111.370.1
+Languages Change Together	Set up job	2026-11-14T14:54:02.1510814Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+Languages Change Together	Set up job	2026-11-14T14:54:02.1513955Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+Languages Change Together	Set up job	2026-11-14T14:54:02.1516024Z ##[endgroup]
+Languages Change Together	Set up job	2026-11-14T14:54:02.1518039Z ##[group]GITHUB_TOKEN Permissions
+Languages Change Together	Set up job	2026-11-14T14:54:02.1521098Z Contents: read
+Languages Change Together	Set up job	2026-11-14T14:54:02.1522228Z Metadata: read
+Languages Change Together	Set up job	2026-11-14T14:54:02.1523169Z ##[endgroup]
+Languages Change Together	Set up job	2026-11-14T14:54:02.1526634Z Secret source: Actions
+Languages Change Together	Set up job	2026-11-14T14:54:02.1528079Z Cache mode: write
+Languages Change Together	Set up job	2026-11-14T14:54:02.1529503Z Prepare workflow directory
+Languages Change Together	Set up job	2026-11-14T14:54:02.2024743Z Prepare all required actions
+Languages Change Together	Set up job	2026-11-14T14:54:02.2098790Z Getting action download info
+Languages Change Together	Set up job	2026-11-14T14:54:02.4129788Z Download action repository 'actions/checkout@v7.0.1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+Languages Change Together	Set up job	2026-11-14T14:54:02.5471009Z Download action repository 'actions/setup-node@v7.1.0' (SHA:949feb2413d6458794dcd2491c4babbbce0c15c1)
+Languages Change Together	Set up job	2026-11-14T14:54:02.7357540Z Complete job name: Languages Change Together
+Languages Change Together	Run actions/checkout@v7.0.1	﻿2026-11-14T14:54:02.8255679Z ##[group]Run actions/checkout@v7.0.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8256670Z with:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8257108Z   fetch-depth: 0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8257587Z   persist-credentials: false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8258168Z   repository: link-foundation/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8262244Z   token: ***
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8262680Z   ssh-strict: true
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8263116Z   ssh-user: git
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8263535Z   clean: true
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8263977Z   sparse-checkout-cone-mode: true
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8264684Z   fetch-tags: false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8265147Z   show-progress: true
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8265598Z   lfs: false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8266020Z   submodules: false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8266478Z   set-safe-directory: true
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8266996Z   allow-unsafe-pr-checkout: false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:02.8267785Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.0893096Z Syncing repository: link-foundation/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.0896900Z ##[group]Getting Git version info
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.0898059Z Working directory is '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.0900056Z [command]/usr/bin/git version
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1002177Z git version 2.56.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1012977Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1028801Z Temporarily overriding HOME='/home/runner/work/_temp/65c2c196-5786-4444-b432-98541623ce7d' before making global git config changes
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1039957Z Adding repository directory to the temporary git global config as a safe directory
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1056264Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1111526Z Deleting the contents of '/home/runner/work/lino-objects-codec/lino-objects-codec'
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1128577Z ##[group]Determining repository object format
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1131699Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1134706Z ##[group]Initializing the repository
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1136857Z [command]/usr/bin/git init /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1249991Z hint: Using 'master' as the name for the initial branch. This default branch name
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1251771Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1253243Z hint: to use in all of your new repositories, which will suppress this warning,
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1254931Z hint: call:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1256091Z hint:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1257330Z hint: 	git config --global init.defaultBranch <name>
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1258717Z hint:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1260307Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1262765Z hint: 'development'. The just-created branch can be renamed via this command:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1265165Z hint:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1266437Z hint: 	git branch -m <name>
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1267782Z hint:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1269590Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1272097Z Initialized empty Git repository in /home/runner/work/lino-objects-codec/lino-objects-codec/.git/
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1277036Z [command]/usr/bin/git remote add origin https://github.com/link-foundation/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1337478Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1339448Z ##[group]Disabling automatic garbage collection
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1342453Z [command]/usr/bin/git config --local gc.auto 0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1383316Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1385515Z ##[group]Setting up auth
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1387045Z Removing SSH command configuration
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1394167Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1440129Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1862800Z Removing HTTP extra header
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1870184Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.1923391Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2281565Z Removing includeIf entries pointing to credentials config files
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2288130Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2336275Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2608742Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2662039Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path /home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2709705Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2756293Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2801039Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2842039Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2842893Z ##[group]Fetching the repository
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.2850798Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +54f87ddfea345aac50c3cc6a16c79e4b8a084189:refs/remotes/pull/87/merge
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6741523Z From https://github.com/link-foundation/lino-objects-codec
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6745063Z  * [new branch]      issue-1-843d779c4cdb                     -> origin/issue-1-843d779c4cdb
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6748203Z  * [new branch]      issue-11-c74c0836aeba                    -> origin/issue-11-c74c0836aeba
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6751729Z  * [new branch]      issue-15-b28422959bc5                    -> origin/issue-15-b28422959bc5
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6755145Z  * [new branch]      issue-17-ace5a094a724                    -> origin/issue-17-ace5a094a724
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6758706Z  * [new branch]      issue-19-d88ab983ff7d                    -> origin/issue-19-d88ab983ff7d
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6762038Z  * [new branch]      issue-20-d21ab54e8ff1                    -> origin/issue-20-d21ab54e8ff1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6765768Z  * [new branch]      issue-22-e5ea3b44ef6b                    -> origin/issue-22-e5ea3b44ef6b
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6769228Z  * [new branch]      issue-25-76b0e5ea19d6                    -> origin/issue-25-76b0e5ea19d6
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6772634Z  * [new branch]      issue-27-eb86cc75f92a                    -> origin/issue-27-eb86cc75f92a
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6776249Z  * [new branch]      issue-29-7f70f0d87db9                    -> origin/issue-29-7f70f0d87db9
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6778777Z  * [new branch]      issue-3-397c5eeac29f                     -> origin/issue-3-397c5eeac29f
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6781132Z  * [new branch]      issue-31-bd2874f2d076                    -> origin/issue-31-bd2874f2d076
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6783622Z  * [new branch]      issue-33-2c527aa50b81                    -> origin/issue-33-2c527aa50b81
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6787344Z  * [new branch]      issue-35-03946ff48852                    -> origin/issue-35-03946ff48852
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6790644Z  * [new branch]      issue-37-0e0bcabcea22                    -> origin/issue-37-0e0bcabcea22
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6793828Z  * [new branch]      issue-39-e53c893293ed                    -> origin/issue-39-e53c893293ed
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6797127Z  * [new branch]      issue-41-297a752a4939                    -> origin/issue-41-297a752a4939
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6799771Z  * [new branch]      issue-43-a666a4fd6f03                    -> origin/issue-43-a666a4fd6f03
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6802307Z  * [new branch]      issue-45-f2100b3aab88                    -> origin/issue-45-f2100b3aab88
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6805082Z  * [new branch]      issue-47-7a09fbbdea01                    -> origin/issue-47-7a09fbbdea01
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6807666Z  * [new branch]      issue-5-9641b6fb00d3                     -> origin/issue-5-9641b6fb00d3
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6810482Z  * [new branch]      issue-65-5c21265ef83f                    -> origin/issue-65-5c21265ef83f
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6813256Z  * [new branch]      issue-69-dab96606bd2e                    -> origin/issue-69-dab96606bd2e
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6816338Z  * [new branch]      issue-7-7a98520cd689                     -> origin/issue-7-7a98520cd689
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6819164Z  * [new branch]      issue-71-c58ec48e90af                    -> origin/issue-71-c58ec48e90af
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6821966Z  * [new branch]      issue-75-067634269e3c                    -> origin/issue-75-067634269e3c
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6824918Z  * [new branch]      issue-77-648feda2cbaf                    -> origin/issue-77-648feda2cbaf
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6828581Z  * [new branch]      issue-79-067c580e4a39                    -> origin/issue-79-067c580e4a39
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6833274Z  * [new branch]      issue-8-8f8d9acce5f1                     -> origin/issue-8-8f8d9acce5f1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6838174Z  * [new branch]      issue-81-ff932d81cc25                    -> origin/issue-81-ff932d81cc25
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6842777Z  * [new branch]      issue-84-f670b61f6b57                    -> origin/issue-84-f670b61f6b57
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6847211Z  * [new branch]      issue-86-35430a936d8f                    -> origin/issue-86-35430a936d8f
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6851671Z  * [new branch]      issue-9-bef9e95e65ef                     -> origin/issue-9-bef9e95e65ef
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6855780Z  * [new branch]      main                                     -> origin/main
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6858291Z  * [new tag]         csharp-v0.2.0                            -> csharp-v0.2.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6860561Z  * [new tag]         csharp_v0.3.0                            -> csharp_v0.3.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6862911Z  * [new tag]         csharp_v0.3.1                            -> csharp_v0.3.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6865285Z  * [new tag]         js-v0.3.5                                -> js-v0.3.5
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6867348Z  * [new tag]         js_v0.3.6                                -> js_v0.3.6
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6869951Z  * [new tag]         js_v0.4.0                                -> js_v0.4.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6872466Z  * [new tag]         js_v0.5.0                                -> js_v0.5.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6874819Z  * [new tag]         js_v0.5.1                                -> js_v0.5.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6876883Z  * [new tag]         js_v0.6.0                                -> js_v0.6.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6878829Z  * [new tag]         js_v0.7.0                                -> js_v0.7.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6880807Z  * [new tag]         js_v0.8.0                                -> js_v0.8.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6882920Z  * [new tag]         js_v0.9.0                                -> js_v0.9.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6886325Z  * [new tag]         js_v0.9.1                                -> js_v0.9.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6889536Z  * [new tag]         js_v0.9.2                                -> js_v0.9.2
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6892828Z  * [new tag]         js_v0.9.4                                -> js_v0.9.4
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6896540Z  * [new tag]         js_v0.9.5                                -> js_v0.9.5
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6899713Z  * [new tag]         rust-v0.2.0                              -> rust-v0.2.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6902777Z  * [new tag]         rust-v0.2.1                              -> rust-v0.2.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6906399Z  * [new tag]         rust_v0.3.0                              -> rust_v0.3.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6909444Z  * [new tag]         rust_v0.4.0                              -> rust_v0.4.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6912708Z  * [new tag]         rust_v0.4.1                              -> rust_v0.4.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6915064Z  * [new tag]         rust_v0.5.0                              -> rust_v0.5.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6917127Z  * [new tag]         rust_v0.6.0                              -> rust_v0.6.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6919162Z  * [new tag]         rust_v0.7.0                              -> rust_v0.7.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6921197Z  * [new tag]         rust_v0.8.0                              -> rust_v0.8.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6923235Z  * [new tag]         rust_v0.9.0                              -> rust_v0.9.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6926006Z  * [new tag]         rust_v0.9.1                              -> rust_v0.9.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6928779Z  * [new tag]         rust_v0.9.2                              -> rust_v0.9.2
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6930857Z  * [new tag]         rust_v0.9.3                              -> rust_v0.9.3
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6932875Z  * [new tag]         rust_v0.9.4                              -> rust_v0.9.4
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6935096Z  * [new tag]         v0.1.1                                   -> v0.1.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6936995Z  * [new tag]         v0.3.0                                   -> v0.3.0
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6938867Z  * [new tag]         v0.3.1                                   -> v0.3.1
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6940708Z  * [new tag]         v0.3.2                                   -> v0.3.2
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6942588Z  * [new tag]         v0.3.3                                   -> v0.3.3
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6944867Z  * [new ref]         54f87ddfea345aac50c3cc6a16c79e4b8a084189 -> pull/87/merge
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6949277Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6951030Z ##[group]Determining the checkout info
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6953309Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6954674Z [command]/usr/bin/git sparse-checkout disable
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6958171Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6962030Z ##[group]Checking out the ref
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.6963779Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/87/merge
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7530847Z Note: switching to 'refs/remotes/pull/87/merge'.
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7532459Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7533722Z You are in 'detached HEAD' state. You can look around, make experimental
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7537003Z changes and commit them, and you can discard any commits you make in this
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7539475Z state without impacting any branches by switching back to a branch.
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7541472Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7543026Z If you want to create a new branch to retain commits you create, you may
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7546540Z do so (now or later) by using -c with the switch command. Example:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7548650Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7549478Z   git switch -c <new-branch-name>
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7550818Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7551695Z Or undo this operation with:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7631417Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7632281Z   git switch -
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7633249Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7634929Z Turn off this advice by setting config variable advice.detachedHead to false
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7637094Z 
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7639600Z HEAD is now at 54f87dd Merge 0ad69b8f085c1f6891baa597f9c271db5b73700b into 023932fc611d1f170de7e459af23c2b1ebf05ace
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7647212Z ##[endgroup]
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7650930Z [command]/usr/bin/git log -1 --format=%H
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7653379Z 54f87ddfea345aac50c3cc6a16c79e4b8a084189
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7662573Z ##[group]Removing auth
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7664754Z Removing SSH command configuration
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7667819Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7715195Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7963861Z Removing HTTP extra header
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.7967852Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8018724Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8265754Z Removing includeIf entries pointing to credentials config files
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8270175Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8311005Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8314377Z includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8317133Z includeif.gitdir:/github/workspace/.git.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8319280Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8323804Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8356339Z /home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8370923Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-6cc08166\-b9b5\-4b03\-bd73\-5e6ccf4c9b6b\.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8428218Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8469380Z /home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8480894Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/lino-objects-codec/lino-objects-codec/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-6cc08166\-b9b5\-4b03\-bd73\-5e6ccf4c9b6b\.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8527084Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8563007Z /github/runner_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8572835Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-6cc08166\-b9b5\-4b03\-bd73\-5e6ccf4c9b6b\.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8621165Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8657764Z /github/runner_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8667596Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-6cc08166\-b9b5\-4b03\-bd73\-5e6ccf4c9b6b\.config
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8712220Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8956837Z Removing credentials config '/home/runner/work/_temp/git-credentials-6cc08166-b9b5-4b03-bd73-5e6ccf4c9b6b.config'
+Languages Change Together	Run actions/checkout@v7.0.1	2026-11-14T14:54:03.8965410Z ##[endgroup]
+Languages Change Together	Setup Node.js	﻿2026-11-14T14:54:03.9339794Z ##[group]Run actions/setup-node@v7.1.0
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9341069Z with:
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9341951Z   node-version: 26.13.1
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9343012Z   package-manager-cache: false
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9344116Z   check-latest: false
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9354301Z   token: ***
+Languages Change Together	Setup Node.js	2026-11-14T14:54:03.9355390Z ##[endgroup]
+Languages Change Together	Setup Node.js	2026-11-14T14:54:04.0667858Z Attempting to download 26.13.1...
+Languages Change Together	Setup Node.js	2026-11-14T14:54:04.4680433Z Acquiring 26.13.1 - x64 from https://github.com/actions/node-versions/releases/download/26.13.1-43134154182/node-26.13.1-linux-x64.tar.gz
+Languages Change Together	Setup Node.js	2026-11-14T14:54:05.3080781Z Extracting ...
+Languages Change Together	Setup Node.js	2026-11-14T14:54:05.3232714Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/7638a873-de01-4f75-930d-c9c33f3533a4 -f /home/runner/work/_temp/b1f455fe-2f25-4f5d-be4c-e57d5eecc1c7
+Languages Change Together	Setup Node.js	2026-11-14T14:54:06.6842755Z Adding to the cache ...
+Languages Change Together	Setup Node.js	2026-11-14T14:54:08.5440636Z ##[group]Environment details
+Languages Change Together	Setup Node.js	2026-11-14T14:54:08.7752298Z node: v26.13.1
+Languages Change Together	Setup Node.js	2026-11-14T14:54:08.7752787Z npm: 11.20.0
+Languages Change Together	Setup Node.js	2026-11-14T14:54:08.7755320Z yarn: 1.22.22
+Languages Change Together	Setup Node.js	2026-11-14T14:54:08.7756195Z ##[endgroup]
+Languages Change Together	Install locked release tools and npm	﻿2026-11-14T14:54:08.7956700Z ##[group]Run npm ci --ignore-scripts
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:08.7957135Z ^[[36;1mnpm ci --ignore-scripts^[[0m
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:08.7957528Z ^[[36;1mecho "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"^[[0m
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:08.7984046Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:08.7984440Z ##[endgroup]
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.1719171Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.1730179Z added 58 packages, and audited 206 packages in 3s
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.1731175Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.1731668Z 37 packages are looking for funding
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.1732286Z   run `npm fund` for details
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2102396Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2103630Z 21 moderate severity vulnerabilities
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2104097Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2104698Z To address issues that do not require attention, run:
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2105313Z   npm audit fix
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2105570Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2106016Z To address all issues (including breaking changes), run:
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2604160Z   npm audit fix --force
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2604841Z 
+Languages Change Together	Install locked release tools and npm	2026-11-14T14:54:12.2605111Z Run `npm audit` for details.
+Languages Change Together	Check parity-gate helper's own tests	﻿2026-11-14T14:54:12.2660403Z ##[group]Run node --test scripts/check-language-parity.test.mjs
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.2661263Z ^[[36;1mnode --test scripts/check-language-parity.test.mjs^[[0m
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.2691014Z shell: /usr/bin/bash -e {0}
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.2691452Z ##[endgroup]
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3729382Z ✔ a change to every language is balanced (1.687578ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3745878Z ✔ a change to only one language is not balanced (4.210444ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3775809Z ✔ a change to three of four languages is not balanced (0.204912ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3776985Z ✔ shared-only changes are balanced (nothing to enforce) (0.236411ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3778093Z ✔ dependency-only updates do not count as library source (0.244516ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3779151Z ✔ tests and examples do not count as library source (0.189283ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3780142Z ✔ backslash and ./ prefixed paths are normalized (0.256939ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3781072Z ✔ every declared language has a source path (0.252431ms)
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3889791Z ℹ tests 8
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3890854Z ℹ suites 0
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3891484Z ℹ pass 8
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3891876Z ℹ fail 0
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3892247Z ℹ cancelled 0
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3892595Z ℹ skipped 0
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3892847Z ℹ todo 0
+Languages Change Together	Check parity-gate helper's own tests	2026-11-14T14:54:12.3893110Z ℹ duration_ms 85.095552
+Languages Change Together	Enforce cross-language parity	﻿2026-11-14T14:54:12.4021976Z ##[group]Run node scripts/check-language-parity.mjs
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4022434Z ^[[36;1mnode scripts/check-language-parity.mjs^[[0m
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4044065Z shell: /usr/bin/bash -e {0}
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4044336Z env:
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4044801Z   PARITY_BASE_REF: main
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4045054Z   PARITY_SKIP_REASON: 
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4045284Z ##[endgroup]
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4423160Z Language parity check failed.
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4424900Z   Changed: Python, Rust, C#
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4425489Z   Missing a matching change: JavaScript
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4425940Z 
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4426696Z This repository keeps its four implementations byte-for-byte compatible, so a
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4427908Z change to one language must be mirrored in the others in the same pull request.
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4429264Z If this change is intentionally single-language, add `[skip-parity]` to the
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4430083Z pull request title or body.
+Languages Change Together	Enforce cross-language parity	2026-11-14T14:54:12.4462294Z ##[error]Process completed with exit code 1.
+Languages Change Together	Post Run actions/checkout@v7.0.1	﻿2026-11-14T14:54:12.4611487Z Post job cleanup.
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5637284Z [command]/usr/bin/git version
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5679034Z git version 2.56.1
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5724281Z Temporarily overriding HOME='/home/runner/work/_temp/da542259-6ff7-4906-b8ca-1c26e54bd57c' before making global git config changes
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5728080Z Adding repository directory to the temporary git global config as a safe directory
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5731711Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/lino-objects-codec/lino-objects-codec
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5781145Z Removing SSH command configuration
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5789282Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.5840142Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6180221Z Removing HTTP extra header
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6188001Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6257569Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6630612Z Removing includeIf entries pointing to credentials config files
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6641108Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Languages Change Together	Post Run actions/checkout@v7.0.1	2026-11-14T14:54:12.6694193Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Languages Change Together	Complete job	﻿2026-11-14T14:54:12.7237377Z Cleaning up orphan processes

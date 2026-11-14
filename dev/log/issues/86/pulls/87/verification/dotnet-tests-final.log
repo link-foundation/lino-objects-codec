@@ -1,0 +1,12 @@
+Running tests from /tmp/gh-issue-solver-1794665145423/csharp/tests/Lino.Objects.Codec.Tests/bin/Release/net11.0/Lino.Objects.Codec.Tests.dll (net11.0|x64)
+/tmp/gh-issue-solver-1794665145423/csharp/tests/Lino.Objects.Codec.Tests/bin/Release/net11.0/Lino.Objects.Codec.Tests.dll (net11.0|x64) passed [+541/x0/?0] (2s 908ms)
+
+  In process file artifacts produced:
+    - /tmp/gh-issue-solver-1794665145423/csharp/TestResults/41384aab-cf44-4568-9f31-db25da9c5384.cobertura.xml
+
+Test run summary: Passed!
+  total: 541
+  failed: 0
+  succeeded: 541
+  skipped: 0
+  duration: 5s 124ms

@@ -123,7 +123,7 @@ function parseChangeset(filePath) {
 
     // Extract version type - support both quoted and unquoted package names
     const versionTypeRegex = new RegExp(
-      `^['"]?${PACKAGE_NAME.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]?:\\s+(major|minor|patch)`,
+      `^['"]?${RegExp.escape(PACKAGE_NAME)}['"]?:\\s+(major|minor|patch)`,
       'm'
     );
     const versionTypeMatch = content.match(versionTypeRegex);

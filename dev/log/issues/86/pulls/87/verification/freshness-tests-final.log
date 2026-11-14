@@ -1,0 +1,20 @@
+test_action_bundle_and_prerelease_tags_are_not_action_versions (test_dependency_freshness.DependencyFreshnessTests.test_action_bundle_and_prerelease_tags_are_not_action_versions) ... ok
+test_blocker_must_be_on_the_manifest_line (test_dependency_freshness.DependencyFreshnessTests.test_blocker_must_be_on_the_manifest_line) ... ok
+test_blockers_do_not_spread_to_other_declarations_of_the_same_package (test_dependency_freshness.DependencyFreshnessTests.test_blockers_do_not_spread_to_other_declarations_of_the_same_package) ... ok
+test_current_and_unbounded_dependencies_pass (test_dependency_freshness.DependencyFreshnessTests.test_current_and_unbounded_dependencies_pass) ... ok
+test_every_ecosystem_build_and_dev_dependencies_are_read (test_dependency_freshness.DependencyFreshnessTests.test_every_ecosystem_build_and_dev_dependencies_are_read) ... ok
+test_every_pinned_action_and_tool_in_the_repository_is_read (test_dependency_freshness.DependencyFreshnessTests.test_every_pinned_action_and_tool_in_the_repository_is_read) ... ok
+test_hash_pinned_actions_are_read_from_the_release_comment (test_dependency_freshness.DependencyFreshnessTests.test_hash_pinned_actions_are_read_from_the_release_comment) ... ok
+test_hook_tags_work_without_github_releases (test_dependency_freshness.DependencyFreshnessTests.test_hook_tags_work_without_github_releases) ... ok
+test_moving_major_action_tag_tracks_patches (test_dependency_freshness.DependencyFreshnessTests.test_moving_major_action_tag_tracks_patches) ... ok
+test_only_an_open_issue_is_an_exception (test_dependency_freshness.DependencyFreshnessTests.test_only_an_open_issue_is_an_exception) ... ok
+test_outside_semver_range_is_stale (test_dependency_freshness.DependencyFreshnessTests.test_outside_semver_range_is_stale) ... ok
+test_report_mode_warns_instead_of_failing (test_dependency_freshness.DependencyFreshnessTests.test_report_mode_warns_instead_of_failing) ... ok
+test_root_tools_experiments_hooks_and_toolchains_are_checked (test_dependency_freshness.DependencyFreshnessTests.test_root_tools_experiments_hooks_and_toolchains_are_checked) ... ok
+test_two_component_version_has_an_implicit_zero_patch (test_dependency_freshness.DependencyFreshnessTests.test_two_component_version_has_an_implicit_zero_patch) ... ok
+
+----------------------------------------------------------------------
+Ran 14 tests in 1.189s
+
+OK
+BLOCKED blocked: https://github.com/owner/repo/issues/123

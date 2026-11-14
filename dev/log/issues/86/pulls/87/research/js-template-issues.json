@@ -1,0 +1,1 @@
+[{"number":188,"state":"CLOSED","title":"Text a pull request wrote is printed to the CI log unbracketed, so a changeset quoting `##[error]` annotates the run — and can also switch off command processing or mask arbitrary text","url":"https://github.com/link-foundation/js-ai-driven-development-pipeline-template/issues/188"}]

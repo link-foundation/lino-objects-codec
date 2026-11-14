@@ -1,5 +1,7 @@
 """Basic usage examples for lino-objects-codec."""
 
+from typing import Any
+
 from link_notation_objects_codec import (
     CircularReferenceError,
     decode,
@@ -8,12 +10,12 @@ from link_notation_objects_codec import (
 )
 
 
-def main():
+def main() -> None:
     print("=== Link Notation Objects Codec Examples ===\n")
 
     # Example 1: Basic types
     print("1. Basic Types:")
-    basic_examples = [
+    basic_examples: list[Any] = [
         None,
         True,
         False,
@@ -30,8 +32,8 @@ def main():
 
     # Example 2: Collections
     print("\n2. Collections:")
-    list_example = [1, 2, 3, "hello", True]
-    dict_example = {"name": "Alice", "age": 30, "active": True}
+    list_example: list[Any] = [1, 2, 3, "hello", True]
+    dict_example: dict[str, Any] = {"name": "Alice", "age": 30, "active": True}
 
     print(f"  List: {list_example}")
     encoded_list = encode(list_example)
@@ -49,7 +51,7 @@ def main():
 
     # Example 3: Nested structures
     print("\n3. Nested Structures:")
-    nested = {
+    nested: dict[str, Any] = {
         "users": [
             {"id": 1, "name": "Alice", "admin": True},
             {"id": 2, "name": "Bob", "admin": False},
@@ -70,7 +72,7 @@ def main():
     # rejects a cycle instead of silently unrolling it.
 
     # Self-referencing list
-    lst = [1, 2, 3]
+    lst: list[Any] = [1, 2, 3]
     lst.append(lst)
     print("  Created self-referencing list")
     encoded_circular = encode_compact(lst)
@@ -81,7 +83,7 @@ def main():
     assert decoded_circular[3] is decoded_circular
 
     # Self-referencing dict
-    d = {"name": "root"}
+    d: dict[str, Any] = {"name": "root"}
     d["self"] = d
     print("\n  Created self-referencing dict")
     encoded_dict_circular = encode_compact(d)
@@ -96,14 +98,15 @@ def main():
     # Example 5: Shared references
     print("\n5. Shared Object References:")
     # Also a compact-format property, for the same reason.
-    shared = {"shared": "data", "value": 42}
-    container = {"first": shared, "second": shared, "third": shared}
+    shared: dict[str, Any] = {"shared": "data", "value": 42}
+    container: dict[str, Any] = {"first": shared, "second": shared, "third": shared}
     print("  Created container with 3 references to same object")
     encoded_shared = encode_compact(container)
     print(f"  Encoded: {encoded_shared}")
     decoded_shared = decode(encoded_shared)
     print(
-        f"  All three references point to same object: {decoded_shared['first'] is decoded_shared['second'] is decoded_shared['third']}"
+        "  All three references point to same object: "
+        f"{decoded_shared['first'] is decoded_shared['second'] is decoded_shared['third']}"
     )
     assert decoded_shared["first"] is decoded_shared["second"]
     assert decoded_shared["second"] is decoded_shared["third"]
@@ -111,13 +114,14 @@ def main():
     # Modify through one reference
     decoded_shared["first"]["modified"] = True
     print(
-        f"  Modified through 'first', visible in 'second': {decoded_shared['second'].get('modified')}"
+        "  Modified through 'first', visible in 'second': "
+        f"{decoded_shared['second'].get('modified')}"
     )
     assert decoded_shared["second"]["modified"] is True
 
     # Example 6: Output formats
     print("\n6. Output Formats:")
-    data = {
+    data: dict[str, Any] = {
         "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
         "count": 2,
     }

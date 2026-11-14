@@ -1,0 +1,51 @@
+Audit npm lock	fail	12s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960684	
+Languages Change Together	fail	13s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090521/job/132483963561	
+Test (Python 3.15 on windows-2025)	fail	41s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132484609687	
+.github/dependabot.yml	pass	1s	https://dependabot-api.githubapp.com	
+Audit Cargo lock	pass	2m43s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960797	
+Audit NuGet dependencies	pass	27s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960572	
+Audit Python dependencies	pass	34s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960472	
+Audit Workflow Security	pass	13s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090542/job/132483960941	
+Build Package	pass	22s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132485624782	
+Changelog Fragment Check	pass	6s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132483960600	
+Changelog Fragment Check	pass	12s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132484164370	
+Changeset Check	pass	14s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132483960355	
+Check Links	pass	9s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090449/job/132483960441	
+Check for Changesets	pass	16s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132484632840	
+Check for Manual Version Changes	pass	5s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132483961255	
+CodeQL	pass	3s	https://github.com/link-foundation/lino-objects-codec/runs/132484818975	
+CodeQL (actions)	pass	51s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960709	
+CodeQL (csharp)	pass	2m26s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960686	
+CodeQL (javascript-typescript)	pass	58s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960697	
+CodeQL (python)	pass	56s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960663	
+CodeQL (rust)	pass	2m37s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960790	
+Detect Changes	pass	15s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132483960555	
+Detect Changes	pass	8s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132483960887	
+Detect Changes	pass	12s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132483961027	
+Detect Changes	pass	5s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132483961183	
+Direct dependencies are current	pass	17s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090407/job/132483960339	
+Implementations Pin One Parser Version	pass	13s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090521/job/132483963338	
+Lint Workflows	pass	8s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090542/job/132483960713	
+Lint and Format Check	pass	42s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132484481784	
+Lint and Format Check	pass	39s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132484609643	
+Lint and Format Check	pass	31s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132484164440	
+Lint and Format Check	pass	21s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132484632858	
+Lockfiles have no pending compatible updates	pass	24s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090407/job/132483960573	
+Scan for Committed Secrets	pass	10s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090476/job/132483960702	
+Test (.NET on macos-15)	pass	49s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132484481856	
+Test (.NET on ubuntu-24.04)	pass	19s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132484481889	
+Test (.NET on windows-2025)	pass	1m5s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132484481825	
+Test (Node.js on ubuntu-24.04)	pass	23s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132484904028	
+Test (Node.js on windows-2025)	pass	47s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132484903955	
+Test (Python 3.15 on ubuntu-24.04)	pass	42s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132484609632	
+Manual Release	skipping	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132485732380	
+Test (Node.js on macos-15)	pending	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132484904025	
+Test Shared Scripts	pass	14s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090562/job/132483960722	
+Test (Python 3.15 on macos-15)	pending	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090523/job/132484609636	
+Test (Rust on ubuntu-24.04)	pass	31s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132484566698	
+Test (Rust on windows-2025)	pass	1m12s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132484566695	
+Version Modification Check	pass	14s	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132483961351	
+Test (Rust on macos-15)	pending	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132484566779	
+Auto Release	skipping	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090414/job/132485732590	
+Create Changelog PR	skipping	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090526/job/132483962191	
+Create Changeset PR	skipping	0	https://github.com/link-foundation/lino-objects-codec/actions/runs/43607090680/job/132483962003	

@@ -3,7 +3,10 @@
 from links_notation import Parser
 
 # Parse the encoded string
-encoded = "(obj_0: ((str c2VsZg==) obj_0) ((str b3RoZXI=) (obj_1: ((str MQ==) (int 1)) ((str Mg==) (int 2)))))"
+encoded = (
+    "(obj_0: ((str c2VsZg==) obj_0) "
+    "((str b3RoZXI=) (obj_1: ((str MQ==) (int 1)) ((str Mg==) (int 2)))))"
+)
 parser = Parser()
 links = parser.parse(encoded)
 
@@ -22,9 +25,7 @@ if links:
         print(f"  values: {val.values}")
         if val.values:
             for j, subval in enumerate(val.values):
-                print(
-                    f"    Subvalue {j}: id={subval.id}, has_values={bool(subval.values)}"
-                )
+                print(f"    Subvalue {j}: id={subval.id}, has_values={bool(subval.values)}")
                 if subval.values:
                     for k, subsubval in enumerate(subval.values):
                         print(f"      Subsubvalue {k}: id={subsubval.id}")

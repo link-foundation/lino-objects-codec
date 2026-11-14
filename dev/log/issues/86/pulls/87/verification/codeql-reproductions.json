@@ -1,0 +1,23 @@
+{
+  "baseline": "235d954e956e3b7f985144f523dadefcc3368380",
+  "identifier_trimming": {
+    "before": "bounded timeout",
+    "after": "pass"
+  },
+  "literal_private_git_identity": {
+    "before": false,
+    "after": true
+  },
+  "exact_python_badge_origin": {
+    "before": false,
+    "after": true
+  },
+  "rust_literal_build_version": {
+    "before": "false",
+    "after": "true"
+  },
+  "csharp_literal_build_version": {
+    "before": "false",
+    "after": "true"
+  }
+}

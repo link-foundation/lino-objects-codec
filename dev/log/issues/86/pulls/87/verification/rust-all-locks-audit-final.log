@@ -1,0 +1,30 @@
+Audit experiments/issue-37/parenthesis-indentation/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning experiments/issue-37/parenthesis-indentation/Cargo.lock for vulnerabilities (9 crate dependencies)
+Audit experiments/issue-43/line-format-probe/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning experiments/issue-43/line-format-probe/Cargo.lock for vulnerabilities (9 crate dependencies)
+Audit experiments/issue-45/quote-probe/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning experiments/issue-45/quote-probe/Cargo.lock for vulnerabilities (9 crate dependencies)
+Audit experiments/issue-47/rust-interop/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning experiments/issue-47/rust-interop/Cargo.lock for vulnerabilities (11 crate dependencies)
+Audit experiments/issue-65/consumer/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning experiments/issue-65/consumer/Cargo.lock for vulnerabilities (21 crate dependencies)
+Audit rust/Cargo.lock
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1509 security advisories (from /home/box/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning rust/Cargo.lock for vulnerabilities (36 crate dependencies)
