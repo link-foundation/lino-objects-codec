@@ -12,7 +12,9 @@
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
 
-import { readFileSync, readdirSync } from 'fs';
+import { readdirSync } from 'fs';
+
+import { packageVersion } from './package-version.mjs';
 
 import { loadReleaseTools, setOutput } from './release-tools.mjs';
 
@@ -108,13 +110,7 @@ function countChangesets() {
  * @param {string} source - 'local' or 'remote'
  */
 async function getVersion(source = 'local') {
-  if (source === 'remote') {
-    const result = await $`git show origin/main:package.json`.run({
-      capture: true,
-    });
-    return JSON.parse(result.stdout).version;
-  }
-  return JSON.parse(readFileSync('./package.json', 'utf8')).version;
+  return packageVersion(source === 'remote' ? { ref: 'origin/main' } : {});
 }
 
 async function main() {
