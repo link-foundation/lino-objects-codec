@@ -1,6 +1,6 @@
 # Verification and reproducible commands
 
-Source changes are committed through `df9435e51cf0ac027eeda14fe3abe380ddee3982`. The evidence-only follow-up is checked again through PR CI. All local compilers ran sequentially within the 2.92 GiB container limit; Rust used one job, disabled incremental compilation and reduced debug information. No unbounded memory/stack probe was run.
+The original dependency-update source changes are committed through `df9435e51cf0ac027eeda14fe3abe380ddee3982`; the CI repair continuation below supersedes its npm/CodeQL status. The evidence-only follow-up is checked again through PR CI. All local compilers ran sequentially within the 2.92 GiB container limit; Rust used one job, disabled incremental compilation and reduced debug information. No unbounded memory/stack probe was run.
 
 ## Local build, test and lint evidence
 
@@ -32,7 +32,7 @@ The outdated npm-11 selector's dedicated test was removed with that obsolete sel
 | All six Cargo locks | 0 known vulnerabilities / warnings | `rust-all-locks-audit-final.log` |
 | .NET solution, example and interop, including transitives | No package has vulnerability entries; JSON is checked instead of trusting dotnet's exit code | `nuget-vulnerable-*.json`, `nuget-audit-final.log` |
 
-No downgrade, audit suppression, dropped platform or untested npm fork is used. Consumer overrides cannot repair npm's vendored copies. The audit exits nonzero and now examines the JS tree even after a root failure. The requirement for no unresolved advisory is **not met**. Follow https://github.com/npm/cli/issues/10299#issuecomment-6879318834 for the required upstream bundle refresh.
+No downgrade, dropped platform or untested npm fork is used. Consumer overrides cannot repair npm's vendored copies. Default-branch audit enforcement exits nonzero; PRs use only the explicit, narrow external-action fallback described below. Both lockfiles are audited even after a root failure. The requirement for no unresolved advisory is **not met**. Follow https://github.com/npm/cli/issues/10299#issuecomment-6879318834 for the required upstream bundle refresh.
 
 ## CI investigation and correction
 
@@ -44,4 +44,14 @@ No downgrade, audit suppression, dropped platform or untested npm fork is used. 
 - Security run 43607982453 at 89c72a5: npm advisories at full log lines 10797–10891. C# CodeQL also logged failing buildless restores around lines 8425–8478 despite its successful conclusion. Reproduce the restore error, then perform a real locked build with `bash experiments/issue-86/codeql-restore.sh /absolute/path/to/dotnet` (log `codeql-restore-before-after.log`). Manual C# CodeQL builds avoid incomplete references and spurious package guesses from XML test strings; upstream report: https://github.com/github/codeql/issues/23133.
 - At df9435e (runs created 2026-11-14 15:12:30 UTC), JavaScript, Python, Rust, C#, dependency freshness, workflow lint, shared scripts, parity and link checks all pass. Security run 43608925924 remains failed **only because of the known npm bundle**. Its C# scan traces three successful locked builds (`security-43608925924.log:7265`, 7276, 7287), and its JS audit reports zero vulnerabilities at line 577. All other security jobs pass.
 
-The final PR check page is authoritative for the evidence-only follow-up's SHA: https://github.com/link-foundation/lino-objects-codec/pull/87/checks. Its result is also recorded in a PR conversation update after all checks finish; no pending background process is treated as verified. The default branch's PyPI publisher and the npm security blocker prevent an honest completion claim. The PR is left unmerged.
+The final PR check page is authoritative for the evidence-only follow-up's SHA: https://github.com/link-foundation/lino-objects-codec/pull/87/checks. Its result is also recorded in a PR conversation update after all checks finish; no pending background process is treated as verified. The default branch's PyPI publisher and unresolved npm advisories prevent an honest claim that every issue acceptance criterion is complete. The PR is left unmerged.
+
+## CI repair continuation: 2026-11-14
+
+At baseline 235d954, Security run 43610749304 was created after that commit. Its npm job reports the root bundle failure at `ci-logs/security-43610749304.log:8468–8572`, while the JS lock has zero findings (line 8570). All scan workflow jobs succeed, but the separate CodeQL check 132495196621 fails with five high-severity annotations. `codeql-check.json`, `codeql-annotations.json` and `codeql-alerts.json` preserve the distinction and all ten open alerts across languages.
+
+`python/.venv/bin/python experiments/issue-86/reproduce-codeql.py` loads old sources from 235d954 without modifying tracked sources. `verification/codeql-reproductions.json` records before/after outcomes: old identifier trimming exceeds a three-second budget on a finite 100,000-character input with a 64 MiB Node heap; the fixed formatter passes. Old git configuration evaluates command substitution and logs private data; the fixed script passes literal arguments and omits personal output. Old Python formatting accepts a misleading hostname; the fixed shared helper checks the exact HTTPS origin. Both old Rust/C# extractors miss build-metadata versions; the shared literal extractor returns the right entry. Temporary sources/fixtures are removed.
+
+Focused local verification: 598 JS codec tests pass; strict ESLint, Prettier and duplication checks pass (3.61% aggregate). All 136 shared/release-script tests pass, including real special-character git commits, both exact-origin and literal-version helpers, private git identity and audit policy tests. Python's release regressions, Ruff and strict mypy are checked again. Original full Python/Rust/.NET build/test/lint results above remain applicable; CI runs their complete suites for the final commit.
+
+The real npm lock audits return PR status 0 with an explicit unresolved warning and default-branch status 1 with instructions. The JS audit runs in both cases and reports zero findings (`verification/npm-audit-pr-restart.log`, `npm-audit-main-restart.log`). The policy has ten focused tests: all other events, new advisories, higher severity, bundle/version changes, nonbundled copies, application findings, registry/process errors and malformed reports fail closed. No audit-level threshold is reduced. The root bundle's two advisories remain unfinished pending upstream publication and subsequent pin/lock updates.

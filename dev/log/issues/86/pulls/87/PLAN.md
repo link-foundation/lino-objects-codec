@@ -18,7 +18,7 @@ Objective: implement and verify every requirement in issue 86 in this single PR;
 - [x] Extend Dependabot to cover every actual ecosystem/directory, including SDK and pre-commit.
 - [x] Add release fragments using existing release automation; do not manually bump package versions prohibited by CI.
 - [x] Run full build/test/lint for each ecosystem sequentially within 2.92 GiB; resolve new diagnostics without relaxing checks. Audit both npm locks, full Python environment, six Cargo locks and .NET entry points.
-- [ ] **Blocked:** no unresolved advisories / green Security. Latest official npm bundles vulnerable glob/minimatch (two advisories, 21 propagated moderate findings); consumer overrides cannot repair the bundle. Await a fixed official release; retain the strict failure.
+- [ ] **Blocked:** no unresolved advisories. Latest official npm bundles vulnerable glob/minimatch (two advisories, 21 propagated moderate findings); consumer overrides cannot repair the bundle. Await a fixed official release; enforce failure on main and report the exact two advisories on PRs under the requested external-action fallback.
 - [ ] **Blocked:** default-branch PyPI publishing / completely green main. A PyPI owner must configure the Trusted Publisher described in `ANALYSIS.md`; this workspace has no PyPI account authority. Main cannot use branch fixes until an owner merges the PR.
 - [x] Commit atomic source steps, push only `issue-86-35430a936d8f`, update PR title/body with reproduction and verification plus `Fixes #86`.
 - [x] Fetch latest main (023932f), confirm it is already incorporated; inspect `gh pr diff`, source diff and lock metadata for regressions and removed features.
