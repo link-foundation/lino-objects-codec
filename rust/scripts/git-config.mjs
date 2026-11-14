@@ -9,31 +9,28 @@
  * Usage: node scripts/git-config.mjs [--name <name>] [--email <email>]
  */
 
-import { execSync } from 'child_process';
+import { execFileSync } from 'node:child_process';
 
 // Default values
 const name = process.env.GIT_USER_NAME || 'github-actions[bot]';
-const email = process.env.GIT_USER_EMAIL || 'github-actions[bot]@users.noreply.github.com';
+const email =
+  process.env.GIT_USER_EMAIL || 'github-actions[bot]@users.noreply.github.com';
 
 /**
- * Execute a shell command
- * @param {string} command - The command to execute
+ * Configure one value without shell interpolation or logging personal data.
  */
-function exec(command) {
+function configure(key, value) {
   try {
-    execSync(command, { stdio: 'inherit' });
-  } catch (error) {
-    console.error(`Error executing command: ${command}`);
-    console.error(error.message);
+    execFileSync('git', ['config', key, value], { stdio: 'pipe' });
+  } catch {
+    console.error(`Could not configure git ${key}`);
     process.exit(1);
   }
 }
 
 try {
-  console.log(`Configuring git user: ${name} <${email}>`);
-
-  exec(`git config user.name "${name}"`);
-  exec(`git config user.email "${email}"`);
+  configure('user.name', name);
+  configure('user.email', email);
 
   console.log('Git configuration complete');
 } catch (error) {

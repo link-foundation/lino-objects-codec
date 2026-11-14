@@ -410,11 +410,16 @@ function formatIndentedScalarValue(value, reservedReferences = new Set()) {
  * @returns {string} Sanitized id segment
  */
 function sanitizeIdentifierPart(value) {
-  const sanitized = String(value)
-    .replace(/[^A-Za-z0-9_-]+/g, '_')
-    .replace(/^_+|_+$/g, '');
-
-  return sanitized || 'item';
+  const sanitized = String(value).replace(/[^A-Za-z0-9_-]+/g, '_');
+  let start = 0;
+  let end = sanitized.length;
+  while (start < end && sanitized[start] === '_') {
+    start += 1;
+  }
+  while (end > start && sanitized[end - 1] === '_') {
+    end -= 1;
+  }
+  return sanitized.slice(start, end) || 'item';
 }
 
 /**

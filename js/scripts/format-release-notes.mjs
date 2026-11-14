@@ -26,6 +26,7 @@
  */
 
 import { readFileSync } from 'fs';
+import { hasShieldsBadge } from '../../scripts/release-notes.mjs';
 import {
   buildNpmVersionBadge,
   normalizeReleaseVersionForBadge,
@@ -78,7 +79,7 @@ try {
   const currentBody = releaseData.body || '';
 
   // Skip if already formatted (has shields.io badge image)
-  if (currentBody.includes('img.shields.io')) {
+  if (hasShieldsBadge(currentBody)) {
     console.log('ℹ️ Release notes already formatted');
     process.exit(0);
   }

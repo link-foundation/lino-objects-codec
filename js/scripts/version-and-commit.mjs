@@ -194,9 +194,7 @@ async function main() {
       await $`git add -A`;
 
       // Commit with version number as message
-      const commitMessage = newVersion;
-      const escapedMessage = commitMessage.replace(/"/g, '\\"');
-      await $`git commit -m "${escapedMessage}"`;
+      await $`git commit -m ${newVersion}`;
 
       // Push directly to main
       await $`git push origin main`;

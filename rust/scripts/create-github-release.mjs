@@ -28,6 +28,11 @@ import {
   normalizeReleaseVersionForBadge,
 } from './release-format-helpers.mjs';
 
+import {
+  extractChangelogEntry,
+  hasShieldsBadge,
+} from '../../scripts/release-notes.mjs';
+
 import { $ } from 'command-stream';
 import { makeConfig } from 'lino-arguments';
 
@@ -113,23 +118,7 @@ try {
     changelog = '';
   }
 
-  // Extract changelog entry for this version
-  // Read from CHANGELOG.md between this version header and the next version header
-  const versionHeaderRegex = new RegExp(
-    `## \\[?${semver.replace(/\./g, '\\.')}\\]?[\\s\\S]*?(?=## \\[?\\d|$)`
-  );
-  const match = changelog.match(versionHeaderRegex);
-
-  let releaseNotes = '';
-  if (match) {
-    // Remove the version header itself and trim
-    releaseNotes = match[0]
-      .replace(
-        new RegExp(`## \\[?${semver.replace(/\./g, '\\.')}\\]?[^\\n]*`),
-        ''
-      )
-      .trim();
-  }
+  let releaseNotes = extractChangelogEntry(changelog, semver);
 
   if (!releaseNotes) {
     releaseNotes = `Release ${semver}`;
@@ -139,7 +128,7 @@ try {
   // when the changelog body itself does not embed one. The format-release
   // script will skip any release that already contains a shields.io badge,
   // so adding it here is idempotent.
-  if (crateName && !/img\.shields\.io/.test(releaseNotes)) {
+  if (crateName && !hasShieldsBadge(releaseNotes)) {
     const badge = buildCratesIoVersionBadge(crateName, semver);
     releaseNotes = `${releaseNotes}\n\n---\n\n${badge}`;
   }

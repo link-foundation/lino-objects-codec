@@ -32,6 +32,11 @@ import {
   normalizeReleaseVersionForBadge,
 } from './release-format-helpers.mjs';
 
+import {
+  extractChangelogEntry,
+  hasShieldsBadge,
+} from '../../scripts/release-notes.mjs';
+
 import { $ } from 'command-stream';
 import { makeConfig } from 'lino-arguments';
 
@@ -49,7 +54,8 @@ function findCsprojPackageName(rootDir = '.') {
       return;
     }
     for (const entry of entries) {
-      if (entry === 'node_modules' || entry === 'bin' || entry === 'obj') continue;
+      if (entry === 'node_modules' || entry === 'bin' || entry === 'obj')
+        continue;
       const full = path.join(dir, entry);
       let stat;
       try {
@@ -75,7 +81,9 @@ function findCsprojPackageName(rootDir = '.') {
     }
     const packageIdMatch = xml.match(/<PackageId>([^<]+)<\/PackageId>/);
     if (packageIdMatch) return packageIdMatch[1].trim();
-    const assemblyNameMatch = xml.match(/<AssemblyName>([^<]+)<\/AssemblyName>/);
+    const assemblyNameMatch = xml.match(
+      /<AssemblyName>([^<]+)<\/AssemblyName>/
+    );
     if (assemblyNameMatch) return assemblyNameMatch[1].trim();
     // Fall back to the file name (without extension).
     return path.basename(csproj, '.csproj');
@@ -141,29 +149,13 @@ try {
     changelog = '';
   }
 
-  // Extract changelog entry for this version
-  // Read from CHANGELOG.md between this version header and the next version header
-  const versionHeaderRegex = new RegExp(
-    `## \\[?${semver.replace(/\./g, '\\.')}\\]?[\\s\\S]*?(?=## \\[?\\d|$)`
-  );
-  const match = changelog.match(versionHeaderRegex);
-
-  let releaseNotes = '';
-  if (match) {
-    // Remove the version header itself and trim
-    releaseNotes = match[0]
-      .replace(
-        new RegExp(`## \\[?${semver.replace(/\./g, '\\.')}\\]?[^\\n]*`),
-        ''
-      )
-      .trim();
-  }
+  let releaseNotes = extractChangelogEntry(changelog, semver);
 
   if (!releaseNotes) {
     releaseNotes = `Release ${semver}`;
   }
 
-  if (packageName && !/img\.shields\.io/.test(releaseNotes)) {
+  if (packageName && !hasShieldsBadge(releaseNotes)) {
     const badge = buildNuGetVersionBadge(packageName, semver);
     releaseNotes = `${releaseNotes}\n\n---\n\n${badge}`;
   }
