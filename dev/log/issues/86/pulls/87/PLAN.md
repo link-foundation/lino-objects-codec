@@ -23,7 +23,7 @@ Objective: implement and verify every requirement in issue 86 in this single PR;
 - [x] Commit atomic source steps, push only `issue-86-35430a936d8f`, update PR title/body with reproduction and verification plus `Fixes #86`.
 - [x] Fetch latest main (023932f), confirm it is already incorporated; inspect `gh pr diff`, source diff and lock metadata for regressions and removed features.
 - [x] Verify all ten source-commit workflows at df9435e; preserve/diagnose nonpassing logs. Nine workflows pass; Security fails only on the documented npm advisories. C# manual CodeQL builds succeed.
-- [ ] Final evidence commit: recheck exact-HEAD CI until every run finishes, record the result in a PR conversation comment, mark PR 87 ready for review, and confirm a clean working tree. The authoritative final receipt is linked from PR 87; this checklist does not claim blocked criteria are complete.
+- [x] CI repair source commit 358c86b: all ten workflows succeed, all 59 checks complete (48 pass / 11 expected skips), separate CodeQL succeeds with no open alerts, and npm lock audit succeeds under the narrow requested fallback. Evidence follow-up CI and ready/clean confirmation are recorded in the authoritative final PR conversation receipt; blocked criteria above remain unfinished.
 
 ## Approach
 
