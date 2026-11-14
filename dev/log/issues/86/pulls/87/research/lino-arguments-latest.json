@@ -1,0 +1,131 @@
+{
+  "bugs": {
+    "url": "https://github.com/link-foundation/lino-arguments/issues"
+  },
+  "dist": {
+    "shasum": "619f042a1fd344230e76c5482f4fe4be1225c592",
+    "tarball": "https://registry.npmjs.org/lino-arguments/-/lino-arguments-0.4.1.tgz",
+    "fileCount": 33,
+    "integrity": "sha512-ebJMxoR5RZIkCGCFIobRMjZ0JUECwIYXSE++wiQLuWhMcy1Rz2Z83no7PEF6YR/wcRbZULnvUtnPv0gShaviFQ==",
+    "signatures": [
+      {
+        "sig": "MEUCIQDzWPWq6jRDIm2i32Cy1QHxVkE3U0wpkqxbEd8B47gx7wIgTmWtToSVXFvqO5Q2NzNbq4VFcB9marLZK8JTpyfIEMs=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEYCIQD5CCF2Sj0Tbdf16yhXNBn01MIWRQ4iPBIRHwYaFFJQYQIhAJERy/dS0gJBJUZNwY1hHzX/0ynlkL1qXHicva7p6fYY",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/lino-arguments@0.4.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 185026
+  },
+  "main": "./src/index.js",
+  "name": "lino-arguments",
+  "type": "module",
+  "author": "",
+  "engines": {
+    "node": "^20.19.0 || ^22.12.0 || >=23"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./pure": "./src/pure.js"
+  },
+  "gitHead": "878618e638e405ee7c93104d524ac061e5d6a7c7",
+  "license": "Unlicense",
+  "scripts": {
+    "lint": "eslint .",
+    "test": "node --test tests/*.test.js",
+    "check": "npm run lint && npm run format:check && npm run check:file-size",
+    "format": "prettier --write .",
+    "prepare": "husky || true",
+    "lint:fix": "eslint . --fix",
+    "changeset": "changeset",
+    "format:check": "prettier --check .",
+    "test:release": "node --test ../experiments/test-js-release.mjs && node ../experiments/test-release-preparation.mjs",
+    "test:consumer": "node ../experiments/test-latest-grammar-consumer.mjs && node ../experiments/test-latest-grammar-consumer.mjs --assess-lino-env-range",
+    "check:file-size": "node ../scripts/check-file-size.mjs",
+    "changeset:create": "node ../scripts/create-manual-changeset.mjs",
+    "changeset:status": "changeset status --since=origin/main",
+    "changeset:publish": "changeset publish",
+    "changeset:version": "node ../scripts/changeset-version.mjs",
+    "changeset:validate": "node ../scripts/validate-changeset.mjs",
+    "check:dependencies": "npm outdated"
+  },
+  "_npmUser": {
+    "name": "GitHub Actions",
+    "email": "npm-oidc-no-reply@github.com",
+    "trustedPublisher": {
+      "id": "github",
+      "oidcConfigId": "8be3bf34-8db4-46a3-9572-fdd0b5833d8b"
+    }
+  },
+  "homepage": "https://github.com/link-foundation/lino-arguments#readme",
+  "keywords": [
+    "lino",
+    "arguments",
+    "cli",
+    "yargs",
+    "environment",
+    "links-notation",
+    "config"
+  ],
+  "repository": {
+    "url": "git+https://github.com/link-foundation/lino-arguments.git",
+    "type": "git"
+  },
+  "_npmVersion": "12.2.2",
+  "description": "A setup of Links Notation Environment (lenv) + yargs to support easy configuration of CLI apps",
+  "directories": {},
+  "lint-staged": {
+    "*.{js,mjs,cjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "maintainers": [
+    {
+      "name": "konard",
+      "email": "drakonard@gmail.com"
+    }
+  ],
+  "_nodeVersion": "24.22.2",
+  "dependencies": {
+    "yargs": "^18.2.0",
+    "getenv": "^2.0.0",
+    "lino-env": "^0.2.8",
+    "links-notation": "^0.31.2"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "eslint": "^10.14.0",
+    "prettier": "^3.9.10",
+    "@eslint/js": "^10.0.1",
+    "lint-staged": "^17.6.0",
+    "test-anywhere": "^0.9.1",
+    "@changesets/cli": "^3.0.3",
+    "@dotenvx/dotenvx": "^2.38.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7"
+  },
+  "peerDependencies": {
+    "@dotenvx/dotenvx": "^2.38.2"
+  },
+  "peerDependenciesMeta": {
+    "@dotenvx/dotenvx": {
+      "optional": true
+    }
+  },
+  "_npmOperationalInternal": {
+    "tmp": "tmp/lino-arguments_0.4.1_1793946957831_0.8026881691483496",
+    "host": "s3://npm-registry-packages-npm-production"
+  },
+  "_id": "lino-arguments@0.4.1",
+  "version": "0.4.1"
+}

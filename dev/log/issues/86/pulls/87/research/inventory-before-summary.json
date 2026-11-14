@@ -1,0 +1,1 @@
+{"stage": "before", "declarations": 365, "registry_queries": 216, "errors": [{"ecosystem": "github-tools", "name": "pre-commit/mirrors-mypy", "error": "HTTP Error 404: Not Found"}]}

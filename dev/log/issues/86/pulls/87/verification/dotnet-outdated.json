@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "parameters": "--outdated --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "/tmp/gh-issue-solver-1794665145423/csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj"
+    },
+    {
+      "path": "/tmp/gh-issue-solver-1794665145423/csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "frameworks": [
+        {
+          "framework": "net11.0",
+          "transitivePackages": [
+            {
+              "id": "Microsoft.ApplicationInsights",
+              "resolvedVersion": "2.23.0",
+              "latestVersion": "3.2.0"
+            },
+            {
+              "id": "Microsoft.Bcl.AsyncInterfaces",
+              "resolvedVersion": "6.0.0",
+              "latestVersion": "11.0.0"
+            },
+            {
+              "id": "Microsoft.DiaSymReader",
+              "resolvedVersion": "2.2.10",
+              "latestVersion": "3.0.0"
+            },
+            {
+              "id": "Microsoft.Extensions.DependencyModel",
+              "resolvedVersion": "10.0.10",
+              "latestVersion": "11.0.0"
+            },
+            {
+              "id": "Microsoft.Testing.Extensions.Telemetry",
+              "resolvedVersion": "2.5.2",
+              "latestVersion": "2.5.3"
+            },
+            {
+              "id": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
+              "resolvedVersion": "2.5.2",
+              "latestVersion": "2.5.3"
+            },
+            {
+              "id": "Microsoft.Testing.Platform",
+              "resolvedVersion": "2.5.2",
+              "latestVersion": "2.5.3"
+            },
+            {
+              "id": "Microsoft.Testing.Platform.MSBuild",
+              "resolvedVersion": "2.5.2",
+              "latestVersion": "2.5.3"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "dist-tags": {
+    "latest-1": "1.4.29",
+    "latest-3": "3.10.10",
+    "next-3": "3.10.10",
+    "latest-2": "2.15.12",
+    "next-2": "2.15.12",
+    "next-4": "4.6.1",
+    "latest-4": "4.6.1",
+    "next-5": "5.10.0",
+    "latest-5": "5.10.0",
+    "next-7": "7.24.2",
+    "latest-7": "7.24.2",
+    "v6.14-next": "6.14.18",
+    "latest-6": "6.14.18",
+    "next-6": "6.14.18",
+    "next-8": "8.19.4",
+    "next-9": "9.9.4",
+    "latest": "12.2.2",
+    "next-10": "10.9.10",
+    "next-11": "11.21.2",
+    "next-12": "12.2.2"
+  },
+  "releases": {
+    "12.2.0": {
+      "version": "12.2.0",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "9b58e3add8a0ad8c87c927f1a988f41435f4ffad",
+        "tarball": "https://registry.npmjs.org/npm/-/npm-12.2.0.tgz",
+        "fileCount": 1942,
+        "integrity": "sha512-ZsJjKpTnlmSXOLLXiU1xDCzC4Wlok4IwZmh/aw2KUuXytU7q6qMv/cUT7MoeSf95Slwuw/lRXYefGzGCspHPNQ==",
+        "signatures": [
+          {
+            "sig": "MEYCIQCXvXZm01EiQIfCOjMbCna9ATH8xNjCbTX7B6rGjB8USgIhAPKM2KBQSm3OwLzM4Ayj4PxP5emDpys9665mIf2vokPO",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEYCIQDE/ZBPO+IrWRblLzFc4tZqXE3CvPyOJc4t1t6GiN9raAIhAKPeEeEUqZfTFxCFVEYgSAvFiFwEjtSkImzKqv9bw1GF",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 12397700
+      }
+    },
+    "12.2.1": {
+      "version": "12.2.1",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "2a2765aa5b36f68006ea7132bd3f20b095a85c6e",
+        "tarball": "https://registry.npmjs.org/npm/-/npm-12.2.1.tgz",
+        "fileCount": 1942,
+        "integrity": "sha512-bKCmFRVT/BB+YPEYbZwQ1XUI3N5t4xKSpU1MxOjo7z3iWzKBJ0ZXRC1xFdEN+TC7N5TdywaBzf2dMXGJq/e2PQ==",
+        "signatures": [
+          {
+            "sig": "MEQCIAsXcHTrdTysebaa+LWvu1F6tjSlwyXRr3eG/smzppVnAiApJq1ELms3QE7/aTlQmEt/Yf24Tz5G7sygrUXYS8khng==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIB++SZIIe5GkkDK2W7U+6Nvp9MXNjpqHUviecw480OMCAiEAnJUNjH2EnEyZgrFQz0nM8A81An7XUuu08GR5KXWHgmo=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 12430582
+      }
+    },
+    "12.2.2": {
+      "version": "12.2.2",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "51a953fbf70423136e8c39818ca4bd35175cd13d",
+        "tarball": "https://registry.npmjs.org/npm/-/npm-12.2.2.tgz",
+        "fileCount": 1943,
+        "integrity": "sha512-KglgbZyacf7jH+FHuNRqVuCzQi8VhI2a7J87Ix43FsPTuZoGWmIXXGdZtBUOA79vwL+IJREqURVzupA7PsQTcA==",
+        "signatures": [
+          {
+            "sig": "MEYCIQC0H2VHrmUE7Wlz8zpinDV1V0uGWGt+Yhg2dGGoAitpVQIhAOUSSCIKTU9mVFXcblFiUxW9225+DHd7VEpXSV4xj7v0",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIQCo1xH/1Y+aHGmvJ5MgJLr3O/rua+Xbf3JSALwMSqEmmgIgSd+Sq+eknLwFvPfGhv9qOr9dNWlPiT45X6//lHkOHOo=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 12459070
+      }
+    }
+  }
+}

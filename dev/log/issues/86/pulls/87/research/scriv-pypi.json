@@ -1,0 +1,27 @@
+{
+  "version": "1.8.1",
+  "urls": {
+    "Documentation": "https://scriv.readthedocs.io",
+    "Funding": "https://github.com/sponsors/nedbat",
+    "Home": "https://github.com/nedbat/scriv",
+    "Issues": "https://github.com/nedbat/scriv/issues",
+    "Mastodon": "https://hachyderm.io/@nedbat",
+    "Source": "https://github.com/nedbat/scriv"
+  },
+  "requires_dist": [
+    "attrs==26.1.0",
+    "certifi==2026.10.23",
+    "charset-normalizer==3.5.2",
+    "click==8.5.0",
+    "click-log==0.4.0",
+    "idna==3.20",
+    "jinja2==3.1.6",
+    "markdown-it-py==4.2.0",
+    "markupsafe==3.0.4",
+    "mdurl==0.1.2",
+    "requests==2.34.2",
+    "urllib3==2.8.0",
+    "tomli; python_version < \"3.11\" and extra == \"toml\"",
+    "pyyaml; extra == \"yaml\""
+  ]
+}

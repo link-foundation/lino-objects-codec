@@ -1,0 +1,707 @@
+# Lino Protocol Parser for JavaScript
+
+JavaScript implementation of the Links Notation parser using Bun and
+Peggy.js parser generator.
+
+## Installation
+
+### Installing from npm
+
+Install the package using your preferred package manager:
+
+#### Using npm (Node.js)
+
+```bash
+npm install links-notation
+```
+
+#### Using Bun
+
+```bash
+bun add links-notation
+```
+
+#### Using Deno
+
+```typescript
+import { Parser, Link } from 'npm:links-notation@^0.6.0';
+```
+
+#### In browsers
+
+The package has no runtime dependencies and imports no Node.js built-in
+modules, so bundlers need no polyfills. For example, esbuild bundles it with
+`esbuild entry.js --bundle --platform=browser`. Before 0.27.1, `StreamParser`
+imported Node's `events` module, and browser bundles needed the `events`
+package installed as a polyfill.
+
+### Local Development Setup
+
+For contributors working on the source code:
+
+#### Using Bun (recommended)
+
+```bash
+cd js
+bun install
+```
+
+#### Using npm
+
+```bash
+cd js
+npm install
+```
+
+## Build
+
+Compile the Peggy.js grammar:
+
+```bash
+bun run build:grammar
+```
+
+Build the project:
+
+```bash
+bun run build
+```
+
+## Test
+
+Run tests:
+
+```bash
+bun test
+```
+
+Watch mode:
+
+```bash
+bun test --watch
+```
+
+## Usage
+
+### TypeScript Support
+
+This package includes TypeScript type definitions for improved developer experience with IntelliSense, autocomplete, and compile-time type checking.
+
+```typescript
+import { Parser, Link, FormatOptions } from 'links-notation';
+
+// TypeScript provides full type checking and autocomplete
+const parser = new Parser({
+  maxInputSize: 10 * 1024 * 1024,
+  maxDepth: 64,
+});
+
+const links: Link[] = parser.parse('(source: type target)');
+```
+
+### Basic Parsing
+
+```javascript
+import { Parser, Link } from 'links-notation';
+
+// Create parser
+const parser = new Parser();
+
+// Parse Lino format string
+const input = `papa (lovesMama: loves mama)
+son lovesMama
+daughter lovesMama
+all (love mama)`;
+
+const result = parser.parse(input);
+console.log(result);
+
+// Access parsed structure
+result.forEach((link) => {
+  console.log(link.toString());
+});
+```
+
+### Working with Links
+
+```javascript
+import { Link } from 'links-notation';
+
+// Create links programmatically
+const link = new Link('parent', [new Link('child1'), new Link('child2')]);
+
+console.log(link.toString()); // (parent: child1 child2)
+
+// Access link properties
+console.log('ID:', link.id);
+console.log('Values:', link.values);
+```
+
+### Advanced Usage
+
+```javascript
+// Handle nested structures
+const input = `parent
+  child1
+  child2
+    grandchild1
+    grandchild2`;
+
+const parsed = await parser.parse(input);
+
+// Work with groups
+import { LinksGroup } from 'links-notation';
+const group = new LinksGroup(parsed);
+console.log(group.format());
+```
+
+### Indented Text Documents
+
+Use `parseIndentedDocument` and `formatIndentedDocument` for text parents and
+their answers or options:
+
+```javascript
+import { parseIndentedDocument, formatIndentedDocument } from 'links-notation';
+
+const input = `What is your experience?
+  I have worked with JavaScript
+'Question with "quotes": and colon'
+  Answer
+Skills
+  JavaScript
+  Python
+`;
+const answers = parseIndentedDocument(input);
+console.log(answers.get('What is your experience?'));
+// I have worked with JavaScript
+console.log(answers.get('Skills')); // ['JavaScript', 'Python']
+console.log(formatIndentedDocument(answers));
+```
+
+A parent with no children maps to `[]`, one child maps to a string, and multiple
+children map to an array. Repeated parent lines accumulate children in order.
+To read multiple child lines as multiline text, pass
+`{ multipleValues: 'join' }`. These helpers accept the same parsing options as
+`Parser`, including `comments`, `maxInputSize`, and `maxDepth`.
+
+The formatter uses two spaces of indentation and adds a final newline to a
+nonempty document. Ordinary single-space prose stays unquoted. Quotes are
+escaped by doubling the enclosing delimiter. Structural characters, comment
+starts, reserved literal prefixes, and significant whitespace are quoted.
+Empty strings and control characters use the versioned reference literals
+introduced in 0.24.0. A multiline string is encoded as one reference with its
+exact line endings; an array is written as separate child references. Parsed
+IDs are already unescaped.
+
+The text format does not distinguish a one-element array from a single string;
+both read back as a string. Use a multiline string to distinguish one
+multiline answer from several options. The helpers reject grandchildren and
+named links with values instead of discarding their structure.
+
+For arbitrary indentation trees, `Parser.parseGroups(input)` returns existing
+`LinksGroup` instances. Each group's `element` is the `Link` on that line, and
+`children` contains its immediately indented groups. Parenthesized values retain
+their usual `Link` structure:
+
+```javascript
+import { Parser } from 'links-notation';
+
+const [group] = new Parser().parseGroups('Question\n  Answer\n    Detail');
+console.log(group.element.getValuesString()); // Question
+console.log(group.children[0].element.getValuesString()); // Answer
+console.log(group.children[0].children[0].element.getValuesString()); // Detail
+```
+
+`Parser.parse()` continues to return the existing list of links and expanded
+paths. `parseGroups()` preserves indentation even for the `name:` syntax.
+
+#### Indented ID Groups
+
+`parse` defines the canonical link values for `x:\n  a\n  b`: `(x: a b)`.
+`parseGroups` keeps the `x:` element as a self reference (`id: 'x'`,
+`values: []`), with children separate from that empty value list. Leaf lines
+containing a single reference inside an indented ID's value subtree become
+references, so folding that subtree agrees with `parse`:
+
+```javascript
+import { Link, Parser } from 'links-notation';
+
+const parser = new Parser();
+const unindent = ({ element, children }) =>
+  children.length
+    ? new Link(element.id, [...element.values, ...children.map(unindent)])
+    : element;
+const text = 'x:\n  a\n  b';
+console.log(parser.parse(text)[0].format()); // (x: a b)
+console.log(parser.parseGroups(text).map(unindent)[0].format()); // (x: a b)
+```
+
+Parentheses keep their meaning: `x:\n  (a)` gives `(x: (a))` in both readings.
+Named and multi-value children keep their structure too. Under an ordinary
+head such as `x: kind`, the child `a` remains a one-value link `(a)`;
+`parse` expands those lines into paths, so this folding function is only an
+equivalence with `parse` for indented ID subtrees. A standalone `id:` or
+`(id:)` has no values in either API. The Link model represents it with
+`id: 'id', values: []`; its existing default formatter writes `(id)`.
+
+Before 0.30.2, `parseGroups` kept the anonymous one-value wrapper around leaf
+references under `x:`. Callers that accessed `child.element.values[0]` there
+should now use `child.element`. C++ (`parse_groups`), Swift and Kotlin expose
+the same group contract; the other six bindings do not expose this parser API.
+
+`escapeReference` and `unescapeReference` are exported functions and static
+methods on `Link`. Use minimal mode only for whole text lines; default escaping
+still quotes spaces so references can be used inside tuples:
+
+```javascript
+import { Link, escapeReference, unescapeReference } from 'links-notation';
+
+Link.escapeReference('plain text'); // "'plain text'"
+escapeReference('plain text', { minimal: true }); // 'plain text'
+unescapeReference("'it''s ready'"); // "it's ready"
+```
+
+`unescapeReference` decodes a complete serialized reference, including n-quote
+delimiters, doubled escapes, and versioned literals. It rejects incomplete
+quoted input and malformed literals, and preserves literal backslashes. Do not
+call it on already decoded `Link.id` values.
+
+See the [Q&A document example](../examples/js_indented_document.js).
+
+### How a Document Was Written (CST)
+
+Parsing keeps how every ID was written. Quoting never changes a reference:
+`1` and `'1'` are the same reference, so equality, formatting and JSON stay as
+they were. Each parsed link also carries `rawId`, the ID exactly as written,
+and `quote`, the delimiter it was written between:
+
+```javascript
+import { Parser } from 'links-notation';
+
+const [link] = new Parser().parse("(t 1 '1')");
+const [, bare, quoted] = link.values;
+bare.equals(quoted); // true: the same reference
+[bare.rawId, bare.quote]; // ['1', null]
+[quoted.rawId, quoted.quote]; // ["'1'", "'"]
+link.format(); // '(t 1 1)'
+```
+
+`rawId` is `null` for links without an ID, links built in code, and links
+made by indentation path combination. Use `new Parser({ syntax: false })` (AST
+mode) to leave it out.
+
+`parseCst(input)` returns the lossless concrete syntax tree. Every character,
+including comments, blank lines, indentation, quotes and line endings, belongs
+to exactly one token, so the original text is always recovered:
+
+```javascript
+const cst = new Parser().parseCst("(t 1 '1') # note\n");
+cst.toString(); // "(t 1 '1') # note\n"
+cst.tokens().map((token) => [token.kind, token.text]);
+// [['open_paren', '('], ['reference', 't'], ['whitespace', ' '], ...]
+cst.toSExpression();
+// (document (line (group open_paren:"(" (line reference:"t" ...) close_paren:")") whitespace:" " comment:"# note" newline:"\n"))
+```
+
+A `document` node holds `line` nodes. A line holds its tokens up to and
+including its line ending. A `group` node holds `(`, the lines inside it, and
+`)`. Reference tokens carry `value` (what the reference means) and `quote`.
+`parseCst` refuses exactly what `parse` refuses. See
+[the issue 364 case study](../docs/case-studies/issue-364/README.md).
+
+### Streaming Parser (for Large Messages)
+
+The `StreamParser` allows you to parse Links Notation incrementally, processing data as it arrives without loading the entire message into memory. This is ideal for:
+
+- Large files that don't fit in memory
+- Network streaming (TCP/HTTP)
+- Real-time processing of incoming data
+
+```javascript
+import { StreamParser } from 'links-notation';
+
+const parser = new StreamParser({ collect: false, maxBufferSize: 1024 * 1024 });
+
+// Listen for parsed links
+parser.on('link', (link) => {
+  console.log('Parsed link:', link.toString());
+});
+
+// Listen for errors with location information
+parser.on('error', (error) => {
+  console.error(
+    `Error at line ${error.line}, col ${error.column}: ${error.message}`
+  );
+});
+
+// Feed data incrementally (e.g., from network chunks)
+parser.write('papa (lovesMama: loves mama)\n');
+parser.write('son lovesMama\n');
+parser.write('daughter lovesMama\n');
+
+// Finish the last record. Links are not retained when collection is disabled.
+parser.end();
+```
+
+`StreamParser.parse(chunks)` and `StreamParser.parseAsync(chunks)` expose native
+sync and async iterables. The parser also provides `position()`, `drain()`,
+`reset()`, and a maximum unresolved-record size. See the
+[streaming parser example](../examples/js_streaming_parser.js).
+
+### TypeScript Usage Examples
+
+```typescript
+import {
+  Parser,
+  Link,
+  FormatOptions,
+  FormatConfig,
+  formatLinks,
+} from 'links-notation';
+
+// Create parser with options
+const parser = new Parser({
+  maxInputSize: 5 * 1024 * 1024,
+  maxDepth: 32,
+});
+
+// Parse with full type safety
+const links: Link[] = parser.parse('(id: value1 value2)');
+
+// Create links programmatically
+const link = new Link('parent', [new Link('child1'), new Link('child2')]);
+
+// Use formatting options
+const formatOptions = new FormatOptions({
+  lessParentheses: true,
+  maxLineLength: 80,
+  indentLongLines: true,
+  maxInlineRefs: 3,
+  groupConsecutive: false,
+});
+
+// Format with type-checked options
+const formatted: string = link.format(formatOptions);
+
+// Format multiple links
+const output: string = formatLinks(links, formatOptions);
+```
+
+## Syntax Examples
+
+### Doublets (2-tuple)
+
+```lino
+papa (lovesMama: loves mama)
+son lovesMama
+daughter lovesMama
+all (love mama)
+```
+
+### Triplets (3-tuple)
+
+```lino
+papa has car
+mama has house
+(papa and mama) are happy
+```
+
+### N-tuples with References
+
+```lino
+(linksNotation: links notation)
+(This is a linksNotation as well)
+(linksNotation supports (unlimited number (of references) in each link))
+```
+
+### Indented Structure
+
+```lino
+parent
+  child1
+  child2
+    grandchild1
+    grandchild2
+```
+
+### Multi-line Groups
+
+A parenthesized group opens a _nested context_: its body starts fresh at
+indentation level zero and follows the same rules as the root document, so a
+line break inside parentheses is structure rather than decoration.
+
+```lino
+value (
+  id "1"
+  label "one"
+)
+```
+
+The document above parses to `(value ((id 1) (label one)))` - two children, each
+a link of its own - rather than to one flat list in which the boundary between
+`id` and `label` would be lost. A body that stays on a single line still
+collapses to a single link, so `(a b c)` is unchanged.
+
+```javascript
+import { Parser, formatLinks } from 'links-notation';
+
+const links = new Parser().parse(`value (
+  id "1"
+  label "one"
+)`);
+
+console.log(formatLinks(links)); // (value ((id 1) (label one)))
+```
+
+### Comments
+
+A `#` hides the rest of the line it stands on, so a document can carry prose
+about itself:
+
+```lino
+# the machines this deploys to
+deploy: staging # only staging, for now
+```
+
+Both comments are gone by the time the document is read, leaving the single
+link `(deploy: staging)`. A `#` only opens a comment where a reference could
+begin, so a `#` inside a token (`issue#1047`) and a `#` inside a delimited
+reference (`"#"`) stay ordinary characters.
+
+A formatter keeps the same rule from the other side: a reference that begins
+with a `#` is written quoted (`'#tag'`), so a document it writes reads back as
+itself.
+
+Comments are on by default, and a parser can be told to read `#` as an ordinary
+character again, for documents written before comments existed:
+
+```javascript
+import { Parser, formatLinks } from 'links-notation';
+
+const document =
+  '# the machines this deploys to\ndeploy: staging # only staging, for now\n';
+console.log(formatLinks(new Parser().parse(document))); // (deploy: staging)
+
+const plain = new Parser({ comments: false });
+console.log(formatLinks(plain.parse('# a b\n'))); // (# a b)
+```
+
+## API Reference
+
+### Classes
+
+#### `Parser`
+
+Main parser class for converting strings to links.
+
+- `constructor(options)` - Create a parser; `options.comments` set to `false`
+  reads `#` as an ordinary character instead of the start of a comment
+  - `options.maxInputSize` - Maximum input size in bytes (default: 10MB)
+  - `options.maxDepth` - How deep links may nest (default: `DEFAULT_MAX_DEPTH`,
+    64). Every parenthesized group and every indentation level is one level,
+    and a document nested deeper is refused with a `ParseError` rather than
+    recursed into until the stack runs out
+- `initialize()` - Initialize the parser (async)
+- `parse(input)` - Parse a Lino string and return links
+- `parseGroups(input)` - Read an indentation tree as `LinksGroup` instances
+- `parseCst(input)` - Read the lossless concrete syntax tree (`CstNode`)
+  - `options.syntax` - If `false` (AST mode), parsed links leave `rawId` null
+    (default: `true`)
+
+#### `Link`
+
+Represents a single link with ID and values.
+
+- `constructor(id, values = [])` - Create a new link
+- `toString()` - Convert link to string format
+- `id` - Link identifier
+- `values` - Array of child values/links
+- `rawId` - The ID exactly as the parsed document wrote it, or `null`; ignored
+  by `equals`, `format` and JSON
+- `quote` - `'`, `"` or `` ` `` when `rawId` is quoted, otherwise `null`
+- `escapeReference(reference, options)` - Quote a reference; `minimal: true`
+  allows ordinary prose on a text document line
+- `unescapeReference(reference)` - Decode a complete serialized reference
+
+#### `LinksGroup`
+
+Container for grouping related links.
+
+- `constructor(links)` - Create a new group
+- `format()` - Format the group as a string
+
+#### `StreamParser`
+
+Event-emitting streaming parser for incremental parsing. Its built-in emitter
+has the Node.js `EventEmitter` listener methods (`on`, `once`, `off`,
+`addListener`, `removeListener`, `prependListener`, `prependOnceListener`,
+`removeAllListeners`, `emit`, `listeners`, `listenerCount`, `eventNames`) and
+works in browsers without a polyfill. It is not an `instanceof EventEmitter`.
+
+- `constructor(options)` - Create a new streaming parser
+  - `options.maxInputSize` - Maximum input size in bytes (default: 10MB)
+  - `options.maxDepth` - How deep links may nest (default: 64)
+- `write(chunk)` - Feed a chunk of data to the parser
+- `end()` - Finish parsing and return all parsed links
+- `position()` - Get current parsing position (line, column, offset)
+- Event: `'link'` - Emitted when a link is parsed (callback receives Link object)
+- Event: `'error'` - Emitted on parse error (callback receives Error with line/column info)
+
+#### `ParseError`
+
+Thrown by `parse(input)` when the document does not parse. The message says
+where the document stopped making sense and quotes the offending line:
+
+```js
+import { Parser, ParseError } from 'links-notation';
+
+try {
+  new Parser().parse('ci_gate x\nstage: rust: nextest\n');
+} catch (error) {
+  console.error(error.message);
+  if (error instanceof ParseError) {
+    console.error(`${error.line}:${error.column} (offset ${error.offset})`);
+  }
+}
+```
+
+```text
+Syntax error at line 2, column 12: Expected "(", [ \t], [\r\n], or [^ \t\n\r(:)] but ":" found.
+2 | stage: rust: nextest
+  |            ^
+```
+
+- `offset` - Offset of the offending position from the start of the document
+- `line`, `column` - Where the document stopped parsing, counted from 1
+- `found` - The character found instead, or `null` at the end of the document
+- `lineText` - The offending line, as written
+- `snippet` - The offending line with a caret under the offending column
+- `location` - The position as the generated parser reports it
+- `cause` - The error the generated parser threw
+- `maxDepth` - The deepest nesting allowed, when the document is nested deeper;
+  `null` for any other error
+
+A document nested deeper than `maxDepth` is refused at the group or the line
+that is one level too deep:
+
+```text
+Nesting too deep at line 1, column 4: nesting depth exceeds the maximum of 3
+1 | ((((a))))
+  |    ^
+```
+
+## Project Structure
+
+- `src/grammar.pegjs` - Peggy.js grammar definition
+- `src/Link.js` - Link data structure
+- `src/LinksGroup.js` - Links group container
+- `src/ParseError.js` - Parse error with the position of the defect
+- `src/Parser.js` - Parser wrapper
+- `src/index.js` - Main entry point
+- `tests/` - Test files
+
+## Maintenance
+
+### Linting
+
+Run ESLint to check for code style issues:
+
+```bash
+bun run lint
+```
+
+Auto-fix linting issues:
+
+```bash
+bun run lint:fix
+```
+
+### Pre-commit Hooks
+
+This project uses pre-commit hooks that automatically run ESLint before commits.
+To set up pre-commit hooks locally:
+
+```bash
+# From repository root
+pip install pre-commit
+pre-commit install
+```
+
+## Dependencies
+
+- Peggy.js (5.0.6) - Parser generator
+- Bun runtime (development)
+
+## Maintenance
+
+### Code Formatting
+
+This project uses [Prettier](https://prettier.io/) for code formatting.
+
+#### Format all files
+
+```bash
+npx prettier --write .
+```
+
+#### Check formatting (without modifying files)
+
+```bash
+npx prettier --check .
+```
+
+These checks are also enforced in CI. Pull requests with formatting issues will
+fail the format check.
+
+## Package Information
+
+- Package: `links-notation`
+- License: Unlicense (see [LICENSE](../LICENSE))
+
+Exact Unicode identifiers and values round-trip with the [reference literal contract](../docs/protocol/reference-literals.md)
+introduced in 0.24.0, including mixed quotes, empty strings, controls and multiline text.
+
+### Recursive nested output
+
+`formatNested` writes a link's leading atoms on its line and its trailing link
+values on indented lines, recursively:
+
+```javascript
+import { Link, Parser, formatNested } from 'links-notation';
+const parser = new Parser();
+const links = parser.parse(
+  '(form: stack (direction vertical) (save: button Save (on press (emit save))))'
+);
+const text = formatNested(links);
+// form: stack
+//   direction vertical
+//   save: button Save
+//     on press
+//       emit save
+
+const unindent = ({ element, children }) =>
+  children.length
+    ? new Link(element.id, [...element.values, ...children.map(unindent)])
+    : element;
+const readBack = parser.parseGroups(text).map(unindent);
+console.log(readBack[0].equals(links[0])); // true
+```
+
+Run the complete [form example](../examples/js_nested_format.mjs) with Node.
+
+Use `parseGroups` plus this fold to read nested output. Canonical `parse` keeps
+its path expansion for ordinary indented heads. `formatIndentedDocument` remains
+the separate two-level plain-text document helper.
+
+The default indentation is two spaces; `formatNested(links, '    ')` uses four.
+The result has no final newline. References use normal escaping. Parentheses
+stay where needed for `()`, `((a b))`, or a lone reference under a bare `name:`
+ancestor. An atom after a link stays in place, so `(root: (a b) tail (c d))`
+becomes `root: (a b) tail\n  c d` without changing value order. The existing
+inline formatter's exclusions for empty links and named empty-value links used
+as values also apply to this writer.
+
+Threshold options (`maxInlineRefs`, `indentLongLines`, `preferInline`) retain
+anonymous links inline when indentation would lose their container. Use
+`formatNested` for recursive output. The same writer is available in all ten
+bindings; see the [cross-language API table](../parity/README.md#recursive-nested-formatting).

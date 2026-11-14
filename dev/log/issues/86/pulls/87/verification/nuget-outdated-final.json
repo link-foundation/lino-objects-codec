@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "parameters": "--outdated --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "/tmp/gh-issue-solver-1794665145423/csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj"
+    },
+    {
+      "path": "/tmp/gh-issue-solver-1794665145423/csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj"
+    }
+  ]
+}

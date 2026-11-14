@@ -1,0 +1,11 @@
+Using Python 3.15.2 environment at: python/.venv
+Resolved 76 packages in 15ms
+Uninstalled 1 package in 2ms
+ - lino-objects-codec==0.3.1 (from file:///tmp/gh-issue-solver-1794665145423/python)
+Using Python 3.15.2 environment at: python/.venv
+Resolved 1 package in 4ms
+   Building lino-objects-codec @ file:///tmp/gh-issue-solver-1794665145423/python
+      Built lino-objects-codec @ file:///tmp/gh-issue-solver-1794665145423/python
+Prepared 1 package in 557ms
+Installed 1 package in 2ms
+ + lino-objects-codec==0.3.1 (from file:///tmp/gh-issue-solver-1794665145423/python)

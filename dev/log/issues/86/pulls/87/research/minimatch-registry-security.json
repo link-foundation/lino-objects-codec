@@ -1,0 +1,236 @@
+{
+  "dist-tags": {
+    "legacy-v8": "8.0.7",
+    "legacy-v7": "7.4.9",
+    "legacy-v6": "6.2.3",
+    "legacy-v5": "5.1.9",
+    "legacy-v4": "4.2.6",
+    "legacy-v3": "3.1.5",
+    "legacy-v9": "9.0.9",
+    "latest": "11.0.8"
+  },
+  "releases": {
+    "11.0.0": {
+      "version": "11.0.0",
+      "engines": {
+        "node": "18 || 20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "81fb90aeee4eaea39af341352d3661ae04e97bbb",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.0.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-/4ymzTLZ2FkgyGY+Gp644J3l4OS+mnWGKVH+Y7r8DcOeUreCtc75sE9mCUrbwOJh4pQC3J4pfBo8mulOoaytIA==",
+        "signatures": [
+          {
+            "sig": "MEYCIQCWgRVO9yG+bJATZktLN7qmse7cB6n7s1NHdnnMiyxrsAIhAMnKvkzeHGv4PV7YzxQtQwqMPecW4+Q4SlLn8Ma3x2fU",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEYCIQCrsA6f841UIxpX99wcp+5C0cw0PMAYeeFPlOqBg8B1tAIhAJus1SaQADNf/VN9iA3IYCIleFxUMkh6JzoBa1zs2m3D",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 417952
+      }
+    },
+    "11.0.1": {
+      "version": "11.0.1",
+      "engines": {
+        "node": "18 || 20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "6958bb689808489c3b4320428537fda7ae2a881c",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.1.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-t+Vn6DX4wPCxS23y03C0uhF7S1jpi1GfqPrnlEipCJaA2ykiNbMkVlDutZtmvLfRcUN6R8AYVlzTsQrT4RZoLQ==",
+        "signatures": [
+          {
+            "sig": "MEUCIQDB2uFESkha1qIPEvIJ3mxzmJ0gIzHBinxGHk+V0Px6rwIgFdwkf9cO6QFCCcbHyuXFDXIJ/pE3d7SnkJimJ47mLys=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEQCIDj9WO5QU7lR2BoI/oOe8ggF/52doLDzBXQSf2a1bym3AiBLmQZLM/Yw8k3UhjuSUYIApi3Wup2h+jzSBs/SVrE+QQ==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 420517
+      }
+    },
+    "11.0.2": {
+      "version": "11.0.2",
+      "engines": {
+        "node": "18 || 20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "c51ab06cf560793fa5472fdd70829e088cd1a218",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.2.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-pWTgz5CN3tjqyZNSK2tePlSmu9IwM41q8yn8Usdqqwe9TIHh+9dEpLLjF4uApsfPEAZY71qtSiA2B2APEr+1Yw==",
+        "signatures": [
+          {
+            "sig": "MEQCIEN6cHEQ0iUylWVqMGOtyTYGxJq4tH9iUldAU4r8byXWAiBh+woFz5R6ZrTGXD2M0x8jDT+7BUdcQGw9QJmRcWzh1w==",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIF709FZy93IJDt0UIiWjwzdklQgsNxVG3uoaJL5uSQXZAiEA1lkTBjbW7Np7+ejrbstilkg/fWT9P63iFlExEWk9mPc=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 420517
+      }
+    },
+    "11.0.3": {
+      "version": "11.0.3",
+      "engines": {
+        "node": "18 || 20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "d794539f77c0a98ea4adca473768d1e1357204f5",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.3.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-iny/40PEGkNJQ5/Pv6z3nm6FbRAby32GeZRjCUJk2WnNDbgPSTcdI+DDvLqsgBdD4cD5sMtMheqPPnehCCa8Nw==",
+        "signatures": [
+          {
+            "sig": "MEUCIBnLUUnTzxl2Z+M3s8fSGAPcNUolW17SS0KQMV5sJmDSAiEAj4Q5XCHZMOV0YlMjd6iKTAKgWW2Z8HlpPBoOgJ4AKPQ=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIQC30zV4hJDherXkQIw6hiq65oKdYvVfsC6PJh/JM+tVGgIgGyjD1Jm0KcN0WSbcVTXJhqYjFwZKYoQY+A9gy6FJHZE=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 428805
+      }
+    },
+    "11.0.4": {
+      "version": "11.0.4",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "3ed156790c2754647ee94dab305a3f93cd16481e",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.4.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-/UJ1dEoVQTjPNDh6SGlUo+ueLMmoHTas4q+8yaAR/5t6nLAIiBDJtoYUh20IYleix7ehiQkgczb84PE3uzHkxg==",
+        "signatures": [
+          {
+            "sig": "MEYCIQDEOeaSawo61fW1jAgx8gXxhufIx5hP7bJh3WfnbiMv/QIhAO+SIVo+m3JRC8B5Ti4otnhcSp9jp/+U0weE+jVCaN28",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIQDfCsOpk1DAzxLPZBaZc8LtmA88slF1VwDQ3O1CVWAsfQIgM2gTDEXrw1VHKX029WGt7y3xbflqIDfCJJ61BjTl3Zc=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 428799
+      }
+    },
+    "11.0.5": {
+      "version": "11.0.5",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "29589e94fc4d84193b2a31b082b0ec67b5ea1d42",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.5.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-snPlVppFcYWfLLFQGhDxUyBcHNtMlWmn3jtj7pEaO+DP8pqL0IvAzXhMYmn1z9ASNtgmwLBdFxSf4tMUB0OTKA==",
+        "signatures": [
+          {
+            "sig": "MEUCIHaOX0fMr3IqUwt/33ibEdXITBTZ+6b8G0bTQsxyqlVKAiEAxLlezs+aBcpbR5IvhH8gjBMcEnwBCCBklke4l6g12iI=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          },
+          {
+            "sig": "MEUCIFG9CVWxdCKOvkoQhq6/Dau8yWKnsRe2JUfehv6UjIfXAiEA/61s9+tO6KNFRXovFjIajPFl0hTvU3gM5U5nhiLzAR8=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "unpackedSize": 440956
+      }
+    },
+    "11.0.6": {
+      "version": "11.0.6",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "99b1cdf4592b77aac7b12a83d2d76dfa78420016",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.6.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-6NZbDPQIRnsJFjJ9wbd5659OKaTHCqpPHdldE3WwArjxr5wLxHIwnx4eTGcPebpVBZZQbITvQQIx8K0VGXoT3Q==",
+        "signatures": [
+          {
+            "sig": "MEUCIQC93iWriuYpRj1E6RWeDiOtUbpOhebcCdsFHXgI5x97rwIgVgo4oQTF4QU1NJHgMzstDHRzgt+uvay40DgcNMnStgs=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/minimatch@11.0.6",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 464435
+      }
+    },
+    "11.0.7": {
+      "version": "11.0.7",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "696d78046604553717a82bb45b451b5319d63d34",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.7.tgz",
+        "fileCount": 37,
+        "integrity": "sha512-Tnk+M9mPjqKDZlUd77eMSjPjhnlBIa1mABOwetMryIshUwi1YmOBdGFfQnHgn4Z8A66eLT8ENzJrxwYmKfqrZg==",
+        "signatures": [
+          {
+            "sig": "MEUCIHYSc2/WpZ0AySd4A1bUwhQy9O9C34kk0O7epmsQSqHBAiEA8qdFkarWpOrXqmMVxVkEfB28Hjc1Ys8Jkm1hmFVrnSM=",
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+          }
+        ],
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/minimatch@11.0.7",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "unpackedSize": 478861
+      }
+    },
+    "11.0.8": {
+      "version": "11.0.8",
+      "engines": {
+        "node": "20 || >=22"
+      },
+      "deprecated": null,
+      "dist": {
+        "shasum": "715fc3509cd7f76ed9af2f702a98411b1b0288c8",
+        "tarball": "https://registry.npmjs.org/minimatch/-/minimatch-11.0.8.tgz",
+        "integrity": "sha512-nFQuYSTVrGvysVBps5Ih+0BdnYFN/Cj3C816r6+p7yK+FHrVLGE4O4N9AFwykrlNlvM2HYt+Rad1Uiro6h88Ig==",
+        "fileCount": 37,
+        "unpackedSize": 501013,
+        "attestations": {
+          "url": "https://registry.npmjs.org/-/npm/v1/attestations/minimatch@11.0.8",
+          "provenance": {
+            "predicateType": "https://slsa.dev/provenance/v1"
+          }
+        },
+        "signatures": [
+          {
+            "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+            "sig": "MEQCIDv1uKndKTp5uF8EnOfx3W0patnaByYWGnokabgsjPaZAiBs28XnHVRyQ0SpOTIsbON9LCRuqoOjjvGtsNdeT6OV5g=="
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,6119 @@
+{
+  "retrieved_at": "2026-11-14T15:02:25.722981+00:00",
+  "rows": [
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "rust/Cargo.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "base64",
+      "version": "0.23.1",
+      "manifest": "rust/Cargo.toml",
+      "blocker": null,
+      "latest": "0.23.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "manifest": "rust/Cargo.toml",
+      "blocker": null,
+      "latest": "1.0.154"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "manifest": "rust/Cargo.toml",
+      "blocker": null,
+      "latest": "1.0.154"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proptest",
+      "version": "1.12.0",
+      "manifest": "rust/Cargo.toml",
+      "blocker": null,
+      "latest": "1.12.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-65/consumer/Cargo.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "command-stream",
+      "version": "2.6.0",
+      "manifest": "package.json",
+      "blocker": null,
+      "latest": "2.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lino-arguments",
+      "version": "0.4.1",
+      "manifest": "package.json",
+      "blocker": null,
+      "latest": "0.4.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm",
+      "version": "12.2.2",
+      "manifest": "package.json",
+      "blocker": null,
+      "latest": "12.2.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": "package.json",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/cli",
+      "version": "3.0.3",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "3.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/js",
+      "version": "10.0.1",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "10.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint",
+      "version": "10.15.0",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "10.15.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-config-prettier",
+      "version": "10.1.8",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "10.1.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-plugin-prettier",
+      "version": "5.5.7",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "5.5.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "husky",
+      "version": "9.1.7",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "9.1.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd",
+      "version": "5.4.3",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lint-staged",
+      "version": "17.6.0",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "17.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "prettier",
+      "version": "3.10.1",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "3.10.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm",
+      "version": "12.2.2",
+      "manifest": "js/package.json",
+      "blocker": null,
+      "latest": "12.2.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "setuptools",
+      "version": "84.2.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "84.2.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "wheel",
+      "version": "0.48.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "0.48.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pytest",
+      "version": "9.2.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "9.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pytest-cov",
+      "version": "7.1.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "ruff",
+      "version": "0.17.5",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "0.17.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "mypy",
+      "version": "2.4.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "2.4.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "scriv",
+      "version": "1.8.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "1.8.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "build",
+      "version": "1.6.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "1.6.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "twine",
+      "version": "7.0.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip-audit",
+      "version": "2.10.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "2.10.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pre-commit",
+      "version": "4.7.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "4.7.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "setuptools",
+      "version": "84.2.1",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "84.2.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "wheel",
+      "version": "0.48.0",
+      "manifest": "python/pyproject.toml",
+      "blocker": null,
+      "latest": "0.48.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Link.Foundation.Links.Notation",
+      "version": "0.31.1",
+      "manifest": "csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj",
+      "blocker": null,
+      "latest": "0.31.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.NET.Test.Sdk",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.runner.visualstudio",
+      "version": "4.0.1",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.CodeCoverage",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.ApplicationInsights",
+      "version": "3.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "3.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.DiaSymReader",
+      "version": "3.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.DependencyModel",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.Telemetry",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Platform",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Platform.MSBuild",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Azure.Core",
+      "version": "1.65.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.65.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration.Binder",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Logging",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Logging.Configuration",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Options.ConfigurationExtensions",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Identity.Client",
+      "version": "4.92.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "4.92.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Identity.Client.Extensions.Msal",
+      "version": "4.92.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "4.92.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.IdentityModel.Abstractions",
+      "version": "8.23.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "8.23.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Api",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Api.ProviderBuilderExtensions",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Extensions.Hosting",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.PersistentStorage.Abstractions",
+      "version": "1.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.PersistentStorage.FileSystem",
+      "version": "1.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.ClientModel",
+      "version": "1.17.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "1.17.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Memory.Data",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Security.Cryptography.ProtectedData",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+      "blocker": null,
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "codecov/codecov-action",
+      "version": "7.1.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/upload-artifact",
+      "version": "7.0.2",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.2"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/download-artifact",
+      "version": "8.0.2",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "8.0.2"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/csharp.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/dependencies.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "peter-evans/create-pull-request",
+      "version": "8.1.3",
+      "manifest": ".github/workflows/js.yml",
+      "blocker": null,
+      "latest": "8.1.3"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/links.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "lycheeverse/lychee-action",
+      "version": "2.9.0",
+      "manifest": ".github/workflows/links.yml",
+      "blocker": null,
+      "latest": "2.9.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/parity.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "codecov/codecov-action",
+      "version": "7.1.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/upload-artifact",
+      "version": "7.0.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.2"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/download-artifact",
+      "version": "8.0.2",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "8.0.2"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "pypa/gh-action-pypi-publish",
+      "version": "1.14.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "1.14.3"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "pypa/gh-action-pypi-publish",
+      "version": "1.14.3",
+      "manifest": ".github/workflows/python.yml",
+      "blocker": null,
+      "latest": "1.14.3"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/cache",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/cache",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/cache",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "rust-lang/crates-io-auth-action",
+      "version": "1.0.6",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.0.6"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "rust-lang/crates-io-auth-action",
+      "version": "1.0.6",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "1.0.6"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "peter-evans/create-pull-request",
+      "version": "8.1.3",
+      "manifest": ".github/workflows/rust.yml",
+      "blocker": null,
+      "latest": "8.1.3"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/scripts.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/scripts.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/scripts.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "node",
+      "version": "26.13.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "26.13.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "python",
+      "version": "3.15.2",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "3.15.2"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "cargo-audit",
+      "version": "0.23.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "0.23.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "github/codeql-action",
+      "version": "4.39.3",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "4.39.3"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "github/codeql-action",
+      "version": "4.39.3",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "4.39.3"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-dotnet",
+      "version": "6.1.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-node",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/setup-python",
+      "version": "7.1.0",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/workflows.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "actions/checkout",
+      "version": "7.0.1",
+      "manifest": ".github/workflows/workflows.yml",
+      "blocker": null,
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "github-actions",
+      "name": "zizmorcore/zizmor-action",
+      "version": "0.8.1",
+      "manifest": ".github/workflows/workflows.yml",
+      "blocker": null,
+      "latest": "0.8.1"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "rhysd/actionlint",
+      "version": "1.7.12",
+      "manifest": ".github/workflows/workflows.yml",
+      "blocker": null,
+      "latest": "1.7.12"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "zizmorcore/zizmor",
+      "version": "1.32.0",
+      "manifest": ".github/workflows/workflows.yml",
+      "blocker": null,
+      "latest": "1.32.0"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "gitleaks/gitleaks",
+      "version": "8.30.1",
+      "manifest": ".github/workflows/security.yml",
+      "blocker": null,
+      "latest": "8.30.1"
+    },
+    {
+      "ecosystem": "github-hooks",
+      "name": "pre-commit/pre-commit-hooks",
+      "version": "6.0.0",
+      "manifest": "python/.pre-commit-config.yaml",
+      "blocker": null,
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "github-hooks",
+      "name": "astral-sh/ruff-pre-commit",
+      "version": "0.17.5",
+      "manifest": "python/.pre-commit-config.yaml",
+      "blocker": null,
+      "latest": "0.17.5"
+    },
+    {
+      "ecosystem": "github-hooks",
+      "name": "pre-commit/mirrors-mypy",
+      "version": "2.4.1",
+      "manifest": "python/.pre-commit-config.yaml",
+      "blocker": null,
+      "latest": "2.4.1"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "rust",
+      "version": "1.100.0",
+      "manifest": "rust-toolchain.toml",
+      "blocker": null,
+      "latest": "1.100.0"
+    },
+    {
+      "ecosystem": "toolchain",
+      "name": "dotnet-sdk",
+      "version": "11.0.100",
+      "manifest": "csharp/global.json",
+      "blocker": null,
+      "latest": "11.0.100"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@peggyjs/from-mem",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-android-arm-eabi",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-android-arm64",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-darwin-arm64",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-darwin-x64",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-linux-arm-gnueabihf",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-linux-arm64-gnu",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-linux-arm64-musl",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-linux-x64-gnu",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-linux-x64-musl",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-win32-arm64-msvc",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-win32-ia32-msvc",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@resvg/resvg-js-win32-x64-msvc",
+      "version": "2.6.2",
+      "manifest": "package-lock.json",
+      "latest": "2.6.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sec-ant/readable-stream",
+      "version": "0.4.1",
+      "manifest": "package-lock.json",
+      "latest": "0.7.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sindresorhus/merge-streams",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@xterm/headless",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "acorn",
+      "version": "8.19.0",
+      "manifest": "package-lock.json",
+      "latest": "8.19.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ansi-regex",
+      "version": "6.6.0",
+      "manifest": "package-lock.json",
+      "latest": "6.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ansi-styles",
+      "version": "6.2.3",
+      "manifest": "package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cliui",
+      "version": "9.0.1",
+      "manifest": "package-lock.json",
+      "latest": "9.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "string-width",
+      "version": "7.2.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "command-stream",
+      "version": "2.6.0",
+      "manifest": "package-lock.json",
+      "latest": "2.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "commander",
+      "version": "14.0.3",
+      "manifest": "package-lock.json",
+      "latest": "15.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "manifest": "package-lock.json",
+      "latest": "7.0.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "emoji-regex",
+      "version": "10.6.0",
+      "manifest": "package-lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "escalade",
+      "version": "3.2.0",
+      "manifest": "package-lock.json",
+      "latest": "3.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "execa",
+      "version": "10.2.1",
+      "manifest": "package-lock.json",
+      "latest": "10.2.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "figures",
+      "version": "6.1.0",
+      "manifest": "package-lock.json",
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "get-caller-file",
+      "version": "2.0.5",
+      "manifest": "package-lock.json",
+      "latest": "2.0.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "get-east-asian-width",
+      "version": "1.7.0",
+      "manifest": "package-lock.json",
+      "latest": "1.7.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "get-stream",
+      "version": "9.0.1",
+      "manifest": "package-lock.json",
+      "latest": "9.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "getenv",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "gifenc",
+      "version": "1.0.3",
+      "manifest": "package-lock.json",
+      "latest": "1.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "human-signals",
+      "version": "8.0.1",
+      "manifest": "package-lock.json",
+      "latest": "8.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-plain-obj",
+      "version": "4.1.0",
+      "manifest": "package-lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-stream",
+      "version": "4.0.1",
+      "manifest": "package-lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-unicode-supported",
+      "version": "2.1.0",
+      "manifest": "package-lock.json",
+      "latest": "2.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "isexe",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "package-lock.json",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lino-arguments",
+      "version": "0.4.1",
+      "manifest": "package-lock.json",
+      "latest": "0.4.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lino-env",
+      "version": "0.2.8",
+      "manifest": "package-lock.json",
+      "latest": "0.2.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "meta-language",
+      "version": "0.46.0",
+      "manifest": "package-lock.json",
+      "latest": "0.46.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "node-addon-api",
+      "version": "7.1.1",
+      "manifest": "package-lock.json",
+      "latest": "8.9.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "node-pty",
+      "version": "1.1.0",
+      "manifest": "package-lock.json",
+      "latest": "1.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm",
+      "version": "12.2.2",
+      "manifest": "package-lock.json",
+      "latest": "12.2.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-run-path",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "path-key",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@gar/promise-retry",
+      "version": "1.0.3",
+      "manifest": "package-lock.json",
+      "latest": "1.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@isaacs/fs-minipass",
+      "version": "4.0.1",
+      "manifest": "package-lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@isaacs/string-locale-compare",
+      "version": "1.1.0",
+      "manifest": "package-lock.json",
+      "latest": "1.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/agent",
+      "version": "5.0.2",
+      "manifest": "package-lock.json",
+      "latest": "5.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "agent-base",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "http-proxy-agent",
+      "version": "9.1.0",
+      "manifest": "package-lock.json",
+      "latest": "9.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "https-proxy-agent",
+      "version": "9.1.0",
+      "manifest": "package-lock.json",
+      "latest": "9.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/arborist",
+      "version": "10.0.4",
+      "manifest": "package-lock.json",
+      "latest": "10.0.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/config",
+      "version": "11.2.0",
+      "manifest": "package-lock.json",
+      "latest": "11.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/fs",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/git",
+      "version": "8.0.0",
+      "manifest": "package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/installed-package-contents",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-bundled",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-normalize-package-bin",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/map-workspaces",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/metavuln-calculator",
+      "version": "10.0.0",
+      "manifest": "package-lock.json",
+      "latest": "10.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/name-from-folder",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/node-gyp",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/package-json",
+      "version": "8.0.0",
+      "manifest": "package-lock.json",
+      "latest": "8.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/promise-spawn",
+      "version": "10.0.1",
+      "manifest": "package-lock.json",
+      "latest": "10.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/query",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/redact",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@npmcli/run-script",
+      "version": "11.0.0",
+      "manifest": "package-lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/bundle",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/core",
+      "version": "4.0.1",
+      "manifest": "package-lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/protobuf-specs",
+      "version": "0.5.1",
+      "manifest": "package-lock.json",
+      "latest": "0.5.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/sign",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/tuf",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@sigstore/verify",
+      "version": "4.1.0",
+      "manifest": "package-lock.json",
+      "latest": "4.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tufjs/canonical-json",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@tufjs/models",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "abbrev",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "aproba",
+      "version": "2.1.0",
+      "manifest": "package-lock.json",
+      "latest": "2.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "archy",
+      "version": "1.0.0",
+      "manifest": "package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "bin-links",
+      "version": "7.0.1",
+      "manifest": "package-lock.json",
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cmd-shim",
+      "version": "9.0.2",
+      "manifest": "package-lock.json",
+      "latest": "9.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-normalize-package-bin",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "read-cmd-shim",
+      "version": "7.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "binary-extensions",
+      "version": "3.1.0",
+      "manifest": "package-lock.json",
+      "latest": "3.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "brace-expansion",
+      "version": "5.0.12",
+      "manifest": "package-lock.json",
+      "latest": "5.0.13"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cacache",
+      "version": "21.0.1",
+      "manifest": "package-lock.json",
+      "latest": "21.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "chalk",
+      "version": "5.6.2",
+      "manifest": "package-lock.json",
+      "latest": "6.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "chownr",
+      "version": "3.0.0",
+      "manifest": "package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ci-info",
+      "version": "4.4.0",
+      "manifest": "package-lock.json",
+      "latest": "4.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cidr-regex",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.1.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "common-ancestor-path",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cssesc",
+      "version": "3.0.0",
+      "manifest": "package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "debug",
+      "version": "4.4.3",
+      "manifest": "package-lock.json",
+      "latest": "4.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "diff",
+      "version": "8.0.4",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "env-paths",
+      "version": "2.2.1",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "exponential-backoff",
+      "version": "3.1.3",
+      "manifest": "package-lock.json",
+      "latest": "3.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fastest-levenshtein",
+      "version": "1.0.16",
+      "manifest": "package-lock.json",
+      "latest": "1.0.16"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fs-minipass",
+      "version": "3.0.3",
+      "manifest": "package-lock.json",
+      "latest": "3.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "glob",
+      "version": "13.0.6",
+      "manifest": "package-lock.json",
+      "latest": "14.0.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "graceful-fs",
+      "version": "4.2.11",
+      "manifest": "package-lock.json",
+      "latest": "4.2.12"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "hosted-git-info",
+      "version": "10.1.1",
+      "manifest": "package-lock.json",
+      "latest": "10.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "http-cache-semantics",
+      "version": "4.3.0",
+      "manifest": "package-lock.json",
+      "latest": "4.3.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "iconv-lite",
+      "version": "0.7.3",
+      "manifest": "package-lock.json",
+      "latest": "0.7.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ini",
+      "version": "7.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "init-package-json",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ip-address",
+      "version": "10.7.5",
+      "manifest": "package-lock.json",
+      "latest": "10.7.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-cidr",
+      "version": "7.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "isexe",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "json-parse-even-better-errors",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "json-stringify-nice",
+      "version": "1.1.4",
+      "manifest": "package-lock.json",
+      "latest": "1.1.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jsonparse",
+      "version": "1.3.1",
+      "manifest": "package-lock.json",
+      "latest": "1.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "just-diff",
+      "version": "6.0.2",
+      "manifest": "package-lock.json",
+      "latest": "6.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "just-diff-apply",
+      "version": "5.5.0",
+      "manifest": "package-lock.json",
+      "latest": "5.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmaccess",
+      "version": "11.0.0",
+      "manifest": "package-lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmdiff",
+      "version": "9.0.4",
+      "manifest": "package-lock.json",
+      "latest": "9.0.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmexec",
+      "version": "11.0.5",
+      "manifest": "package-lock.json",
+      "latest": "11.0.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmfund",
+      "version": "8.0.4",
+      "manifest": "package-lock.json",
+      "latest": "8.0.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmorg",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmpack",
+      "version": "10.0.4",
+      "manifest": "package-lock.json",
+      "latest": "10.0.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmpublish",
+      "version": "12.0.1",
+      "manifest": "package-lock.json",
+      "latest": "12.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmsearch",
+      "version": "10.0.0",
+      "manifest": "package-lock.json",
+      "latest": "10.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmteam",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "libnpmversion",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lru-cache",
+      "version": "11.5.2",
+      "manifest": "package-lock.json",
+      "latest": "11.5.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "make-fetch-happen",
+      "version": "16.0.1",
+      "manifest": "package-lock.json",
+      "latest": "16.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minimatch",
+      "version": "10.2.5",
+      "manifest": "package-lock.json",
+      "latest": "11.0.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass",
+      "version": "7.1.3",
+      "manifest": "package-lock.json",
+      "latest": "7.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass-collect",
+      "version": "2.0.1",
+      "manifest": "package-lock.json",
+      "latest": "2.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass-fetch",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass-flush",
+      "version": "1.0.6",
+      "manifest": "package-lock.json",
+      "latest": "2.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass-pipeline",
+      "version": "1.2.4",
+      "manifest": "package-lock.json",
+      "latest": "3.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass",
+      "version": "3.3.6",
+      "manifest": "package-lock.json",
+      "latest": "7.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yallist",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minipass-sized",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minizlib",
+      "version": "3.1.0",
+      "manifest": "package-lock.json",
+      "latest": "3.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ms",
+      "version": "2.1.3",
+      "manifest": "package-lock.json",
+      "latest": "2.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "mute-stream",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "negotiator",
+      "version": "1.0.0",
+      "manifest": "package-lock.json",
+      "latest": "1.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "node-gyp",
+      "version": "13.0.0",
+      "manifest": "package-lock.json",
+      "latest": "13.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "nopt",
+      "version": "10.0.1",
+      "manifest": "package-lock.json",
+      "latest": "10.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-audit-report",
+      "version": "8.0.0",
+      "manifest": "package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-install-checks",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-package-arg",
+      "version": "14.0.0",
+      "manifest": "package-lock.json",
+      "latest": "14.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-packlist",
+      "version": "11.3.0",
+      "manifest": "package-lock.json",
+      "latest": "11.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ignore-walk",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-pick-manifest",
+      "version": "12.0.0",
+      "manifest": "package-lock.json",
+      "latest": "12.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-normalize-package-bin",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-profile",
+      "version": "13.0.1",
+      "manifest": "package-lock.json",
+      "latest": "13.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-registry-fetch",
+      "version": "20.0.1",
+      "manifest": "package-lock.json",
+      "latest": "20.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "npm-user-validate",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "p-map",
+      "version": "7.0.5",
+      "manifest": "package-lock.json",
+      "latest": "7.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "pacote",
+      "version": "22.0.1",
+      "manifest": "package-lock.json",
+      "latest": "22.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "parse-conflict-json",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "path-scurry",
+      "version": "2.0.2",
+      "manifest": "package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "postcss-selector-parser",
+      "version": "7.1.6",
+      "manifest": "package-lock.json",
+      "latest": "7.2.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "proc-log",
+      "version": "7.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "proggy",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "promise-all-reject-late",
+      "version": "1.0.1",
+      "manifest": "package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "promise-call-limit",
+      "version": "3.0.2",
+      "manifest": "package-lock.json",
+      "latest": "3.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "promzard",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "proxy-agent-negotiate",
+      "version": "1.1.0",
+      "manifest": "package-lock.json",
+      "latest": "1.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "qrcode-terminal",
+      "version": "0.12.0",
+      "manifest": "package-lock.json",
+      "latest": "0.12.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "read",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "manifest": "package-lock.json",
+      "latest": "2.1.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "semver",
+      "version": "7.8.6",
+      "manifest": "package-lock.json",
+      "latest": "7.8.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "signal-exit",
+      "version": "4.1.0",
+      "manifest": "package-lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "sigstore",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "smart-buffer",
+      "version": "4.2.0",
+      "manifest": "package-lock.json",
+      "latest": "4.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "socks",
+      "version": "2.8.9",
+      "manifest": "package-lock.json",
+      "latest": "2.8.10"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "socks-proxy-agent",
+      "version": "10.1.0",
+      "manifest": "package-lock.json",
+      "latest": "10.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "agent-base",
+      "version": "9.0.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "spdx-exceptions",
+      "version": "2.5.0",
+      "manifest": "package-lock.json",
+      "latest": "2.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "spdx-expression-parse",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "spdx-license-ids",
+      "version": "3.0.23",
+      "manifest": "package-lock.json",
+      "latest": "3.0.24"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ssri",
+      "version": "14.0.0",
+      "manifest": "package-lock.json",
+      "latest": "14.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "supports-color",
+      "version": "10.2.2",
+      "manifest": "package-lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tar",
+      "version": "7.5.22",
+      "manifest": "package-lock.json",
+      "latest": "7.5.23"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "text-table",
+      "version": "0.2.0",
+      "manifest": "package-lock.json",
+      "latest": "0.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tiny-relative-date",
+      "version": "2.0.2",
+      "manifest": "package-lock.json",
+      "latest": "2.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "manifest": "package-lock.json",
+      "latest": "0.2.17"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fdir",
+      "version": "6.5.0",
+      "manifest": "package-lock.json",
+      "latest": "6.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picomatch",
+      "version": "4.0.5",
+      "manifest": "package-lock.json",
+      "latest": "4.0.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "treeverse",
+      "version": "3.0.0",
+      "manifest": "package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tuf-js",
+      "version": "6.0.0",
+      "manifest": "package-lock.json",
+      "latest": "6.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "undici",
+      "version": "6.29.1",
+      "manifest": "package-lock.json",
+      "latest": "8.12.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "util-deprecate",
+      "version": "1.0.2",
+      "manifest": "package-lock.json",
+      "latest": "1.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "validate-npm-package-name",
+      "version": "8.0.0",
+      "manifest": "package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "walk-up-path",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "which",
+      "version": "7.0.0",
+      "manifest": "package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "write-file-atomic",
+      "version": "8.0.0",
+      "manifest": "package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yallist",
+      "version": "5.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "parse-ms",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "path-key",
+      "version": "3.1.1",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "peggy",
+      "version": "5.1.1",
+      "manifest": "package-lock.json",
+      "latest": "5.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "pretty-ms",
+      "version": "9.3.1",
+      "manifest": "package-lock.json",
+      "latest": "10.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "semver",
+      "version": "7.8.6",
+      "manifest": "package-lock.json",
+      "latest": "7.8.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "manifest": "package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "signal-exit",
+      "version": "4.1.0",
+      "manifest": "package-lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "source-map-generator",
+      "version": "2.0.7",
+      "manifest": "package-lock.json",
+      "latest": "2.0.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "string-width",
+      "version": "8.3.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "strip-ansi",
+      "version": "7.2.0",
+      "manifest": "package-lock.json",
+      "latest": "7.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "strip-final-newline",
+      "version": "4.0.0",
+      "manifest": "package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "unicorn-magic",
+      "version": "0.3.0",
+      "manifest": "package-lock.json",
+      "latest": "0.4.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "which",
+      "version": "2.0.2",
+      "manifest": "package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "which-command",
+      "version": "0.1.0",
+      "manifest": "package-lock.json",
+      "latest": "0.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "wrap-ansi",
+      "version": "9.0.2",
+      "manifest": "package-lock.json",
+      "latest": "10.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "string-width",
+      "version": "7.2.0",
+      "manifest": "package-lock.json",
+      "latest": "9.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "y18n",
+      "version": "5.0.8",
+      "manifest": "package-lock.json",
+      "latest": "5.0.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yargs",
+      "version": "18.2.0",
+      "manifest": "package-lock.json",
+      "latest": "18.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yargs-parser",
+      "version": "22.0.0",
+      "manifest": "package-lock.json",
+      "latest": "22.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yoctocolors",
+      "version": "2.2.0",
+      "manifest": "package-lock.json",
+      "latest": "2.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cacheable/memory",
+      "version": "2.2.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@cacheable/utils",
+      "version": "2.5.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/apply-release-plan",
+      "version": "8.1.1",
+      "manifest": "js/package-lock.json",
+      "latest": "8.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/assemble-release-plan",
+      "version": "7.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/changelog-git",
+      "version": "1.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/cli",
+      "version": "3.0.3",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/config",
+      "version": "4.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/errors",
+      "version": "1.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/format",
+      "version": "0.1.3",
+      "manifest": "js/package-lock.json",
+      "latest": "0.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/get-dependents-graph",
+      "version": "3.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/git",
+      "version": "4.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/parse",
+      "version": "1.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/pre",
+      "version": "3.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/read",
+      "version": "1.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/should-skip-package",
+      "version": "1.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/types",
+      "version": "7.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@changesets/write",
+      "version": "1.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@clack/core",
+      "version": "1.6.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@clack/prompts",
+      "version": "1.9.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.9.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@dual-bundle/import-meta-resolve",
+      "version": "4.2.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.2.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint-community/eslint-utils",
+      "version": "4.10.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.10.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-visitor-keys",
+      "version": "3.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint-community/regexpp",
+      "version": "4.12.3",
+      "manifest": "js/package-lock.json",
+      "latest": "4.12.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/config-array",
+      "version": "0.23.6",
+      "manifest": "js/package-lock.json",
+      "latest": "0.23.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/config-helpers",
+      "version": "0.7.0",
+      "manifest": "js/package-lock.json",
+      "latest": "0.7.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/core",
+      "version": "1.2.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.2.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/js",
+      "version": "10.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "10.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/object-schema",
+      "version": "3.0.5",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@eslint/plugin-kit",
+      "version": "0.7.3",
+      "manifest": "js/package-lock.json",
+      "latest": "0.7.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@humanfs/core",
+      "version": "0.19.2",
+      "manifest": "js/package-lock.json",
+      "latest": "0.20.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@humanfs/node",
+      "version": "0.16.8",
+      "manifest": "js/package-lock.json",
+      "latest": "0.17.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@humanfs/types",
+      "version": "0.15.0",
+      "manifest": "js/package-lock.json",
+      "latest": "0.16.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@humanwhocodes/module-importer",
+      "version": "1.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@humanwhocodes/retry",
+      "version": "0.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "0.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@isaacs/nonrecursive-glob-match",
+      "version": "1.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@keyv/bigmap",
+      "version": "1.3.1",
+      "manifest": "js/package-lock.json",
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@keyv/serialize",
+      "version": "1.1.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@manypkg/find-root",
+      "version": "3.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "3.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@manypkg/get-packages",
+      "version": "3.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "3.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@manypkg/tools",
+      "version": "2.1.2",
+      "manifest": "js/package-lock.json",
+      "latest": "2.1.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@pkgr/core",
+      "version": "0.3.6",
+      "manifest": "js/package-lock.json",
+      "latest": "0.3.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@pnpm/deps.graph-sequencer",
+      "version": "1100.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1101.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/esrecurse",
+      "version": "4.3.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/estree",
+      "version": "1.0.10",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.10"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "@types/json-schema",
+      "version": "7.0.15",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.15"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "acorn",
+      "version": "8.19.0",
+      "manifest": "js/package-lock.json",
+      "latest": "8.19.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "acorn-jsx",
+      "version": "5.3.2",
+      "manifest": "js/package-lock.json",
+      "latest": "5.3.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ajv",
+      "version": "6.15.0",
+      "manifest": "js/package-lock.json",
+      "latest": "8.20.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "brace-expansion",
+      "version": "5.0.13",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.13"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cac",
+      "version": "7.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cacheable",
+      "version": "2.5.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "debug",
+      "version": "4.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "4.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "deep-is",
+      "version": "0.1.4",
+      "manifest": "js/package-lock.json",
+      "latest": "0.1.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "escape-string-regexp",
+      "version": "4.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint",
+      "version": "10.15.0",
+      "manifest": "js/package-lock.json",
+      "latest": "10.15.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-config-prettier",
+      "version": "10.1.8",
+      "manifest": "js/package-lock.json",
+      "latest": "10.1.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-plugin-prettier",
+      "version": "5.5.7",
+      "manifest": "js/package-lock.json",
+      "latest": "5.5.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-scope",
+      "version": "9.1.2",
+      "manifest": "js/package-lock.json",
+      "latest": "9.1.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "eslint-visitor-keys",
+      "version": "5.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "espree",
+      "version": "11.2.0",
+      "manifest": "js/package-lock.json",
+      "latest": "11.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "esquery",
+      "version": "1.7.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.7.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "esrecurse",
+      "version": "4.3.0",
+      "manifest": "js/package-lock.json",
+      "latest": "4.3.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "estraverse",
+      "version": "5.3.0",
+      "manifest": "js/package-lock.json",
+      "latest": "5.3.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "esutils",
+      "version": "2.0.3",
+      "manifest": "js/package-lock.json",
+      "latest": "2.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "manifest": "js/package-lock.json",
+      "latest": "3.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-diff",
+      "version": "1.3.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.3.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-json-stable-stringify",
+      "version": "2.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-levenshtein",
+      "version": "2.0.6",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-string-truncated-width",
+      "version": "3.0.3",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-string-width",
+      "version": "3.0.2",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fast-wrap-ansi",
+      "version": "0.2.2",
+      "manifest": "js/package-lock.json",
+      "latest": "0.2.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "fdir",
+      "version": "6.5.0",
+      "manifest": "js/package-lock.json",
+      "latest": "6.5.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "file-entry-cache",
+      "version": "11.1.5",
+      "manifest": "js/package-lock.json",
+      "latest": "11.1.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "find-up",
+      "version": "5.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "flat-cache",
+      "version": "6.1.23",
+      "manifest": "js/package-lock.json",
+      "latest": "6.1.23"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "flatted",
+      "version": "3.4.4",
+      "manifest": "js/package-lock.json",
+      "latest": "3.4.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "glob-parent",
+      "version": "6.0.2",
+      "manifest": "js/package-lock.json",
+      "latest": "6.0.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "hashery",
+      "version": "1.5.1",
+      "manifest": "js/package-lock.json",
+      "latest": "3.0.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "hookified",
+      "version": "1.15.1",
+      "manifest": "js/package-lock.json",
+      "latest": "3.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "human-id",
+      "version": "4.2.2",
+      "manifest": "js/package-lock.json",
+      "latest": "4.2.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "husky",
+      "version": "9.1.7",
+      "manifest": "js/package-lock.json",
+      "latest": "9.1.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ignore",
+      "version": "5.3.2",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.14"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "import-meta-resolve",
+      "version": "4.2.0",
+      "manifest": "js/package-lock.json",
+      "latest": "4.2.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "imurmurhash",
+      "version": "0.1.4",
+      "manifest": "js/package-lock.json",
+      "latest": "0.1.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "manifest": "js/package-lock.json",
+      "latest": "2.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "is-glob",
+      "version": "4.0.3",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "isexe",
+      "version": "2.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jju",
+      "version": "1.4.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.4.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-darwin-arm64",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-darwin-x64",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-linux-arm64-gnu",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-linux-arm64-musl",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-linux-x64-gnu",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-linux-x64-musl",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-windows-arm64-msvc",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jscpd-windows-x64-msvc",
+      "version": "5.4.3",
+      "manifest": "js/package-lock.json",
+      "latest": "5.4.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "json-schema-traverse",
+      "version": "0.4.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "json-stable-stringify-without-jsonify",
+      "version": "1.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "jsonc-parser",
+      "version": "3.3.1",
+      "manifest": "js/package-lock.json",
+      "latest": "3.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "keyv",
+      "version": "5.6.0",
+      "manifest": "js/package-lock.json",
+      "latest": "6.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "launch-editor",
+      "version": "2.14.2",
+      "manifest": "js/package-lock.json",
+      "latest": "2.14.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "levn",
+      "version": "0.4.1",
+      "manifest": "js/package-lock.json",
+      "latest": "0.4.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "js/package-lock.json",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "lint-staged",
+      "version": "17.6.0",
+      "manifest": "js/package-lock.json",
+      "latest": "17.6.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "locate-path",
+      "version": "6.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "minimatch",
+      "version": "11.0.8",
+      "manifest": "js/package-lock.json",
+      "latest": "11.0.8"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "ms",
+      "version": "2.1.3",
+      "manifest": "js/package-lock.json",
+      "latest": "2.1.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "natural-compare",
+      "version": "1.4.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.4.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "optionator",
+      "version": "0.9.4",
+      "manifest": "js/package-lock.json",
+      "latest": "0.9.4"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "p-limit",
+      "version": "3.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "7.3.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "p-locate",
+      "version": "5.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "package-manager-detector",
+      "version": "1.9.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.9.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "path-exists",
+      "version": "4.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "path-key",
+      "version": "3.1.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.1.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "picomatch",
+      "version": "4.0.7",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.7"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "prelude-ls",
+      "version": "1.2.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.2.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "prettier",
+      "version": "3.10.1",
+      "manifest": "js/package-lock.json",
+      "latest": "3.10.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "prettier-linter-helpers",
+      "version": "1.0.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.0.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "punycode",
+      "version": "2.3.1",
+      "manifest": "js/package-lock.json",
+      "latest": "2.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "qified",
+      "version": "0.10.1",
+      "manifest": "js/package-lock.json",
+      "latest": "0.13.2"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "hookified",
+      "version": "2.2.0",
+      "manifest": "js/package-lock.json",
+      "latest": "3.1.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "semver",
+      "version": "7.8.6",
+      "manifest": "js/package-lock.json",
+      "latest": "7.8.6"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "4.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "shell-quote",
+      "version": "1.12.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.12.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "sisteransi",
+      "version": "2.0.0",
+      "manifest": "js/package-lock.json",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "string-argv",
+      "version": "0.3.2",
+      "manifest": "js/package-lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "synckit",
+      "version": "0.12.3",
+      "manifest": "js/package-lock.json",
+      "latest": "0.12.3"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tinyexec",
+      "version": "1.3.1",
+      "manifest": "js/package-lock.json",
+      "latest": "1.3.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "manifest": "js/package-lock.json",
+      "latest": "0.2.17"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "type-check",
+      "version": "0.4.0",
+      "manifest": "js/package-lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "uri-js",
+      "version": "4.4.1",
+      "manifest": "js/package-lock.json",
+      "latest": "4.4.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "which",
+      "version": "2.0.2",
+      "manifest": "js/package-lock.json",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "word-wrap",
+      "version": "1.2.5",
+      "manifest": "js/package-lock.json",
+      "latest": "1.2.5"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yaml",
+      "version": "2.9.1",
+      "manifest": "js/package-lock.json",
+      "latest": "2.9.1"
+    },
+    {
+      "ecosystem": "npm",
+      "name": "yocto-queue",
+      "version": "0.1.0",
+      "manifest": "js/package-lock.json",
+      "latest": "1.2.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "ast-serialize",
+      "version": "0.13.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.13.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "attrs",
+      "version": "26.1.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "26.1.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "boolean-py",
+      "version": "5.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "5.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "build",
+      "version": "1.6.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.6.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "cachecontrol",
+      "version": "0.14.4",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.14.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "certifi",
+      "version": "2026.10.23",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2026.10.23"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "cffi",
+      "version": "2.1.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.1.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "cfgv",
+      "version": "3.5.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.5.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "charset-normalizer",
+      "version": "3.5.2",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.5.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "click",
+      "version": "8.5.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "8.5.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "click-log",
+      "version": "0.4.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "colorama",
+      "version": "0.4.6",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.4.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "coverage",
+      "version": "7.17.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "7.17.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "cryptography",
+      "version": "50.0.2",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "50.0.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "cyclonedx-python-lib",
+      "version": "11.12.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "11.12.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.7.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "distlib",
+      "version": "0.4.4",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.4.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "docutils",
+      "version": "0.23",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.23"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "filelock",
+      "version": "4.2.10",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.2.10"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "id",
+      "version": "1.6.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.6.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "identify",
+      "version": "2.6.20",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.6.20"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "idna",
+      "version": "3.20",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.20"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "iniconfig",
+      "version": "2.3.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.3.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "jaraco-classes",
+      "version": "3.4.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.4.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "jaraco-context",
+      "version": "6.1.2",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "6.1.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "jaraco-functools",
+      "version": "4.6.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.6.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "jeepney",
+      "version": "0.9.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.9.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "jinja2",
+      "version": "3.1.6",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.1.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "keyring",
+      "version": "25.7.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "25.7.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "librt",
+      "version": "0.16.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.16.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "license-expression",
+      "version": "30.4.4",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "30.4.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "markdown-it-py",
+      "version": "4.2.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.3.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "markupsafe",
+      "version": "3.0.4",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.0.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "mdurl",
+      "version": "0.1.2",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "more-itertools",
+      "version": "11.2.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "11.2.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "msgpack",
+      "version": "1.2.4",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.2.4"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "mypy",
+      "version": "2.4.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.4.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "mypy-extensions",
+      "version": "1.2.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "nh3",
+      "version": "0.3.7",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.3.7"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "nodeenv",
+      "version": "1.12.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.12.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "packageurl-python",
+      "version": "0.17.6",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.17.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "packaging",
+      "version": "26.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pathspec",
+      "version": "1.1.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.1.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip-api",
+      "version": "0.0.35",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.0.35"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip-audit",
+      "version": "2.10.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.10.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip-requirements-parser",
+      "version": "32.0.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "32.0.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "platformdirs",
+      "version": "4.14.5",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.14.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pluggy",
+      "version": "1.7.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.7.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pre-commit",
+      "version": "4.7.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.7.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "py-serializable",
+      "version": "2.2.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pycparser",
+      "version": "3.12",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.12"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pygments",
+      "version": "2.21.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.21.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pyparsing",
+      "version": "3.3.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.3.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pyproject-hooks",
+      "version": "1.3.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.3.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pytest",
+      "version": "9.2.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "9.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pytest-cov",
+      "version": "7.1.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "7.1.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "python-discovery",
+      "version": "1.9.5",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.9.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pywin32-ctypes",
+      "version": "0.2.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.2.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pyyaml",
+      "version": "6.0.3",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "6.0.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "readme-renderer",
+      "version": "46.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "46.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "requests",
+      "version": "2.34.2",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.34.2"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "requests-toolbelt",
+      "version": "1.0.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "rfc3986",
+      "version": "2.0.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.0.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "rich",
+      "version": "15.0.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "15.0.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "ruff",
+      "version": "0.17.5",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.17.5"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "scriv",
+      "version": "1.8.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.8.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "secretstorage",
+      "version": "3.5.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "3.5.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "setuptools",
+      "version": "84.2.1",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "84.2.1"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "sortedcontainers",
+      "version": "2.4.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.4.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "tomli",
+      "version": "2.5.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.5.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "tomli-w",
+      "version": "1.2.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "twine",
+      "version": "7.0.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "7.0.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "4.16.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "urllib3",
+      "version": "2.8.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "2.8.0"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "virtualenv",
+      "version": "21.15.6",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "21.15.6"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "wheel",
+      "version": "0.48.0",
+      "manifest": "python/requirements-dev.lock",
+      "latest": "0.48.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "experiments/issue-43/line-format-probe/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "experiments/issue-45/quote-probe/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "base64",
+      "version": "0.23.1",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "0.23.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "experiments/issue-47/rust-interop/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "base64",
+      "version": "0.23.1",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "0.23.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "equivalent",
+      "version": "1.0.3",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "foldhash",
+      "version": "0.2.0",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "0.2.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "0.17.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "indexmap",
+      "version": "2.14.2",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "2.14.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "itoa",
+      "version": "1.0.19",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.19"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde",
+      "version": "1.0.229",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_core",
+      "version": "1.0.229",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.154"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "zmij",
+      "version": "1.0.23",
+      "manifest": "experiments/issue-65/consumer/Cargo.lock",
+      "latest": "1.0.23"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "autocfg",
+      "version": "1.5.1",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.5.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "base64",
+      "version": "0.23.1",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.23.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "bitflags",
+      "version": "2.13.2",
+      "manifest": "rust/Cargo.lock",
+      "latest": "2.13.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "cfg-if",
+      "version": "1.0.5",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "chacha20",
+      "version": "0.10.2",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.10.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "core_detect",
+      "version": "1.0.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "cpufeatures",
+      "version": "0.3.1",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.3.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "equivalent",
+      "version": "1.0.3",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "foldhash",
+      "version": "0.2.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.2.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "getrandom",
+      "version": "0.4.3",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.4.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "hashbrown",
+      "version": "0.17.1",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.17.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "indexmap",
+      "version": "2.14.2",
+      "manifest": "rust/Cargo.lock",
+      "latest": "2.14.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "itoa",
+      "version": "1.0.19",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.19"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "libc",
+      "version": "0.2.191",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.2.191"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation",
+      "version": "0.31.5",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.31.5"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "links-notation-macro",
+      "version": "0.1.2",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.1.2"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "memchr",
+      "version": "2.8.3",
+      "manifest": "rust/Cargo.lock",
+      "latest": "2.8.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "nom",
+      "version": "8.0.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "8.0.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "num-traits",
+      "version": "0.2.19",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.2.19"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proc-macro2",
+      "version": "1.0.107",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.107"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "proptest",
+      "version": "1.12.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.12.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "quote",
+      "version": "1.0.47",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.47"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "r-efi",
+      "version": "6.0.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "7.2.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "rand",
+      "version": "0.10.3",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.10.3"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "rand_core",
+      "version": "0.10.1",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.10.1"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "rand_xorshift",
+      "version": "0.5.0",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "regex-syntax",
+      "version": "0.8.11",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.8.11"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde",
+      "version": "1.0.229",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_core",
+      "version": "1.0.229",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_derive",
+      "version": "1.0.229",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.229"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "serde_json",
+      "version": "1.0.154",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.154"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "syn",
+      "version": "3.0.10",
+      "manifest": "rust/Cargo.lock",
+      "latest": "3.0.10"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unarray",
+      "version": "0.1.4",
+      "manifest": "rust/Cargo.lock",
+      "latest": "0.1.4"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "unicode-ident",
+      "version": "1.0.27",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.27"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "zmij",
+      "version": "1.0.23",
+      "manifest": "rust/Cargo.lock",
+      "latest": "1.0.23"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "pip",
+      "version": "26.3",
+      "manifest": "workflow/update tools",
+      "latest": "26.3"
+    },
+    {
+      "ecosystem": "pypi",
+      "name": "uv",
+      "version": "0.13.8",
+      "manifest": "workflow/update tools",
+      "latest": "0.13.8"
+    },
+    {
+      "ecosystem": "cargo",
+      "name": "cargo-audit",
+      "version": "0.23.0",
+      "manifest": "workflow/update tools",
+      "latest": "0.23.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Link.Foundation.Links.Notation",
+      "version": "0.31.1",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.31.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Pegasus",
+      "version": "4.1.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Collections",
+      "version": "0.4.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Disposables",
+      "version": "0.4.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Exceptions",
+      "version": "0.5.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Interfaces",
+      "version": "0.5.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Random",
+      "version": "0.3.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.3.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Ranges",
+      "version": "0.5.0",
+      "manifest": "experiments/issue-47/csharp-interop/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Link.Foundation.Links.Notation",
+      "version": "0.31.1",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.31.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Pegasus",
+      "version": "4.1.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Collections",
+      "version": "0.4.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Disposables",
+      "version": "0.4.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Exceptions",
+      "version": "0.5.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Interfaces",
+      "version": "0.5.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Random",
+      "version": "0.3.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.3.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Ranges",
+      "version": "0.5.0",
+      "manifest": "csharp/examples/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Azure.Core",
+      "version": "1.65.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.65.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.ApplicationInsights",
+      "version": "3.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "3.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Bcl.AsyncInterfaces",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.DiaSymReader",
+      "version": "3.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "3.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration.Binder",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Configuration.EnvironmentVariables",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.DependencyInjection",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.DependencyModel",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Logging",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Logging.Configuration",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Extensions.Options.ConfigurationExtensions",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Identity.Client",
+      "version": "4.92.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.92.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Identity.Client.Extensions.Msal",
+      "version": "4.92.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.92.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.IdentityModel.Abstractions",
+      "version": "8.23.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "8.23.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.NET.Test.Sdk",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.CodeCoverage",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.Telemetry",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Extensions.TrxReport.Abstractions",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Platform",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Testing.Platform.MSBuild",
+      "version": "2.5.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "2.5.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Api",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Api.ProviderBuilderExtensions",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.Extensions.Hosting",
+      "version": "1.21.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.21.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.PersistentStorage.Abstractions",
+      "version": "1.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "OpenTelemetry.PersistentStorage.FileSystem",
+      "version": "1.2.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.2.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.ClientModel",
+      "version": "1.17.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.17.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Memory.Data",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Security.Cryptography.ProtectedData",
+      "version": "11.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "11.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.runner.visualstudio",
+      "version": "4.0.1",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Azure.Monitor.OpenTelemetry.Exporter",
+      "version": "1.10.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "1.10.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Link.Foundation.Links.Notation",
+      "version": "0.31.1",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.31.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.CodeCoverage",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.TestPlatform.ObjectModel",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.TestPlatform.TestHost",
+      "version": "18.12.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "18.12.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Microsoft.Win32.Registry",
+      "version": "5.0.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "5.0.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Mono.Cecil",
+      "version": "0.11.6",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.11.6"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Pegasus",
+      "version": "4.1.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Collections",
+      "version": "0.4.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Disposables",
+      "version": "0.4.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Exceptions",
+      "version": "0.5.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Interfaces",
+      "version": "0.5.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Random",
+      "version": "0.3.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.3.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Ranges",
+      "version": "0.5.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "System.Security.AccessControl",
+      "version": "6.0.1",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "6.0.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.analyzers",
+      "version": "2.3.0",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "2.3.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.assert",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.common",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.core.mtp-v2",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.extensibility.core",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.mtp-v2",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.runner.common",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "xunit.v3.runner.inproc.console",
+      "version": "4.0.3",
+      "manifest": "csharp/tests/Lino.Objects.Codec.Tests/packages.lock.json",
+      "latest": "4.0.3"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Link.Foundation.Links.Notation",
+      "version": "0.31.1",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.31.1"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Pegasus",
+      "version": "4.1.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "4.1.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Collections",
+      "version": "0.4.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Disposables",
+      "version": "0.4.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.4.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Exceptions",
+      "version": "0.5.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Interfaces",
+      "version": "0.5.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Random",
+      "version": "0.3.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.3.0"
+    },
+    {
+      "ecosystem": "nuget",
+      "name": "Platform.Ranges",
+      "version": "0.5.0",
+      "manifest": "csharp/src/Lino.Objects.Codec/packages.lock.json",
+      "latest": "0.5.0"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "pre-commit/pre-commit-hooks",
+      "version": "6.0.0",
+      "manifest": "python/.pre-commit-config.yaml",
+      "latest": "6.0.0"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "astral-sh/ruff-pre-commit",
+      "version": "0.17.5",
+      "manifest": "python/.pre-commit-config.yaml",
+      "latest": "0.17.5"
+    },
+    {
+      "ecosystem": "github-tools",
+      "name": "pre-commit/mirrors-mypy",
+      "version": "2.4.1",
+      "manifest": "python/.pre-commit-config.yaml",
+      "latest": "2.4.1"
+    }
+  ]
+}

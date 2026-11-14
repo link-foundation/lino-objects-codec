@@ -1,0 +1,1842 @@
+[
+  {
+    "ecosystem": "cargo",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "rust/Cargo.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "base64",
+    "version": "0.23.1",
+    "manifest": "rust/Cargo.toml",
+    "blocker": null,
+    "latest": "0.23.1"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "serde_json",
+    "version": "1.0.154",
+    "manifest": "rust/Cargo.toml",
+    "blocker": null,
+    "latest": "1.0.154"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "serde_json",
+    "version": "1.0.154",
+    "manifest": "rust/Cargo.toml",
+    "blocker": null,
+    "latest": "1.0.154"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "proptest",
+    "version": "1.12.0",
+    "manifest": "rust/Cargo.toml",
+    "blocker": null,
+    "latest": "1.12.0"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "experiments/issue-37/parenthesis-indentation/Cargo.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "experiments/issue-43/line-format-probe/Cargo.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "experiments/issue-45/quote-probe/Cargo.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "experiments/issue-65/consumer/Cargo.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "command-stream",
+    "version": "2.6.0",
+    "manifest": "package.json",
+    "blocker": null,
+    "latest": "2.6.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "lino-arguments",
+    "version": "0.4.1",
+    "manifest": "package.json",
+    "blocker": null,
+    "latest": "0.4.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": "package.json",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": "package.json",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "@changesets/cli",
+    "version": "3.0.3",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "3.0.3"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "@eslint/js",
+    "version": "10.0.1",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "10.0.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "eslint",
+    "version": "10.15.0",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "10.15.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "eslint-config-prettier",
+    "version": "10.1.8",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "10.1.8"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "eslint-plugin-prettier",
+    "version": "5.5.7",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "5.5.7"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "husky",
+    "version": "9.1.7",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "9.1.7"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "jscpd",
+    "version": "5.4.3",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "5.4.3"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "lint-staged",
+    "version": "17.6.0",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "17.6.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "prettier",
+    "version": "3.10.1",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "3.10.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": "js/package.json",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "setuptools",
+    "version": "84.2.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "84.2.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "wheel",
+    "version": "0.48.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "0.48.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "links-notation",
+    "version": "0.31.5",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "0.31.5"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pytest",
+    "version": "9.2.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "9.2.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pytest-cov",
+    "version": "7.1.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "ruff",
+    "version": "0.17.5",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "0.17.5"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "mypy",
+    "version": "2.4.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "2.4.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "scriv",
+    "version": "1.8.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "1.8.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "build",
+    "version": "1.6.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "1.6.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "twine",
+    "version": "7.0.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "7.0.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip-audit",
+    "version": "2.10.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "2.10.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pre-commit",
+    "version": "4.7.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "4.7.0"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "setuptools",
+    "version": "84.2.1",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "84.2.1"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "wheel",
+    "version": "0.48.0",
+    "manifest": "python/pyproject.toml",
+    "blocker": null,
+    "latest": "0.48.0"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "Link.Foundation.Links.Notation",
+    "version": "0.31.1",
+    "manifest": "csharp/src/Lino.Objects.Codec/Lino.Objects.Codec.csproj",
+    "blocker": null,
+    "latest": "0.31.1"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "Microsoft.NET.Test.Sdk",
+    "version": "18.12.0",
+    "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+    "blocker": null,
+    "latest": "18.12.0"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "xunit.v3",
+    "version": "4.0.3",
+    "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+    "blocker": null,
+    "latest": "4.0.3"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "xunit.runner.visualstudio",
+    "version": "4.0.1",
+    "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+    "blocker": null,
+    "latest": "4.0.1"
+  },
+  {
+    "ecosystem": "nuget",
+    "name": "Microsoft.Testing.Extensions.CodeCoverage",
+    "version": "18.12.0",
+    "manifest": "csharp/tests/Lino.Objects.Codec.Tests/Lino.Objects.Codec.Tests.csproj",
+    "blocker": null,
+    "latest": "18.12.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "codecov/codecov-action",
+    "version": "7.1.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/upload-artifact",
+    "version": "7.0.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/download-artifact",
+    "version": "8.0.2",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "8.0.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/csharp.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/dependencies.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "peter-evans/create-pull-request",
+    "version": "8.1.3",
+    "manifest": ".github/workflows/js.yml",
+    "blocker": null,
+    "latest": "8.1.3"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/links.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "lycheeverse/lychee-action",
+    "version": "2.9.0",
+    "manifest": ".github/workflows/links.yml",
+    "blocker": null,
+    "latest": "2.9.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/parity.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "codecov/codecov-action",
+    "version": "7.1.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/upload-artifact",
+    "version": "7.0.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/download-artifact",
+    "version": "8.0.2",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "8.0.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "pypa/gh-action-pypi-publish",
+    "version": "1.14.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "1.14.3"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "pypa/gh-action-pypi-publish",
+    "version": "1.14.3",
+    "manifest": ".github/workflows/python.yml",
+    "blocker": null,
+    "latest": "1.14.3"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/cache",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/cache",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/cache",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "rust-lang/crates-io-auth-action",
+    "version": "1.0.6",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.0.6"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "rust-lang/crates-io-auth-action",
+    "version": "1.0.6",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "1.0.6"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "peter-evans/create-pull-request",
+    "version": "8.1.3",
+    "manifest": ".github/workflows/rust.yml",
+    "blocker": null,
+    "latest": "8.1.3"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/scripts.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/scripts.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/scripts.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/scripts.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "node",
+    "version": "26.13.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "26.13.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "python",
+    "version": "3.15.2",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "3.15.2"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "npm",
+    "name": "npm",
+    "version": "12.2.2",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "12.2.2"
+  },
+  {
+    "ecosystem": "pypi",
+    "name": "pip",
+    "version": "26.3",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "26.3"
+  },
+  {
+    "ecosystem": "cargo",
+    "name": "cargo-audit",
+    "version": "0.23.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "0.23.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "github/codeql-action",
+    "version": "4.39.3",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "4.39.3"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "github/codeql-action",
+    "version": "4.39.3",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "4.39.3"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-dotnet",
+    "version": "6.1.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "6.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-node",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/setup-python",
+    "version": "7.1.0",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.1.0"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/workflows.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "actions/checkout",
+    "version": "7.0.1",
+    "manifest": ".github/workflows/workflows.yml",
+    "blocker": null,
+    "latest": "7.0.1"
+  },
+  {
+    "ecosystem": "github-actions",
+    "name": "zizmorcore/zizmor-action",
+    "version": "0.8.1",
+    "manifest": ".github/workflows/workflows.yml",
+    "blocker": null,
+    "latest": "0.8.1"
+  },
+  {
+    "ecosystem": "github-tools",
+    "name": "rhysd/actionlint",
+    "version": "1.7.12",
+    "manifest": ".github/workflows/workflows.yml",
+    "blocker": null,
+    "latest": "1.7.12"
+  },
+  {
+    "ecosystem": "github-tools",
+    "name": "zizmorcore/zizmor",
+    "version": "1.32.0",
+    "manifest": ".github/workflows/workflows.yml",
+    "blocker": null,
+    "latest": "1.32.0"
+  },
+  {
+    "ecosystem": "github-tools",
+    "name": "gitleaks/gitleaks",
+    "version": "8.30.1",
+    "manifest": ".github/workflows/security.yml",
+    "blocker": null,
+    "latest": "8.30.1"
+  },
+  {
+    "ecosystem": "github-hooks",
+    "name": "pre-commit/pre-commit-hooks",
+    "version": "6.0.0",
+    "manifest": "python/.pre-commit-config.yaml",
+    "blocker": null,
+    "latest": "6.0.0"
+  },
+  {
+    "ecosystem": "github-hooks",
+    "name": "astral-sh/ruff-pre-commit",
+    "version": "0.17.5",
+    "manifest": "python/.pre-commit-config.yaml",
+    "blocker": null,
+    "latest": "0.17.5"
+  },
+  {
+    "ecosystem": "github-hooks",
+    "name": "pre-commit/mirrors-mypy",
+    "version": "2.4.1",
+    "manifest": "python/.pre-commit-config.yaml",
+    "blocker": null,
+    "latest": "2.4.1"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "rust",
+    "version": "1.100.0",
+    "manifest": "rust-toolchain.toml",
+    "blocker": null,
+    "latest": "1.100.0"
+  },
+  {
+    "ecosystem": "toolchain",
+    "name": "dotnet-sdk",
+    "version": "11.0.100",
+    "manifest": "csharp/global.json",
+    "blocker": null,
+    "latest": "11.0.100"
+  }
+]

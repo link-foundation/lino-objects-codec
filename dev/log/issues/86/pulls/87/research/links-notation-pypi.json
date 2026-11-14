@@ -1,0 +1,16 @@
+{
+  "version": "0.31.5",
+  "urls": {
+    "Homepage": "https://github.com/link-foundation/links-notation",
+    "Issues": "https://github.com/link-foundation/links-notation/issues",
+    "Repository": "https://github.com/link-foundation/links-notation"
+  },
+  "requires_dist": [
+    "pytest>=9.2.0; extra == \"test\"",
+    "pytest-timeout>=2.4.0; extra == \"test\"",
+    "black>=26.10.1; extra == \"lint\"",
+    "isort>=9.0.2; extra == \"lint\"",
+    "flake8>=7.5.0; extra == \"lint\"",
+    "links-notation[lint,test]; extra == \"dev\""
+  ]
+}

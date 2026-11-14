@@ -1,0 +1,8 @@
+  Lino.Objects.Codec -> /tmp/gh-issue-solver-1794665145423/csharp/src/Lino.Objects.Codec/bin/Release/net11.0/Lino.Objects.Codec.dll
+  Lino.Objects.Codec.Tests -> /tmp/gh-issue-solver-1794665145423/csharp/tests/Lino.Objects.Codec.Tests/bin/Release/net11.0/Lino.Objects.Codec.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.95

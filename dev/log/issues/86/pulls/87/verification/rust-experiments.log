@@ -1,0 +1,98 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v3.0.10
+   Compiling memchr v2.8.3
+   Compiling nom v8.0.0
+   Compiling links-notation-macro v0.1.2
+   Compiling links-notation v0.31.5
+   Compiling parenthesis-indentation-probe v0.1.0 (/tmp/gh-issue-solver-1794665145423/experiments/issue-37/parenthesis-indentation)
+    Finished `test` profile [unoptimized] target(s) in 17.01s
+     Running unittests src/main.rs (experiments/issue-37/parenthesis-indentation/target/debug/build/parenthesis-indentation-probe/9d99dd775f308a5e/out/parenthesis_indentation_probe-9d99dd775f308a5e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/bin/shapes.rs (experiments/issue-37/parenthesis-indentation/target/debug/build/parenthesis-indentation-probe/4a8a9b6c6db22dca/out/shapes-4a8a9b6c6db22dca)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling syn v3.0.10
+   Compiling memchr v2.8.3
+   Compiling nom v8.0.0
+   Compiling links-notation-macro v0.1.2
+   Compiling links-notation v0.31.5
+   Compiling line-format-probe v0.1.0 (/tmp/gh-issue-solver-1794665145423/experiments/issue-43/line-format-probe)
+    Finished `test` profile [unoptimized] target(s) in 16.49s
+     Running unittests src/main.rs (experiments/issue-43/line-format-probe/target/debug/build/line-format-probe/c48a81e5401d638e/out/line_format_probe-c48a81e5401d638e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v3.0.10
+   Compiling memchr v2.8.3
+   Compiling nom v8.0.0
+   Compiling links-notation-macro v0.1.2
+   Compiling links-notation v0.31.5
+   Compiling quote-probe v0.1.0 (/tmp/gh-issue-solver-1794665145423/experiments/issue-45/quote-probe)
+    Finished `test` profile [unoptimized] target(s) in 14.55s
+     Running unittests src/main.rs (experiments/issue-45/quote-probe/target/debug/build/quote-probe/f6ea52cec90a230e/out/quote_probe-f6ea52cec90a230e)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling syn v3.0.10
+   Compiling memchr v2.8.3
+   Compiling nom v8.0.0
+   Compiling links-notation-macro v0.1.2
+   Compiling links-notation v0.31.5
+   Compiling base64 v0.23.1
+   Compiling lino-objects-codec v0.9.4 (/tmp/gh-issue-solver-1794665145423/rust)
+   Compiling issue-47-interop v0.0.0 (/tmp/gh-issue-solver-1794665145423/experiments/issue-47/rust-interop)
+    Finished `test` profile [unoptimized] target(s) in 15.71s
+     Running unittests src/main.rs (experiments/issue-47/rust-interop/target/debug/build/issue-47-interop/f19a40822015e876/out/issue_47_interop-f19a40822015e876)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling serde_core v1.0.229
+   Compiling memchr v2.8.3
+   Compiling zmij v1.0.23
+   Compiling syn v3.0.10
+   Compiling equivalent v1.0.3
+   Compiling hashbrown v0.17.1
+   Compiling serde_json v1.0.154
+   Compiling indexmap v2.14.2
+   Compiling links-notation-macro v0.1.2
+   Compiling nom v8.0.0
+   Compiling itoa v1.0.19
+   Compiling foldhash v0.2.0
+   Compiling links-notation v0.31.5
+   Compiling base64 v0.23.1
+   Compiling lino-objects-codec v0.9.4 (/tmp/gh-issue-solver-1794665145423/rust)
+   Compiling issue-65-consumer v0.1.0 (/tmp/gh-issue-solver-1794665145423/experiments/issue-65/consumer)
+    Finished `test` profile [unoptimized] target(s) in 25.07s
+     Running unittests src/main.rs (experiments/issue-65/consumer/target/debug/build/issue-65-consumer/e64c7627b7790894/out/issue_65_consumer-e64c7627b7790894)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

@@ -1,0 +1,4 @@
+No known vulnerabilities found
+Name               Skip Reason
+------------------ ---------------------------------------------------------------------------------
+lino-objects-codec Dependency not found on PyPI and could not be audited: lino-objects-codec (0.3.1)

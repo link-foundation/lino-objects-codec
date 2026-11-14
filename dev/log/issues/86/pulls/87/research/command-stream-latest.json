@@ -1,0 +1,280 @@
+{
+  "bin": {
+    "$fy": "src/fy-cli.mjs",
+    "command-stream": "src/cli.mjs"
+  },
+  "bugs": {
+    "url": "https://github.com/link-foundation/command-stream/issues"
+  },
+  "dist": {
+    "shasum": "7f0a3050fcf9e20c47028cb1fdb1de8a03f8d0eb",
+    "tarball": "https://registry.npmjs.org/command-stream/-/command-stream-2.6.0.tgz",
+    "fileCount": 783,
+    "integrity": "sha512-40vek1DBJYxlIQ/LXBqy61WNjm5q1uN0fK58IZyWCVVcffwUc0FOfevGbJkqM77ZJkhYVd3JnAYOznjMK5rFkA==",
+    "signatures": [
+      {
+        "sig": "MEUCIQCOfTgWOoEJTqggHVMAw2mCpFG34VuMOBnj9e4kxrV+sQIgQPiEHClfRwtH800kwDUWrLX83/198o5rvTcMkEzhGJM=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "sig": "MEQCIGQ4OXXzy/r1Sx70k1VXZjzxsq+sJoy5GAqkaabqxmUgAiAOBqSOuZlOo3ZrgrZbU6BKIom6AjIEXdC4eLm37iTVLQ==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/command-stream@2.6.0",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 2700872
+  },
+  "main": "./src/$.cjs",
+  "name": "command-stream",
+  "type": "module",
+  "types": "./types/index.d.ts",
+  "author": {
+    "name": "link-foundation"
+  },
+  "module": "./src/$.mjs",
+  "engines": {
+    "bun": ">=1.0.0",
+    "node": ">=22.0.0"
+  },
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./types/index.d.ts",
+        "default": "./src/$.mjs"
+      },
+      "default": "./src/$.mjs",
+      "require": {
+        "types": "./types/index.d.cts",
+        "default": "./src/$.cjs"
+      }
+    },
+    "./fy": {
+      "types": "./types/fy.d.ts",
+      "default": "./src/fy/index.mjs"
+    },
+    "./zx": {
+      "import": {
+        "types": "./types/zx.d.ts",
+        "default": "./src/zx/index.mjs"
+      },
+      "default": "./src/zx/index.mjs",
+      "require": {
+        "types": "./types/zx.d.cts",
+        "default": "./src/zx/index.cjs"
+      }
+    },
+    "./bun": {
+      "import": {
+        "types": "./types/bun.d.ts",
+        "default": "./src/bun.mjs"
+      },
+      "default": "./src/bun.mjs",
+      "require": {
+        "types": "./types/bun.d.cts",
+        "default": "./src/bun.cjs"
+      }
+    },
+    "./core": {
+      "import": {
+        "types": "./types/core.d.ts",
+        "default": "./src/core.mjs"
+      },
+      "default": "./src/core.mjs",
+      "require": {
+        "types": "./types/core.d.cts",
+        "default": "./src/core.cjs"
+      }
+    },
+    "./execa": {
+      "import": {
+        "types": "./types/execa.d.ts",
+        "default": "./src/execa/index.mjs"
+      },
+      "default": "./src/execa/index.mjs",
+      "require": {
+        "types": "./types/execa.d.cts",
+        "default": "./src/execa/index.cjs"
+      }
+    },
+    "./zx/cli": {
+      "import": {
+        "types": "./types/zx-cli.d.ts",
+        "default": "./src/zx/cli.mjs"
+      },
+      "default": "./src/zx/cli.mjs",
+      "require": {
+        "types": "./types/zx-cli.d.cts",
+        "default": "./src/zx/cli.cjs"
+      }
+    },
+    "./shelljs": {
+      "import": {
+        "types": "./types/shelljs.d.ts",
+        "default": "./src/shelljs/index.mjs"
+      },
+      "default": "./src/shelljs/index.mjs",
+      "require": {
+        "types": "./types/shelljs.d.cts",
+        "default": "./src/shelljs/index.cjs"
+      }
+    },
+    "./zx/core": {
+      "import": {
+        "types": "./types/zx-core.d.ts",
+        "default": "./src/zx/core.mjs"
+      },
+      "default": "./src/zx/core.mjs",
+      "require": {
+        "types": "./types/zx-core.d.cts",
+        "default": "./src/zx/core.cjs"
+      }
+    },
+    "./zx/globals": {
+      "types": "./types/zx-globals.d.ts",
+      "default": "./src/zx/globals.mjs",
+      "require": "./src/zx/globals.cjs"
+    },
+    "./cross-spawn": {
+      "import": {
+        "types": "./types/cross-spawn.d.ts",
+        "default": "./src/cross-spawn.mjs"
+      },
+      "require": {
+        "types": "./types/cross-spawn.d.cts",
+        "default": "./src/cross-spawn.cjs"
+      }
+    },
+    "./package.json": "./package.json",
+    "./process-runner": {
+      "types": "./types/process-runner.d.ts",
+      "default": "./src/process-runner.mjs"
+    },
+    "./shelljs/plugin": {
+      "import": {
+        "types": "./types/shelljs-plugin.d.ts",
+        "default": "./src/shelljs/plugin.mjs"
+      },
+      "require": {
+        "types": "./types/shelljs-plugin.d.cts",
+        "default": "./src/shelljs/plugin.cjs"
+      }
+    }
+  },
+  "gitHead": "b6a94e3cb04d4352d69d3cf8624344393a6ec957",
+  "license": "Unlicense",
+  "scripts": {
+    "lint": "cd .. && js/node_modules/.bin/eslint . --max-warnings 0",
+    "test": "cd .. && bun test js/tests/ --timeout 10000",
+    "check": "bun run lint && bun run format:check && bun run check:duplication && bun run check:types",
+    "format": "cd .. && js/node_modules/.bin/prettier --write .",
+    "prepare": "cd .. && js/node_modules/.bin/husky || true",
+    "lint:fix": "cd .. && js/node_modules/.bin/eslint . --fix --max-warnings 0",
+    "benchmark": "bun benchmarks/cli.mjs",
+    "changeset": "changeset",
+    "test:pipe": "cd .. && bun test js/tests/pipe.test.mjs --timeout 10000",
+    "test:sync": "cd .. && bun test js/tests/sync.test.mjs --timeout 10000",
+    "docs:check": "cd .. && node scripts/generate-docs.mjs --check",
+    "check:types": "tsc -p tests/types/tsconfig.json",
+    "test:readme": "cd .. && bun test js/tests/readme-examples.test.mjs --timeout 10000",
+    "check:parity": "cd .. && node scripts/check-parity.mjs",
+    "format:check": "cd .. && js/node_modules/.bin/prettier --check .",
+    "test:builtin": "cd .. && bun test js/tests/builtin-commands.test.mjs --timeout 10000",
+    "docs:generate": "cd .. && node scripts/generate-docs.mjs",
+    "test:coverage": "cd .. && bun test js/tests/ --coverage --timeout 10000",
+    "test:features": "cd .. && bun test js/tests/*.features.test.mjs --timeout 10000",
+    "benchmark:test": "cd .. && bun test js/tests/benchmark-suite.test.mjs --timeout 10000",
+    "benchmark:smoke": "bun benchmarks/cli.mjs --smoke",
+    "test:comparison": "cd .. && bun test js/tests/$.features.test.mjs js/tests/competitor-compatibility.test.mjs --reporter=verbose --timeout 10000",
+    "benchmark:bundle": "bun benchmarks/cli.mjs --suite bundle-size",
+    "changeset:status": "changeset status --since=origin/main",
+    "test:competitors": "cd .. && bun test js/tests/competitor-compatibility.test.mjs --timeout 10000",
+    "changeset:publish": "changeset publish",
+    "changeset:version": "bun scripts/changeset-version.mjs",
+    "check:duplication": "jscpd src scripts",
+    "benchmark:features": "bun benchmarks/cli.mjs --suite features",
+    "check:dependencies": "cd .. && bun scripts/check-dependencies.mjs",
+    "build:terminal-font": "node scripts/build-terminal-font.mjs",
+    "benchmark:real-world": "bun benchmarks/cli.mjs --suite real-world",
+    "benchmark:performance": "bun benchmarks/cli.mjs --suite performance"
+  },
+  "_npmUser": {
+    "name": "GitHub Actions",
+    "email": "npm-oidc-no-reply@github.com",
+    "trustedPublisher": {
+      "id": "github",
+      "oidcConfigId": "038e7314-ce8b-43f5-ae1d-b08526dc540a"
+    }
+  },
+  "homepage": "https://github.com/link-foundation/command-stream/tree/main/js#readme",
+  "keywords": [
+    "shell",
+    "command",
+    "streaming",
+    "async",
+    "iteration",
+    "eventemitter",
+    "bun",
+    "node",
+    "cross-runtime"
+  ],
+  "repository": {
+    "url": "git+https://github.com/link-foundation/command-stream.git",
+    "type": "git",
+    "directory": "js"
+  },
+  "_npmVersion": "12.2.1",
+  "description": "Modern $ shell utility library with streaming, async iteration, and EventEmitter support, optimized for Bun runtime",
+  "directories": {},
+  "maintainers": [
+    {
+      "name": "konard",
+      "email": "drakonard@gmail.com"
+    }
+  ],
+  "_nodeVersion": "24.21.0",
+  "dependencies": {
+    "acorn": "8.19.0",
+    "execa": "10.2.1",
+    "gifenc": "^1.0.3",
+    "cross-spawn": "7.0.6",
+    "meta-language": "^0.46.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "@xterm/headless": "^6.0.0"
+  },
+  "_hasShrinkwrap": false,
+  "devDependencies": {
+    "zx": "8.8.5",
+    "chalk": "^6.0.1",
+    "husky": "^9.1.7",
+    "jscpd": "^5.4.2",
+    "use-m": "8.16.4",
+    "eslint": "^10.13.0",
+    "esbuild": "0.28.2",
+    "shelljs": "0.10.0",
+    "prettier": "^3.9.10",
+    "@eslint/js": "^10.0.1",
+    "typescript": "7.0.2",
+    "@types/node": "26.6.5",
+    "lint-staged": "^17.6.0",
+    "subset-font": "^2.9.0",
+    "@types/shelljs": "0.10.0",
+    "@changesets/cli": "^3.0.3",
+    "dejavu-fonts-ttf": "^2.37.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.7"
+  },
+  "optionalDependencies": {
+    "node-pty": "^1.1.0"
+  },
+  "_npmOperationalInternal": {
+    "tmp": "tmp/command-stream_2.6.0_1792853734668_0.7178467579876859",
+    "host": "s3://npm-registry-packages-npm-production"
+  },
+  "_id": "command-stream@2.6.0",
+  "version": "2.6.0"
+}
