@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-11-14
+
+### Changed
+
+- Require Rust 1.100.0, update Links Notation to 0.31.5 and refresh every library and experiment lockfile.
+- Use current let-chain syntax accepted by the latest Clippy, and install release tooling from the shared npm lockfile.
+
 ## [0.9.4] - 2026-11-14
 
 ### Changed
