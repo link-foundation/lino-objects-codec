@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.4] - 2026-11-14
+
+### Changed
+
+- Update `links-notation` from 0.27.1 to 0.31.3, the latest release, so a project that also depends on the current parser resolves one copy instead of two. No public API changes: no `links-notation` type is part of this crate's API, and the test suite passes unchanged against 0.31.3.
+
+### Changed
+
+- Publish the Links Notation 0.31 migration under a new crate version (issue #84). crates.io still served 0.9.3, which requires `links-notation ^0.27.1`, because the release run for the migration skipped publishing when GitHub could not acquire a macOS runner. This release requires `links-notation ^0.31.4`, the latest release; the round-trip and conformance suites pass unchanged against it.
+- Releases now read the published dependency metadata back from crates.io and fail when it differs from `Cargo.toml`. They also build a fresh consumer crate against the registry artifact, round-trip a value through it and check that it resolves the same `links-notation` minor version as the source.
+- When a push to `main` leaves changelog fragments unreleased because the tests or build did not finish, CI now fails with an error that says how to finish the release.
+
 ## [0.9.3] - 2026-10-29
 
 ### Fixed
