@@ -57,7 +57,8 @@ function check(eventName, results, lock = fixture().lock) {
   const messages = [];
   let calls = 0;
   const status = auditNpmLocks({
-    eventName,
+    // Undefined represents an unset event, regardless of the CI test host.
+    eventName: eventName ?? '',
     run: () => results[calls++],
     readLock: () => lock,
     log: (text) => messages.push(text),
