@@ -573,6 +573,72 @@ jobs:
             --tag-prefix "rust_v" \
             --language "Rust"
 
+      # Issue #84: crates.io kept serving 0.9.3 (links-notation ^0.27.1) while
+      # main required 0.31.x, and no step compared the registry artifact with
+      # the source. Read the published dependency metadata back, then build a
+      # fresh consumer of the registry crate that round-trips a value and must
+      # resolve the manifest's dependency versions. Runs after the GitHub
+      # release because the crate version is immutable once uploaded.
+      - name: Verify published dependencies and a consumer round trip
+        if: steps.release_check.outputs.should_release == 'true'
+        working-directory: ./rust
+        env:
+          VERSION: ${{ steps.current_version.outputs.version }}
+        run: node scripts/verify-published-crate.mjs --version "${VERSION}" --consumer
+
+  # === RELEASE PENDING GUARD ===
+  # Issue #84: the push that merged the links-notation 0.31 migration never
+  # released it. GitHub could not acquire a macOS runner ("The job was not
+  # acquired by Runner of type hosted even after multiple attempts"), the macOS
+  # test leg was cancelled, so Build Package and Auto Release were skipped, and
+  # the changelog fragment sat on main while crates.io kept serving 0.9.3. The
+  # run was red, but nothing said that a release was owed or how to finish it.
+  # This job says so whenever a push to main leaves fragments unreleased.
+  release-pending:
+    timeout-minutes: 10
+    name: Release Pending Check
+    needs: [test, build]
+    if: >-
+      ${{
+      always() &&
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      needs.build.result != 'success'
+      }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Fail with instructions when changelog fragments are unreleased
+        working-directory: ./rust
+        env:
+          TEST_RESULT: ${{ needs.test.result }}
+          BUILD_RESULT: ${{ needs.build.result }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          FRAGMENTS=$(find changelog.d -maxdepth 1 -name '*.md' ! -name README.md | sort)
+          if [ -z "$FRAGMENTS" ]; then
+            echo "No unreleased changelog fragments; nothing is owed to crates.io."
+            exit 0
+          fi
+          VERSION=$(sed -n 's|^version = "\(.*\)"|\1|p' Cargo.toml | head -1)
+          echo "::error title=Rust release pending::Test (${TEST_RESULT}) and Build Package (${BUILD_RESULT}) did not both succeed, so Auto Release skipped publishing the changelog fragments below; crates.io still serves ${VERSION} or older."
+          echo ""
+          echo "Unreleased changelog fragments:"
+          while IFS= read -r FRAGMENT; do echo "  ${FRAGMENT}"; done <<< "$FRAGMENTS"
+          echo ""
+          echo "How to finish the release (either one is enough):"
+          echo "  1. If the failure was infrastructure (for example a runner that was never"
+          echo "     acquired), open ${RUN_URL}"
+          echo "     and use 'Re-run failed jobs'; Auto Release runs once the tests pass."
+          echo "  2. Or run: gh workflow run rust.yml --ref main -f release_mode=instant -f bump_type=patch"
+          echo "     (use the highest bump type among the fragments above)."
+          echo "If a test genuinely failed, fix it in a pull request instead; merging it releases the fragments."
+          echo "See docs/case-studies/issue-84/README.md."
+          exit 1
+
   # === MANUAL INSTANT RELEASE ===
   # Manual release via workflow_dispatch - only after CI passes
   manual-release:
@@ -744,6 +810,14 @@ jobs:
             --tag-prefix "rust_v" \
             --language "Rust"
 
+      # Issue #84: see the matching step in auto-release.
+      - name: Verify published dependencies and a consumer round trip
+        if: steps.version.outputs.version_committed == 'true' || steps.version.outputs.already_released == 'true'
+        working-directory: ./rust
+        env:
+          NEW_VERSION: ${{ steps.version.outputs.new_version }}
+        run: node scripts/verify-published-crate.mjs --version "${NEW_VERSION}" --consumer
+
   # === MANUAL CHANGELOG PR ===
   changelog-pr:
     timeout-minutes: 20
@@ -795,7 +869,7 @@ jobs:
           echo "Created changelog fragment: $FILENAME"
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@15733dbdfeedb4f7fdb73d13c6f5ac83b710fab8 # v8.1.2
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: add changelog for manual ${{ github.event.inputs.bump_type }} release'
