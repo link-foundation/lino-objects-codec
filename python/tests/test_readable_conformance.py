@@ -10,7 +10,7 @@ byte-identical.
 import json
 import math
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import pytest
 
@@ -20,12 +20,12 @@ LANGUAGE = "python"
 
 FIXTURES = Path(__file__).resolve().parents[2] / "fixtures" / "readable-format" / "cases.json"
 
-_SPECIAL_FLOATS = {"NaN": math.nan, "Infinity": math.inf, "-Infinity": -math.inf}
+_SPECIAL_FLOATS: dict[str, Any] = {"NaN": math.nan, "Infinity": math.inf, "-Infinity": -math.inf}
 
 
 def _section(key: str) -> list[dict[str, Any]]:
     document = json.loads(FIXTURES.read_text(encoding="utf-8"))
-    return document[key]
+    return cast(list[dict[str, Any]], document[key])
 
 
 def _build(spec: dict[str, Any]) -> Any:

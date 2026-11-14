@@ -109,7 +109,7 @@ function countChangesets() {
  * Get package version
  * @param {string} source - 'local' or 'remote'
  */
-async function getVersion(source = 'local') {
+function getVersion(source = 'local') {
   return packageVersion(source === 'remote' ? { ref: 'origin/main' } : {});
 }
 

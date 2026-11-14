@@ -1,6 +1,5 @@
 # Throwaway build and run artefacts of the interop drivers.
 out/
 rust-interop/target/
-rust-interop/Cargo.lock
 csharp-interop/bin/
 csharp-interop/obj/

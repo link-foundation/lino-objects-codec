@@ -52,3 +52,6 @@ packages/
 
 # macOS
 .DS_Store
+
+# Keep resolved dependencies reproducible.
+!packages.lock.json

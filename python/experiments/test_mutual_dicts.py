@@ -1,10 +1,13 @@
 """Test mutual reference dicts."""
 
-from link_notation_objects_codec import encode
+from typing import Any
+
 from links_notation import Parser
 
-dict1 = {"name": "dict1"}
-dict2 = {"name": "dict2"}
+from link_notation_objects_codec import encode
+
+dict1: dict[str, Any] = {"name": "dict1"}
+dict2: dict[str, Any] = {"name": "dict2"}
 dict1["other"] = dict2
 dict2["other"] = dict1
 

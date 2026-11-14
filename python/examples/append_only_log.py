@@ -6,10 +6,12 @@ compactor can cut the file at any newline, and ``grep``, ``tail -f`` and
 exactly.
 """
 
+from typing import Any
+
 from link_notation_objects_codec import decode_line, encode_line
 
 
-def record(phase: str, num_bytes: int, complete: bool) -> dict:
+def record(phase: str, num_bytes: int, complete: bool) -> dict[str, object]:
     """Build a record of the shape an append-only log actually holds."""
     return {"phase": phase, "bytes": num_bytes, "complete": complete}
 
@@ -18,7 +20,7 @@ def main() -> None:
     print("=== Append-only log, one record per line ===\n")
 
     # Appending: each record becomes exactly one line of the file.
-    entries = [
+    entries: list[Any] = [
         record("stream_start", 0, False),
         record("stream_chunk", 1024, False),
         record("stream_end", 2827, True),

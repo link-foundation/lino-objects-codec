@@ -17,7 +17,6 @@
  *     no longer reports a false-positive success.
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
@@ -33,14 +32,8 @@ import {
   normalizeReleaseVersionForBadge,
 } from './release-format-helpers.mjs';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
-
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+import { $ } from 'command-stream';
+import { makeConfig } from 'lino-arguments';
 
 function findCsprojPackageName(rootDir = '.') {
   // Walk a small tree (one level deep) to find the first .csproj with

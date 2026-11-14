@@ -25,15 +25,22 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Check parity-gate helper's own tests
         run: node --test scripts/check-language-parity.test.mjs
@@ -58,14 +65,21 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
 
       - name: Check version-gate helper's own tests
         run: node --test scripts/check-links-notation-parity.test.mjs

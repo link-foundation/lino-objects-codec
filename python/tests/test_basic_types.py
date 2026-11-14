@@ -8,19 +8,19 @@ from link_notation_objects_codec import decode, encode
 class TestNoneType:
     """Tests for None type serialization."""
 
-    def test_encode_none(self):
+    def test_encode_none(self) -> None:
         """Test encoding None value."""
         result = encode(None)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_none(self):
+    def test_decode_none(self) -> None:
         """Test decoding None value."""
         encoded = encode(None)
         result = decode(encoded)
         assert result is None
 
-    def test_roundtrip_none(self):
+    def test_roundtrip_none(self) -> None:
         """Test roundtrip encoding/decoding of None."""
         original = None
         encoded = encode(original)
@@ -31,31 +31,31 @@ class TestNoneType:
 class TestBooleans:
     """Tests for boolean type serialization."""
 
-    def test_encode_true(self):
+    def test_encode_true(self) -> None:
         """Test encoding True value."""
         result = encode(True)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_false(self):
+    def test_encode_false(self) -> None:
         """Test encoding False value."""
         result = encode(False)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_true(self):
+    def test_decode_true(self) -> None:
         """Test decoding True value."""
         encoded = encode(True)
         result = decode(encoded)
         assert result is True
 
-    def test_decode_false(self):
+    def test_decode_false(self) -> None:
         """Test decoding False value."""
         encoded = encode(False)
         result = decode(encoded)
         assert result is False
 
-    def test_roundtrip_bool(self):
+    def test_roundtrip_bool(self) -> None:
         """Test roundtrip encoding/decoding of boolean values."""
         for value in [True, False]:
             encoded = encode(value)
@@ -67,25 +67,25 @@ class TestBooleans:
 class TestIntegers:
     """Tests for integer type serialization."""
 
-    def test_encode_zero(self):
+    def test_encode_zero(self) -> None:
         """Test encoding zero."""
         result = encode(0)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_positive_int(self):
+    def test_encode_positive_int(self) -> None:
         """Test encoding positive integer."""
         result = encode(42)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_negative_int(self):
+    def test_encode_negative_int(self) -> None:
         """Test encoding negative integer."""
         result = encode(-42)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_int(self):
+    def test_decode_int(self) -> None:
         """Test decoding integer value."""
         for value in [0, 42, -42, 999999]:
             encoded = encode(value)
@@ -93,7 +93,7 @@ class TestIntegers:
             assert result == value
             assert isinstance(result, int)
 
-    def test_roundtrip_int(self):
+    def test_roundtrip_int(self) -> None:
         """Test roundtrip encoding/decoding of integers."""
         test_values = [0, 1, -1, 42, -42, 123456789, -123456789]
         for value in test_values:
@@ -106,20 +106,20 @@ class TestIntegers:
 class TestFloats:
     """Tests for float type serialization."""
 
-    def test_encode_float(self):
+    def test_encode_float(self) -> None:
         """Test encoding float value."""
         result = encode(3.14)
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_float(self):
+    def test_decode_float(self) -> None:
         """Test decoding float value."""
         encoded = encode(3.14)
         result = decode(encoded)
         assert result == pytest.approx(3.14)
         assert isinstance(result, float)
 
-    def test_roundtrip_float(self):
+    def test_roundtrip_float(self) -> None:
         """Test roundtrip encoding/decoding of floats."""
         test_values = [0.0, 1.0, -1.0, 3.14, -3.14, 0.123456789, -999.999]
         for value in test_values:
@@ -128,7 +128,7 @@ class TestFloats:
             assert decoded == pytest.approx(value)
             assert isinstance(decoded, float)
 
-    def test_float_special_values(self):
+    def test_float_special_values(self) -> None:
         """Test encoding/decoding special float values."""
         import math
 
@@ -148,26 +148,26 @@ class TestFloats:
 class TestStrings:
     """Tests for string type serialization."""
 
-    def test_encode_empty_string(self):
+    def test_encode_empty_string(self) -> None:
         """Test encoding empty string."""
         result = encode("")
         assert result is not None
         assert isinstance(result, str)
 
-    def test_encode_simple_string(self):
+    def test_encode_simple_string(self) -> None:
         """Test encoding simple string."""
         result = encode("hello")
         assert result is not None
         assert isinstance(result, str)
 
-    def test_decode_string(self):
+    def test_decode_string(self) -> None:
         """Test decoding string value."""
         encoded = encode("hello world")
         result = decode(encoded)
         assert result == "hello world"
         assert isinstance(result, str)
 
-    def test_roundtrip_string(self):
+    def test_roundtrip_string(self) -> None:
         """Test roundtrip encoding/decoding of strings."""
         test_values = [
             "",
@@ -185,7 +185,7 @@ class TestStrings:
             assert decoded == value
             assert isinstance(decoded, str)
 
-    def test_string_with_quotes(self):
+    def test_string_with_quotes(self) -> None:
         """Test encoding/decoding strings with quotes."""
         test_values = [
             "string with 'single quotes'",

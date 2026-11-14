@@ -1,7 +1,8 @@
 """Test escaping in links notation."""
 
-from links_notation import Parser, Link, format_links
 import base64
+
+from links_notation import Link, Parser, format_links
 
 parser = Parser()
 

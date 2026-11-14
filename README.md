@@ -23,10 +23,10 @@ Universal serialization library to encode/decode objects to/from Links Notation 
 
 This library provides universal serialization and deserialization with built-in support for circular references and complex object graphs in:
 
-- **[Python](python/)** - Full implementation for Python 3.13+
-- **[JavaScript](js/)** - Full implementation for Node.js 22.11+
-- **[Rust](rust/)** - Full implementation for Rust 1.87+ (tests require 1.88+)
-- **[C#](csharp/)** - Full implementation for .NET 10.0+
+- **[Python](python/)** - Full implementation for Python 3.15+
+- **[JavaScript](js/)** - Full implementation for Node.js 26.13.1+
+- **[Rust](rust/)** - Full implementation for Rust 1.100+
+- **[C#](csharp/)** - Full implementation for .NET 11.0+
 
 All implementations share the same design philosophy and provide feature parity.
 
@@ -269,11 +269,8 @@ Console.WriteLine(ReferenceEquals(decoded, decoded?[0])); // True - Reference pr
 
 ```python
 data = {
-    "users": [
-        {"id": 1, "name": "Alice"},
-        {"id": 2, "name": "Bob"}
-    ],
-    "metadata": {"version": 1, "count": 2}
+    "users": [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}],
+    "metadata": {"version": 1, "count": 2},
 }
 assert decode(encode(data)) == data
 ```
@@ -368,8 +365,8 @@ from link_notation_objects_codec import format_indented, parse_indented
 
 # Format an object with an identifier
 formatted = format_indented(
-    '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019',
-    {'uuid': '6dcf4c1b-ff3f-482c-95ab-711ea7d1b019', 'status': 'executed'}
+    "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019",
+    {"uuid": "6dcf4c1b-ff3f-482c-95ab-711ea7d1b019", "status": "executed"},
 )
 
 # Parse it back

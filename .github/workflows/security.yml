@@ -45,7 +45,7 @@ jobs:
         # the Rust crate was the one implementation with no CodeQL coverage.
         language: [javascript-typescript, python, csharp, rust, actions]
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -53,9 +53,9 @@ jobs:
       # better at it with the SDK the project targets on PATH.
       - name: Setup .NET
         if: matrix.language == 'csharp'
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v6.1.0
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: csharp/global.json
 
       # Every language here supports `build-mode: none`. Left unset, C# fell
       # back to autobuild and warned on each run (issue #71): "Cannot build
@@ -63,13 +63,13 @@ jobs:
       # of "none"". Buildless also drops the autobuild step, whose success
       # depended on guessing this monorepo's build entry point.
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@v4.39.3
         with:
           languages: ${{ matrix.language }}
           build-mode: none
 
       - name: Analyze
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@v4.39.3
 
   # `actions/dependency-review-action` was tried here first and fails with
   # "Dependency review is not supported on this repository. Please ensure that
@@ -85,14 +85,14 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-nuget-audit
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v6
+        uses: actions/setup-dotnet@v6.1.0
         with:
-          dotnet-version: '10.0.x'
+          global-json-file: csharp/global.json
 
       # `dotnet list package --vulnerable` exits 0 even when it finds
       # advisories, so the report is inspected rather than the exit code.
@@ -100,15 +100,13 @@ jobs:
       - name: Audit NuGet dependencies
         working-directory: ./csharp
         run: |
-          dotnet restore
-          dotnet list package --vulnerable --include-transitive \
-            > nuget-audit.txt 2>&1
-          cat nuget-audit.txt
-          if grep -qiE '^\s+> ' nuget-audit.txt; then
-            echo "::error::Vulnerable NuGet packages found (see report above)"
-            exit 1
-          fi
-          echo "No vulnerable NuGet packages found."
+          for project in Lino.Objects.Codec.sln examples/BasicUsage.csproj ../experiments/issue-47/csharp-interop/Interop.csproj; do
+            dotnet restore "$project" --locked-mode
+            dotnet package list --project "$project" --vulnerable --include-transitive \
+              --format json > nuget-audit.json
+            cat nuget-audit.json
+            python3 -c 'import json; d=json.load(open("nuget-audit.json")); assert not any(p.get("vulnerabilities") for project in d["projects"] for f in project.get("frameworks", []) for key in ("topLevelPackages", "transitivePackages") for p in f.get(key, [])), "Vulnerable NuGet packages found"'
+          done
 
   npm-audit:
     name: Audit npm lock
@@ -118,19 +116,27 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-npm-audit
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
 
-      # `--package-lock-only` audits the committed lockfile rather than an
-      # install resolved at run time, so the result matches what reviewers see.
-      - name: Audit the committed lockfile
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
+      # Audit both committed npm trees, including private release tools.
+      - name: Audit the committed lockfiles
         working-directory: ./js
-        run: npm audit --package-lock-only --audit-level=high
+        run: |
+          npm audit --prefix .. --package-lock-only
+          npm audit --package-lock-only
 
   cargo-audit:
     name: Audit Cargo lock
@@ -140,7 +146,7 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-cargo-audit
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
@@ -150,14 +156,17 @@ jobs:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
 
       - name: Install cargo-audit
-        run: cargo install cargo-audit --locked
+        run: cargo install cargo-audit --version 0.23.0 --locked
 
-      - name: Audit Rust dependencies
-        working-directory: ./rust
-        run: cargo audit
+      - name: Audit every Rust lockfile
+        run: |
+          while IFS= read -r lock; do
+            echo "Auditing $lock"
+            cargo audit --file "$lock" --deny warnings
+          done < <(git ls-files 'rust/Cargo.lock' 'experiments/**/Cargo.lock')
 
   pip-audit:
     name: Audit Python dependencies
@@ -167,17 +176,19 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-pip-audit
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v7.1.0
         with:
-          python-version: '3.13'
+          python-version: '3.15.2'
 
       - name: Install pip-audit
-        run: python -m pip install --upgrade pip pip-audit
+        run: |
+          python -m pip install pip==26.3
+          python -m pip install --require-hashes -r python/requirements-dev.lock
 
       # `--skip-editable` leaves out this repository's own editable install,
       # which has no PyPI record to audit; `--strict` cannot be used with it
@@ -185,7 +196,7 @@ jobs:
       - name: Audit installed dependencies
         working-directory: ./python
         run: |
-          python -m pip install -e ".[dev]"
+          python -m pip install --no-build-isolation --no-deps -e .
           pip-audit --skip-editable --progress-spinner off
 
   # === SECRETS DETECTION (best practice #11) ===
@@ -198,7 +209,7 @@ jobs:
       group: check-${{ github.workflow }}-${{ github.ref }}-secrets-scan
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           # Full history: a secret that was committed and later removed is
           # still in the repository and still has to be rotated.

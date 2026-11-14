@@ -30,7 +30,6 @@ const UNSAFE_INTEGERS = [
   [-1e18, '-1e+18'],
   // 1000000000000000100 is not representable; it is the double 1e18 + 128,
   // which needs one more significant digit than 1e18 to round-trip.
-  // eslint-disable-next-line no-loss-of-precision
   [1000000000000000100, '1.0000000000000001e+18'],
   [2 ** 64, '1.8446744073709552e+19'],
   // From 1e21 on String() already uses an exponent; the spelling is unchanged.

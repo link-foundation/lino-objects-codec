@@ -26,7 +26,7 @@ from pathlib import Path
 
 def run_command(
     cmd: list[str], check: bool = True, capture: bool = False
-) -> subprocess.CompletedProcess:
+) -> subprocess.CompletedProcess[str]:
     """Run a command and handle errors."""
     cmd_str = " ".join(cmd)
     print(f"Running: {cmd_str}")

@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+from collections.abc import Callable
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -17,7 +20,7 @@ _spec.loader.exec_module(preflight)
 
 
 # The claims GitHub actually sent in the run that failed, run 32345106245.
-FAILING_RUN_ENV = {
+FAILING_RUN_ENV: dict[str, Any] = {
     "GITHUB_REPOSITORY": "link-foundation/lino-objects-codec",
     "GITHUB_WORKFLOW_REF": (
         "link-foundation/lino-objects-codec/.github/workflows/python.yml@refs/heads/main"
@@ -26,42 +29,47 @@ FAILING_RUN_ENV = {
 }
 
 
-def _fetch(status: int):
-    def fetch(url: str) -> int:
-        fetch.calls.append(url)
-        return status
+@dataclass
+class _Fetch:
+    status: int
+    calls: list[str] = field(default_factory=list)
 
-    fetch.calls = []
-    return fetch
+    def __call__(self, url: str) -> int:
+        self.calls.append(url)
+        return self.status
 
 
-def _capture():
+def _fetch(status: int) -> _Fetch:
+    return _Fetch(status)
+
+
+def _capture() -> tuple[list[str], Callable[[str], None]]:
     lines: list[str] = []
     return lines, lines.append
 
 
-def test_missing_project_is_detected():
+def test_missing_project_is_detected() -> None:
     assert preflight.project_exists("lino-objects-codec", _fetch(404)) is False
 
 
-def test_existing_project_is_detected():
+def test_existing_project_is_detected() -> None:
     assert preflight.project_exists("requests", _fetch(200)) is True
 
 
-def test_unreachable_pypi_is_not_reported_as_missing():
+def test_unreachable_pypi_is_not_reported_as_missing() -> None:
     # A network failure must not be turned into "the project does not exist",
     # which would print a runbook for a problem that may not exist.
     assert preflight.project_exists("lino-objects-codec", _fetch(0)) is None
     assert preflight.project_exists("lino-objects-codec", _fetch(503)) is None
 
 
-def test_probe_targets_the_pypi_json_api():
+def test_probe_targets_the_pypi_json_api() -> None:
     fetch = _fetch(404)
     preflight.project_exists("lino-objects-codec", fetch)
     assert fetch.calls == ["https://pypi.org/pypi/lino-objects-codec/json"]
 
 
-def test_claims_match_the_ones_pypi_rejected():
+def test_claims_match_the_ones_pypi_rejected() -> None:
     claims = preflight.resolve_claims(FAILING_RUN_ENV)
     assert claims["owner"] == "link-foundation"
     assert claims["repository"] == "lino-objects-codec"
@@ -71,12 +79,12 @@ def test_claims_match_the_ones_pypi_rejected():
     assert claims["environment"] == ""
 
 
-def test_environment_claim_is_reported_when_the_workflow_declares_one():
-    env = {**FAILING_RUN_ENV, "PYPI_PUBLISH_ENVIRONMENT": "release"}
+def test_environment_claim_is_reported_when_the_workflow_declares_one() -> None:
+    env: dict[str, Any] = {**FAILING_RUN_ENV, "PYPI_PUBLISH_ENVIRONMENT": "release"}
     assert preflight.resolve_claims(env)["environment"] == "release"
 
 
-def test_runbook_names_every_value_the_pypi_form_asks_for():
+def test_runbook_names_every_value_the_pypi_form_asks_for() -> None:
     claims = preflight.resolve_claims(FAILING_RUN_ENV)
     runbook = preflight.build_runbook("lino-objects-codec", claims, has_token=False)
     for expected in (
@@ -90,7 +98,7 @@ def test_runbook_names_every_value_the_pypi_form_asks_for():
         assert expected in runbook
 
 
-def test_runbook_says_a_token_will_carry_this_run():
+def test_runbook_says_a_token_will_carry_this_run() -> None:
     claims = preflight.resolve_claims(FAILING_RUN_ENV)
     assert "PYPI_API_TOKEN is configured" in preflight.build_runbook(
         "lino-objects-codec", claims, has_token=True
@@ -100,7 +108,7 @@ def test_runbook_says_a_token_will_carry_this_run():
     )
 
 
-def test_preflight_reports_but_never_gates():
+def test_preflight_reports_but_never_gates() -> None:
     # A pending publisher is invisible from outside PyPI: the project stays
     # absent until the first upload succeeds. Failing here would reject the
     # very configuration that is about to work.
@@ -112,7 +120,7 @@ def test_preflight_reports_but_never_gates():
     assert any("PyPI project does not exist yet" in line for line in lines)
 
 
-def test_existing_project_produces_no_runbook():
+def test_existing_project_produces_no_runbook() -> None:
     lines, out = _capture()
     code = preflight.main(
         ["--package", "lino-objects-codec"], env=FAILING_RUN_ENV, fetch=_fetch(200), out=out
@@ -121,7 +129,7 @@ def test_existing_project_produces_no_runbook():
     assert not any("pending publisher" in line for line in lines)
 
 
-def test_unreachable_pypi_warns_and_continues():
+def test_unreachable_pypi_warns_and_continues() -> None:
     lines, out = _capture()
     code = preflight.main(
         ["--package", "lino-objects-codec"], env=FAILING_RUN_ENV, fetch=_fetch(0), out=out
@@ -130,7 +138,7 @@ def test_unreachable_pypi_warns_and_continues():
     assert any("PyPI preflight inconclusive" in line for line in lines)
 
 
-def test_verbose_is_off_by_default():
+def test_verbose_is_off_by_default() -> None:
     lines, out = _capture()
     preflight.main(
         ["--package", "lino-objects-codec"], env=FAILING_RUN_ENV, fetch=_fetch(200), out=out
@@ -139,9 +147,9 @@ def test_verbose_is_off_by_default():
 
 
 @pytest.mark.parametrize("switch", ["flag", "env"])
-def test_verbose_dumps_the_claims(switch: str):
+def test_verbose_dumps_the_claims(switch: str) -> None:
     lines, out = _capture()
-    argv = ["--package", "lino-objects-codec"]
+    argv: list[Any] = ["--package", "lino-objects-codec"]
     env = dict(FAILING_RUN_ENV)
     if switch == "flag":
         argv.append("--verbose")
@@ -153,7 +161,7 @@ def test_verbose_dumps_the_claims(switch: str):
     assert "link-foundation" in body
 
 
-def test_verbose_env_var_respects_an_explicit_off():
+def test_verbose_env_var_respects_an_explicit_off() -> None:
     lines, out = _capture()
     preflight.main(
         ["--package", "lino-objects-codec"],

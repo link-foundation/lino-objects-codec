@@ -151,7 +151,8 @@ export function toPackagePaths(changedFiles, prefix) {
  * @returns {boolean} True for files under `.github/workflows/`
  */
 export function isWorkflowFile(filePath) {
-  return filePath.startsWith(".github/workflows/");
+  return filePath.startsWith(".github/workflows/") ||
+    ["package.json", "package-lock.json", "rust-toolchain.toml", "scripts/release-tools.mjs"].includes(filePath);
 }
 
 /**

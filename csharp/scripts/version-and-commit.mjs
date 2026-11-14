@@ -7,7 +7,6 @@
  *   description: Optional description for the release
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
  * - command-stream: Modern shell command execution with streaming support
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
@@ -15,14 +14,8 @@
 import { readFileSync, writeFileSync, appendFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
-
-// Import link-foundation libraries
-const { $ } = await use('command-stream');
-const { makeConfig } = await use('lino-arguments');
+import { $ } from 'command-stream';
+import { makeConfig } from 'lino-arguments';
 
 // Parse CLI arguments using lino-arguments
 const config = makeConfig({

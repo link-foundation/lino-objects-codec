@@ -1,6 +1,5 @@
-export const MINIMUM_NPM_VERSION = '11.5.1';
-export const MINIMUM_NODE_VERSION = '22.14.0';
-export const TRUSTED_PUBLISHING_NPM_MAJOR = 11;
+export const MINIMUM_NPM_VERSION = '12.2.2';
+export const MINIMUM_NODE_VERSION = '26.13.1';
 
 export function parseVersion(version) {
   const clean = String(version).trim().replace(/^v/, '');
@@ -30,18 +29,4 @@ export function compareVersions(left, right) {
 
 export function isVersionAtLeast(version, minimum) {
   return compareVersions(version, minimum) >= 0;
-}
-
-export function selectLatestSatisfyingMajor({ versions, major, minimum }) {
-  return versions
-    .filter((version) => {
-      try {
-        const [candidateMajor] = parseVersion(version);
-        return candidateMajor === major && isVersionAtLeast(version, minimum);
-      } catch {
-        return false;
-      }
-    })
-    .sort(compareVersions)
-    .at(-1);
 }

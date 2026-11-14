@@ -8,6 +8,8 @@ rejects a circular value instead of looping; that is covered by
 so it is used unaliased throughout.
 """
 
+from typing import Any
+
 import pytest
 
 from link_notation_objects_codec import (
@@ -25,9 +27,9 @@ from link_notation_objects_codec import (
 class TestCircularReferences:
     """Tests for circular reference handling."""
 
-    def test_self_referencing_list(self):
+    def test_self_referencing_list(self) -> None:
         """Test encoding/decoding a list that references itself."""
-        lst = []
+        lst: list[Any] = []
         lst.append(lst)
 
         encoded = encode(lst)
@@ -41,9 +43,9 @@ class TestCircularReferences:
         assert len(decoded) == 1
         assert decoded[0] is decoded
 
-    def test_self_referencing_dict(self):
+    def test_self_referencing_dict(self) -> None:
         """Test encoding/decoding a dict that references itself."""
-        d = {}
+        d: dict[str, Any] = {}
         d["self"] = d
 
         encoded = encode(d)
@@ -57,10 +59,10 @@ class TestCircularReferences:
         assert "self" in decoded
         assert decoded["self"] is decoded
 
-    def test_mutual_reference_lists(self):
+    def test_mutual_reference_lists(self) -> None:
         """Test encoding/decoding two lists referencing each other."""
-        list1 = [1, 2]
-        list2 = [3, 4]
+        list1: list[Any] = [1, 2]
+        list2: list[Any] = [3, 4]
         list1.append(list2)
         list2.append(list1)
 
@@ -82,10 +84,10 @@ class TestCircularReferences:
         # Check circular reference
         assert decoded[2][2] is decoded
 
-    def test_mutual_reference_dicts(self):
+    def test_mutual_reference_dicts(self) -> None:
         """Test encoding/decoding two dicts referencing each other."""
-        dict1 = {"name": "dict1"}
-        dict2 = {"name": "dict2"}
+        dict1: dict[str, Any] = {"name": "dict1"}
+        dict2: dict[str, Any] = {"name": "dict2"}
         dict1["other"] = dict2
         dict2["other"] = dict1
 
@@ -98,12 +100,12 @@ class TestCircularReferences:
         # Check circular reference
         assert decoded["other"]["other"] is decoded
 
-    def test_complex_circular_structure(self):
+    def test_complex_circular_structure(self) -> None:
         """Test encoding/decoding complex structure with circular references."""
         # Create a tree-like structure with a back reference
-        root = {"name": "root", "children": []}
-        child1 = {"name": "child1", "parent": root}
-        child2 = {"name": "child2", "parent": root}
+        root: dict[str, Any] = {"name": "root", "children": []}
+        child1: dict[str, Any] = {"name": "child1", "parent": root}
+        child2: dict[str, Any] = {"name": "child2", "parent": root}
         root["children"] = [child1, child2]
 
         encoded = encode(root)
@@ -118,10 +120,10 @@ class TestCircularReferences:
         assert decoded["children"][0]["parent"] is decoded
         assert decoded["children"][1]["parent"] is decoded
 
-    def test_list_with_multiple_references_to_same_object(self):
+    def test_list_with_multiple_references_to_same_object(self) -> None:
         """Test encoding/decoding list with multiple references to same object."""
-        shared = {"shared": "value"}
-        lst = [shared, shared, shared]
+        shared: dict[str, Any] = {"shared": "value"}
+        lst: list[Any] = [shared, shared, shared]
 
         encoded = encode(lst)
         decoded = decode(encoded)
@@ -132,10 +134,10 @@ class TestCircularReferences:
         assert decoded[1] is decoded[2]
         assert decoded[0] == {"shared": "value"}
 
-    def test_dict_with_multiple_references_to_same_object(self):
+    def test_dict_with_multiple_references_to_same_object(self) -> None:
         """Test encoding/decoding dict with multiple references to same object."""
-        shared = ["shared", "list"]
-        d = {"first": shared, "second": shared, "third": shared}
+        shared: list[Any] = ["shared", "list"]
+        d: dict[str, Any] = {"first": shared, "second": shared, "third": shared}
 
         encoded = encode(d)
         decoded = decode(encoded)
@@ -145,12 +147,12 @@ class TestCircularReferences:
         assert decoded["second"] is decoded["third"]
         assert decoded["first"] == ["shared", "list"]
 
-    def test_deeply_nested_circular_reference(self):
+    def test_deeply_nested_circular_reference(self) -> None:
         """Test encoding/decoding deeply nested structure with circular reference."""
-        level1 = {"level": 1}
-        level2 = {"level": 2, "parent": level1}
-        level3 = {"level": 3, "parent": level2}
-        level4 = {"level": 4, "parent": level3}
+        level1: dict[str, Any] = {"level": 1}
+        level2: dict[str, Any] = {"level": 2, "parent": level1}
+        level3: dict[str, Any] = {"level": 3, "parent": level2}
+        level4: dict[str, Any] = {"level": 4, "parent": level3}
         level1["child"] = level2
         level2["child"] = level3
         level3["child"] = level4
@@ -168,9 +170,9 @@ class TestCircularReferences:
         # Check circular reference back to root
         assert decoded["child"]["child"]["child"]["root"] is decoded
 
-    def test_encoded_format_uses_builtin_references_not_ref_marker(self):
+    def test_encoded_format_uses_builtin_references_not_ref_marker(self) -> None:
         """Cycles must encode as bare `obj_N` links, not `(ref obj_N)`. See issue #27."""
-        d = {}
+        d: dict[str, Any] = {}
         d["self"] = d
         encoded = encode(d)
 
@@ -180,7 +182,7 @@ class TestCircularReferences:
         # The owner must be defined inline using the (obj_id: type ...) form.
         assert "(obj_0: dict" in encoded, encoded
 
-    def test_decoder_rejects_legacy_ref_marker(self):
+    def test_decoder_rejects_legacy_ref_marker(self) -> None:
         """Legacy (ref X) form must be rejected as an unknown type marker."""
         legacy = "(dict obj_0 ((str c2VsZg==) (ref obj_0)))"
         with pytest.raises(ValueError, match=r"Unknown type marker:\s*ref"):
@@ -190,25 +192,25 @@ class TestCircularReferences:
 class TestReadableFormatAndCircularReferences:
     """The readable format cannot name a shared node, so it refuses a cycle."""
 
-    def test_readable_format_rejects_self_referencing_dict(self):
+    def test_readable_format_rejects_self_referencing_dict(self) -> None:
         """A dict holding itself cannot be written as a tree."""
-        obj = {"name": "root"}
+        obj: dict[str, Any] = {"name": "root"}
         obj["self"] = obj
 
         with pytest.raises(CircularReferenceError):
             encode_readable(obj)
 
-    def test_readable_format_rejects_self_referencing_list(self):
+    def test_readable_format_rejects_self_referencing_list(self) -> None:
         """A list holding itself cannot be written as a tree."""
-        lst = [1, 2]
+        lst: list[Any] = [1, 2]
         lst.append(lst)
 
         with pytest.raises(CircularReferenceError):
             encode_readable(lst)
 
-    def test_readable_format_writes_shared_object_twice(self):
+    def test_readable_format_writes_shared_object_twice(self) -> None:
         """A shared object is written once per place it appears."""
-        shared = {"x": 1}
+        shared: dict[str, Any] = {"x": 1}
 
         text = encode_readable({"a": shared, "b": shared})
         decoded = decode(text)

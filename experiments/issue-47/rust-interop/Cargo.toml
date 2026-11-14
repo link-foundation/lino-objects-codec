@@ -2,6 +2,7 @@
 name = "issue-47-interop"
 version = "0.0.0"
 edition = "2024"
+rust-version = "1.100"
 publish = false
 
 # A throwaway driver that path-references the real crate, so the shipped

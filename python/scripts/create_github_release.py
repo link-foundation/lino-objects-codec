@@ -66,7 +66,7 @@ def build_pypi_badge(package_name: str, release_version: str) -> str:
     )
 
 
-def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess:
+def run_command(cmd: list[str], check: bool = True) -> subprocess.CompletedProcess[str]:
     """Run a command and handle errors."""
     print(f"Running: {' '.join(cmd)}")
     result = subprocess.run(cmd, capture_output=True, text=True, check=False)

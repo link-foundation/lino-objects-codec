@@ -29,12 +29,12 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@v7.1.0
         with:
-          python-version: '3.13'
+          python-version: '3.15.2'
       - name: Test freshness gate, including blocker policy
         run: python -m unittest discover -s scripts -p 'test_dependency_freshness.py' -v
       - name: Check latest releases across all four ecosystems
@@ -47,39 +47,48 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
+          node-version: '26.13.1'
+          package-manager-cache: false
+
+      - name: Install locked release tools and npm
+        shell: bash
+        run: |
+          npm ci --ignore-scripts
+          echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
       - uses: dtolnay/rust-toolchain@683b588c487a69d01f6c6ddf40f036ff682cc2c8 # master branch @ 2026-10-16
         with:
           # The `stable` branch ref supplied this default; it is restated because
           # the action is hash-pinned to a master commit (issue #75: the stable
           # branch is rebuilt per release, so its old commits turn unreachable).
-          toolchain: stable
+          toolchain: '1.100.0'
       - name: Check npm resolved versions
-        working-directory: js
         run: |
-          npm ci
-          if ! npm outdated; then
+          npm ci --prefix js
+          if ! { npm outdated && npm outdated --prefix js; }; then
             if [ "$FRESHNESS_MODE" = report ]; then
-              echo '::warning title=Stale npm lockfile::js/package-lock.json has newer releases available; run npm update.'
+              echo '::warning title=Stale npm lockfile::npm lockfiles have newer direct releases available; run npm update.'
             else
-              echo '::error title=Stale npm lockfile::js/package-lock.json has newer releases available; run npm update.'
+              echo '::error title=Stale npm lockfile::npm lockfiles have newer direct releases available; run npm update.'
               exit 1
             fi
           fi
-      - name: Check Cargo lockfile
-        working-directory: rust
+      - name: Check every Cargo lockfile
         run: |
-          cargo update --dry-run 2>&1 | tee cargo-update.log
-          if grep -E '^[[:space:]]*(Updating .+ ->|Adding |Removing |Locking [1-9])' cargo-update.log; then
-            if [ "$FRESHNESS_MODE" = report ]; then
-              echo '::warning title=Stale Cargo lockfile::Cargo.lock has pending updates; run cargo update.'
-            else
-              echo '::error title=Stale Cargo lockfile::Cargo.lock has pending updates; run cargo update.'
-              exit 1
+          while IFS= read -r lock; do
+            manifest="${lock%Cargo.lock}Cargo.toml"
+            cargo update --manifest-path "$manifest" --dry-run 2>&1 | tee cargo-update.log
+            if grep -E '^[[:space:]]*(Updating .+ ->|Adding |Removing |Locking [1-9])' cargo-update.log; then
+              if [ "$FRESHNESS_MODE" = report ]; then
+                echo "::warning title=Stale Cargo lockfile::$lock has pending updates; run cargo update."
+              else
+                echo "::error title=Stale Cargo lockfile::$lock has pending updates; run cargo update."
+                exit 1
+              fi
             fi
-          fi
+          done < <(git ls-files 'rust/Cargo.lock' 'experiments/**/Cargo.lock')

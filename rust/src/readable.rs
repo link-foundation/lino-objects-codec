@@ -882,10 +882,10 @@ fn ref_to_value(value: &str, quoted: bool) -> LinoValue {
     if let Ok(i) = value.parse::<i64>() {
         return LinoValue::Int(i);
     }
-    if value.contains(['.', 'e', 'E']) {
-        if let Ok(f) = value.parse::<f64>() {
-            return LinoValue::Float(f);
-        }
+    if value.contains(['.', 'e', 'E'])
+        && let Ok(f) = value.parse::<f64>()
+    {
+        return LinoValue::Float(f);
     }
 
     LinoValue::String(value.to_string())

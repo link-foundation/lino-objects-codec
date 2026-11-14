@@ -2,15 +2,16 @@
 """Test the failing cases to understand the issue."""
 
 import sys
+from typing import Any
 
 sys.path.insert(0, "src")
 
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import decode, encode
 
 # Test 1: Mutual reference dicts
 print("Test 1: Mutual reference dicts")
-dict1 = {"name": "dict1"}
-dict2 = {"name": "dict2"}
+dict1: dict[str, Any] = {"name": "dict1"}
+dict2: dict[str, Any] = {"name": "dict2"}
 dict1["other"] = dict2
 dict2["other"] = dict1
 
@@ -26,8 +27,8 @@ print()
 
 # Test 2: List with multiple references to same object
 print("Test 2: List with multiple references to same object")
-shared = {"shared": "value"}
-lst = [shared, shared, shared]
+shared: dict[str, Any] = {"shared": "value"}
+lst: list[Any] = [shared, shared, shared]
 
 encoded = encode(lst)
 print(f"  Encoded: {encoded}")

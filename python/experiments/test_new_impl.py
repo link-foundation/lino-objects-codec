@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 """Test the new implementation with self-reference format."""
 
-import sys
 import os
+import sys
+from typing import Any
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from link_notation_objects_codec import encode, decode
+from link_notation_objects_codec import decode, encode
 
 print("=" * 60)
 print("Test 1: Self-referencing dict")
 print("=" * 60)
 
-obj = {}
+obj: dict[str, Any] = {}
 obj["self"] = obj
 
 encoded = encode(obj)
@@ -29,7 +30,7 @@ print("\n" + "=" * 60)
 print("Test 2: Self-referencing list")
 print("=" * 60)
 
-lst = [1, 2, 3]
+lst: list[Any] = [1, 2, 3]
 lst.append(lst)
 
 encoded2 = encode(lst)
@@ -45,8 +46,8 @@ print("\n" + "=" * 60)
 print("Test 3: Mutual references")
 print("=" * 60)
 
-list1 = [1, 2]
-list2 = [3, 4]
+list1: list[Any] = [1, 2]
+list2: list[Any] = [3, 4]
 list1.append(list2)
 list2.append(list1)
 
@@ -63,7 +64,7 @@ print("\n" + "=" * 60)
 print("Test 4: Simple dict (no self-reference)")
 print("=" * 60)
 
-simple = {"a": 1, "b": 2}
+simple: dict[str, Any] = {"a": 1, "b": 2}
 encoded4 = encode(simple)
 print(f"Encoded: {encoded4}")
 print("Expected format: (dict ((str ...) (int 1)) ((str ...) (int 2)))")

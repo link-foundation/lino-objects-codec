@@ -1,10 +1,12 @@
 """Test if round-trip works despite parser oddity."""
 
-from link_notation_objects_codec import encode, decode
+from typing import Any
+
+from link_notation_objects_codec import decode, encode
 
 # Simple case that should work
 print("=== Test 1: List with self-reference ===")
-lst = []
+lst: list[Any] = []
 lst.append(lst)
 
 encoded = encode(lst)
@@ -17,7 +19,7 @@ print()
 
 # Dict with only self-reference (no nested objects with IDs)
 print("=== Test 2: Dict with self-reference and simple values ===")
-obj = {}
+obj: dict[str, Any] = {}
 obj["self"] = obj
 obj["num"] = 42
 obj["text"] = "hello"

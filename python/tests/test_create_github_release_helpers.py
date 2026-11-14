@@ -10,9 +10,10 @@ from pathlib import Path
 # the package path (it lives under scripts/ which is not part of the package).
 SCRIPT_PATH = Path(__file__).resolve().parent.parent / "scripts" / "create_github_release.py"
 spec = importlib.util.spec_from_file_location("create_github_release", SCRIPT_PATH)
+assert spec is not None and spec.loader is not None
 module = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = module
-spec.loader.exec_module(module)  # type: ignore[union-attr]
+spec.loader.exec_module(module)
 
 
 def test_normalize_strips_dash_language_prefix() -> None:

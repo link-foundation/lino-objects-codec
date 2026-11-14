@@ -803,10 +803,9 @@ impl ObjectCodec {
                         if let LiNo::Link {
                             id: Some(link_id), ..
                         } = &other_link
+                            && link_id == id
                         {
-                            if link_id == id {
-                                return self.decode_link(&other_link);
-                            }
+                            return self.decode_link(&other_link);
                         }
                     }
                     // Not found - return empty array as fallback
@@ -831,10 +830,10 @@ impl ObjectCodec {
             LiNo::Link { id, values } => {
                 // Check for self-reference ID (already in memo)
                 let self_ref_id = id.as_ref().filter(|i| i.starts_with("obj_"));
-                if let Some(ref_id) = self_ref_id {
-                    if let Some(value) = self.decode_memo.get(ref_id) {
-                        return Ok(value.clone());
-                    }
+                if let Some(ref_id) = self_ref_id
+                    && let Some(value) = self.decode_memo.get(ref_id)
+                {
+                    return Ok(value.clone());
                 }
 
                 if values.is_empty() {
@@ -853,56 +852,55 @@ impl ObjectCodec {
                     type_ids::NULL => Ok(LinoValue::Null),
 
                     type_ids::BOOL => {
-                        if values.len() > 1 {
-                            if let LiNo::Ref(val) = &values[1] {
-                                return Ok(LinoValue::Bool(val.eq_ignore_ascii_case("true")));
-                            }
+                        if values.len() > 1
+                            && let LiNo::Ref(val) = &values[1]
+                        {
+                            return Ok(LinoValue::Bool(val.eq_ignore_ascii_case("true")));
                         }
                         Ok(LinoValue::Bool(false))
                     }
 
                     type_ids::INT => {
-                        if values.len() > 1 {
-                            if let LiNo::Ref(val) = &values[1] {
-                                if let Ok(i) = val.parse::<i64>() {
-                                    return Ok(LinoValue::Int(i));
-                                }
-                            }
+                        if values.len() > 1
+                            && let LiNo::Ref(val) = &values[1]
+                            && let Ok(i) = val.parse::<i64>()
+                        {
+                            return Ok(LinoValue::Int(i));
                         }
                         Ok(LinoValue::Int(0))
                     }
 
                     type_ids::FLOAT => {
-                        if values.len() > 1 {
-                            if let LiNo::Ref(val) = &values[1] {
-                                return match val.as_str() {
-                                    "NaN" => Ok(LinoValue::Float(f64::NAN)),
-                                    "Infinity" => Ok(LinoValue::Float(f64::INFINITY)),
-                                    "-Infinity" => Ok(LinoValue::Float(f64::NEG_INFINITY)),
-                                    s => {
-                                        if let Ok(f) = s.parse::<f64>() {
-                                            Ok(LinoValue::Float(f))
-                                        } else {
-                                            Ok(LinoValue::Float(0.0))
-                                        }
+                        if values.len() > 1
+                            && let LiNo::Ref(val) = &values[1]
+                        {
+                            return match val.as_str() {
+                                "NaN" => Ok(LinoValue::Float(f64::NAN)),
+                                "Infinity" => Ok(LinoValue::Float(f64::INFINITY)),
+                                "-Infinity" => Ok(LinoValue::Float(f64::NEG_INFINITY)),
+                                s => {
+                                    if let Ok(f) = s.parse::<f64>() {
+                                        Ok(LinoValue::Float(f))
+                                    } else {
+                                        Ok(LinoValue::Float(0.0))
                                     }
-                                };
-                            }
+                                }
+                            };
                         }
                         Ok(LinoValue::Float(0.0))
                     }
 
                     type_ids::STR => {
-                        if values.len() > 1 {
-                            if let LiNo::Ref(b64_str) = &values[1] {
-                                if let Ok(bytes) = BASE64.decode(b64_str) {
-                                    if let Ok(s) = String::from_utf8(bytes) {
-                                        return Ok(LinoValue::String(s));
-                                    }
-                                }
-                                // If decode fails, return raw value
-                                return Ok(LinoValue::String(b64_str.clone()));
+                        if values.len() > 1
+                            && let LiNo::Ref(b64_str) = &values[1]
+                        {
+                            if let Ok(bytes) = BASE64.decode(b64_str)
+                                && let Ok(s) = String::from_utf8(bytes)
+                            {
+                                return Ok(LinoValue::String(s));
                             }
+                            // If decode fails, return raw value
+                            return Ok(LinoValue::String(b64_str.clone()));
                         }
                         Ok(LinoValue::String(String::new()))
                     }
@@ -941,15 +939,15 @@ impl ObjectCodec {
                         // Decode key-value pairs (skip type marker at index 0)
                         let mut obj = Vec::new();
                         for pair_link in values.iter().skip(1) {
-                            if let LiNo::Link { values: pair, .. } = pair_link {
-                                if pair.len() >= 2 {
-                                    let key = self.decode_link(&pair[0])?;
-                                    let value = self.decode_link(&pair[1])?;
+                            if let LiNo::Link { values: pair, .. } = pair_link
+                                && pair.len() >= 2
+                            {
+                                let key = self.decode_link(&pair[0])?;
+                                let value = self.decode_link(&pair[1])?;
 
-                                    // Key should be a string
-                                    if let LinoValue::String(k) = key {
-                                        obj.push((k, value));
-                                    }
+                                // Key should be a string
+                                if let LinoValue::String(k) = key {
+                                    obj.push((k, value));
                                 }
                             }
                         }

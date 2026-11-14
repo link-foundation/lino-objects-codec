@@ -6,20 +6,13 @@
  *   version: Version to use in the changelog entry (default: from Cargo.toml)
  *
  * Uses link-foundation libraries:
- * - use-m: Dynamic package loading without package.json dependencies
  * - lino-arguments: Unified configuration from CLI args, env vars, and .lenv files
  */
 
 import { readFileSync, writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { join } from 'path';
 
-// Load use-m dynamically
-const { use } = eval(
-  await (await fetch('https://unpkg.com/use-m/use.js')).text()
-);
-
-// Import link-foundation libraries
-const { makeConfig } = await use('lino-arguments');
+import { makeConfig } from 'lino-arguments';
 
 // Parse CLI arguments using lino-arguments
 const config = makeConfig({

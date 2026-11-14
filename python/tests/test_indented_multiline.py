@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -15,8 +16,8 @@ CASES = json.loads(
 
 
 @pytest.mark.parametrize("case", CASES, ids=[case["name"] for case in CASES])
-def test_indented_string_roundtrip(case):
-    original = {"t": case["value"], "after": "unchanged"}
+def test_indented_string_roundtrip(case: dict[str, str]) -> None:
+    original: dict[str, Any] = {"t": case["value"], "after": "unchanged"}
     text = format_indented("doc", original)
     assert parse_indented(text) == ("doc", original)
     # Also accept standard headers, leading/trailing blank lines and a final newline.

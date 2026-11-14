@@ -1,9 +1,10 @@
 [package]
 name = "line-format-probe"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.100"
 
 # Probe for issue #43: which single-line spellings does the notation's own
 # parser accept, and what shape do they parse into?
 [dependencies]
-links-notation = "0.31.4"
+links-notation = "0.31.5"
