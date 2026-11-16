@@ -312,12 +312,19 @@ def latest(ecosystem: str, name: str) -> str:
                 for row in get_json("https://nodejs.org/dist/index.json")
                 if re.fullmatch(r"v\d+\.\d+\.\d+", row["version"])
             )
-        if name == "python":
+        if name == "python" or name.startswith("python@"):
+            series = name.partition("@")[2]
             versions = get_json(
                 "https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json"
             )
             return max(
-                (row["version"] for row in versions if row["stable"]), key=version_key
+                (
+                    row["version"]
+                    for row in versions
+                    if row["stable"]
+                    and (not series or row["version"].startswith(series + "."))
+                ),
+                key=version_key
             )
         if name == "dotnet-sdk":
             releases = get_json(
@@ -417,7 +424,19 @@ def latest(ecosystem: str, name: str) -> str:
 
 
 def check(dependency: Dependency, latest_version, issue_state) -> str | None:
-    current = latest_version(dependency.ecosystem, dependency.name)
+    # setup-python's X.Y selector automatically tracks patches in that series.
+    # Compatibility builds intentionally select an older minor; treating X.Y
+    # as X.Y.0 incorrectly forces them onto the newest interpreter (#88).
+    if (
+        dependency.ecosystem == "toolchain"
+        and dependency.name == "python"
+        and dependency.version is not None
+        and re.fullmatch(r"\d+\.\d+", dependency.version)
+    ):
+        current = latest_version("toolchain", f"python@{dependency.version}")
+        current = current.rsplit(".", 1)[0]
+    else:
+        current = latest_version(dependency.ecosystem, dependency.name)
     if dependency.ecosystem == "github-actions" and "." not in dependency.version:
         current = current.split(".")[0]
     if dependency.version is None or version_key(dependency.version) >= version_key(
