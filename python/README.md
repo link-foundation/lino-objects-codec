@@ -21,6 +21,8 @@ A Python library to encode/decode objects to/from Links Notation format. This li
 - **Opt-in Tracing**: Set `LINO_CODEC_DEBUG=1` to trace encoding and decoding, the same way in every language
 - **Simple API**: Easy-to-use `encode()` and `decode()` functions
 
+Requires Python 3.11 or newer (including the `links-notation` dependency).
+
 ## Installation
 
 ```bash
