@@ -5,4 +5,4 @@ edition = "2024"
 rust-version = "1.100"
 
 [dependencies]
-links-notation = "0.31.5"
+links-notation = "0.31.6"

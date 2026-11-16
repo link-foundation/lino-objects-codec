@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lino-objects-codec"
-version = "0.3.1"
+version = "0.3.2"
 description = "A library to encode/decode objects to/from links notation"
 readme = "README.md"
-requires-python = ">=3.15"
+requires-python = ">=3.11"
 license = "Unlicense"
 license-files = ["LICENSE"]
 authors = [
@@ -17,10 +17,14 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3.15",
 ]
 dependencies = [
-    "links-notation>=0.31.5",
+    "links-notation>=0.31.6",
 ]
 
 [project.optional-dependencies]
@@ -32,7 +36,7 @@ dev = [
     "pytest-cov>=7.1.0",
     "ruff>=0.17.5",
     "mypy>=2.4.1",
-    "scriv[toml]>=1.8.1",
+    "scriv[toml]>=1.8.2",
     "build>=1.6.1",
     "twine>=7.0.0",
     "pip-audit>=2.10.1",
@@ -59,7 +63,7 @@ addopts = "-v --cov=link_notation_objects_codec --cov-report=term-missing"
 line-length = 100
 # Matches `requires-python` above: an older target silently keeps deprecated
 # typing constructs passing review.
-target-version = "py315"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM"]
@@ -72,7 +76,7 @@ ignore = []
 known-first-party = ["link_notation_objects_codec"]
 
 [tool.mypy]
-python_version = "3.15"
+python_version = "3.11"
 warn_return_any = false
 warn_unused_configs = true
 disallow_untyped_defs = false

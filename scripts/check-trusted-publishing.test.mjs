@@ -115,3 +115,18 @@ test("every OIDC token consumer keeps a secret fallback", () => {
     }
   }
 });
+
+// A first-release retry from a PR branch must never write to the default branch.
+test("Python first-release retry uses OIDC and cannot write repository contents", () => {
+  const python = workflowFiles().find(({ name }) => name === "python.yml");
+  const current = jobs(python.text).find(({ name }) => name === "publish-current");
+  assert.ok(current, "a current-version publishing path is required");
+  assert.match(current.text, /inputs\.publish_current/);
+  assert.match(current.text, /needs\.build\.result == 'success'/);
+  assert.match(current.text, /contents: read/);
+  assert.match(current.text, /id-token: write/);
+  assert.match(current.text, /pypa\/gh-action-pypi-publish@[0-9a-f]{40}/);
+  assert.doesNotMatch(current.text, /password:|contents: write|version_and_commit\.py.*--|git push/);
+  const manual = jobs(python.text).find(({ name }) => name === "manual-release");
+  assert.match(manual.text, /!inputs\.publish_current/);
+});

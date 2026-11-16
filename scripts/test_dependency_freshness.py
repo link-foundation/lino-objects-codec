@@ -214,6 +214,46 @@ class DependencyFreshnessTests(unittest.TestCase):
             )
         )
 
+    def test_python_compatibility_selector_tracks_its_own_series(self):
+        calls = []
+
+        def latest_version(ecosystem, name):
+            calls.append((ecosystem, name))
+            return "3.11.18" if name == "python@3.11" else "3.15.2"
+
+        self.assertIsNone(
+            check(
+                Dependency("toolchain", "python", "3.11", "python.yml"),
+                latest_version,
+                lambda *_: "closed",
+            )
+        )
+        self.assertEqual(calls, [("toolchain", "python@3.11")])
+        self.assertIsNotNone(
+            check(
+                Dependency("toolchain", "python", "3.11.0", "python.yml"),
+                latest_version,
+                lambda *_: "closed",
+            )
+        )
+
+    def test_python_series_selects_latest_stable_patch_and_rejects_missing_series(self):
+        latest.cache_clear()
+        with patch(
+            "check_dependency_freshness.get_json",
+            return_value=[
+                {"version": "3.11.17", "stable": True},
+                {"version": "3.11.18", "stable": True},
+                {"version": "3.15.2", "stable": True},
+                {"version": "3.11.19", "stable": False},
+            ],
+        ):
+            self.assertEqual(latest("toolchain", "python@3.11"), "3.11.18")
+            self.assertEqual(latest("toolchain", "python"), "3.15.2")
+            with self.assertRaises(ValueError):
+                latest("toolchain", "python@3.99")
+        latest.cache_clear()
+
     def test_two_component_version_has_an_implicit_zero_patch(self):
         self.assertIsNone(
             check(
