@@ -6,7 +6,7 @@ publication criteria explicitly unfinished if account access blocks them.
 ## Requirements and verification
 
 - [x] Set the oldest supported Python version, matching runtime dependencies.
-  `links-notation` 0.31.5 declares >=3.11. Validate installation and tests on 3.11.
+  `links-notation` 0.31.5/0.31.6 declare >=3.11. Installation and tests pass on 3.11.
 - [x] Align classifiers, Ruff/mypy targets, development lock and CI matrix.
   Exercise supported Python releases and preserve Linux/macOS/Windows coverage.
 - [x] Reproduce old metadata rejecting an available interpreter; verify isolated
@@ -28,3 +28,7 @@ Refresh only these dependencies and their locks, preserving parser minor parity.
 Upstream links-notation compare 0.31.5...0.31.6 contains Python annotations and a
 py.typed marker, with no runtime behavior changes. New annotations expose four
 optional-ID checks in mypy; explicit casts preserve existing decoding behavior.
+
+All seven Python interpreter/OS legs, lint and Build Package passed in dispatch
+43780260916. The final current-SHA checks and actual OIDC outcome are tracked in
+the PR description. See VERIFICATION.md for reproducible commands and failures.
