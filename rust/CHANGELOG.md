@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-11-16
+
+### Changed
+
+- Refresh links-notation to 0.31.6 to satisfy the dependency freshness check while preparing the Python release.
+
 ## [1.0.0] - 2026-11-14
 
 ### Changed
