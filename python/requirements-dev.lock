@@ -82,9 +82,7 @@ cachecontrol==0.14.4 \
 certifi==2026.10.23 \
     --hash=sha256:a9895e6e2758b371e0545e321a3a8fd1fcfd9829ada8824a936dfb16aaaf36cd \
     --hash=sha256:e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1
-    # via
-    #   requests
-    #   scriv
+    # via requests
 cffi==2.1.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and platform_python_implementation != 'PyPy' and sys_platform == 'linux' \
     --hash=sha256:046bfc24911b37851ee1b51aab8bffe713d89c68c6a057b09484ce9fd5f69b4e \
     --hash=sha256:06c72bb76605a4b0cd0aad6930b69d4baf7dd5d806cfc409b824191099700e66 \
@@ -364,9 +362,7 @@ charset-normalizer==3.5.2 \
     --hash=sha256:fcff63213e8e6e47770541a4607175404f47cbb3ebea7b6058cc82d524a0e424 \
     --hash=sha256:fd1fbe0f116b6e55da77aca2c6ddcddcfac2186cbf78bdebf40fc156efca389d \
     --hash=sha256:fe9753dfee015c570d73df76f899f18444d41388bffcde097deba51c4fadbb9f
-    # via
-    #   requests
-    #   scriv
+    # via requests
 click==8.5.0 \
     --hash=sha256:255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360 \
     --hash=sha256:ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34
@@ -599,9 +595,7 @@ identify==2.6.20 \
 idna==3.20 \
     --hash=sha256:a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44 \
     --hash=sha256:ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c
-    # via
-    #   requests
-    #   scriv
+    # via requests
 importlib-metadata==10.2.0 ; python_full_version < '3.12' and platform_machine != 'ppc64le' and platform_machine != 's390x' \
     --hash=sha256:9413a2029fd9ca5669d27f1386071bbfe3c7ebca0545692ec975088241fe1d79 \
     --hash=sha256:c7a4bf1c7479601f6b8e437cfc14f4f77028ba62a8f34ae95cd93d9774dfba51
@@ -783,9 +777,9 @@ license-expression==30.4.4 \
     --hash=sha256:421788fdcadb41f049d2dc934ce666626265aeccefddd25e162a26f23bcbf8a4 \
     --hash=sha256:73448f0aacd8d0808895bdc4b2c8e01a8d67646e4188f887375398c761f340fd
     # via cyclonedx-python-lib
-links-notation==0.31.5 \
-    --hash=sha256:5964daf5339d0ead804bf40750ccb863c80119ca5b7a01cf1bdcedccf4baf159 \
-    --hash=sha256:8ad54155a6c7f1a27fc94f6097799fd065ba03d765c61288760d5fbd1fcbfbe3
+links-notation==0.31.6 \
+    --hash=sha256:49de41eff83e586c2c598832cb33389613de98a22c144b2904cebb4e654be56a \
+    --hash=sha256:4ccba7e7c96a038c4ef7c758f66dbd65d5278b0686b1cfdd3479705b2715736e
     # via lino-objects-codec (python/pyproject.toml)
 markdown-it-py==4.2.0 \
     --hash=sha256:04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49 \
@@ -945,15 +939,11 @@ markupsafe==3.0.4 \
     --hash=sha256:fa95848c929b6a75f6848d3c9793e59db365ee436776e57db835cdbfa79ba977 \
     --hash=sha256:fd9f8797427910198f95bced71ddfed61130d7e349213bfb8466c9c99e2c46a8 \
     --hash=sha256:fdb4ca07ab75ffadab4a8b135ad59cdbb3156b99310f3d565370da74a15d6bd3
-    # via
-    #   jinja2
-    #   scriv
+    # via jinja2
 mdurl==0.1.2 \
     --hash=sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8 \
     --hash=sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba
-    # via
-    #   markdown-it-py
-    #   scriv
+    # via markdown-it-py
 more-itertools==11.2.1 ; platform_machine != 'ppc64le' and platform_machine != 's390x' \
     --hash=sha256:35a7377edd1dd6608dcb2cdf534ded55ea32d49448875ad042cd3f879fb1ded0 \
     --hash=sha256:cbf08fd0af284dc69718b9b76a8e6203df624d70209ea511e4219d350c856f63
@@ -1358,9 +1348,9 @@ ruff==0.17.5 \
     --hash=sha256:ec4ecf40fb4d6e1265b009dbe551727920926fc0f769070c452d6d84b422a74d \
     --hash=sha256:f93d2b7d449ed9545304f6923699ca20d13c675b69f258481709a08ae61076db
     # via lino-objects-codec (python/pyproject.toml)
-scriv==1.8.1 \
-    --hash=sha256:7c47f6981cf859fe3f3fe336e811c60e2d36713ce377d7a874d56779c33ec916 \
-    --hash=sha256:95f7344c5c2bf6295b7188ef1a96d124931bbba5f7e25143d4df6fadfc51d5c2
+scriv==1.8.2 \
+    --hash=sha256:7c967d3ddd3ba82b78bde0c046ba18f2aa127191c3b5385642d6fcde49fcb87b \
+    --hash=sha256:ae0ec6586de4c42994cd2019fde6e870c506a8d85a4eb830d9f53132f9e4eb7c
     # via lino-objects-codec (python/pyproject.toml)
 secretstorage==3.5.0 ; platform_machine != 'ppc64le' and platform_machine != 's390x' and sys_platform == 'linux' \
     --hash=sha256:0ce65888c0725fcb2c5bc0fdb8e5438eece02c523557ea40ce0703c266248137 \
@@ -1461,7 +1451,6 @@ urllib3==2.8.0 \
     # via
     #   id
     #   requests
-    #   scriv
     #   twine
 virtualenv==21.15.6 \
     --hash=sha256:4b99ab9b95ff11043939bb4cad2fa0449175fa5a478372864f62160cb6c1a7ed \

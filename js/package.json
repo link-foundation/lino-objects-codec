@@ -36,7 +36,7 @@
     "url": "https://github.com/link-foundation/lino-objects-codec.git"
   },
   "dependencies": {
-    "links-notation": "^0.31.5"
+    "links-notation": "^0.31.6"
   },
   "engines": {
     "node": ">=26.13.1",
@@ -50,7 +50,7 @@
     "eslint-plugin-prettier": "^5.5.7",
     "husky": "^9.1.7",
     "jscpd": "^5.4.3",
-    "lint-staged": "^17.6.0",
+    "lint-staged": "^17.6.1",
     "prettier": "^3.10.1"
   },
   "lint-staged": {

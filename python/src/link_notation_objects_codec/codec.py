@@ -539,21 +539,21 @@ class ObjectCodec:
             if len(link.values) > 1:
                 bool_value = link.values[1]
                 if hasattr(bool_value, "id"):
-                    return bool_value.id.lower() == "true"
+                    return cast(str, bool_value.id).lower() == "true"
             return False
 
         elif type_marker == self.TYPE_INT:
             if len(link.values) > 1:
                 int_value = link.values[1]
                 if hasattr(int_value, "id"):
-                    return int(int_value.id)
+                    return int(cast(str, int_value.id))
             return 0
 
         elif type_marker == self.TYPE_FLOAT:
             if len(link.values) > 1:
                 float_value = link.values[1]
                 if hasattr(float_value, "id"):
-                    value_str = float_value.id
+                    value_str = cast(str, float_value.id)
                     if value_str == "NaN":
                         return math.nan
                     elif value_str == "Infinity":
@@ -568,7 +568,7 @@ class ObjectCodec:
             if len(link.values) > 1:
                 str_value = link.values[1]
                 if hasattr(str_value, "id"):
-                    b64_str = str_value.id
+                    b64_str = cast(str, str_value.id)
                     # Decode from base64
                     try:
                         decoded_bytes = base64.b64decode(b64_str)
