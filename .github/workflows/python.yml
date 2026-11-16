@@ -30,6 +30,11 @@ on:
         description: 'Release description (optional)'
         required: false
         type: string
+      publish_current:
+        description: 'Publish the checked-out version without commits or tags (first-release retry)'
+        required: false
+        type: boolean
+        default: false
 
 # Least privilege by default (best practice #10 / template parity): individual
 # release jobs raise this to `contents: write` where they need it.
@@ -533,6 +538,7 @@ jobs:
       ${{
       !cancelled() &&
       github.event_name == 'workflow_dispatch' &&
+      !inputs.publish_current &&
       needs.build.result == 'success'
       }}
     runs-on: ubuntu-24.04
@@ -667,3 +673,69 @@ jobs:
             --repository "${GITHUB_REPOSITORY}" \
             --tag-prefix "python_v" \
             --language "Python"
+
+  # First-publish retries must be possible from the reviewed branch without
+  # version_and_commit.py pushing to main or creating release tags.
+  publish-current:
+    name: Publish Current Version
+    timeout-minutes: 15
+    concurrency:
+      group: main-writer-${{ github.repository }}
+      cancel-in-progress: false
+      queue: max
+    needs: [lint, test, build]
+    if: >-
+      ${{
+      !cancelled() &&
+      github.event_name == 'workflow_dispatch' &&
+      inputs.publish_current &&
+      needs.build.result == 'success'
+      }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version: '3.11'
+
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: dist
+          path: python/dist/
+
+      - name: PyPI publish preflight
+        working-directory: ./python
+        env:
+          PYPI_PREFLIGHT_VERBOSE: '0'
+        run: python scripts/pypi_publish_preflight.py --package lino-objects-codec
+
+      - name: Publish to PyPI with the pending or attached trusted publisher
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
+        with:
+          packages-dir: python/dist/
+          verbose: true
+          skip-existing: true
+
+      - name: Verify the published version and Python requirement
+        working-directory: ./python
+        run: |
+          python - <<'PYTHON'
+          import json
+          import tomllib
+          import urllib.request
+          from pathlib import Path
+
+          project = tomllib.loads(Path('pyproject.toml').read_text())['project']
+          url = f"https://pypi.org/pypi/{project['name']}/{project['version']}/json"
+          with urllib.request.urlopen(url) as response:
+              published = json.load(response)
+          assert published['info']['requires_python'] == project['requires-python']
+          assert published['urls'], 'PyPI has no uploaded distributions'
+          print(f"Verified {project['name']} {project['version']} on PyPI")
+          PYTHON
