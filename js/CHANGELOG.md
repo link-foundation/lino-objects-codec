@@ -1,5 +1,15 @@
 # lino-objects-codec
 
+## 1.0.0
+
+### Major Changes
+
+- Require Node.js 26.13.1 and npm 12.2.2, update Links Notation to 0.31.5, and install reproducible release tools from the repository lockfile. Replace legacy npm-major selection and manual regular-expression escaping with current runtime APIs. Fix release version checks when main advances in the monorepo.
+
+  Update `links-notation` from `^0.31.3` to `^0.31.4`, the latest release, so a project that also depends on the current parser installs one copy instead of two. The test suite passes unchanged against 0.31.4. Refresh ESLint, Prettier and the lockfile for the dependency freshness gate.
+
+  Refresh links-notation to 0.31.6 and lint-staged to 17.6.1 to satisfy dependency freshness while preparing the Python release.
+
 ## 0.9.6
 
 ### Patch Changes
