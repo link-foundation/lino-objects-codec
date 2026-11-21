@@ -6,12 +6,12 @@
     "node": ">=26.13.1"
   },
   "devDependencies": {
-    "command-stream": "2.6.0",
+    "command-stream": "3.0.0",
     "lino-arguments": "0.4.1",
-    "npm": "12.2.2"
+    "npm": "12.2.3"
   },
   "overrides": {
-    "links-notation": "0.31.5",
+    "links-notation": "0.31.8",
     "peggy": "5.1.1",
     "source-map-generator": "2.0.7",
     "semver": "7.8.6"

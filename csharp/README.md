@@ -327,6 +327,13 @@ Decode Links Notation format to a C# object.
 **Throws:**
 - `InvalidOperationException` - If the type marker is unknown
 
+#### `Codec.Decode(string notation, DecodeOptions options)`
+
+Set `ReadableOnly` to reject compact notation, `RejectDuplicateKeys` to require
+unique decoded keys within an object, and `MaxDepth` to limit open parentheses
+outside quotes. Duplicate checking and a depth limit also require readable
+input. Violations raise `FormatException`.
+
 #### `Codec.EncodeLine(object? obj)`
 
 Encode a C# object into the readable format on one line.

@@ -224,6 +224,13 @@ let legacy = decode("(int 42)").unwrap();
 assert_eq!(legacy, LinoValue::Int(42));
 ```
 
+#### `decode_with_options(notation: &str, options: DecodeOptions) -> Result<LinoValue, CodecError>`
+
+Set `readable_only` to reject compact notation, `reject_duplicate_keys` to require
+unique decoded keys within an object, and `max_depth` to limit open parentheses
+outside quotes. Duplicate checking and a depth limit also require readable
+input. `ObjectCodec::decode_with_options` accepts the same options.
+
 ### `ObjectCodec`
 
 For advanced use cases, you can create your own codec instance:

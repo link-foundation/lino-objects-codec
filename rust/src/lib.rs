@@ -94,6 +94,17 @@ impl fmt::Display for CodecError {
 
 impl std::error::Error for CodecError {}
 
+/// Opt-in restrictions for decoding readable Links Notation.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct DecodeOptions {
+    /// Reject compact notation. Either of the other restrictions also requires readable input.
+    pub readable_only: bool,
+    /// Reject duplicate decoded keys within each object.
+    pub reject_duplicate_keys: bool,
+    /// Limit open parentheses outside quotes. A top-level scalar has depth zero.
+    pub max_depth: Option<usize>,
+}
+
 /// A value that can be encoded/decoded using the Links Notation codec.
 ///
 /// This type supports all the types available in Python/JavaScript versions
@@ -729,17 +740,33 @@ impl ObjectCodec {
     /// Both the readable format and the compact (base64) format are accepted, so
     /// files written by earlier versions keep working and migrate on next write.
     pub fn decode(&mut self, notation: &str) -> Result<LinoValue, CodecError> {
+        self.decode_with_options(notation, DecodeOptions::default())
+    }
+
+    /// Decode with optional readable-only, duplicate-key and nesting restrictions.
+    pub fn decode_with_options(
+        &mut self,
+        notation: &str,
+        options: DecodeOptions,
+    ) -> Result<LinoValue, CodecError> {
         if notation.trim().is_empty() {
             return Ok(LinoValue::Null);
         }
 
-        if is_compact_notation(notation) {
+        let require_readable =
+            options.readable_only || options.reject_duplicate_keys || options.max_depth.is_some();
+        if is_compact_notation(notation, require_readable) {
+            if require_readable {
+                return Err(CodecError::ParseError(
+                    "compact notation is disabled for this decode".to_string(),
+                ));
+            }
             crate::debug::trace("codec.decode", || "compact notation detected".to_string());
             return self.decode_compact(notation);
         }
 
         crate::debug::trace("codec.decode", || "readable notation detected".to_string());
-        readable::decode(notation)
+        readable::decode_with_options(notation, options)
     }
 
     /// Decode the readable, single-line Links Notation format.
@@ -999,7 +1026,7 @@ const COMPACT_TYPE_MARKERS: &[&str] = &[
 /// null while `(null 1)` is a readable line holding two values.
 const EMPTY_BODY_MARKERS: [&str; 2] = [type_ids::NULL, "None"];
 
-fn is_compact_notation(notation: &str) -> bool {
+fn is_compact_notation(notation: &str, include_all_markers: bool) -> bool {
     let Some(first_line) = notation.lines().map(str::trim).find(|l| !l.is_empty()) else {
         return false;
     };
@@ -1020,13 +1047,15 @@ fn is_compact_notation(notation: &str) -> bool {
         (marker, rest) = split_token(rest.trim_start());
     }
 
-    if !COMPACT_TYPE_MARKERS.contains(&marker) {
+    let is_compact_marker = COMPACT_TYPE_MARKERS.contains(&marker)
+        || (include_all_markers && matches!(marker, "undefined" | "json_number"));
+    if !is_compact_marker {
         return false;
     }
 
     // A compact null is the whole link: `(null)`. A link that holds more than the
     // marker is a readable line whose first value happens to be null.
-    if EMPTY_BODY_MARKERS.contains(&marker) {
+    if EMPTY_BODY_MARKERS.contains(&marker) || marker == "undefined" {
         return rest.trim_start().starts_with(')');
     }
 
@@ -1227,6 +1256,14 @@ pub fn encode_obfuscated(value: &LinoValue) -> String {
 /// ```
 pub fn decode(notation: &str) -> Result<LinoValue, CodecError> {
     DEFAULT_CODEC.with(|codec| codec.borrow_mut().decode(notation))
+}
+
+/// Decode Links Notation using the supplied readable decoding restrictions.
+pub fn decode_with_options(
+    notation: &str,
+    options: DecodeOptions,
+) -> Result<LinoValue, CodecError> {
+    DEFAULT_CODEC.with(|codec| codec.borrow_mut().decode_with_options(notation, options))
 }
 
 /// Formatting utilities for indented Links Notation format.

@@ -202,11 +202,13 @@ def decode_line(text: str) -> Any:
     return decode(line)
 
 
-def decode(text: str) -> Any:
+def decode(text: str, *, reject_duplicate_keys: bool = False, max_depth: int | None = None) -> Any:
     """Decode the readable, indented Links Notation form back into a value.
 
     Args:
         text: The readable Links Notation document.
+        reject_duplicate_keys: Require unique keys in each object.
+        max_depth: Maximum parenthesis nesting.
 
     Returns:
         The reconstructed value.
@@ -214,7 +216,7 @@ def decode(text: str) -> Any:
     Raises:
         ReadableFormatError: If the document is not well formed.
     """
-    tokens = _tokenize(text)
+    tokens = _tokenize(text, max_depth)
     trace("readable.decode", lambda: f"{len(tokens)} tokens")
     cursor = _Cursor(tokens)
     rows = cursor.parse_rows(top_level=True)
@@ -224,9 +226,11 @@ def decode(text: str) -> Any:
 
     # A document holding a single value (for example ``42``) is that value.
     if len(rows) == 1 and len(rows[0]) == 1:
-        return _node_to_value(rows[0][0])
+        return _node_to_value(rows[0][0], reject_duplicate_keys)
 
-    return _rows_to_value(rows, multiline=True, object_marker=False)
+    return _rows_to_value(
+        rows, multiline=True, object_marker=False, reject_duplicate_keys=reject_duplicate_keys
+    )
 
 
 # === Encoding ===
@@ -536,10 +540,11 @@ class _Node:
         self.is_object = is_object
 
 
-def _tokenize(text: str) -> list[_Token]:
+def _tokenize(text: str, max_depth: int | None) -> list[_Token]:
     """Split a document into parentheses, newlines and references."""
     tokens: list[_Token] = []
     i = 0
+    depth = 0
     length = len(text)
 
     while i < length:
@@ -551,9 +556,13 @@ def _tokenize(text: str) -> list[_Token]:
         elif char.isspace():
             i += 1
         elif char == "(":
+            depth += 1
+            if max_depth is not None and depth > max_depth:
+                raise ReadableFormatError(f"maximum nesting depth {max_depth} exceeded")
             tokens.append(_Token(_TOKEN_OPEN))
             i += 1
         elif char == ")":
+            depth = max(0, depth - 1)
             tokens.append(_Token(_TOKEN_CLOSE))
             i += 1
         elif char in _QUOTE_CHARS:
@@ -722,15 +731,17 @@ class _Cursor:
         return False
 
 
-def _node_to_value(node: _Node) -> Any:
+def _node_to_value(node: _Node, reject_duplicate_keys: bool) -> Any:
     if node.is_ref:
         return _ref_to_value(node.value, node.quoted)
-    return _rows_to_value(node.rows, node.multiline, node.is_object)
+    return _rows_to_value(node.rows, node.multiline, node.is_object, reject_duplicate_keys)
 
 
-def _rows_to_value(rows: list[list[_Node]], multiline: bool, object_marker: bool) -> Any:
+def _rows_to_value(
+    rows: list[list[_Node]], multiline: bool, object_marker: bool, reject_duplicate_keys: bool
+) -> Any:
     if object_marker:
-        return _marked_object_to_value(rows)
+        return _marked_object_to_value(rows, reject_duplicate_keys)
 
     if not rows:
         return {} if multiline else []
@@ -741,28 +752,25 @@ def _rows_to_value(rows: list[list[_Node]], multiline: bool, object_marker: bool
 
     # Written on one line, a link is a list of values: a dict on one line says so
     # with the ``o:`` marker, which is what keeps ``(key value)`` unambiguous.
-    if not multiline:
-        return [_node_to_value(node) for row in rows for node in row]
-
-    # ``key value`` on every line makes a dict; anything else is a list of values.
-    is_dict = all(len(row) == 2 and _node_to_key(row[0]) is not None for row in rows)
+    # Two values per row, starting with a key, make a multiline object.
+    is_dict = multiline and all(len(row) == 2 and _node_to_key(row[0]) is not None for row in rows)
 
     if is_dict:
         result: dict[str, Any] = {}
         for row in rows:
             key = _node_to_key(row[0])
             assert key is not None  # checked by is_dict
-            result[key] = _node_to_value(row[1])
+            _add_property(result, key, row[1], reject_duplicate_keys)
         return result
 
     items: list[Any] = []
     for row in rows:
         for node in row:
-            items.append(_node_to_value(node))
+            items.append(_node_to_value(node, reject_duplicate_keys))
     return items
 
 
-def _marked_object_to_value(rows: list[list[_Node]]) -> dict[str, Any]:
+def _marked_object_to_value(rows: list[list[_Node]], reject_duplicate_keys: bool) -> dict[str, Any]:
     """Build the dict a ``(o: (key value) ...)`` link describes.
 
     Every value in it is a pair, so anything else is a malformed document rather
@@ -793,9 +801,17 @@ def _marked_object_to_value(rows: list[list[_Node]]) -> dict[str, Any]:
                 f"an object marked '{OBJECT_MARKER}:' holds (key value) pairs, "
                 "found a pair whose key is not text"
             )
-        result[key] = _node_to_value(row[1])
+        _add_property(result, key, row[1], reject_duplicate_keys)
 
     return result
+
+
+def _add_property(
+    result: dict[str, Any], key: str, node: _Node, reject_duplicate_keys: bool
+) -> None:
+    if reject_duplicate_keys and key in result:
+        raise ReadableFormatError(f"duplicate object key {key!r}")
+    result[key] = _node_to_value(node, reject_duplicate_keys)
 
 
 def _node_to_key(node: _Node) -> str | None:

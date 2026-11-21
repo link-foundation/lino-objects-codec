@@ -1,4 +1,4 @@
-export const MINIMUM_NPM_VERSION = '12.2.2';
+export const MINIMUM_NPM_VERSION = '12.2.3';
 export const MINIMUM_NODE_VERSION = '26.13.1';
 
 export function parseVersion(version) {

@@ -7,7 +7,10 @@
 //! agreeing on a shared mistake: every language must encode `value` to exactly
 //! `text` and to exactly `line`, and decode both back to exactly `value`.
 
-use lino_objects_codec::{LinoValue, decode, decode_line, encode, encode_line};
+use lino_objects_codec::{
+    CodecError, DecodeOptions, LinoValue, ObjectCodec, decode, decode_line, decode_with_options,
+    encode, encode_line,
+};
 use serde_json::Value as Json;
 
 /// The language id this suite answers to in a case's `skip` map.
@@ -343,4 +346,52 @@ fn no_shared_document_hides_its_text_in_base64() {
             name(&case)
         );
     }
+}
+
+#[test]
+fn strict_decode_matches_shared_cases() {
+    for case in section("strictDecode") {
+        let options = DecodeOptions {
+            readable_only: true,
+            reject_duplicate_keys: true,
+            max_depth: Some(usize::try_from(case["depth"].as_u64().unwrap()).unwrap()),
+        };
+        let decoded = decode_with_options(text(&case), options);
+        if let Some(expected) = case["error"].as_str() {
+            assert!(
+                matches!(&decoded, Err(CodecError::ParseError(message)) if message.contains(expected)),
+                "{}: expected {expected}, got {decoded:?}",
+                name(&case)
+            );
+        } else {
+            let decoded = decoded.unwrap_or_else(|error| panic!("{}: {error}", name(&case)));
+            assert!(same(&decoded, &build(&case["value"])), "{}", name(&case));
+        }
+    }
+}
+
+#[test]
+fn decode_restrictions_are_optional_and_scoped_to_a_call() {
+    let mut codec = ObjectCodec::new();
+    let duplicate = "(o: (profile publication) (profile documents))";
+    let unique_keys = DecodeOptions {
+        reject_duplicate_keys: true,
+        ..DecodeOptions::default()
+    };
+    assert!(codec.decode_with_options(duplicate, unique_keys).is_err());
+    let readable_only = DecodeOptions {
+        readable_only: true,
+        ..DecodeOptions::default()
+    };
+    assert_eq!(
+        codec.decode_with_options(duplicate, readable_only).unwrap(),
+        codec.decode(duplicate).unwrap()
+    );
+    let limit = DecodeOptions {
+        max_depth: Some(2),
+        ..DecodeOptions::default()
+    };
+    assert!(codec.decode_with_options("(int 42)", limit).is_err());
+    assert!(codec.decode_with_options("(int 42)", unique_keys).is_err());
+    assert_eq!(codec.decode("(int 42)").unwrap(), LinoValue::Int(42));
 }

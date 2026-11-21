@@ -63,6 +63,10 @@ def is_compact_notation(notation: str) -> bool:
     Returns:
         ``True`` when the document should be read by :func:`decode_compact`.
     """
+    return _detect_compact_notation(notation, include_all_markers=False)
+
+
+def _detect_compact_notation(notation: str, *, include_all_markers: bool) -> bool:
     first_line = next((line.strip() for line in notation.splitlines() if line.strip()), None)
     if first_line is None or not first_line.startswith("("):
         return False
@@ -77,7 +81,9 @@ def is_compact_notation(notation: str) -> bool:
             return False
         marker, rest = _split_token(rest.lstrip())
 
-    if marker not in _COMPACT_TYPE_MARKERS:
+    if marker not in _COMPACT_TYPE_MARKERS and not (
+        include_all_markers and marker in {"undefined", "json_number"}
+    ):
         return False
 
     # A compact null is the whole link: ``(null)``. A link that holds more than
@@ -293,7 +299,14 @@ class ObjectCodec:
         """
         return self.encode_compact(obj)
 
-    def decode(self, notation: str) -> Any:
+    def decode(
+        self,
+        notation: str,
+        *,
+        readable_only: bool = False,
+        reject_duplicate_keys: bool = False,
+        max_depth: int | None = None,
+    ) -> Any:
         """
         Decode Links Notation format to a Python object.
 
@@ -302,19 +315,29 @@ class ObjectCodec:
 
         Args:
             notation: String in Links Notation format
+            readable_only: Reject compact notation.
+            reject_duplicate_keys: Require unique keys in each readable object.
+            max_depth: Maximum number of open parentheses outside quotes.
 
         Returns:
             Reconstructed Python object
         """
+        if max_depth is not None and (type(max_depth) is not int or max_depth < 0):
+            raise ValueError("max_depth must be a non-negative integer")
         if notation is None or not notation.strip():
             return None
 
-        if is_compact_notation(notation):
+        require_readable = readable_only or reject_duplicate_keys or max_depth is not None
+        if _detect_compact_notation(notation, include_all_markers=require_readable):
+            if require_readable:
+                raise readable.ReadableFormatError("compact notation is disabled for this decode")
             trace("codec.decode", lambda: "compact notation detected")
             return self.decode_compact(notation)
 
         trace("codec.decode", lambda: "readable notation detected")
-        return readable.decode(notation)
+        return readable.decode(
+            notation, reject_duplicate_keys=reject_duplicate_keys, max_depth=max_depth
+        )
 
     def decode_compact(self, notation: str) -> Any:
         """
@@ -710,7 +733,13 @@ def encode_obfuscated(obj: Any) -> str:
     return _default_codec.encode_obfuscated(obj)
 
 
-def decode(notation: str) -> Any:
+def decode(
+    notation: str,
+    *,
+    readable_only: bool = False,
+    reject_duplicate_keys: bool = False,
+    max_depth: int | None = None,
+) -> Any:
     """
     Decode Links Notation format to a Python object.
 
@@ -718,11 +747,19 @@ def decode(notation: str) -> Any:
 
     Args:
         notation: String in Links Notation format
+        readable_only: Reject compact notation.
+        reject_duplicate_keys: Require unique keys in each readable object.
+        max_depth: Maximum number of open parentheses outside quotes.
 
     Returns:
         Reconstructed Python object
     """
-    return _default_codec.decode(notation)
+    return _default_codec.decode(
+        notation,
+        readable_only=readable_only,
+        reject_duplicate_keys=reject_duplicate_keys,
+        max_depth=max_depth,
+    )
 
 
 def decode_compact(notation: str) -> Any:

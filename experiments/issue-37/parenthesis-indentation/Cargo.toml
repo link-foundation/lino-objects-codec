@@ -6,4 +6,4 @@ rust-version = "1.100"
 
 # Switch this between "0.14.0" and "0.13.0" to compare parser behaviour.
 [dependencies]
-links-notation = "0.31.6"
+links-notation = "0.31.8"

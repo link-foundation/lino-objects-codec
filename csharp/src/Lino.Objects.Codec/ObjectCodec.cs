@@ -213,21 +213,37 @@ public class ObjectCodec
     /// </remarks>
     /// <param name="notation">String in Links Notation format</param>
     /// <returns>Reconstructed C# object</returns>
-    public object? Decode(string notation)
+    public object? Decode(string notation) => Decode(notation, null);
+
+    /// <summary>Decode with optional readable-only, duplicate-key and nesting restrictions.</summary>
+    /// <param name="notation">String in Links Notation format</param>
+    /// <param name="options">Opt-in decoding restrictions</param>
+    /// <returns>Reconstructed C# object</returns>
+    public object? Decode(string notation, DecodeOptions? options)
     {
+        if (options?.MaxDepth < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(options), "MaxDepth must be a non-negative integer");
+        }
         if (string.IsNullOrWhiteSpace(notation))
         {
             return null;
         }
 
-        if (IsCompactNotation(notation))
+        var requireReadable = options is not null
+            && (options.ReadableOnly || options.RejectDuplicateKeys || options.MaxDepth.HasValue);
+        if (DetectCompactNotation(notation, requireReadable))
         {
+            if (requireReadable)
+            {
+                throw new FormatException("compact notation is disabled for this decode");
+            }
             CodecDebug.Trace("decode", () => "compact notation detected");
             return DecodeCompact(notation);
         }
 
         CodecDebug.Trace("decode", () => "readable notation detected");
-        return Readable.Decode(notation);
+        return Readable.Decode(notation, options?.RejectDuplicateKeys ?? false, options?.MaxDepth);
     }
 
     /// <summary>
@@ -697,19 +713,22 @@ public class ObjectCodec
     /// </remarks>
     /// <param name="notation">The document to classify</param>
     /// <returns>True when the document should be read by <see cref="DecodeCompact"/></returns>
-    public static bool IsCompactNotation(string notation)
-    {
-        var firstLine = notation
-            .Split('\n')
-            .Select(line => line.Trim())
-            .FirstOrDefault(line => line.Length > 0);
+    public static bool IsCompactNotation(string notation) => DetectCompactNotation(notation, false);
 
-        if (firstLine is null || !firstLine.StartsWith('('))
+    private static bool DetectCompactNotation(string notation, bool includeAllMarkers)
+    {
+        var firstLine = notation.AsSpan().TrimStart();
+        if (firstLine.IsEmpty || firstLine[0] != '(')
         {
             return false;
         }
+        var lineBreak = firstLine.IndexOf('\n');
+        if (lineBreak >= 0)
+        {
+            firstLine = firstLine[..lineBreak];
+        }
 
-        var (marker, rest) = SplitToken(firstLine[1..].TrimStart());
+        var (marker, rest) = SplitToken(firstLine[1..].Trim().ToString());
 
         // Skip the `obj_N:` definition id, if present.
         if (marker.EndsWith(':'))
@@ -721,14 +740,15 @@ public class ObjectCodec
             (marker, rest) = SplitToken(rest.TrimStart());
         }
 
-        if (!CompactTypeMarkers.Contains(marker))
+        if (!CompactTypeMarkers.Contains(marker)
+            && !(includeAllMarkers && marker is "undefined" or "json_number"))
         {
             return false;
         }
 
         // A compact `null` carries no payload, so `(null)` is a compact document
         // while `(null 1)` is a readable line holding two values.
-        if (EmptyBodyMarkers.Contains(marker))
+        if (EmptyBodyMarkers.Contains(marker) || marker == "undefined")
         {
             return rest.TrimStart().StartsWith(')');
         }
@@ -799,6 +819,12 @@ public static class Codec
     /// <param name="notation">String in Links Notation format</param>
     /// <returns>Reconstructed C# object</returns>
     public static object? Decode(string notation) => new ObjectCodec().Decode(notation);
+
+    /// <summary>Decode with optional readable-only, duplicate-key and nesting restrictions.</summary>
+    /// <param name="notation">String in Links Notation format</param>
+    /// <param name="options">Opt-in decoding restrictions</param>
+    /// <returns>Reconstructed C# object</returns>
+    public static object? Decode(string notation, DecodeOptions? options) => new ObjectCodec().Decode(notation, options);
 
     /// <summary>
     /// Encode an object into the readable format on one line.

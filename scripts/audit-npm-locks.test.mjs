@@ -9,8 +9,8 @@ import {
 function fixture() {
   const packages = {
     'node_modules/npm': {
-      version: '12.2.2',
-      resolved: 'https://registry.npmjs.org/npm/-/npm-12.2.2.tgz',
+      version: '12.2.3',
+      resolved: 'https://registry.npmjs.org/npm/-/npm-12.2.3.tgz',
     },
   };
   const vulnerabilities = {};
@@ -114,7 +114,7 @@ test('new advisories, severities, bundle versions and nonbundled copies fail clo
       report.error = { code: 'E401' };
     },
     ({ lock }) => {
-      lock.packages['node_modules/npm'].version = '12.2.3';
+      lock.packages['node_modules/npm'].version = '12.2.2';
     },
     ({ lock }) => {
       lock.packages['node_modules/npm'].resolved =

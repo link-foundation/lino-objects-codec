@@ -60,7 +60,7 @@ jobs:
       # accepting incomplete references or guessing monorepo build entrypoints.
       # Other languages retain an explicit buildless mode (issue #71).
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4.39.3
+        uses: github/codeql-action/init@v4.39.4
         with:
           languages: ${{ matrix.language }}
           build-mode: ${{ matrix.language == 'csharp' && 'manual' || 'none' }}
@@ -75,7 +75,7 @@ jobs:
           done
 
       - name: Analyze
-        uses: github/codeql-action/analyze@v4.39.3
+        uses: github/codeql-action/analyze@v4.39.4
 
   # `actions/dependency-review-action` was tried here first and fails with
   # "Dependency review is not supported on this repository. Please ensure that

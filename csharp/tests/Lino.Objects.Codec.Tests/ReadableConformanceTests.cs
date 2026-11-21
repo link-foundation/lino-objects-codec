@@ -229,7 +229,7 @@ public class ReadableConformanceTests
     }
 
     /// <summary>
-    /// <see cref="Codec.Decode"/> reads both forms, so a log reader needs no flag
+    /// <see cref="Codec.Decode(string)"/> reads both forms, so a log reader needs no flag
     /// saying which one it holds.
     /// </summary>
     [Theory]
@@ -271,5 +271,57 @@ public class ReadableConformanceTests
         Assert.DoesNotContain(
             "base64 \"", @case.GetProperty("line").GetString()!, StringComparison.Ordinal);
         Assert.NotEqual(string.Empty, name);
+    }
+
+    public static IEnumerable<object[]> StrictDecodeCases()
+    {
+        foreach (var @case in Section("strictDecode").EnumerateArray())
+        {
+            yield return new object[] { @case.GetProperty("name").GetString()!, @case };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(StrictDecodeCases))]
+    public void StrictDecodeMatchesSharedCase(string name, JsonElement @case)
+    {
+        var text = @case.GetProperty("text").GetString()!;
+        var options = new DecodeOptions
+        {
+            ReadableOnly = true,
+            RejectDuplicateKeys = true,
+            MaxDepth = @case.GetProperty("depth").GetInt32(),
+        };
+
+        if (@case.TryGetProperty("error", out var error))
+        {
+            var exception = Assert.Throws<FormatException>(() => Codec.Decode(text, options));
+            Assert.Contains(error.GetString()!, exception.Message, StringComparison.Ordinal);
+        }
+        else
+        {
+            var expected = Build(@case.GetProperty("value"));
+            Assert.True(Same(expected, Codec.Decode(text, options)), $"case {name} decoded to a different value");
+        }
+    }
+
+    [Fact]
+    public void DecodeRestrictionsAreOptionalAndScopedToACall()
+    {
+        var codec = new ObjectCodec();
+        const string duplicate = "(o: (profile publication) (profile documents))";
+        var uniqueKeys = new DecodeOptions { RejectDuplicateKeys = true };
+        Assert.Throws<FormatException>(() => codec.Decode(duplicate, uniqueKeys));
+        var decoded = codec.Decode(duplicate, new DecodeOptions { ReadableOnly = true });
+        Assert.Equal("documents", Assert.IsType<Dictionary<string, object?>>(decoded)["profile"]);
+        Assert.Throws<FormatException>(() => codec.Decode("(int 42)", new DecodeOptions { MaxDepth = 2 }));
+        Assert.Throws<FormatException>(() => codec.Decode("(int 42)", uniqueKeys));
+        Assert.Equal(42, codec.Decode("(int 42)"));
+    }
+
+    [Fact]
+    public void DecodeRejectsNegativeDepthLimit()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => Codec.Decode("", new DecodeOptions { MaxDepth = -1 }));
     }
 }

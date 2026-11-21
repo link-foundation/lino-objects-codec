@@ -488,6 +488,12 @@ Decode Links Notation format to a JavaScript object.
 **Parameters:**
 
 - `options.notation` - String in Links Notation format
+- `options.readableOnly` - Reject compact notation
+- `options.rejectDuplicateKeys` - Reject repeated decoded keys within an object
+- `options.maxDepth` - Maximum number of open parentheses outside quotes
+
+All restrictions are opt-in. Duplicate checking and a depth limit also require
+readable input.
 
 **Returns:**
 

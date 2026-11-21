@@ -897,5 +897,108 @@
       },
       "text": "\"both \"\"kinds\"\" of 'quotes'\""
     }
+  ],
+  "strictDecode": [
+    {
+      "name": "duplicate in marked object",
+      "text": "(o: (profile publication) (profile documents))",
+      "depth": 2,
+      "error": "duplicate object key"
+    },
+    {
+      "name": "duplicate in indented object inside an array",
+      "text": "(\n  (\n    profile publication\n    \"profile\" documents\n  )\n)",
+      "depth": 2,
+      "error": "duplicate object key"
+    },
+    {
+      "name": "duplicate in top-level rows",
+      "text": "profile publication\n'profile' documents",
+      "depth": 0,
+      "error": "duplicate object key"
+    },
+    {
+      "name": "escaped and base64 keys compare by their decoded text",
+      "text": "(o: ((escaped \"%70rofile\") publication) ((base64 \"cHJvZmlsZQ==\") documents))",
+      "depth": 3,
+      "error": "duplicate object key"
+    },
+    {
+      "name": "special property names are checked as literal keys",
+      "text": "(o: (__proto__ ()) (\"__proto__\" 2))",
+      "depth": 3,
+      "error": "duplicate object key"
+    },
+    {
+      "name": "case-sensitive keys and independent sibling objects",
+      "text": "((o: (profile 1) (Profile 2)) (o: (profile 3)))",
+      "depth": 3,
+      "value": {
+        "array": [
+          { "object": [["profile", { "int": 1 }], ["Profile", { "int": 2 }]] },
+          { "object": [["profile", { "int": 3 }]] }
+        ]
+      }
+    },
+    {
+      "name": "array entries can repeat",
+      "text": "(profile profile)",
+      "depth": 1,
+      "value": { "array": [{ "str": "profile" }, { "str": "profile" }] }
+    },
+    {
+      "name": "marked object pairs count towards depth",
+      "text": "(o: (profile publication))",
+      "depth": 1,
+      "error": "maximum nesting depth"
+    },
+    {
+      "name": "escaped scalar link counts towards depth",
+      "text": "(escaped \"%28\")",
+      "depth": 0,
+      "error": "maximum nesting depth"
+    },
+    {
+      "name": "reject excess depth while tokenizing",
+      "text": "((('unterminated",
+      "depth": 2,
+      "error": "maximum nesting depth"
+    },
+    {
+      "name": "parentheses inside a multiline n-quote reference are literal",
+      "text": "\"\"\"line ((\nnext )\"\"\"",
+      "depth": 0,
+      "value": { "str": "line ((\nnext )" }
+    },
+    {
+      "name": "legacy base64 scalar remains readable",
+      "text": "(base64 \"KA==\")",
+      "depth": 1,
+      "value": { "str": "(" }
+    },
+    {
+      "name": "compact scalar",
+      "text": "(str cG9saWN5)",
+      "depth": 3,
+      "error": "compact notation is disabled"
+    },
+    {
+      "name": "compact object with id and leading whitespace",
+      "text": "\r\n (obj_0: dict ((str c2VsZg==) obj_0))",
+      "depth": 5,
+      "error": "compact notation is disabled"
+    },
+    {
+      "name": "compact JavaScript undefined",
+      "text": "(undefined)",
+      "depth": 1,
+      "error": "compact notation is disabled"
+    },
+    {
+      "name": "compact Rust JSON number",
+      "text": "(json_number 1)",
+      "depth": 1,
+      "error": "compact notation is disabled"
+    }
   ]
 }

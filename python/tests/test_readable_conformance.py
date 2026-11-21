@@ -14,7 +14,14 @@ from typing import Any, cast
 
 import pytest
 
-from link_notation_objects_codec import decode, decode_line, encode, encode_line
+from link_notation_objects_codec import (
+    ObjectCodec,
+    ReadableFormatError,
+    decode,
+    decode_line,
+    encode,
+    encode_line,
+)
 
 LANGUAGE = "python"
 
@@ -126,3 +133,32 @@ def test_no_shared_document_hides_its_text_in_base64() -> None:
     for case in CASES:
         assert 'base64 "' not in case["text"], case["name"]
         assert 'base64 "' not in case["line"], case["name"]
+
+
+@pytest.mark.parametrize("case", _section("strictDecode"), ids=lambda case: case["name"])
+def test_strict_decode(case: dict[str, Any]) -> None:
+    options = {"readable_only": True, "reject_duplicate_keys": True, "max_depth": case["depth"]}
+    if "error" in case:
+        with pytest.raises(ReadableFormatError, match=case["error"]):
+            decode(case["text"], **options)
+    else:
+        assert _same(decode(case["text"], **options), _build(case["value"]))
+
+
+def test_decode_restrictions_are_optional_and_scoped_to_a_call() -> None:
+    codec = ObjectCodec()
+    duplicate = "(o: (profile publication) (profile documents))"
+    with pytest.raises(ReadableFormatError, match="duplicate object key"):
+        codec.decode(duplicate, reject_duplicate_keys=True)
+    assert codec.decode(duplicate, readable_only=True) == {"profile": "documents"}
+    with pytest.raises(ReadableFormatError, match="compact notation"):
+        codec.decode("(int 42)", max_depth=2)
+    with pytest.raises(ReadableFormatError, match="compact notation"):
+        codec.decode("(int 42)", reject_duplicate_keys=True)
+    assert codec.decode("(int 42)") == 42
+
+
+@pytest.mark.parametrize("value", [-1, 1.5, True, "1"])
+def test_decode_rejects_invalid_depth_limits(value: Any) -> None:
+    with pytest.raises(ValueError, match="max_depth"):
+        decode("", max_depth=value)
