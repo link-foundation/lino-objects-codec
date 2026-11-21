@@ -183,22 +183,41 @@ export class ObjectCodec {
    *
    * @param {Object} options - Options
    * @param {string} options.notation - String in Links Notation format
+   * @param {boolean} [options.readableOnly=false] - Reject compact notation
+   * @param {boolean} [options.rejectDuplicateKeys=false] - Require unique keys in each readable object
+   * @param {number} [options.maxDepth] - Maximum number of open parentheses outside quotes
    * @returns {*} Reconstructed JavaScript object
    */
   decode(options = {}) {
-    const { notation } = options;
+    const {
+      notation,
+      readableOnly = false,
+      rejectDuplicateKeys = false,
+      maxDepth,
+    } = options;
+    if (
+      maxDepth !== undefined &&
+      (!Number.isSafeInteger(maxDepth) || maxDepth < 0)
+    ) {
+      throw new RangeError('maxDepth must be a non-negative safe integer');
+    }
 
     if (notation === undefined || notation === null || notation.trim() === '') {
       return null;
     }
 
-    if (isCompactNotation(notation)) {
+    const requireReadable =
+      readableOnly || rejectDuplicateKeys || maxDepth !== undefined;
+    if (detectCompactNotation(notation, requireReadable)) {
+      if (requireReadable) {
+        throw new SyntaxError('compact notation is disabled for this decode');
+      }
       trace('codec.decode', () => 'compact notation detected');
       return this.decodeCompact({ notation });
     }
 
     trace('codec.decode', () => 'readable notation detected');
-    return readable.decode(notation);
+    return readable.decode(notation, { rejectDuplicateKeys, maxDepth });
   }
 
   /**
@@ -658,10 +677,11 @@ const EMPTY_BODY_MARKERS = new Set([
  * @returns {boolean} True when the document is in the compact format
  */
 export function isCompactNotation(notation) {
-  const firstLine = notation
-    .split('\n')
-    .map((line) => line.trim())
-    .find((line) => line.length > 0);
+  return detectCompactNotation(notation, false);
+}
+
+function detectCompactNotation(notation, includeAllMarkers) {
+  const firstLine = notation.trimStart().split('\n', 1)[0];
 
   if (!firstLine || !firstLine.startsWith('(')) {
     return false;
@@ -679,7 +699,10 @@ export function isCompactNotation(notation) {
     [marker, rest] = splitToken(rest.trimStart());
   }
 
-  if (!COMPACT_TYPE_MARKERS.has(marker)) {
+  if (
+    !COMPACT_TYPE_MARKERS.has(marker) &&
+    !(includeAllMarkers && marker === 'json_number')
+  ) {
     return false;
   }
 
@@ -779,6 +802,9 @@ export function encodeObfuscated(options = {}) {
  *
  * @param {Object} options - Options
  * @param {string} options.notation - String in Links Notation format
+ * @param {boolean} [options.readableOnly=false] - Reject compact notation
+ * @param {boolean} [options.rejectDuplicateKeys=false] - Require unique keys in each readable object
+ * @param {number} [options.maxDepth] - Maximum number of open parentheses outside quotes
  * @returns {*} Reconstructed JavaScript object
  */
 export function decode(options = {}) {

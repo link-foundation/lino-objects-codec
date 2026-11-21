@@ -76,8 +76,9 @@
 //! object: on one line, objects say so.
 
 use crate::debug::trace;
-use crate::{CodecError, LinoValue};
+use crate::{CodecError, DecodeOptions, LinoValue};
 use base64::{Engine, engine::general_purpose::STANDARD as BASE64};
+use std::collections::HashSet;
 
 /// Default indentation used by [`encode`].
 pub const DEFAULT_INDENT: &str = "  ";
@@ -130,7 +131,14 @@ pub fn decode_line(text: &str) -> Result<LinoValue, CodecError> {
 
 /// Decode the readable, indented Links Notation form back into a value.
 pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
-    let tokens = tokenize(text)?;
+    decode_with_options(text, DecodeOptions::default())
+}
+
+pub(crate) fn decode_with_options(
+    text: &str,
+    options: DecodeOptions,
+) -> Result<LinoValue, CodecError> {
+    let tokens = tokenize(text, options.max_depth)?;
     trace("readable.decode", || format!("{} tokens", tokens.len()));
     let mut cursor = Cursor { tokens, pos: 0 };
     let rows = cursor.parse_rows(true)?;
@@ -143,10 +151,10 @@ pub fn decode(text: &str) -> Result<LinoValue, CodecError> {
 
     // A document holding a single value (for example `42`) is that value.
     if rows.len() == 1 && rows[0].len() == 1 {
-        return node_to_value(&rows[0][0]);
+        return node_to_value(&rows[0][0], options.reject_duplicate_keys);
     }
 
-    rows_to_value(&rows, true, false)
+    rows_to_value(&rows, true, false, options.reject_duplicate_keys)
 }
 
 /// Quote and escape a value for one physical line. Decode with [`decode_line`].
@@ -435,9 +443,10 @@ enum Node {
     },
 }
 
-fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
+fn tokenize(text: &str, max_depth: Option<usize>) -> Result<Vec<Token>, CodecError> {
     let mut tokens = Vec::new();
     let mut i = 0;
+    let mut depth = 0_usize;
 
     // Keep byte offsets into the original UTF-8 text. Advance by whole code
     // points for whitespace/references; ASCII quote boundaries are safe slices.
@@ -450,9 +459,18 @@ fn tokenize(text: &str) -> Result<Vec<Token>, CodecError> {
         } else if c.is_whitespace() {
             i += c.len_utf8();
         } else if c == '(' {
+            depth += 1;
+            if let Some(limit) = max_depth
+                && depth > limit
+            {
+                return Err(CodecError::ParseError(format!(
+                    "maximum nesting depth {limit} exceeded"
+                )));
+            }
             tokens.push(Token::Open);
             i += 1;
         } else if c == ')' {
+            depth = depth.saturating_sub(1);
             tokens.push(Token::Close);
             i += 1;
         } else if matches!(c, '"' | '\'' | '`') {
@@ -640,14 +658,14 @@ impl Cursor {
     }
 }
 
-fn node_to_value(node: &Node) -> Result<LinoValue, CodecError> {
+fn node_to_value(node: &Node, reject_duplicate_keys: bool) -> Result<LinoValue, CodecError> {
     match node {
         Node::Ref { value, quoted } => Ok(ref_to_value(value, *quoted)),
         Node::Link {
             rows,
             multiline,
             object,
-        } => rows_to_value(rows, *multiline, *object),
+        } => rows_to_value(rows, *multiline, *object, reject_duplicate_keys),
     }
 }
 
@@ -655,9 +673,10 @@ fn rows_to_value(
     rows: &[Vec<Node>],
     multiline: bool,
     object_marker: bool,
+    reject_duplicate_keys: bool,
 ) -> Result<LinoValue, CodecError> {
     if object_marker {
-        return marked_object_to_value(rows);
+        return marked_object_to_value(rows, reject_duplicate_keys);
     }
 
     if rows.is_empty() {
@@ -674,28 +693,20 @@ fn rows_to_value(
 
     // Written on one line, a link is a list of values: an object on one line says
     // so with the `o:` marker, which is what keeps `(key value)` unambiguous.
-    if !multiline {
-        let mut items = Vec::new();
-        for row in rows {
-            for node in row {
-                items.push(node_to_value(node)?);
-            }
-        }
-        return Ok(LinoValue::Array(items));
-    }
-
-    // `key value` on every line makes an object; anything else is a list of values.
-    let is_object = rows
-        .iter()
-        .all(|row| row.len() == 2 && node_to_key(&row[0]).is_some());
+    // Two values per row, starting with a key, make a multiline object.
+    let is_object = multiline
+        && rows
+            .iter()
+            .all(|row| row.len() == 2 && node_to_key(&row[0]).is_some());
 
     if is_object {
         let mut pairs = Vec::with_capacity(rows.len());
+        let mut keys = reject_duplicate_keys.then(HashSet::new);
         for row in rows {
             let Some(key) = node_to_key(&row[0]) else {
                 unreachable!("checked by is_object")
             };
-            pairs.push((key, node_to_value(&row[1])?));
+            pairs.push(decode_pair(key, &row[1], &mut keys)?);
         }
         return Ok(LinoValue::Object(pairs));
     }
@@ -703,7 +714,7 @@ fn rows_to_value(
     let mut items = Vec::new();
     for row in rows {
         for node in row {
-            items.push(node_to_value(node)?);
+            items.push(node_to_value(node, reject_duplicate_keys)?);
         }
     }
     Ok(LinoValue::Array(items))
@@ -711,8 +722,12 @@ fn rows_to_value(
 
 /// Build the object a `(o: (key value) …)` link describes. Every value in it is
 /// a pair, so anything else is a malformed document rather than a silent array.
-fn marked_object_to_value(rows: &[Vec<Node>]) -> Result<LinoValue, CodecError> {
+fn marked_object_to_value(
+    rows: &[Vec<Node>],
+    reject_duplicate_keys: bool,
+) -> Result<LinoValue, CodecError> {
     let mut pairs = Vec::new();
+    let mut keys = reject_duplicate_keys.then(HashSet::new);
 
     for node in rows.iter().flatten() {
         let Node::Link {
@@ -750,10 +765,25 @@ fn marked_object_to_value(rows: &[Vec<Node>]) -> Result<LinoValue, CodecError> {
             )));
         };
 
-        pairs.push((key, node_to_value(value)?));
+        pairs.push(decode_pair(key, value, &mut keys)?);
     }
 
     Ok(LinoValue::Object(pairs))
+}
+
+fn decode_pair(
+    key: String,
+    node: &Node,
+    keys: &mut Option<HashSet<String>>,
+) -> Result<(String, LinoValue), CodecError> {
+    if let Some(keys) = keys
+        && !keys.insert(key.clone())
+    {
+        return Err(CodecError::ParseError(format!(
+            "duplicate object key {key:?}"
+        )));
+    }
+    Ok((key, node_to_value(node, keys.is_some())?))
 }
 
 /// The key a node in key position spells: a reference is the key itself, and a

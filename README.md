@@ -479,6 +479,55 @@ the readable tree cannot express (shared and circular references):
 files keep decoding, and every language reads the compact documents the others
 write.
 
+### Strict decoding for readable files
+
+Use the decode options when loading user-authored data such as a policy file.
+For example, `(o: (profile publication) (profile documents))` raises a duplicate
+key error with duplicate checking enabled.
+
+```javascript
+const policy = decode({
+  notation: text,
+  readableOnly: true,
+  rejectDuplicateKeys: true,
+  maxDepth: 64,
+});
+```
+
+```python
+policy = decode(text, readable_only=True, reject_duplicate_keys=True, max_depth=64)
+```
+
+```rust
+use lino_objects_codec::{DecodeOptions, decode_with_options};
+
+let policy = decode_with_options(text, DecodeOptions {
+    readable_only: true,
+    reject_duplicate_keys: true,
+    max_depth: Some(64),
+})?;
+```
+
+```csharp
+var policy = Codec.Decode(text, new DecodeOptions
+{
+    ReadableOnly = true,
+    RejectDuplicateKeys = true,
+    MaxDepth = 64,
+});
+```
+
+- Readable-only decoding accepts the indented and single-line readable formats
+  and rejects compact documents. Enabling either duplicate checking or a depth
+  limit also requires readable input.
+- Duplicate checking compares the decoded property names within each object,
+  case-sensitively. The same key can appear in separate objects.
+- The depth limit is inclusive and counts open parentheses outside quoted text
+  as the tokenizer reads them. A scalar such as `42` has depth zero, `(42)` has
+  depth one, and `(o: (profile publication))` has depth two. Links used to escape
+  scalars or keys count as well.
+- Omitting the options preserves the default decoding behavior.
+
 ## Debugging
 
 Tracing is off by default and can be turned on in any language by setting the

@@ -224,10 +224,13 @@ export function decodeLine(text) {
 /**
  * Decode the readable, indented Links Notation form back into a value.
  * @param {string} text - The readable Links Notation document
+ * @param {object} [options] - Readable decoding options
+ * @param {boolean} [options.rejectDuplicateKeys=false] - Require unique object keys
+ * @param {number} [options.maxDepth] - Maximum parenthesis nesting
  * @returns {*} The reconstructed value
  */
-export function decode(text) {
-  const tokens = tokenize(text);
+export function decode(text, { rejectDuplicateKeys = false, maxDepth } = {}) {
+  const tokens = tokenize(text, maxDepth);
   trace('readable.decode', () => `${tokens.length} tokens`);
   const cursor = new Cursor(tokens);
   const rows = cursor.parseRows(true);
@@ -238,10 +241,10 @@ export function decode(text) {
 
   // A document holding a single value (for example `42`) is that value.
   if (rows.length === 1 && rows[0].length === 1) {
-    return nodeToValue(rows[0][0]);
+    return nodeToValue(rows[0][0], rejectDuplicateKeys);
   }
 
-  return rowsToValue(rows, true, false);
+  return rowsToValue(rows, true, false, rejectDuplicateKeys);
 }
 
 // === Encoding ===
@@ -589,14 +592,16 @@ const TOKEN_REF = 'ref';
  * A reference remembers whether it was quoted, which is what distinguishes a
  * string from a number when the document is read back.
  * @param {string} text - The document to tokenize
+ * @param {number|undefined} maxDepth - Maximum parenthesis nesting
  * @returns {Array<{kind: string, value?: string, quoted?: boolean}>} The tokens
  */
-function tokenize(text) {
+function tokenize(text, maxDepth) {
   // Delimiters are ASCII. Index UTF-16 directly and slice complete text runs,
   // so supplementary characters survive without a whole-document array.
   const chars = text;
   const tokens = [];
   let i = 0;
+  let depth = 0;
 
   while (i < chars.length) {
     const c = chars[i];
@@ -607,9 +612,14 @@ function tokenize(text) {
     } else if (/\s/.test(c)) {
       i += 1;
     } else if (c === '(') {
+      depth += 1;
+      if (maxDepth !== undefined && depth > maxDepth) {
+        throw new SyntaxError(`maximum nesting depth ${maxDepth} exceeded`);
+      }
       tokens.push({ kind: TOKEN_OPEN });
       i += 1;
     } else if (c === ')') {
+      depth = Math.max(0, depth - 1);
       tokens.push({ kind: TOKEN_CLOSE });
       i += 1;
     } else if (QUOTE_CHARS.includes(c)) {
@@ -847,15 +857,15 @@ class Cursor {
   }
 }
 
-function nodeToValue(node) {
+function nodeToValue(node, rejectDuplicateKeys) {
   return node.ref
     ? refToValue(node.value, node.quoted)
-    : rowsToValue(node.rows, node.multiline, node.object);
+    : rowsToValue(node.rows, node.multiline, node.object, rejectDuplicateKeys);
 }
 
-function rowsToValue(rows, multiline, objectMarker) {
+function rowsToValue(rows, multiline, objectMarker, rejectDuplicateKeys) {
   if (objectMarker) {
-    return markedObjectToValue(rows);
+    return markedObjectToValue(rows, rejectDuplicateKeys);
   }
 
   if (rows.length === 0) {
@@ -869,19 +879,15 @@ function rowsToValue(rows, multiline, objectMarker) {
 
   // Written on one line, a link is a list of values: an object on one line says
   // so with the `o:` marker, which is what keeps `(key value)` unambiguous.
-  if (!multiline) {
-    return rows.flatMap((row) => row.map(nodeToValue));
-  }
-
-  // `key value` on every line makes an object; anything else is a list of values.
-  const isObject = rows.every(
-    (row) => row.length === 2 && nodeToKey(row[0]) !== undefined
-  );
+  // `key value` on every line of a multiline link makes an object.
+  const isObject =
+    multiline &&
+    rows.every((row) => row.length === 2 && nodeToKey(row[0]) !== undefined);
 
   if (isObject) {
     const result = {};
     for (const row of rows) {
-      result[nodeToKey(row[0])] = nodeToValue(row[1]);
+      addProperty(result, nodeToKey(row[0]), row[1], rejectDuplicateKeys);
     }
     return result;
   }
@@ -889,7 +895,7 @@ function rowsToValue(rows, multiline, objectMarker) {
   const items = [];
   for (const row of rows) {
     for (const node of row) {
-      items.push(nodeToValue(node));
+      items.push(nodeToValue(node, rejectDuplicateKeys));
     }
   }
   return items;
@@ -899,10 +905,11 @@ function rowsToValue(rows, multiline, objectMarker) {
  * Build the object a `(o: (key value) …)` link describes. Every value in it is
  * a pair, so anything else is a malformed document rather than a silent array.
  * @param {Array<Array<object>>} rows - The rows of the marked link
+ * @param {boolean} rejectDuplicateKeys - Require unique keys
  * @returns {object} The reconstructed object
  * @throws {SyntaxError} If the link holds anything that is not a pair
  */
-function markedObjectToValue(rows) {
+function markedObjectToValue(rows, rejectDuplicateKeys) {
   const result = {};
 
   for (const node of rows.flat()) {
@@ -932,10 +939,27 @@ function markedObjectToValue(rows) {
           'found a pair whose key is not text'
       );
     }
-    result[key] = nodeToValue(row[1]);
+    addProperty(result, key, row[1], rejectDuplicateKeys);
   }
 
   return result;
+}
+
+function addProperty(result, key, node, rejectDuplicateKeys) {
+  if (rejectDuplicateKeys) {
+    if (Object.hasOwn(result, key)) {
+      throw new SyntaxError(`duplicate object key ${JSON.stringify(key)}`);
+    }
+    // Treat special names such as __proto__ as ordinary own properties.
+    Object.defineProperty(result, key, {
+      value: nodeToValue(node, rejectDuplicateKeys),
+      enumerable: true,
+      writable: true,
+      configurable: true,
+    });
+    return;
+  }
+  result[key] = nodeToValue(node, rejectDuplicateKeys);
 }
 
 /**

@@ -279,12 +279,18 @@ Encode a Python object to Links Notation format.
 **Raises:**
 - `TypeError`: If the object type is not supported
 
-### `decode(notation: str) -> Any`
+### `decode(notation, *, readable_only=False, reject_duplicate_keys=False, max_depth=None)`
 
 Decode Links Notation format to a Python object.
 
 **Parameters:**
 - `notation`: String in Links Notation format
+- `readable_only` rejects compact notation.
+- `reject_duplicate_keys` rejects repeated decoded keys within an object.
+- `max_depth` limits the number of open parentheses outside quotes.
+
+Duplicate checking and a depth limit also require readable input. These
+decoding restrictions raise `ReadableFormatError` when violated.
 
 **Returns:**
 - Reconstructed Python object

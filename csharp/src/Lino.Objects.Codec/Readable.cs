@@ -212,9 +212,11 @@ public static class Readable
     /// <param name="text">The readable Links Notation document</param>
     /// <returns>The reconstructed value</returns>
     /// <exception cref="FormatException">If the document is not well formed</exception>
-    public static object? Decode(string text)
+    public static object? Decode(string text) => Decode(text, false, null);
+
+    internal static object? Decode(string text, bool rejectDuplicateKeys, int? maxDepth)
     {
-        var tokens = Tokenize(text);
+        var tokens = Tokenize(text, maxDepth);
         CodecDebug.Trace("readable.decode", () => $"{tokens.Count} tokens");
         var cursor = new Cursor(tokens);
         var rows = cursor.ParseRows(true);
@@ -227,10 +229,10 @@ public static class Readable
         // A document holding a single value (for example `42`) is that value.
         if (rows.Count == 1 && rows[0].Count == 1)
         {
-            return NodeToValue(rows[0][0]);
+            return NodeToValue(rows[0][0], rejectDuplicateKeys);
         }
 
-        return RowsToValue(rows, true, false);
+        return RowsToValue(rows, true, false, rejectDuplicateKeys);
     }
 
     // === Encoding ===
@@ -597,13 +599,14 @@ public static class Readable
     /// <summary>
     /// Split a document into tokens: parentheses, newlines and references.
     /// </summary>
-    private static List<Token> Tokenize(string text)
+    private static List<Token> Tokenize(string text, int? maxDepth)
     {
         // ASCII delimiters can be scanned directly in UTF-16; slices keep
         // surrogate pairs intact without copying the whole document.
         var chars = text;
         var tokens = new List<Token>();
         int i = 0;
+        int depth = 0;
 
         while (i < chars.Length)
         {
@@ -620,11 +623,17 @@ public static class Readable
             }
             else if (c == '(')
             {
+                depth++;
+                if (depth > maxDepth)
+                {
+                    throw new FormatException($"maximum nesting depth {maxDepth} exceeded");
+                }
                 tokens.Add(new Token(TokenKind.Open, string.Empty, false));
                 i++;
             }
             else if (c == ')')
             {
+                depth = Math.Max(0, depth - 1);
                 tokens.Add(new Token(TokenKind.Close, string.Empty, false));
                 i++;
             }
@@ -874,16 +883,17 @@ public static class Readable
         }
     }
 
-    private static object? NodeToValue(Node node) =>
+    private static object? NodeToValue(Node node, bool rejectDuplicateKeys) =>
         node.IsRef
             ? RefToValue(node.Value, node.Quoted)
-            : RowsToValue(node.Rows, node.Multiline, node.IsObject);
+            : RowsToValue(node.Rows, node.Multiline, node.IsObject, rejectDuplicateKeys);
 
-    private static object? RowsToValue(List<List<Node>> rows, bool multiline, bool objectMarker)
+    private static object? RowsToValue(
+        List<List<Node>> rows, bool multiline, bool objectMarker, bool rejectDuplicateKeys)
     {
         if (objectMarker)
         {
-            return MarkedObjectToValue(rows);
+            return MarkedObjectToValue(rows, rejectDuplicateKeys);
         }
 
         if (rows.Count == 0)
@@ -900,28 +910,15 @@ public static class Readable
         // Written on one line, a link is a list of values: an object on one line
         // says so with the `o:` marker, which is what keeps `(key value)`
         // unambiguous.
-        if (!multiline)
-        {
-            var line = new List<object?>();
-            foreach (var row in rows)
-            {
-                foreach (var node in row)
-                {
-                    line.Add(NodeToValue(node));
-                }
-            }
-            return line;
-        }
-
-        // `key value` on every line makes an object; anything else is a list of values.
-        var isObject = rows.All(row => row.Count == 2 && NodeToKey(row[0]) is not null);
+        // Two values per row, starting with a key, make a multiline object.
+        var isObject = multiline && rows.All(row => row.Count == 2 && NodeToKey(row[0]) is not null);
 
         if (isObject)
         {
             var result = new Dictionary<string, object?>();
             foreach (var row in rows)
             {
-                result[NodeToKey(row[0])!] = NodeToValue(row[1]);
+                AddProperty(result, NodeToKey(row[0])!, row[1], rejectDuplicateKeys);
             }
             return result;
         }
@@ -931,7 +928,7 @@ public static class Readable
         {
             foreach (var node in row)
             {
-                items.Add(NodeToValue(node));
+                items.Add(NodeToValue(node, rejectDuplicateKeys));
             }
         }
         return items;
@@ -942,7 +939,7 @@ public static class Readable
     /// it is a pair, so anything else is a malformed document rather than a
     /// silent array.
     /// </summary>
-    private static object? MarkedObjectToValue(List<List<Node>> rows)
+    private static object? MarkedObjectToValue(List<List<Node>> rows, bool rejectDuplicateKeys)
     {
         var result = new Dictionary<string, object?>();
 
@@ -974,10 +971,20 @@ public static class Readable
                     $"an object marked '{ObjectMarker}:' holds (key value) pairs, "
                     + "found a pair whose key is not text");
             }
-            result[key] = NodeToValue(pair[1]);
+            AddProperty(result, key, pair[1], rejectDuplicateKeys);
         }
 
         return result;
+    }
+
+    private static void AddProperty(
+        Dictionary<string, object?> result, string key, Node node, bool rejectDuplicateKeys)
+    {
+        if (rejectDuplicateKeys && result.ContainsKey(key))
+        {
+            throw new FormatException($"duplicate object key '{key}'");
+        }
+        result[key] = NodeToValue(node, rejectDuplicateKeys);
     }
 
     /// <summary>

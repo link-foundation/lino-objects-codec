@@ -13,7 +13,13 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { encode, encodeLine, decode, decodeLine } from '../src/index.js';
+import {
+  ObjectCodec,
+  encode,
+  encodeLine,
+  decode,
+  decodeLine,
+} from '../src/index.js';
 
 const LANGUAGE = 'js';
 const LANGUAGES = new Set(['js', 'python', 'rust', 'csharp']);
@@ -31,7 +37,9 @@ const SPECIAL_FLOATS = new Map([
   ['-Infinity', -Infinity],
 ]);
 
-const { cases, legacy } = JSON.parse(readFileSync(FIXTURES, 'utf-8'));
+const { cases, legacy, strictDecode } = JSON.parse(
+  readFileSync(FIXTURES, 'utf-8')
+);
 
 /**
  * Turn a fixture value specification into a JavaScript value.
@@ -162,5 +170,58 @@ test('no shared document hides its text in base64', () => {
   for (const testCase of cases) {
     assert.ok(!testCase.text.includes('base64 "'), testCase.name);
     assert.ok(!testCase.line.includes('base64 "'), testCase.name);
+  }
+});
+
+for (const { name, text, depth, error, value } of strictDecode) {
+  test(`strict decode: ${name}`, () => {
+    const options = {
+      notation: text,
+      readableOnly: true,
+      rejectDuplicateKeys: true,
+      maxDepth: depth,
+    };
+    if (error) {
+      assert.throws(() => decode(options), new RegExp(error));
+    } else {
+      assert.deepEqual(decode(options), build(value));
+    }
+  });
+}
+
+test('decode restrictions are optional and scoped to a call', () => {
+  const codec = new ObjectCodec();
+  const duplicate = '(o: (profile publication) (profile documents))';
+  assert.throws(
+    () => codec.decode({ notation: duplicate, rejectDuplicateKeys: true }),
+    /duplicate object key/
+  );
+  assert.deepEqual(codec.decode({ notation: duplicate, readableOnly: true }), {
+    profile: 'documents',
+  });
+  const compact = '(int 42)';
+  assert.throws(
+    () => codec.decode({ notation: compact, maxDepth: 2 }),
+    /compact notation/
+  );
+  assert.throws(
+    () => codec.decode({ notation: compact, rejectDuplicateKeys: true }),
+    /compact notation/
+  );
+  assert.equal(codec.decode({ notation: compact }), 42);
+});
+
+test('strict decode returns a literal __proto__ property', () => {
+  const value = decode({
+    notation: '(o: (__proto__ 1))',
+    rejectDuplicateKeys: true,
+  });
+  assert.equal(Object.getPrototypeOf(value), Object.prototype);
+  assert.equal(Object.hasOwn(value, '__proto__'), true);
+});
+
+test('decode rejects invalid depth limits', () => {
+  for (const maxDepth of [-1, 1.5, Infinity, NaN, null, '1']) {
+    assert.throws(() => decode({ notation: '', maxDepth }), RangeError);
   }
 });
