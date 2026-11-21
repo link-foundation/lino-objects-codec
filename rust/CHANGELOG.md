@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-21
+
+### Added
+
+- Add `decode_with_options` for readable-only decoding, duplicate property rejection, and a maximum nesting depth.
+
 ## [1.0.1] - 2026-11-16
 
 ### Changed
