@@ -1047,9 +1047,9 @@ fn is_compact_notation(notation: &str, include_all_markers: bool) -> bool {
         (marker, rest) = split_token(rest.trim_start());
     }
 
-    if !COMPACT_TYPE_MARKERS.contains(&marker)
-        && !(include_all_markers && matches!(marker, "undefined" | "json_number"))
-    {
+    let is_compact_marker = COMPACT_TYPE_MARKERS.contains(&marker)
+        || (include_all_markers && matches!(marker, "undefined" | "json_number"));
+    if !is_compact_marker {
         return false;
     }
 
