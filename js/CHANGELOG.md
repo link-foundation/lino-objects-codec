@@ -1,5 +1,11 @@
 # lino-objects-codec
 
+## 1.1.0
+
+### Minor Changes
+
+- dbd877d: Add opt-in readable-only decoding, duplicate property rejection, and a maximum nesting depth to `decode`.
+
 ## 1.0.0
 
 ### Major Changes
