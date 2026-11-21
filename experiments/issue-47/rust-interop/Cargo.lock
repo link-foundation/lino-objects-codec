@@ -17,9 +17,9 @@ dependencies = [
 
 [[package]]
 name = "links-notation"
-version = "0.31.5"
+version = "0.31.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c85242a72929b2420870da16f19ea6f7c3f3ca20bbbcd4157c72a0325f02fd64"
+checksum = "813d02bd0432e83be5851f620f45423b1b6738b3bcdcd854a6702440ab8fcfbc"
 dependencies = [
  "links-notation-macro",
  "nom",
@@ -38,7 +38,7 @@ dependencies = [
 
 [[package]]
 name = "lino-objects-codec"
-version = "0.9.4"
+version = "1.0.1"
 dependencies = [
  "base64",
  "links-notation",

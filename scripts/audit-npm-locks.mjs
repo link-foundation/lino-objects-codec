@@ -18,8 +18,8 @@ export const MANUAL_ACTION = `npm maintainers must publish a CLI with patched bu
 export function isKnownNpmBundleReport(report, lock) {
   const npm = lock?.packages?.['node_modules/npm'];
   if (
-    npm?.version !== '12.2.2' ||
-    npm.resolved !== 'https://registry.npmjs.org/npm/-/npm-12.2.2.tgz'
+    npm?.version !== '12.2.3' ||
+    npm.resolved !== 'https://registry.npmjs.org/npm/-/npm-12.2.3.tgz'
   )
     return false;
   for (const [name, version] of [
@@ -135,7 +135,7 @@ export function auditNpmLocks({
       // An unreadable/malformed lock cannot qualify; still audit the next tree.
     }
     if (knownBundle && eventName === 'pull_request') {
-      const message = `PR-only deferral: npm 12.2.2's bundled glob/minimatch advisories remain UNRESOLVED. Skipping enforcement only for these two upstream advisories and their npm-internal propagation. ${MANUAL_ACTION}`;
+      const message = `PR-only deferral: npm 12.2.3's bundled glob/minimatch advisories remain UNRESOLVED. Skipping enforcement only for these two upstream advisories and their npm-internal propagation. ${MANUAL_ACTION}`;
       log(`::warning::${message}`);
       if (summary)
         appendFileSync(
