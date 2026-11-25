@@ -11,11 +11,96 @@
  * @module lino-objects-codec/format
  */
 
-import { Parser as LinoParser } from 'links-notation';
+import {
+  Parser as LinoParser,
+  decodeReferenceLiteral,
+  encodeReferenceLiteral,
+} from 'links-notation';
 import { trace } from './debug.js';
 
 // Shared parser instance
 const parser = new LinoParser();
+
+/**
+ * Spelling of the empty string. The links-notation Parser reads a trailing
+ * empty quote pair (`a ''`) as the start of a value that spans the following
+ * lines (link-foundation/links-notation#443), so the empty string is written as
+ * the lossless reference literal `~1{}` that every links-notation binding reads
+ * back as an empty string (links-notation 0.24.0 and later).
+ */
+const EMPTY_REFERENCE = encodeReferenceLiteral('');
+
+/**
+ * A bare reference starting like this is a versioned reference literal
+ * (`~1{}`), so a string with this prefix must be quoted to keep its spelling.
+ */
+const REFERENCE_LITERAL_PREFIX = /^~[0-9]+\{/;
+
+/**
+ * Check whether a string can be written as a bare reference that the
+ * links-notation Parser reads back unchanged.
+ *
+ * @private
+ * @param {string} str - Reference text
+ * @returns {boolean} True when the text must be quoted (or written as a literal)
+ */
+function needsReferenceQuoting(str) {
+  return (
+    str === '' ||
+    /[\s()'":`]/.test(str) ||
+    // The Parser drops `#...` as a comment (link-foundation/links-notation#444).
+    str.startsWith('#') ||
+    REFERENCE_LITERAL_PREFIX.test(str)
+  );
+}
+
+/**
+ * Wrap text in quotes the links-notation Parser reads back unchanged.
+ *
+ * A text with only one kind of quote is wrapped in the other kind. A text with
+ * both doubles the less frequent one inside it. The Parser reads a run of
+ * quotes at the start of a reference as a wider delimiter, so doubling is only
+ * used when the text does not begin or end with that quote; otherwise the other
+ * quote, then a backtick, and finally the reference literal `~1{...}` is used.
+ *
+ * @private
+ * @param {string} str - Text to quote
+ * @returns {string} Quoted reference
+ */
+function quoteText(str) {
+  if (str === '') {
+    return EMPTY_REFERENCE;
+  }
+
+  const hasSingle = str.includes("'");
+  const hasDouble = str.includes('"');
+
+  if (hasSingle && !hasDouble) {
+    return `"${str}"`;
+  }
+
+  if (!hasSingle) {
+    return `'${str}'`;
+  }
+
+  // Both quotes: double the less frequent one to minimize escaping.
+  const singleQuoteCount = str.split("'").length - 1;
+  const doubleQuoteCount = str.split('"').length - 1;
+  const candidates =
+    doubleQuoteCount < singleQuoteCount ? ['"', "'"] : ["'", '"'];
+
+  for (const quote of candidates) {
+    if (!str.startsWith(quote) && !str.endsWith(quote)) {
+      return `${quote}${str.replaceAll(quote, quote + quote)}${quote}`;
+    }
+  }
+
+  if (!str.includes('`')) {
+    return `\`${str}\``;
+  }
+
+  return encodeReferenceLiteral(str);
+}
 
 /**
  * Escape a reference for Links Notation.
@@ -24,7 +109,9 @@ const parser = new LinoParser();
  * - Reference: An identifier or value (string, number, boolean)
  * - Link: A parenthesized sequence of references or nested links
  *
- * References need escaping when they contain spaces, quotes, parentheses, colons, or newlines:
+ * References need escaping when they contain spaces, quotes, parentheses, colons, or newlines,
+ * when they start with `#` (a comment) or look like a reference literal (`~1{...}`):
+ * - The empty string is written as the reference literal `~1{}`
  * - Use single quotes '' if the string contains spaces or double quotes
  * - Use double quotes "" if the string contains single quotes
  * - Use double quotes "" if it contains both (escape internal double quotes)
@@ -42,40 +129,11 @@ export function escapeReference(options = {}) {
 
   const str = String(value);
 
-  // Check if escaping is needed (contains spaces, quotes, parentheses, colons, or newlines)
-  const needsEscaping = str === '' || /[\s()'":`]/.test(str);
-
-  if (!needsEscaping) {
+  if (!needsReferenceQuoting(str)) {
     return str;
   }
 
-  // If contains single quotes but not double quotes, use double quotes
-  if (str.includes("'") && !str.includes('"')) {
-    return `"${str}"`;
-  }
-
-  // If contains double quotes but not single quotes, use single quotes
-  if (str.includes('"') && !str.includes("'")) {
-    return `'${str}'`;
-  }
-
-  // If contains both quotes, count which one appears more
-  // and use the other one to minimize escaping
-  if (str.includes("'") && str.includes('"')) {
-    const singleQuoteCount = (str.match(/'/g) || []).length;
-    const doubleQuoteCount = (str.match(/"/g) || []).length;
-
-    if (doubleQuoteCount < singleQuoteCount) {
-      // Use double quotes, escape internal double quotes by doubling
-      return `"${str.replaceAll('"', '""')}"`;
-    } else {
-      // Use single quotes, escape internal single quotes by doubling
-      return `'${str.replaceAll("'", "''")}'`;
-    }
-  }
-
-  // Just spaces or other special characters, use single quotes by default
-  return `'${str}'`;
+  return quoteText(str);
 }
 
 /**
@@ -337,21 +395,7 @@ export function formatAsLino(options = {}) {
  * @returns {string} Quoted reference
  */
 function quoteReference(value) {
-  const str = String(value);
-
-  if (str.includes("'") && !str.includes('"')) {
-    return `"${str}"`;
-  }
-
-  if (str.includes('"') && !str.includes("'")) {
-    return `'${str}'`;
-  }
-
-  if (str.includes("'") && str.includes('"')) {
-    return `'${str.replaceAll("'", "''")}'`;
-  }
-
-  return `'${str}'`;
+  return quoteText(String(value));
 }
 
 /**
@@ -522,14 +566,33 @@ function formatIndentedChildValue(
  *     command 'echo test'
  *     exitCode '0'
  *
+ * With `nested: true`, nested objects and arrays stay under their parent
+ * instead of becoming separate sections with generated ids:
+ * ```
+ * hive_mind_state:
+ *   tasks:
+ *     q-1:
+ *       args:
+ *         --model
+ *         ~1{}
+ *         '#x'
+ * ```
+ * An array item that is itself a non-empty object or array is written under a
+ * bare `-:` header. See {@link parseIndented} for reading it back.
+ *
+ * Every reference is written so that the plain links-notation `Parser` reads
+ * it back unchanged: the empty string is the reference literal `~1{}`, and a
+ * string starting with `#` or `~<digits>{` is quoted.
+ *
  * @param {Object} options - Options
  * @param {string} options.id - The object identifier (displayed on first line)
  * @param {Object} options.obj - The object with key-value pairs to format
  * @param {string} [options.indent='  '] - The indentation string (default: 2 spaces)
+ * @param {boolean} [options.nested=false] - Keep nested objects and arrays under their parent
  * @returns {string} Formatted indented Links Notation string
  */
 export function formatIndented(options = {}) {
-  const { id, obj, indent = '  ' } = options;
+  const { id, obj, indent = '  ', nested = false } = options;
 
   if (!id) {
     throw new Error('id is required for formatIndented');
@@ -537,6 +600,10 @@ export function formatIndented(options = {}) {
 
   if (!obj || typeof obj !== 'object' || Array.isArray(obj)) {
     throw new Error('obj must be a plain object for formatIndented');
+  }
+
+  if (nested) {
+    return formatNestedIndented(String(id), obj, indent);
   }
 
   const rootId = String(id);
@@ -590,6 +657,88 @@ export function formatIndented(options = {}) {
 
   formatDefinition(rootId, obj);
   return sections.join('\n\n');
+}
+
+/**
+ * Header written for an array item that is itself a non-empty container.
+ * A key with the same text is always quoted (`'-':`), so a bare `-:` header
+ * always marks an array item.
+ */
+const NESTED_ARRAY_ITEM = '-';
+
+/**
+ * Check whether a value is written as a header with indented children in the
+ * nested form: any object, or an array with at least one item.
+ *
+ * @private
+ * @param {*} value - The value to check
+ * @returns {boolean} True when the value gets its own header line
+ */
+function isNestedContainer(value) {
+  return shouldUseIndentedDefinition(value);
+}
+
+/**
+ * Format an object key for the nested form.
+ *
+ * @private
+ * @param {string} key - Object key
+ * @returns {string} Escaped key
+ */
+function formatNestedKey(key) {
+  return key === NESTED_ARRAY_ITEM
+    ? quoteReference(key)
+    : escapeReference({ value: key });
+}
+
+/**
+ * Format an object in the nested indented form.
+ *
+ * @private
+ * @param {string} rootId - Root identifier
+ * @param {Object} obj - Root object
+ * @param {string} indent - Indentation of one level
+ * @returns {string} Nested indented Links Notation text
+ */
+function formatNestedIndented(rootId, obj, indent) {
+  const lines = [];
+
+  function writeChildren(value, level, ancestors) {
+    if (ancestors.has(value)) {
+      throw new Error(
+        'formatIndented does not support circular references; use encode/decode for typed object graphs'
+      );
+    }
+    ancestors.add(value);
+    const pad = indent.repeat(level);
+    const entries = Array.isArray(value)
+      ? value.map((item) => [null, item])
+      : Object.entries(value);
+
+    for (const [key, child] of entries) {
+      const head = key === null ? NESTED_ARRAY_ITEM : formatNestedKey(key);
+
+      if (isNestedContainer(child)) {
+        lines.push(`${pad}${head}:`);
+        writeChildren(child, level + 1, ancestors);
+        continue;
+      }
+
+      const formattedValue = Array.isArray(child)
+        ? '()'
+        : formatIndentedScalarValue(child);
+      lines.push(
+        key === null
+          ? `${pad}${formattedValue}`
+          : `${pad}${head} ${formattedValue}`
+      );
+    }
+    ancestors.delete(value);
+  }
+
+  lines.push(`${escapeReference({ value: rootId })}:`);
+  writeChildren(obj, 1, new Set());
+  return lines.join('\n');
 }
 
 /**
@@ -713,8 +862,18 @@ function readBareIndentedReference(line, index) {
     index += 1;
   }
 
+  const value = line.slice(start, index);
+
+  // A reference literal (`~1{}`) always stands for a string, like a quoted one.
+  if (REFERENCE_LITERAL_PREFIX.test(value)) {
+    return {
+      token: { value: decodeReferenceLiteral(value), quoted: true },
+      nextIndex: index,
+    };
+  }
+
   return {
-    token: { value: line.slice(start, index), quoted: false },
+    token: { value, quoted: false },
     nextIndex: index,
   };
 }
@@ -867,6 +1026,199 @@ function parseIndentedScalarToken(token) {
 }
 
 /**
+ * Store a key on a decoded object as an own property, including `__proto__`.
+ *
+ * @private
+ * @param {Object} target - Decoded object
+ * @param {string} key - Key
+ * @param {*} value - Value
+ */
+function setOwnProperty(target, key, value) {
+  Object.defineProperty(target, key, {
+    value,
+    enumerable: true,
+    writable: true,
+    configurable: true,
+  });
+}
+
+/**
+ * Read one logical line of the nested form.
+ *
+ * @private
+ * @param {string} rawLine - Logical line, quoted continuations included
+ * @returns {{ indent: number, header: boolean, tokens: Array<{ value: string, quoted: boolean }>, text: string }} Parsed line
+ */
+function readNestedLine(rawLine) {
+  const text = rawLine.trim();
+  const indent = rawLine.length - rawLine.trimStart().length;
+  const colonIndex = findHeaderColon(text);
+
+  if (colonIndex === -1) {
+    const tokens = tokenizeIndentedReferences(text);
+    if (tokens.length !== 1 && tokens.length !== 2) {
+      throw new Error(`Invalid indented value line: ${text}`);
+    }
+    return { indent, header: false, tokens, text };
+  }
+
+  if (text.slice(colonIndex + 1).trim() !== '') {
+    throw new Error(`Invalid definition header: ${text}`);
+  }
+
+  const tokens = tokenizeIndentedReferences(
+    text.slice(0, colonIndex).trimEnd()
+  );
+  if (tokens.length !== 1) {
+    throw new Error(`Invalid definition header: ${text}`);
+  }
+  return { indent, header: true, tokens, text };
+}
+
+/**
+ * Turn the logical lines of the nested form into a tree of headers and the
+ * lines indented under them.
+ *
+ * @private
+ * @param {string} text - Nested indented text
+ * @returns {{ line: Object, children: Array }} Root node
+ */
+function buildNestedTree(text) {
+  let root = null;
+  const stack = [];
+
+  for (const rawLine of splitIndentedLines(text)) {
+    if (!rawLine.trim()) {
+      continue;
+    }
+
+    const node = { line: readNestedLine(rawLine), children: [] };
+    const { indent } = node.line;
+
+    if (!root) {
+      if (indent !== 0) {
+        throw new Error('Indented value found before a definition header');
+      }
+      root = node;
+      stack.push(node);
+      continue;
+    }
+
+    if (indent === 0) {
+      throw new Error(
+        `Nested indented text has more than one top-level definition: ${node.line.text}`
+      );
+    }
+
+    while (stack.length > 1 && stack[stack.length - 1].line.indent >= indent) {
+      stack.pop();
+    }
+
+    const parent = stack[stack.length - 1];
+    if (!parent.line.header) {
+      throw new Error(`Unexpected indentation: ${node.line.text}`);
+    }
+    const siblings = parent.children;
+    if (siblings.length > 0 && siblings[0].line.indent !== indent) {
+      throw new Error(`Inconsistent indentation: ${node.line.text}`);
+    }
+
+    siblings.push(node);
+    stack.push(node);
+  }
+
+  if (!root) {
+    throw new Error(
+      'text must have at least one non-empty line (the identifier)'
+    );
+  }
+
+  return root;
+}
+
+/**
+ * Check whether a node is an array item of the nested form.
+ *
+ * @private
+ * @param {{ line: Object }} node - Tree node
+ * @returns {boolean} True for scalar items and bare `-:` headers
+ */
+function isNestedArrayItem(node) {
+  const { header, tokens } = node.line;
+  if (header) {
+    return !tokens[0].quoted && tokens[0].value === NESTED_ARRAY_ITEM;
+  }
+  return tokens.length === 1;
+}
+
+/**
+ * Decode the children of a header in the nested form.
+ *
+ * @private
+ * @param {{ line: Object, children: Array }} node - Header node
+ * @returns {Object|Array} Decoded object or array
+ */
+function decodeNestedChildren(node) {
+  const { children } = node;
+  const itemCount = children.filter(isNestedArrayItem).length;
+
+  if (itemCount > 0 && itemCount !== children.length) {
+    throw new Error(
+      `Cannot mix array items and object pairs in ${node.line.text}`
+    );
+  }
+
+  if (itemCount > 0) {
+    return children.map((child) =>
+      child.line.header
+        ? decodeNestedChildren(child)
+        : parseIndentedScalarToken(child.line.tokens[0])
+    );
+  }
+
+  const result = {};
+  for (const child of children) {
+    const [keyToken, valueToken] = child.line.tokens;
+    if (child.line.header) {
+      setOwnProperty(result, keyToken.value, decodeNestedChildren(child));
+    } else {
+      if (child.children.length > 0) {
+        throw new Error(`Unexpected indentation under ${child.line.text}`);
+      }
+      setOwnProperty(
+        result,
+        keyToken.value,
+        parseIndentedScalarToken(valueToken)
+      );
+    }
+  }
+  return result;
+}
+
+/**
+ * Parse the nested indented form written by `formatIndented({ nested: true })`.
+ *
+ * @private
+ * @param {string} text - Nested indented text
+ * @returns {{ id: string, obj: Object }} Root id and decoded object
+ */
+function parseNestedIndented(text) {
+  const root = buildNestedTree(text);
+  const { tokens } = root.line;
+
+  if (tokens.length !== 1) {
+    throw new Error(`Invalid definition header: ${root.line.text}`);
+  }
+
+  trace(
+    'format.parseIndented',
+    () => `nested root ${tokens[0].value} with ${root.children.length} children`
+  );
+
+  return { id: tokens[0].value, obj: decodeNestedChildren(root) };
+}
+
+/**
  * Parse an indented Links Notation string back to an object.
  *
  * This parser handles the recursive definition format emitted by
@@ -889,17 +1241,38 @@ function parseIndentedScalarToken(token) {
  * The legacy flat format without a colon after the root identifier is also
  * accepted.
  *
+ * With `nested: true`, reads the nested form written by
+ * `formatIndented({ nested: true })`: a single root header whose nested
+ * objects and arrays are indented under their keys. A line `key value` is an
+ * object entry, a line with one value is an array item, `key:` opens a nested
+ * object or array, and a bare `-:` opens a nested container inside an array.
+ * A `key:` header without indented lines is an empty object.
+ *
+ * Both forms read the reference literal `~1{}` as the empty string.
+ *
  * @param {Object} options - Options
  * @param {string} options.text - The indented Links Notation string to parse
+ * @param {boolean} [options.nested=false] - Read the nested form
  * @returns {{ id: string, obj: Object }} Object with id and parsed key-value pairs
  */
 export function parseIndented(options = {}) {
-  const { text } = options;
+  const { text, nested = false } = options;
 
   if (!text || typeof text !== 'string') {
     throw new Error('text is required for parseIndented');
   }
 
+  return nested ? parseNestedIndented(text) : parseSectionedIndented(text);
+}
+
+/**
+ * Parse the sectioned form, where nested values are separate definitions.
+ *
+ * @private
+ * @param {string} text - Indented text
+ * @returns {{ id: string, obj: Object }} Root id and decoded object
+ */
+function parseSectionedIndented(text) {
   const definitions = splitIndentedDefinitions(text);
 
   if (definitions.length === 0) {
