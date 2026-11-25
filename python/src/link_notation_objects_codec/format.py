@@ -8,7 +8,7 @@ Uses the links-notation library for parsing to ensure compatibility with the sta
 import re
 from typing import Any
 
-from links_notation import Parser
+from links_notation import Parser, encode_reference_literal
 
 from .debug import trace
 
@@ -16,11 +16,56 @@ from .debug import trace
 _parser = Parser()
 
 
+# The links-notation reference literal for the empty string. A bare empty
+# quote pair at the end of a line can swallow the following lines.
+EMPTY_REFERENCE = encode_reference_literal("")
+
+# A bare reference starting with ``~<digits>{`` is a reference literal.
+_REFERENCE_LITERAL_PREFIX = re.compile(r"~[0-9]+\{")
+
+
+def _needs_reference_quoting(s: str) -> bool:
+    """Return True when the Parser would not read ``s`` back as a bare reference."""
+    return (
+        s == ""
+        or bool(re.search(r'[\s()\'":`]', s))
+        or s.startswith("#")
+        or _REFERENCE_LITERAL_PREFIX.match(s) is not None
+    )
+
+
+def _quote_text(s: str, prefer: str = "'") -> str:
+    """
+    Quote ``s`` so the links-notation Parser reads it back unchanged.
+
+    The empty string becomes the reference literal ``~1{}``. Otherwise ``prefer``
+    is used when ``s`` does not contain it, then the other quote. When ``s``
+    contains both quotes, the less frequent one is doubled inside, unless ``s``
+    starts or ends with it (a leading run of quotes is read as a wider
+    delimiter). The fallbacks are a backtick, then a reference literal.
+    """
+    if s == "":
+        return EMPTY_REFERENCE
+    other = '"' if prefer == "'" else "'"
+    for quote in (prefer, other):
+        if quote not in s:
+            return f"{quote}{s}{quote}"
+    candidates = ('"', "'") if s.count('"') < s.count("'") else ("'", '"')
+    for quote in candidates:
+        if not s.startswith(quote) and not s.endswith(quote):
+            return f"{quote}{s.replace(quote, quote + quote)}{quote}"
+    if "`" not in s:
+        return f"`{s}`"
+    return encode_reference_literal(s)
+
+
 def escape_reference(value: Any) -> str:
     """
     Escape a reference for Links Notation.
 
-    References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.
+    References need escaping when they are empty, contain spaces, quotes,
+    parentheses, colons, or newlines, start with ``#`` (a comment), or start with
+    ``~<digits>{`` (a reference literal). The empty string is written as ``~1{}``.
 
     Args:
         value: The value to escape
@@ -34,34 +79,10 @@ def escape_reference(value: Any) -> str:
 
     s = str(value)
 
-    # Check if escaping is needed
-    needs_escaping = bool(re.search(r'[\s()\'":]', s)) or "\n" in s
-
-    if not needs_escaping:
+    if not _needs_reference_quoting(s):
         return s
 
-    # If contains single quotes but not double quotes, use double quotes
-    if "'" in s and '"' not in s:
-        return f'"{s}"'
-
-    # If contains double quotes but not single quotes, use single quotes
-    if '"' in s and "'" not in s:
-        return f"'{s}'"
-
-    # If contains both quotes, count which one appears more
-    if "'" in s and '"' in s:
-        single_count = s.count("'")
-        double_count = s.count('"')
-
-        if double_count < single_count:
-            # Use double quotes, escape internal double quotes by doubling
-            return f'"{s.replace(chr(34), chr(34) + chr(34))}"'
-        else:
-            # Use single quotes, escape internal single quotes by doubling
-            return f"'{s.replace(chr(39), chr(39) + chr(39))}'"
-
-    # Just spaces or other special characters, use single quotes by default
-    return f"'{s}'"
+    return _quote_text(s)
 
 
 def unescape_reference(s: str | None) -> str | None:
@@ -89,9 +110,10 @@ def unescape_reference(s: str | None) -> str | None:
 def _format_indented_value(value: Any) -> str:
     """
     Format a value for display in indented Links Notation.
-    Uses quoting strategy compatible with the links-notation parser:
-    - If value contains double quotes, wrap in single quotes
-    - Otherwise, wrap in double quotes
+
+    Values are quoted, preferring double quotes, so that the links-notation
+    Parser reads them back unchanged (see ``_quote_text``). The empty string is
+    written as the reference literal ``~1{}``.
 
     Args:
         value: The value to format
@@ -102,23 +124,7 @@ def _format_indented_value(value: Any) -> str:
     if value is None:
         return '"null"'
 
-    s = str(value)
-
-    # If contains double quotes but no single quotes, use single quotes
-    if '"' in s and "'" not in s:
-        return f"'{s}'"
-
-    # If contains single quotes but no double quotes, use double quotes
-    if "'" in s and '"' not in s:
-        return f'"{s}"'
-
-    # If contains both, use single quotes and escape internal single quotes
-    if "'" in s and '"' in s:
-        escaped = s.replace("'", "''")
-        return f"'{escaped}'"
-
-    # Default: use double quotes
-    return f'"{s}"'
+    return _quote_text(str(value), prefer='"')
 
 
 def format_indented(
