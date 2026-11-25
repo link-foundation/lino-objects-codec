@@ -1,6 +1,7 @@
 //! Formatting utilities for indented Links Notation and individual values.
 
 use super::{LiNo, parse_lino_to_links};
+use links_notation::encode_reference_literal;
 
 // Public access to the same quoting rules used by both readable encoders.
 pub use crate::readable::{format_value_single_line, format_value_verbatim, quote, unescape};
@@ -26,9 +27,65 @@ impl std::fmt::Display for FormatError {
 
 impl std::error::Error for FormatError {}
 
+/// Whether the links-notation Parser would not read `value` back as a bare reference.
+fn needs_reference_quoting(value: &str) -> bool {
+    value.is_empty()
+        || value
+            .chars()
+            .any(|c| c.is_whitespace() || matches!(c, '(' | ')' | '\'' | '"' | ':' | '`'))
+        || value.starts_with('#')
+        || starts_with_reference_literal(value)
+}
+
+/// Whether `value` starts with `~<digits>{`, the reference-literal prefix.
+fn starts_with_reference_literal(value: &str) -> bool {
+    value.strip_prefix('~').is_some_and(|rest| {
+        let digits = rest.bytes().take_while(u8::is_ascii_digit).count();
+        digits > 0 && rest.as_bytes().get(digits) == Some(&b'{')
+    })
+}
+
+/// Quote `value` so the links-notation Parser reads it back unchanged.
+///
+/// The empty string becomes the reference literal `~1{}`. Otherwise `prefer` is
+/// used when `value` does not contain it, then the other quote. When `value`
+/// contains both quotes, the less frequent one is doubled inside, unless
+/// `value` starts or ends with it (a leading run of quotes is read as a wider
+/// delimiter). The fallbacks are a backtick, then a reference literal.
+fn quote_text(value: &str, prefer: char) -> String {
+    if value.is_empty() {
+        return encode_reference_literal("");
+    }
+    let other = if prefer == '\'' { '"' } else { '\'' };
+    for quote in [prefer, other] {
+        if !value.contains(quote) {
+            return format!("{quote}{value}{quote}");
+        }
+    }
+    let single_count = value.matches('\'').count();
+    let double_count = value.matches('"').count();
+    let candidates = if double_count < single_count {
+        ['"', '\'']
+    } else {
+        ['\'', '"']
+    };
+    for quote in candidates {
+        if !value.starts_with(quote) && !value.ends_with(quote) {
+            let doubled = value.replace(quote, &format!("{quote}{quote}"));
+            return format!("{quote}{doubled}{quote}");
+        }
+    }
+    if !value.contains('`') {
+        return format!("`{value}`");
+    }
+    encode_reference_literal(value)
+}
+
 /// Escape a reference for Links Notation.
 ///
-/// References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.
+/// References need escaping when they are empty, contain spaces, quotes,
+/// parentheses, colons, or newlines, start with `#` (a comment), or start with
+/// `~<digits>{` (a reference literal). The empty string is written as `~1{}`.
 ///
 /// # Arguments
 ///
@@ -38,46 +95,10 @@ impl std::error::Error for FormatError {}
 ///
 /// The escaped reference string
 pub fn escape_reference(value: &str) -> String {
-    // Check if escaping is needed
-    let needs_escaping = value
-        .chars()
-        .any(|c| c.is_whitespace() || c == '(' || c == ')' || c == '\'' || c == '"' || c == ':')
-        || value.contains('\n');
-
-    if !needs_escaping {
+    if !needs_reference_quoting(value) {
         return value.to_string();
     }
-
-    let has_single = value.contains('\'');
-    let has_double = value.contains('"');
-
-    // If contains single quotes but not double quotes, use double quotes
-    if has_single && !has_double {
-        return format!("\"{}\"", value);
-    }
-
-    // If contains double quotes but not single quotes, use single quotes
-    if has_double && !has_single {
-        return format!("'{}'", value);
-    }
-
-    // If contains both quotes, count which one appears more
-    if has_single && has_double {
-        let single_count = value.chars().filter(|&c| c == '\'').count();
-        let double_count = value.chars().filter(|&c| c == '"').count();
-
-        if double_count < single_count {
-            // Use double quotes, escape internal double quotes by doubling
-            let escaped = value.replace('"', "\"\"");
-            return format!("\"{}\"", escaped);
-        }
-        // Use single quotes, escape internal single quotes by doubling
-        let escaped = value.replace('\'', "''");
-        return format!("'{}'", escaped);
-    }
-
-    // Just spaces or other special characters, use single quotes by default
-    format!("'{}'", value)
+    quote_text(value, '\'')
 }
 
 /// Unescape a reference from Links Notation format.
@@ -96,31 +117,12 @@ pub fn unescape_reference(s: &str) -> String {
 }
 
 /// Format a value for display in indented Links Notation.
-/// Uses quoting strategy compatible with the links-notation parser:
-/// - If value contains double quotes, wrap in single quotes
-/// - Otherwise, wrap in double quotes
+///
+/// Values are quoted, preferring double quotes, so that the links-notation
+/// Parser reads them back unchanged (see `quote_text`). The empty string is
+/// written as the reference literal `~1{}`.
 fn format_indented_value(value: &str) -> String {
-    let has_single = value.contains('\'');
-    let has_double = value.contains('"');
-
-    // If contains double quotes but no single quotes, use single quotes
-    if has_double && !has_single {
-        return format!("'{}'", value);
-    }
-
-    // If contains single quotes but no double quotes, use double quotes
-    if has_single && !has_double {
-        return format!("\"{}\"", value);
-    }
-
-    // If contains both, use single quotes and escape internal single quotes
-    if has_single && has_double {
-        let escaped = value.replace('\'', "''");
-        return format!("'{}'", escaped);
-    }
-
-    // Default: use double quotes
-    format!("\"{}\"", value)
+    quote_text(value, '"')
 }
 
 /// Format an object in indented Links Notation format.
