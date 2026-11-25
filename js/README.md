@@ -159,6 +159,32 @@ console.log(obj.catalog.languages[0]);
 // Output: en
 ```
 
+Pass `nested: true` to keep nested objects and arrays under their parent instead of writing a separate section with a generated id for each of them:
+
+```javascript
+const state = {
+  intake: { state: 'draining' },
+  tasks: { 'q-1': { args: ['--model', '', '#x'] } },
+};
+const text = formatIndented({
+  id: 'hive_mind_state',
+  obj: state,
+  nested: true,
+});
+// hive_mind_state:
+//   intake:
+//     state draining
+//   tasks:
+//     q-1:
+//       args:
+//         --model
+//         ~1{}
+//         '#x'
+parseIndented({ text, nested: true }).obj; // deep-equals state
+```
+
+Both forms write every reference so that the plain links-notation `Parser` reads it back unchanged: the empty string is the reference literal `~1{}`, and text starting with `#` (a comment) or `~1{` (a reference literal) is quoted.
+
 Readable indented data is intentionally untyped and acyclic. Use quoted references for strings that look like numbers, booleans, `null`, or generated definition ids. Use the typed codec below when you need circular references, shared object identity, `undefined`, `NaN`, or exact string/number distinctions in all cases.
 
 ### Typed Basic Types
@@ -337,6 +363,13 @@ Readable indented mode emits a root definition and a definition for each nested 
 - Nested values reference generated definition ids such as `obj_root_items`
 - Empty arrays are written as `()`
 - Quoted references parse as strings; unquoted references parse dynamically as numbers, booleans, `null`, definition references, or strings
+- The empty string is written as the reference literal `~1{}`, and references starting with `#` or `~<digits>{` are quoted, so the plain links-notation `Parser` reads every value back unchanged
+
+With `nested: true` there is a single root definition and nesting is shown by indentation:
+
+- `key value` is an object entry, a line with one value is an array item
+- `key:` followed by indented lines is a nested object or array; `key:` alone is an empty object
+- A nested object or array inside an array is written under a bare `-:` header; a key that is literally `-` is quoted (`'-':`)
 
 ### Readable format (the default)
 
@@ -426,7 +459,7 @@ and C# implementations.
 
 ### Readable Indented Data
 
-#### `formatIndented({ id: id, obj: obj, indent: indent })`
+#### `formatIndented({ id: id, obj: obj, indent: indent, nested: nested })`
 
 Format a plain object as readable recursive indented Links Notation.
 
@@ -435,6 +468,7 @@ Format a plain object as readable recursive indented Links Notation.
 - `options.id` - Root definition id
 - `options.obj` - Plain object to format
 - `options.indent` - Optional indentation string, defaulting to two spaces
+- `options.nested` - Optional; `true` keeps nested objects and arrays under their parent instead of separate generated-id definitions (default `false`)
 
 **Returns:**
 
@@ -451,13 +485,14 @@ formatIndented({
 });
 ```
 
-#### `parseIndented({ text: text })`
+#### `parseIndented({ text: text, nested: nested })`
 
 Parse readable recursive indented Links Notation back to `{ id, obj }`.
 
 **Parameters:**
 
 - `options.text` - Indented Links Notation text
+- `options.nested` - Optional; `true` reads the form written by `formatIndented({ nested: true })` (default `false`)
 
 **Returns:**
 

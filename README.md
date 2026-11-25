@@ -327,6 +327,14 @@ var decoded = Codec.Decode(Codec.Encode(data));
 
 The indented format provides a human-readable representation for displaying objects:
 
+In every language the output reads back unchanged with the plain
+[links-notation](https://github.com/link-foundation/links-notation) `Parser`,
+not only with `parseIndented`: the empty string is written as the reference
+literal `~1{}`, and keys or values starting with `#` (a comment) or `~1{` (a
+reference literal) are quoted. The JavaScript `formatIndented` also accepts
+nested objects and arrays; the Python, Rust and C# versions format flat
+key/value records.
+
 **JavaScript:**
 
 ```javascript
@@ -356,6 +364,18 @@ const { id, obj } = parseIndented({ text: formatted });
 // Quoted values can span lines; blank lines and indentation are preserved.
 const record = { id: "doc", obj: { t: "line1\n\n  line2" } };
 parseIndented({ text: formatIndented(record) }); // returns record
+
+// `nested: true` keeps nested objects and arrays under their parent.
+const state = { tasks: { "q-1": { args: ["--model", "", "#x"] } } };
+const nested = formatIndented({ id: "state", obj: state, nested: true });
+// state:
+//   tasks:
+//     q-1:
+//       args:
+//         --model
+//         ~1{}
+//         '#x'
+parseIndented({ text: nested, nested: true }); // returns { id: "state", obj: state }
 ```
 
 **Python:**
@@ -457,7 +477,7 @@ record per line — appending is one write, compaction cuts at a newline, and
 - The `o` marker is what removes the ambiguity a flat layout otherwise has:
   without it `((key value))` reads both as a one-pair object and as an array
   holding a two-element array. With it a bare `( )` on one line is always an
-  array, so a *hand-written* `(a 1)` is the two-element array — on one line,
+  array, so a _hand-written_ `(a 1)` is the two-element array — on one line,
   objects say so
 - `decode()` reads this form too, so a log reader needs no flag saying which form
   a file holds; `decode_line()` is the exact inverse of `encode_line()` and
