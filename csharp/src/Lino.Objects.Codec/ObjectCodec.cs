@@ -870,61 +870,84 @@ public static class Format
     /// <returns>A readable Links Notation value.</returns>
     public static string FormatValueVerbatim(string value) => Readable.FormatValueVerbatim(value);
 
+    // The links-notation reference literal for the empty string. A bare empty
+    // quote pair at the end of a line can swallow the following lines.
+    private static readonly string EmptyReference = ReferenceLiteral.Encode("");
+
+    /// <summary>
+    /// Whether the links-notation Parser would not read <paramref name="value"/> back as a bare reference.
+    /// </summary>
+    private static bool NeedsReferenceQuoting(string value) =>
+        value.Length == 0
+        || value.Any(c => char.IsWhiteSpace(c) || c is '(' or ')' or '\'' or '"' or ':' or '`')
+        || value.StartsWith('#')
+        || StartsWithReferenceLiteral(value);
+
+    /// <summary>Whether <paramref name="value"/> starts with <c>~&lt;digits&gt;{</c>, the reference-literal prefix.</summary>
+    private static bool StartsWithReferenceLiteral(string value)
+    {
+        if (!value.StartsWith('~'))
+        {
+            return false;
+        }
+        var index = 1;
+        while (index < value.Length && char.IsAsciiDigit(value[index]))
+        {
+            index++;
+        }
+        return index > 1 && index < value.Length && value[index] == '{';
+    }
+
+    /// <summary>
+    /// Quote <paramref name="value"/> so the links-notation Parser reads it back unchanged.
+    /// The empty string becomes the reference literal <c>~1{}</c>. Otherwise <paramref name="prefer"/>
+    /// is used when the value does not contain it, then the other quote. When the value contains
+    /// both quotes, the less frequent one is doubled inside, unless the value starts or ends with it
+    /// (a leading run of quotes is read as a wider delimiter). The fallbacks are a backtick, then a
+    /// reference literal.
+    /// </summary>
+    private static string QuoteText(string value, char prefer)
+    {
+        if (value.Length == 0)
+        {
+            return EmptyReference;
+        }
+        var other = prefer == '\'' ? '"' : '\'';
+        foreach (var quote in new[] { prefer, other })
+        {
+            if (!value.Contains(quote))
+            {
+                return $"{quote}{value}{quote}";
+            }
+        }
+        int singleCount = value.Count(c => c == '\'');
+        int doubleCount = value.Count(c => c == '"');
+        var candidates = doubleCount < singleCount ? new[] { '"', '\'' } : new[] { '\'', '"' };
+        foreach (var quote in candidates)
+        {
+            if (!value.StartsWith(quote) && !value.EndsWith(quote))
+            {
+                var doubled = value.Replace(quote.ToString(), new string(quote, 2));
+                return $"{quote}{doubled}{quote}";
+            }
+        }
+        if (!value.Contains('`'))
+        {
+            return $"`{value}`";
+        }
+        return ReferenceLiteral.Encode(value);
+    }
+
     /// <summary>
     /// Escape a reference for Links Notation.
-    /// References need escaping when they contain spaces, quotes, parentheses, colons, or newlines.
+    /// References need escaping when they are empty, contain spaces, quotes, parentheses, colons,
+    /// or newlines, start with <c>#</c> (a comment), or start with <c>~&lt;digits&gt;{</c>
+    /// (a reference literal). The empty string is written as <c>~1{}</c>.
     /// </summary>
     /// <param name="value">The value to escape</param>
     /// <returns>The escaped reference string</returns>
-    public static string EscapeReference(string value)
-    {
-        // Check if escaping is needed
-        bool needsEscaping = value.Any(c => char.IsWhiteSpace(c) || c == '(' || c == ')' || c == '\'' || c == '"' || c == ':')
-            || value.Contains('\n');
-
-        if (!needsEscaping)
-        {
-            return value;
-        }
-
-        bool hasSingle = value.Contains('\'');
-        bool hasDouble = value.Contains('"');
-
-        // If contains single quotes but not double quotes, use double quotes
-        if (hasSingle && !hasDouble)
-        {
-            return $"\"{value}\"";
-        }
-
-        // If contains double quotes but not single quotes, use single quotes
-        if (hasDouble && !hasSingle)
-        {
-            return $"'{value}'";
-        }
-
-        // If contains both quotes, count which one appears more
-        if (hasSingle && hasDouble)
-        {
-            int singleCount = value.Count(c => c == '\'');
-            int doubleCount = value.Count(c => c == '"');
-
-            if (doubleCount < singleCount)
-            {
-                // Use double quotes, escape internal double quotes by doubling
-                var escaped = value.Replace("\"", "\"\"");
-                return $"\"{escaped}\"";
-            }
-            else
-            {
-                // Use single quotes, escape internal single quotes by doubling
-                var escaped = value.Replace("'", "''");
-                return $"'{escaped}'";
-            }
-        }
-
-        // Just spaces or other special characters, use single quotes by default
-        return $"'{value}'";
-    }
+    public static string EscapeReference(string value) =>
+        NeedsReferenceQuoting(value) ? QuoteText(value, '\'') : value;
 
     /// <summary>
     /// Unescape a reference from Links Notation format.
@@ -945,42 +968,12 @@ public static class Format
 
     /// <summary>
     /// Format a value for display in indented Links Notation.
-    /// Uses quoting strategy compatible with the links-notation parser:
-    /// - If value contains double quotes, wrap in single quotes
-    /// - Otherwise, wrap in double quotes
+    /// Values are quoted, preferring double quotes, so that the links-notation Parser reads them
+    /// back unchanged (see <see cref="QuoteText"/>). The empty string is written as the reference
+    /// literal <c>~1{}</c>.
     /// </summary>
-    private static string FormatIndentedValue(string? value)
-    {
-        if (value is null)
-        {
-            return "\"null\"";
-        }
-
-        bool hasSingle = value.Contains('\'');
-        bool hasDouble = value.Contains('"');
-
-        // If contains double quotes but no single quotes, use single quotes
-        if (hasDouble && !hasSingle)
-        {
-            return $"'{value}'";
-        }
-
-        // If contains single quotes but no double quotes, use double quotes
-        if (hasSingle && !hasDouble)
-        {
-            return $"\"{value}\"";
-        }
-
-        // If contains both, use single quotes and escape internal single quotes
-        if (hasSingle && hasDouble)
-        {
-            var escaped = value.Replace("'", "''");
-            return $"'{escaped}'";
-        }
-
-        // Default: use double quotes
-        return $"\"{value}\"";
-    }
+    private static string FormatIndentedValue(string? value) =>
+        value is null ? "\"null\"" : QuoteText(value, '"');
 
     /// <summary>
     /// Format an object in indented Links Notation format.
